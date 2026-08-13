@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Укради Брэйнрот - Полная версия</title>
+    <title>Укради Брэйнрот - Карта 1 Этаж</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
@@ -45,6 +45,8 @@
         #serverList { max-height: 400px; overflow-y: auto; }
         .steal-msg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 40px; font-weight: bold; color: #f7c948; text-shadow: 0 0 10px #f7c948; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
         .steal-msg.show { opacity: 1; }
+        .vip-settings { background: #1a1f2b; border-radius: 12px; padding: 15px; margin-top: 10px; border: 1px solid #f7c948; }
+        #vipAccess { background: #252d3d; color: #fff; border: none; padding: 10px; border-radius: 8px; width: 100%; margin: 10px 0; }
     </style>
 </head>
 <body>
@@ -71,7 +73,7 @@
             <div class="menu-btn" onclick="openProfile()">👤 Профиль</div>
             <div class="menu-btn" onclick="openFriends()">👥 Друзья</div>
             <div class="menu-btn" onclick="openServers()">🖥️ Серверы</div>
-            <div class="menu-btn" onclick="quickPlay()">▶️ Играть (Укради мозг!)</div>
+            <div class="menu-btn" onclick="quickPlay()">▶️ Играть (Быстрый вход)</div>
             <div style="margin-top:20px; text-align:center; color:#666; font-size:14px; cursor:pointer;" onclick="logout()">Выйти</div>
         </div>
 
@@ -117,6 +119,17 @@
         <div id="serversSection" class="hidden card" style="max-width: 520px; margin: 50px auto;">
             <button class="back-btn" onclick="openMenu()">← Назад</button>
             <div class="section-title">Серверы</div>
+            <button class="create-vip-btn" onclick="toggleCreateVip()" style="background:#f7c948; color:#000; padding:10px; border:none; border-radius:10px; margin-bottom:10px; font-weight:bold; cursor:pointer;">✨ Создать VIP-сервер</button>
+            <div id="createVipForm" class="vip-settings hidden">
+                <label>Название VIP-сервера</label>
+                <input type="text" id="vipName" placeholder="Мой VIP">
+                <label>Кто может заходить?</label>
+                <select id="vipAccess">
+                    <option value="all">Все</option>
+                    <option value="friends">Только друзья</option>
+                </select>
+                <button onclick="createVipServer()" class="btn-primary">Создать</button>
+            </div>
             <div id="serverList"></div>
         </div>
 
@@ -150,7 +163,7 @@
 
     <script type="module">
         // ------------------------------------------------------------
-        // ПОЛНЫЙ КОД: Друзья, Серверы, Мультиплеер, Модель человека, ПКМ, Карта
+        // ПОЛНЫЙ КОД: Карта 1 этаж, объекты со скринов, исправление кнопок Join и VIP
         // ------------------------------------------------------------
         import { initializeApp } from 'firebase/app';
         import { getDatabase, ref, set, get, update, remove, push, onValue, onChildAdded, onChildChanged, onChildRemoved } from 'firebase/database';
@@ -185,6 +198,9 @@
         const friendsListContainer = document.getElementById('friendsListContainer');
         const friendSearch = document.getElementById('friendSearch');
         const stealMsg = document.getElementById('stealMsg');
+        const vipName = document.getElementById('vipName');
+        const vipAccess = document.getElementById('vipAccess');
+        const createVipForm = document.getElementById('createVipForm');
 
         const authNick = document.getElementById('authNick');
         const authPass = document.getElementById('authPass');
@@ -206,7 +222,6 @@
         let currentUid = null;
         let currentUserData = null;
         let currentServerId = null;
-        let currentBrain = 100;
 
         // -------------------- 3D Переменные --------------------
         let scene, camera, renderer, player;
@@ -214,11 +229,11 @@
         let animationId = null;
         let playerPosRef = null;
         let updateInterval = null;
-        let otherPlayers = {}; // { uid: THREE.Group }
-        let otherPlayersData = {}; // { uid: { x, z, nick, skin } }
+        let otherPlayers = {}; 
+        let otherPlayersData = {};
 
-        let camTheta = 0; // Горизонтальный угол
-        let camRadius = 15; // Расстояние до камеры
+        let camTheta = 0.5; 
+        let camRadius = 15;
         let isDragging = false;
         let previousMouseX = 0;
         let previousMouseY = 0;
@@ -300,7 +315,7 @@
             profileNick.textContent = currentUserData.nick; profileId.textContent = currentUid.slice(0, 6);
             profileAvatar.src = currentUserData.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(currentUserData.nick) + '&background=random&color=fff&size=80';
 
-            loadFriends(); loadFriendRequests();
+            loadFriends(); loadFriendRequests(); loadServers();
         }
 
         function stopGame() {
@@ -310,7 +325,6 @@
             if (playerPosRef) { remove(playerPosRef); playerPosRef = null; }
             if (currentServerId) { leaveServer(currentServerId); currentServerId = null; }
             
-            // Убираем других игроков
             Object.keys(otherPlayers).forEach(uid => {
                 scene.remove(otherPlayers[uid]);
                 delete otherPlayers[uid];
@@ -356,7 +370,7 @@
                 const dataUrl = ev.target.result;
                 await update(ref(db, 'users/' + currentUid + '/skin'), { skin: dataUrl });
                 currentUserData.skin = dataUrl;
-                alert('Скин сохранён!');
+                alert('Скин сохранён!'); // Применится при заходе в игру
             };
             reader.readAsDataURL(file);
         });
@@ -417,7 +431,23 @@
             });
         }
 
-        // -------------------- Серверы --------------------
+        // -------------------- Серверы и VIP --------------------
+        // Делаем функции глобальными (исправление ошибки "is not defined")
+        window.toggleCreateVip = function() { createVipForm.classList.toggle('hidden'); };
+
+        window.createVipServer = async function() {
+            const name = vipName.value.trim();
+            if (!name) return alert('Введи название VIP-сервера');
+            if (!currentUid) return alert('Нет авторизации');
+            const vipRef = ref(db, 'vipServers');
+            const newVipRef = push(vipRef);
+            await set(newVipRef, {
+                name: name, owner: currentUserData.nick, ownerUid: currentUid,
+                players: 0, max: 8, access: vipAccess.value
+            });
+            alert('VIP-сервер создан!'); vipName.value = ''; createVipForm.classList.add('hidden'); loadServers();
+        };
+
         async function createPublicServer() {
             const newRef = push(ref(db, 'publicServers'));
             await set(newRef, { players: 0, max: 8, createdAt: Date.now() });
@@ -433,19 +463,6 @@
             return available;
         }
 
-        async function joinServer(serverId) {
-            if (!currentUid) return alert('Сначала войди');
-            if (currentServerId) await leaveServer(currentServerId);
-            const path = 'publicServers/' + serverId;
-            const snap = await get(ref(db, path));
-            if (!snap.exists()) return alert('Сервер не найден');
-            const data = snap.val();
-            if (data.players >= data.max) return alert('Сервер заполнен!');
-            await update(ref(db, path), { players: data.players + 1 });
-            currentServerId = serverId;
-            showLoading(() => { init3D(); });
-        }
-
         async function leaveServer(serverId) {
             if (!serverId) return;
             const path = 'publicServers/' + serverId;
@@ -457,11 +474,30 @@
             currentServerId = null;
         }
 
+        // ГЛОБАЛЬНЫЕ ФУНКЦИИ для кнопок HTML
         window.quickPlay = async function() {
             if (!currentUid) return alert('Сначала войди');
             const serverId = await getAvailablePublicServer();
-            await joinServer(serverId);
+            await joinServerLogic(serverId, false);
         };
+
+        window.joinServer = async function(serverId, isVip) {
+            if (!currentUid) return alert('Сначала войди');
+            await joinServerLogic(serverId, isVip);
+        };
+
+        // Основная логика входа на сервер
+        async function joinServerLogic(serverId, isVip) {
+            if (currentServerId) await leaveServer(currentServerId);
+            let path = isVip ? 'vipServers/' + serverId : 'publicServers/' + serverId;
+            const snap = await get(ref(db, path));
+            if (!snap.exists()) return alert('Сервер не найден');
+            const data = snap.val();
+            if (data.players >= data.max) return alert('Сервер заполнен!');
+            await update(ref(db, path), { players: data.players + 1 });
+            currentServerId = serverId;
+            showLoading(() => { init3D(); });
+        }
 
         function loadServers() {
             onValue(ref(db, 'publicServers'), async (snap) => {
@@ -469,42 +505,73 @@
                 if (snap.exists()) {
                     snap.forEach((child) => { publicServers.push({ id: child.key, ...child.val(), type: 'public', name: 'Публичный #' + child.key.slice(0, 4) }); });
                 }
+                
+                const vipSnap = await get(ref(db, 'vipServers'));
+                let vipServers = [];
+                if (vipSnap.exists()) {
+                    vipSnap.forEach((child) => { vipServers.push({ id: child.key, ...child.val(), type: 'vip' }); });
+                }
+                
+                const all = [...vipServers, ...publicServers];
                 serverList.innerHTML = '';
-                if (publicServers.length === 0) { serverList.innerHTML = '<div style="color:#666;">Нет серверов</div>'; return; }
-                publicServers.forEach(s => {
+                if (all.length === 0) { serverList.innerHTML = '<div style="color:#666;">Нет серверов</div>'; return; }
+                all.forEach(s => {
+                    const isVip = s.type === 'vip';
                     const div = document.createElement('div'); div.className = 'server-item';
-                    div.innerHTML = `<div><strong>${s.name}</strong><span class="badge-public" style="background:#4a7cf7; color:#fff; padding:4px 12px; border-radius:30px; font-size:12px;">Публичный</span><div style="font-size:13px; color:#aaa;">${s.players || 0}/${s.max || 8} игроков</div></div><button class="join-btn" onclick="joinServer('${s.id}')">Join</button>`;
+                    div.innerHTML = `
+                        <div>
+                            <strong>${s.name || 'Сервер'}</strong>
+                            <span class="${isVip ? 'badge-vip' : 'badge-public'}">${isVip ? 'VIP' : 'Публичный'}</span>
+                            <div style="font-size:13px; color:#aaa;">${s.players || 0}/${s.max || 8}</div>
+                        </div>
+                        <button class="join-btn" onclick="joinServer('${s.id}', ${isVip})">Join</button>
+                    `;
                     serverList.appendChild(div);
                 });
             });
         }
 
-        // -------------------- 3D Игра (МУЛЬТИПЛЕЕР, МОДЕЛЬ, УПРАВЛЕНИЕ) --------------------
+        // -------------------- 3D Игра --------------------
+        function makeTextSprite(message, color = 'white') {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = 512; canvas.height = 128;
+            context.font = 'Bold 60px Arial';
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            
+            // Тень
+            context.shadowColor = 'black';
+            context.shadowBlur = 10;
+            
+            context.fillStyle = color;
+            context.fillText(message, 256, 64);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            const material = new THREE.SpriteMaterial({ map: texture, depthTest: false });
+            const sprite = new THREE.Sprite(material);
+            sprite.scale.set(6, 1.5, 1);
+            return sprite;
+        }
+
         function createPlayerModel(skinUrl, isOther = false) {
             const group = new THREE.Group();
             const headGeo = new THREE.SphereGeometry(0.3, 12, 12);
             const bodyGeo = new THREE.CylinderGeometry(0.35, 0.35, 0.8, 8);
 
             let material;
-            // Обработка ошибки загрузки текстуры, чтобы не было 404 в консоли
-            const onTextureError = (err) => { console.warn("Ошибка скина", err); };
-            
             if (skinUrl && typeof skinUrl === 'string' && skinUrl.startsWith('data:image')) {
                 const loader = new THREE.TextureLoader();
-                const texture = loader.load(skinUrl, undefined, undefined, onTextureError);
-                texture.flipY = false; // Важно для роблоксовских скинов
+                const texture = loader.load(skinUrl, undefined, undefined, () => {});
+                texture.flipY = false;
                 material = new THREE.MeshStandardMaterial({ map: texture });
             } else {
                 material = new THREE.MeshStandardMaterial({ color: isOther ? 0xff6b6b : 0x4a7cf7 });
             }
 
-            const head = new THREE.Mesh(headGeo, material);
-            head.position.y = 0.7;
-            const body = new THREE.Mesh(bodyGeo, material);
-            body.position.y = 0.2;
-
-            group.add(head);
-            group.add(body);
+            const head = new THREE.Mesh(headGeo, material); head.position.y = 0.7;
+            const body = new THREE.Mesh(bodyGeo, material); body.position.y = 0.2;
+            group.add(head); group.add(body);
             return group;
         }
 
@@ -516,7 +583,7 @@
             serversSection.classList.add('hidden');
 
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x1a1f2b);
+            scene.background = new THREE.Color(0x87CEEB); // Небо
 
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
             camTheta = 0.5;
@@ -526,57 +593,199 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMap.enabled = true;
 
-            const ambient = new THREE.AmbientLight(0x404060);
-            scene.add(ambient);
-            const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-            dirLight.position.set(5, 20, 10);
-            dirLight.castShadow = true;
-            scene.add(dirLight);
+            const ambient = new THREE.AmbientLight(0x404060); scene.add(ambient);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 1); dirLight.position.set(5, 20, 10); dirLight.castShadow = true; scene.add(dirLight);
+            const hemiLight = new THREE.HemisphereLight(0x87CEEB, 0x3a7bd5, 0.6); scene.add(hemiLight);
 
-            // КАРТА (АРЕНА С ЗАБОРАМИ)
-            const groundGeo = new THREE.PlaneGeometry(40, 40);
-            const groundMat = new THREE.MeshStandardMaterial({ color: 0x2a2f3a, side: THREE.DoubleSide });
+            // ----- КАРТА (ЗЕЛЁНАЯ ТРАВА И ЗАБОРЫ) -----
+            const groundGeo = new THREE.PlaneGeometry(60, 60);
+            const groundMat = new THREE.MeshStandardMaterial({ color: 0x6dc85c, side: THREE.DoubleSide }); // Яркая зеленая трава
             const ground = new THREE.Mesh(groundGeo, groundMat);
             ground.rotation.x = -Math.PI / 2;
             ground.receiveShadow = true;
             scene.add(ground);
 
-            const gridHelper = new THREE.GridHelper(40, 20, 0x555555, 0x444444);
-            scene.add(gridHelper);
-
-            const wallMat = new THREE.MeshStandardMaterial({ color: 0x333333, transparent: true, opacity: 0.5 });
+            // Коричневый забор по краям
+            const wallMat = new THREE.MeshStandardMaterial({ color: 0x8B5A2B });
             const walls = [
-                { x: 0, z: -20, w: 40, h: 0.5 }, { x: 0, z: 20, w: 40, h: 0.5 },
-                { x: -20, z: 0, w: 0.5, h: 40 }, { x: 20, z: 0, w: 0.5, h: 40 }
+                { x: 0, z: -30, w: 60, h: 0.5 }, { x: 0, z: 30, w: 60, h: 0.5 },
+                { x: -30, z: 0, w: 0.5, h: 60 }, { x: 30, z: 0, w: 0.5, h: 60 }
             ];
             walls.forEach(w => {
-                const wallMesh = new THREE.Mesh(new THREE.BoxGeometry(w.w, 1, w.h), wallMat);
-                wallMesh.position.set(w.x, 0.5, w.z);
+                const wallMesh = new THREE.Mesh(new THREE.BoxGeometry(w.w, 1.2, w.h), wallMat);
+                wallMesh.position.set(w.x, 0.6, w.z);
                 scene.add(wallMesh);
             });
 
-            // ИГРОК
-            let skinUrl = currentUserData.skin || null;
+            // КРАСНАЯ ДОРОЖКА (по центру)
+            const carpetMat = new THREE.MeshStandardMaterial({ color: 0xcc2233 });
+            const carpet = new THREE.Mesh(new THREE.PlaneGeometry(6, 30), carpetMat);
+            carpet.rotation.x = -Math.PI / 2;
+            carpet.position.set(0, 0.01, 0);
+            scene.add(carpet);
+
+            // ----- БАЗЫ (ВСЕ 1 ЭТАЖНЫЕ) -----
+            const baseMat = new THREE.MeshStandardMaterial({ color: 0x888888 });
+            const roofMat = new THREE.MeshStandardMaterial({ color: 0x666666 });
+            const woodMat = new THREE.MeshStandardMaterial({ color: 0xD2B48C });
+            
+            function create1FloorBase(x, z, label) {
+                const group = new THREE.Group();
+                const base = new THREE.Mesh(new THREE.BoxGeometry(5, 1.4, 4), baseMat);
+                base.position.y = 0.7;
+                group.add(base);
+                
+                const roof = new THREE.Mesh(new THREE.BoxGeometry(5, 0.2, 4.2), roofMat);
+                roof.position.y = 1.5;
+                group.add(roof);
+                
+                // Табличка "Base" или "Empty Base"
+                const sign = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.3, 0.1), woodMat);
+                sign.position.set(0, 0.8, 2.1);
+                group.add(sign);
+                
+                group.position.set(x, 0, z);
+                scene.add(group);
+
+                // Лейбл над базой
+                const labelSprite = makeTextSprite(label, '#ffffff');
+                labelSprite.position.set(x, 2.5, z);
+                scene.add(labelSprite);
+            }
+
+            // 1-этажные базы по бокам (как на скринах)
+            create1FloorBase(-12, -8, 'Empty Base');
+            create1FloorBase(-12, 8, 'Empty Base');
+            create1FloorBase(12, -8, 'Empty Base');
+            create1FloorBase(12, 8, 'Empty Base');
+            create1FloorBase(0, -18, 'Empty Base');
+            create1FloorBase(0, 18, 'Empty Base');
+
+            // ----- ОБЪЕКТЫ (Shop, RNG, Колесо, Robux Shop, Trade Plaza) -----
+            
+            // 1. SHOP (Сине-белая палатка)
+            const shopGroup = new THREE.Group();
+            const tentMat1 = new THREE.MeshStandardMaterial({ color: 0x4a7cf7 });
+            const tentMat2 = new THREE.MeshStandardMaterial({ color: 0xffffff });
+            const tentBase = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.4, 2.5), new THREE.MeshStandardMaterial({color:0x999999}));
+            tentBase.position.y = 0.2;
+            shopGroup.add(tentBase);
+            const tentPole1 = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 2), new THREE.MeshStandardMaterial({color:0xaaaaaa}));
+            tentPole1.position.set(-1.2, 1.2, 0);
+            shopGroup.add(tentPole1);
+            const tentPole2 = tentPole1.clone(); tentPole2.position.set(1.2, 1.2, 0);
+            shopGroup.add(tentPole2);
+            const tentPole3 = tentPole1.clone(); tentPole3.position.set(0, 1.2, -1.2);
+            shopGroup.add(tentPole3);
+            const tentPole4 = tentPole1.clone(); tentPole4.position.set(0, 1.2, 1.2);
+            shopGroup.add(tentPole4);
+            // Крыша
+            const roof1 = new THREE.Mesh(new THREE.ConeGeometry(2.3, 0.8, 4), tentMat1);
+            roof1.rotation.y = Math.PI/4; roof1.position.y = 1.8;
+            shopGroup.add(roof1);
+            shopGroup.position.set(-18, 0, -10);
+            scene.add(shopGroup);
+            const shopLabel = makeTextSprite('Shop', '#4a7cf7'); shopLabel.position.set(-18, 2.8, -10); scene.add(shopLabel);
+
+            // 2. RNG MACHINE (Синяя машина)
+            const rngGroup = new THREE.Group();
+            const rngBase = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 1.5), new THREE.MeshStandardMaterial({color: 0x3a6be0}));
+            rngBase.position.y = 0.75;
+            rngGroup.add(rngBase);
+            const rngLight = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.5), new THREE.MeshStandardMaterial({color: 0xffffff}));
+            rngLight.position.set(0, 1.75, 0.75);
+            rngGroup.add(rngLight);
+            const rngPanel = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.5, 0.1), new THREE.MeshStandardMaterial({color: 0x222222}));
+            rngPanel.position.set(0, 0.9, 0.85);
+            rngGroup.add(rngPanel);
+            rngGroup.position.set(-10, 0, -18);
+            scene.add(rngGroup);
+            const rngLabel = makeTextSprite('RNG Machine', '#3a6be0'); rngLabel.position.set(-10, 2.8, -18); scene.add(rngLabel);
+
+            // 3. CRYSTAL WHEEL (Колесо)
+            const wheelGroup = new THREE.Group();
+            const wheelBase = new THREE.Mesh(new THREE.BoxGeometry(2, 0.2, 2), new THREE.MeshStandardMaterial({color: 0x444444}));
+            wheelBase.position.y = 0.1;
+            wheelGroup.add(wheelBase);
+            const wheelPole = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 1.5), new THREE.MeshStandardMaterial({color: 0xcccccc}));
+            wheelPole.position.y = 0.85;
+            wheelGroup.add(wheelPole);
+            const wheelDisc = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.2, 32), new THREE.MeshStandardMaterial({color: 0xbf40bf}));
+            wheelDisc.position.y = 1.6;
+            wheelGroup.add(wheelDisc);
+            wheelGroup.position.set(10, 0, -18);
+            scene.add(wheelGroup);
+            const wheelLabel = makeTextSprite('Crystal Wheel', '#bf40bf'); wheelLabel.position.set(10, 2.8, -18); scene.add(wheelLabel);
+
+            // 4. ROBUX SHOP (Красная палатка)
+            const robuxGroup = new THREE.Group();
+            const rTent = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.4, 2.5), new THREE.MeshStandardMaterial({color:0x999999}));
+            rTent.position.y = 0.2;
+            robuxGroup.add(rTent);
+            const rPole = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 2), new THREE.MeshStandardMaterial({color:0xaaaaaa}));
+            rPole.position.set(0, 1.2, 0);
+            robuxGroup.add(rPole);
+            const rRoof = new THREE.Mesh(new THREE.ConeGeometry(2.3, 0.8, 4), new THREE.MeshStandardMaterial({color: 0xff3333}));
+            rRoof.rotation.y = Math.PI/4; rRoof.position.y = 1.8;
+            robuxGroup.add(rRoof);
+            robuxGroup.position.set(18, 0, -10);
+            scene.add(robuxGroup);
+            const robuxLabel = makeTextSprite('Robux Shop', '#ff3333'); robuxLabel.position.set(18, 2.8, -10); scene.add(robuxLabel);
+
+            // 5. TRADE PLAZA (Синяя арка)
+            const plazaGroup = new THREE.Group();
+            const pillarMat = new THREE.MeshStandardMaterial({color: 0x2a6bb0});
+            const pillar1 = new THREE.Mesh(new THREE.BoxGeometry(0.6, 2, 0.6), pillarMat);
+            pillar1.position.set(-1.5, 1, 0);
+            plazaGroup.add(pillar1);
+            const pillar2 = pillar1.clone(); pillar2.position.set(1.5, 1, 0);
+            plazaGroup.add(pillar2);
+            const arch = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.4, 0.6), pillarMat);
+            arch.position.set(0, 2, 0);
+            plazaGroup.add(arch);
+            const cube = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.4, 0.4), new THREE.MeshStandardMaterial({color: 0x4a7cf7}));
+            cube.position.set(0, 2.3, 0);
+            plazaGroup.add(cube);
+            plazaGroup.position.set(-10, 0, -8);
+            scene.add(plazaGroup);
+            const plazaLabel = makeTextSprite('Trade Plaza', '#2a6bb0'); plazaLabel.position.set(-10, 3.2, -8); scene.add(plazaLabel);
+
+            // 6. QUEEN BEE (Королева Пчела)
+            const beeGroup = new THREE.Group();
+            const bodyMat = new THREE.MeshStandardMaterial({color: 0xffcc00});
+            const stripeMat = new THREE.MeshStandardMaterial({color: 0x222222});
+            const beeBody = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.6, 8), bodyMat);
+            beeBody.position.y = 0.8;
+            beeGroup.add(beeBody);
+            const stripe1 = new THREE.Mesh(new THREE.CylinderGeometry(0.52, 0.52, 0.1, 8), stripeMat);
+            stripe1.position.y = 0.9;
+            beeGroup.add(stripe1);
+            const stripe2 = stripe1.clone(); stripe2.position.y = 0.7;
+            beeGroup.add(stripe2);
+            const wings = new THREE.Mesh(new THREE.SphereGeometry(0.4, 8, 8), new THREE.MeshStandardMaterial({color: 0xffffff, transparent: true, opacity: 0.4}));
+            wings.position.set(0.5, 1.2, 0.2);
+            wings.scale.set(0.8, 0.1, 0.4);
+            beeGroup.add(wings);
+            const wings2 = wings.clone(); wings2.position.set(-0.5, 1.2, 0.2);
+            beeGroup.add(wings2);
+            beeGroup.position.set(18, 0, -10);
+            scene.add(beeGroup);
+            const beeLabel = makeTextSprite('Queen Bee', '#ffcc00'); beeLabel.position.set(18, 2.2, -10); scene.add(beeLabel);
+
+            // ----- СОЗДАЁМ ИГРОКА -----
+            const skinUrl = currentUserData.skin || null;
             player = createPlayerModel(skinUrl, false);
             player.position.set(0, 0.1, 0);
             scene.add(player);
 
-            // ОТПРАВКА ПОЗИЦИИ В FIREBASE
+            // МУЛЬТИПЛЕЕР
             if (currentServerId) {
                 playerPosRef = ref(db, 'gameSessions/' + currentServerId + '/' + currentUid);
-                // Отправляем 10 раз в секунду
                 updateInterval = setInterval(async () => {
-                    await set(playerPosRef, { 
-                        x: player.position.x, z: player.position.z, 
-                        nick: currentUserData.nick, 
-                        skin: currentUserData.skin || '' 
-                    });
+                    if(player) await set(playerPosRef, { x: player.position.x, z: player.position.z, nick: currentUserData.nick, skin: currentUserData.skin || '' });
                 }, 100);
 
-                // СЛУШАЕМ ДРУГИХ ИГРОКОВ
                 const othersRef = ref(db, 'gameSessions/' + currentServerId);
-                
-                // При добавлении нового игрока
                 onChildAdded(othersRef, (snap) => {
                     const uid = snap.key;
                     if (uid === currentUid) return;
@@ -587,28 +796,17 @@
                     scene.add(model);
                     otherPlayers[uid] = model;
                 });
-
-                // При изменении позиции
                 onChildChanged(othersRef, (snap) => {
                     const uid = snap.key;
-                    if (uid === currentUid) return;
+                    if (uid === currentUid || !otherPlayers[uid]) return;
                     const data = snap.val();
-                    otherPlayersData[uid] = data;
-                    if (otherPlayers[uid]) {
-                        otherPlayers[uid].position.x = data.x || 0;
-                        otherPlayers[uid].position.z = data.z || 0;
-                    }
+                    otherPlayers[uid].position.x = data.x || 0;
+                    otherPlayers[uid].position.z = data.z || 0;
                 });
-
-                // Когда игрок вышел
                 onChildRemoved(othersRef, (snap) => {
                     const uid = snap.key;
                     if (uid === currentUid) return;
-                    if (otherPlayers[uid]) {
-                        scene.remove(otherPlayers[uid]);
-                        delete otherPlayers[uid];
-                        delete otherPlayersData[uid];
-                    }
+                    if (otherPlayers[uid]) { scene.remove(otherPlayers[uid]); delete otherPlayers[uid]; delete otherPlayersData[uid]; }
                 });
             }
 
@@ -630,7 +828,6 @@
             if (!player || !currentServerId) return;
             stealMsg.classList.add('show');
             setTimeout(() => stealMsg.classList.remove('show'), 500);
-            // Здесь можно добавить логику кражи: найти ближайшего игрока в otherPlayersData, обновить мозг в Firebase
         }
 
         function animate() {
@@ -650,11 +847,10 @@
             }
 
             // Ограничение карты
-            const limit = 19;
+            const limit = 28;
             player.position.x = Math.max(-limit, Math.min(limit, player.position.x));
             player.position.z = Math.max(-limit, Math.min(limit, player.position.z));
 
-            // Обновляем камеру
             const heightOffset = 8;
             camera.position.x = player.position.x + camRadius * Math.sin(camTheta);
             camera.position.z = player.position.z + camRadius * Math.cos(camTheta);
@@ -667,14 +863,13 @@
 
         window.exitGame = function() { stopGame(); showMenu(); };
 
-        // Resize
         window.addEventListener('resize', () => {
             if (renderer) { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }
         });
 
         // -------------------- Инициализация --------------------
         checkSession();
-        console.log('🔥 ПОЛНАЯ мультиплеерная версия "Укради Брэйнрот" загружена!');
+        console.log('🔥 Полная карта с 1-этажными базами и объектами загружена!');
     </script>
 </body>
 </html>
