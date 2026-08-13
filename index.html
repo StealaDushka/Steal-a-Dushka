@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Укради Брэйнрот - Платформа</title>
+    <title>Укради Брэйнрот - Тест 3D с серверами</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: #0b0e14; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        #app { width: 100%; max-width: 520px; padding: 20px; }
+        body { background: #0b0e14; color: #fff; overflow: hidden; }
+        #app { width: 100%; height: 100vh; }
         .hidden { display: none !important; }
-        .card { background: #1a1f2b; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); margin-bottom: 20px; }
+        .card { background: #1a1f2b; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); max-width: 520px; margin: 20px auto; }
         input[type="text"], input[type="password"], input[type="file"] { width: 100%; padding: 15px; background: #252d3d; border: none; border-radius: 12px; color: #fff; margin-bottom: 15px; font-size: 16px; }
         button { width: 100%; padding: 15px; border: none; border-radius: 12px; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-bottom: 10px; }
         .btn-primary { background: #4a7cf7; }
@@ -25,7 +25,7 @@
         .section-title { font-size: 22px; font-weight: bold; margin-bottom: 20px; }
         .back-btn { background: #3a3f4e; margin-bottom: 20px; }
         .back-btn:hover { background: #4a5060; }
-        .friend-item, .server-item { background: #252d3d; padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .server-item { background: #252d3d; padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         .server-item .join-btn { width: auto; padding: 8px 25px; background: #4a7cf7; border-radius: 30px; font-size: 14px; }
         .badge-vip { background: #f7c948; color: #000; padding: 4px 12px; border-radius: 30px; font-size: 12px; font-weight: bold; }
         .badge-public { background: #4a7cf7; color: #fff; padding: 4px 12px; border-radius: 30px; font-size: 12px; }
@@ -33,20 +33,17 @@
         .progress-bar { width: 80%; height: 10px; background: #252d3d; border-radius: 10px; overflow: hidden; margin-top: 20px; }
         .progress-fill { height: 100%; width: 0%; background: #4a7cf7; transition: width 0.1s; }
         .progress-text { font-size: 20px; margin-top: 10px; }
-        .flex-row { display: flex; gap: 10px; align-items: center; }
-        .flex-row input { flex: 1; margin-bottom: 0; }
-        .flex-row button { width: auto; padding: 10px 20px; margin-bottom: 0; }
-        .small-btn { width: auto; padding: 5px 15px; font-size: 14px; margin: 0 5px; }
-        .create-vip-btn { background: #f7c948; color: #000; margin-top: 15px; }
-        .create-vip-btn:hover { background: #e5b83a; }
-        .vip-settings { background: #1a1f2b; border-radius: 12px; padding: 15px; margin-top: 10px; border: 1px solid #f7c948; }
-        .vip-settings select { background: #252d3d; color: #fff; border: none; padding: 10px; border-radius: 8px; width: 100%; margin: 10px 0; }
+        #gameContainer { position: relative; width: 100%; height: 100vh; }
+        #gameUI { position: absolute; top: 20px; right: 20px; z-index: 10; }
+        .exit-btn { background: #ff6b6b; padding: 10px 20px; border-radius: 10px; border: none; color: #fff; font-weight: bold; cursor: pointer; }
+        .exit-btn:hover { background: #e55a5a; }
+        #serverList { max-height: 400px; overflow-y: auto; }
     </style>
 </head>
 <body>
     <div id="app">
         <!-- Авторизация -->
-        <div id="authSection" class="card">
+        <div id="authSection" class="card" style="margin-top: 50px;">
             <h2 style="margin-bottom:20px; text-align:center;">Вход / Регистрация</h2>
             <input type="text" id="authNick" placeholder="Ваш никнейм">
             <input type="password" id="authPass" placeholder="Пароль">
@@ -56,9 +53,9 @@
         </div>
 
         <!-- Меню -->
-        <div id="menuSection" class="hidden">
+        <div id="menuSection" class="hidden" style="max-width: 520px; margin: 50px auto;">
             <div class="profile-row">
-                <img id="menuAvatar" class="avatar" src="https://via.placeholder.com/80" alt="avatar">
+                <img id="menuAvatar" class="avatar" src="https://ui-avatars.com/api/?name=Guest&background=random&color=fff&size=80" alt="avatar">
                 <div>
                     <div class="nick" id="menuNick">Гость</div>
                     <div class="stat">ID: <span id="menuId">-</span></div>
@@ -67,16 +64,15 @@
             <div class="menu-btn" onclick="openProfile()">👤 Профиль</div>
             <div class="menu-btn" onclick="quickPlay()">▶️ Играть (быстрый старт)</div>
             <div class="menu-btn" onclick="openServers()">🖥️ Серверы</div>
-            <div class="menu-btn" onclick="openFriends()">👥 Друзья</div>
             <div style="margin-top:20px; text-align:center; color:#666; font-size:14px; cursor:pointer;" onclick="logout()">Выйти</div>
         </div>
 
         <!-- Профиль -->
-        <div id="profileSection" class="hidden card">
+        <div id="profileSection" class="hidden card" style="max-width: 520px; margin: 50px auto;">
             <button class="back-btn" onclick="openMenu()">← Назад</button>
             <div class="section-title">Профиль</div>
             <div class="profile-row">
-                <img id="profileAvatar" class="avatar" src="https://via.placeholder.com/80" alt="avatar">
+                <img id="profileAvatar" class="avatar" src="https://ui-avatars.com/api/?name=Guest&background=random&color=fff&size=80" alt="avatar">
                 <div>
                     <div class="nick" id="profileNick">Гость</div>
                     <div class="stat">ID: <span id="profileId">-</span></div>
@@ -84,47 +80,18 @@
             </div>
             <label style="display:block; margin-bottom:5px;">Сменить аватарку (PNG/JPG)</label>
             <input type="file" id="avatarInput" accept="image/*">
-            <label style="display:block; margin:15px 0 5px;">Сменить скин (загрузите изображение)</label>
+            <label style="display:block; margin:15px 0 5px;">Сменить скин (для 3D-модели)</label>
             <input type="file" id="skinInput" accept="image/*">
             <label style="display:block; margin:15px 0 5px;">Сменить пароль</label>
             <input type="password" id="newPass" placeholder="Новый пароль">
             <button onclick="changePassword()" class="btn-primary">Сохранить пароль</button>
         </div>
 
-        <!-- Друзья -->
-        <div id="friendsSection" class="hidden card">
-            <button class="back-btn" onclick="openMenu()">← Назад</button>
-            <div class="section-title">Друзья</div>
-            <div class="flex-row">
-                <input type="text" id="friendSearch" placeholder="Ник друга">
-                <button onclick="sendFriendRequest()" class="btn-primary" style="width:auto; padding:10px 20px;">➕</button>
-            </div>
-            <div id="friendRequests" style="margin-bottom:15px;">
-                <div style="color:#aaa; font-size:14px;">📩 Запросы:</div>
-                <div id="requestsList"></div>
-            </div>
-            <div id="friendsList">
-                <div style="color:#aaa; font-size:14px;">👥 Мои друзья:</div>
-                <div id="friendsListContainer"></div>
-            </div>
-        </div>
-
         <!-- Серверы -->
-        <div id="serversSection" class="hidden card">
+        <div id="serversSection" class="hidden card" style="max-width: 520px; margin: 50px auto;">
             <button class="back-btn" onclick="openMenu()">← Назад</button>
             <div class="section-title">Серверы</div>
-            <button class="create-vip-btn" onclick="showCreateVip()">✨ Создать VIP-сервер</button>
-            <div id="createVipForm" class="vip-settings hidden">
-                <label>Название VIP-сервера</label>
-                <input type="text" id="vipName" placeholder="Мой VIP">
-                <label>Кто может заходить?</label>
-                <select id="vipAccess">
-                    <option value="all">Все</option>
-                    <option value="friends">Только друзья</option>
-                </select>
-                <button onclick="createVipServer()" class="btn-primary">Создать</button>
-            </div>
-            <div id="serverList" style="margin-top:15px;"></div>
+            <div id="serverList"></div>
         </div>
 
         <!-- Загрузка -->
@@ -133,24 +100,34 @@
             <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
             <div class="progress-text" id="progressText">0%</div>
         </div>
+
+        <!-- 3D Сцена -->
+        <div id="gameContainer" class="hidden">
+            <div id="gameUI">
+                <button class="exit-btn" onclick="exitGame()">✕ Выйти</button>
+            </div>
+            <canvas id="gameCanvas"></canvas>
+        </div>
     </div>
 
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK + Three.js -->
     <script type="importmap">
         {
             "imports": {
                 "firebase/app": "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js",
-                "firebase/database": "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js"
+                "firebase/database": "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js",
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
             }
         }
     </script>
 
     <script type="module">
         // ------------------------------------------------------------
-        // ПОЛНЫЙ КОД: Регистрация, вход (без Firebase Auth), профиль, друзья, серверы
+        // ПОЛНЫЙ КОД: Авторизация, профиль, серверы (реальный онлайн), 3D с анимацией
         // ------------------------------------------------------------
         import { initializeApp } from 'firebase/app';
-        import { getDatabase, ref, set, get, update, remove, push, onValue } from 'firebase/database';
+        import { getDatabase, ref, set, get, update, remove, push, onValue, onChildAdded, onChildRemoved } from 'firebase/database';
+        import * as THREE from 'three';
 
         const firebaseConfig = {
             apiKey: "AIzaSyDkXM7aHtofhx8WAT1eSfLnbsOYVXXg28o",
@@ -165,15 +142,17 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // DOM элементы
+        // DOM
         const authSection = document.getElementById('authSection');
         const menuSection = document.getElementById('menuSection');
         const profileSection = document.getElementById('profileSection');
-        const friendsSection = document.getElementById('friendsSection');
         const serversSection = document.getElementById('serversSection');
         const loadingOverlay = document.getElementById('loadingOverlay');
         const progressFill = document.getElementById('progressFill');
         const progressText = document.getElementById('progressText');
+        const gameContainer = document.getElementById('gameContainer');
+        const canvas = document.getElementById('gameCanvas');
+        const serverList = document.getElementById('serverList');
 
         const authNick = document.getElementById('authNick');
         const authPass = document.getElementById('authPass');
@@ -191,18 +170,17 @@
         const avatarInput = document.getElementById('avatarInput');
         const skinInput = document.getElementById('skinInput');
 
-        const friendSearch = document.getElementById('friendSearch');
-        const requestsList = document.getElementById('requestsList');
-        const friendsListContainer = document.getElementById('friendsListContainer');
-
-        const serverList = document.getElementById('serverList');
-        const vipName = document.getElementById('vipName');
-        const vipAccess = document.getElementById('vipAccess');
-        const createVipForm = document.getElementById('createVipForm');
-
         let currentNick = null;
         let currentUid = null;
         let currentUserData = null;
+        let currentServerId = null; // сервер, на котором находится игрок
+
+        // -------------------- 3D Переменные --------------------
+        let scene, camera, renderer, player;
+        let keys = { w: false, a: false, s: false, d: false };
+        let animationId = null;
+        let playerDirection = new THREE.Vector3(0, 0, -1);
+        let isMoving = false;
 
         // -------------------- Утилиты --------------------
         function showLoading(callback) {
@@ -224,7 +202,6 @@
             }, 100);
         }
 
-        // Функция входа в аккаунт
         async function loginUser(nick, pass) {
             const userRef = ref(db, 'users/' + nick);
             const snap = await get(userRef);
@@ -237,9 +214,8 @@
                 authMsg.textContent = '❌ Неверный пароль!';
                 return false;
             }
-            // Успешный вход
             currentNick = nick;
-            currentUid = nick; // используем ник как уникальный ID
+            currentUid = nick;
             currentUserData = data;
             localStorage.setItem('stealSession', JSON.stringify({ nick, password: pass }));
             return true;
@@ -259,22 +235,21 @@
                 authMsg.textContent = '❌ Этот ник уже занят!';
                 return;
             }
-            // Создаём нового пользователя
             await set(userRef, {
                 nick: nick,
                 password: pass,
-                avatar: 'https://via.placeholder.com/80',
+                avatar: 'https://ui-avatars.com/api/?name=' + encodeURIComponent(nick) + '&background=random&color=fff&size=80',
                 skin: '',
                 friends: {},
                 friendRequests: {}
             });
-            // Проверяем и создаём админа Dushka, если нет
+            // Админ Dushka
             const adminRef = ref(db, 'admins/Dushka');
             const adminSnap = await get(adminRef);
             if (!adminSnap.exists()) {
                 await set(adminRef, {
                     nick: 'Dushka',
-                    password: '16052014may' // обновлённый пароль
+                    password: '16052014may'
                 });
             }
             authMsg.textContent = '✅ Аккаунт создан! Теперь войди.';
@@ -292,76 +267,78 @@
             const success = await loginUser(nick, pass);
             if (success) {
                 authMsg.textContent = '';
-                await showMenu();
+                showMenu();
             }
         });
 
-        // Проверяем, есть ли сохранённая сессия
+        // Проверка сессии
         async function checkSession() {
             const session = localStorage.getItem('stealSession');
             if (session) {
                 const { nick, password } = JSON.parse(session);
                 const success = await loginUser(nick, password);
                 if (success) {
-                    await showMenu();
+                    showMenu();
                     return;
                 } else {
                     localStorage.removeItem('stealSession');
                 }
             }
-            // Если нет сессии или она невалидна, показываем вход
             authSection.classList.remove('hidden');
         }
 
-        // -------------------- Меню и навигация --------------------
-        async function showMenu() {
+        // -------------------- Навигация --------------------
+        function showMenu() {
             authSection.classList.add('hidden');
             menuSection.classList.remove('hidden');
             profileSection.classList.add('hidden');
-            friendsSection.classList.add('hidden');
             serversSection.classList.add('hidden');
+            gameContainer.classList.add('hidden');
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+                if (renderer) { renderer.dispose(); renderer = null; }
+            }
 
             menuNick.textContent = currentUserData.nick;
             menuId.textContent = currentUid.slice(0, 6);
-            menuAvatar.src = currentUserData.avatar || 'https://via.placeholder.com/80';
+            menuAvatar.src = currentUserData.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(currentUserData.nick) + '&background=random&color=fff&size=80';
             profileNick.textContent = currentUserData.nick;
             profileId.textContent = currentUid.slice(0, 6);
-            profileAvatar.src = currentUserData.avatar || 'https://via.placeholder.com/80';
+            profileAvatar.src = currentUserData.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(currentUserData.nick) + '&background=random&color=fff&size=80';
 
-            loadFriends();
-            loadFriendRequests();
-            loadServers();
+            // Если был на сервере, выходим
+            if (currentServerId) {
+                leaveServer(currentServerId);
+                currentServerId = null;
+            }
         }
 
-        window.openMenu = function() {
-            profileSection.classList.add('hidden');
-            friendsSection.classList.add('hidden');
-            serversSection.classList.add('hidden');
-            menuSection.classList.remove('hidden');
-        };
         window.openProfile = function() {
             menuSection.classList.add('hidden');
             profileSection.classList.remove('hidden');
-        };
-        window.openFriends = function() {
-            menuSection.classList.add('hidden');
-            friendsSection.classList.remove('hidden');
-            loadFriends();
-            loadFriendRequests();
         };
         window.openServers = function() {
             menuSection.classList.add('hidden');
             serversSection.classList.remove('hidden');
             loadServers();
         };
+        window.openMenu = function() {
+            profileSection.classList.add('hidden');
+            serversSection.classList.add('hidden');
+            menuSection.classList.remove('hidden');
+        };
         window.logout = function() {
             localStorage.removeItem('stealSession');
             currentNick = null;
             currentUid = null;
             currentUserData = null;
+            if (currentServerId) {
+                leaveServer(currentServerId);
+                currentServerId = null;
+            }
             menuSection.classList.add('hidden');
             profileSection.classList.add('hidden');
-            friendsSection.classList.add('hidden');
             serversSection.classList.add('hidden');
             authSection.classList.remove('hidden');
             authMsg.textContent = '';
@@ -380,7 +357,6 @@
             newPass.value = '';
         };
 
-        // Аватарка
         avatarInput.addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
@@ -396,7 +372,6 @@
             reader.readAsDataURL(file);
         });
 
-        // Скин
         skinInput.addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
@@ -405,186 +380,303 @@
                 const dataUrl = ev.target.result;
                 const userRef = ref(db, 'users/' + currentUid + '/skin');
                 await update(userRef, { skin: dataUrl });
-                alert('Скин сохранён!');
+                currentUserData.skin = dataUrl;
+                alert('Скин сохранён! Применится при следующем запуске игры.');
             };
             reader.readAsDataURL(file);
         });
 
-        // -------------------- Друзья --------------------
-        window.sendFriendRequest = async function() {
-            const targetNick = friendSearch.value.trim();
-            if (!targetNick) return alert('Введи ник друга');
-            if (targetNick === currentUserData.nick) return alert('Нельзя добавить себя');
+        // -------------------- Серверы (реальный онлайн) --------------------
+        // Узел в Firebase: publicServers/{serverId}: { players: число, max: 8 }
+        // VIP серверы: vipServers/{serverId}: { name, owner, players, max, access }
 
-            const usersRef = ref(db, 'users');
-            const snap = await get(usersRef);
-            if (!snap.exists()) return alert('Нет пользователей');
-            let targetUid = null;
-            snap.forEach((child) => {
-                if (child.val().nick === targetNick) targetUid = child.key;
-            });
-            if (!targetUid) return alert('Пользователь не найден');
-            if (targetUid === currentUid) return alert('Это ты');
-
-            const reqRef = ref(db, 'users/' + targetUid + '/friendRequests/' + currentUid);
-            await set(reqRef, { from: currentUserData.nick, timestamp: Date.now() });
-            alert('Запрос отправлен!');
-            friendSearch.value = '';
-        };
-
-        function loadFriendRequests() {
-            if (!currentUid) return;
-            const reqRef = ref(db, 'users/' + currentUid + '/friendRequests');
-            onValue(reqRef, (snap) => {
-                requestsList.innerHTML = '';
-                if (!snap.exists()) {
-                    requestsList.innerHTML = '<div style="color:#666;">Нет запросов</div>';
-                    return;
-                }
-                snap.forEach((child) => {
-                    const data = child.val();
-                    const div = document.createElement('div');
-                    div.className = 'friend-item';
-                    div.innerHTML = `
-                        <span>${data.from}</span>
-                        <div>
-                            <button class="small-btn" onclick="acceptRequest('${child.key}')" style="background:#4a7cf7;">✔</button>
-                            <button class="small-btn" onclick="rejectRequest('${child.key}')" style="background:#6b6b6b;">✖</button>
-                        </div>
-                    `;
-                    requestsList.appendChild(div);
-                });
-            });
-        }
-
-        window.acceptRequest = async function(requesterUid) {
-            const userSnap = await get(ref(db, 'users/' + requesterUid));
-            const requesterNick = userSnap.exists() ? userSnap.val().nick : 'Неизвестный';
-            await set(ref(db, 'users/' + currentUid + '/friends/' + requesterUid), { nick: requesterNick });
-            await remove(ref(db, 'users/' + currentUid + '/friendRequests/' + requesterUid));
-            await set(ref(db, 'users/' + requesterUid + '/friends/' + currentUid), { nick: currentUserData.nick });
-            loadFriends();
-            loadFriendRequests();
-        };
-
-        window.rejectRequest = async function(requesterUid) {
-            await remove(ref(db, 'users/' + currentUid + '/friendRequests/' + requesterUid));
-            loadFriendRequests();
-        };
-
-        function loadFriends() {
-            if (!currentUid) return;
-            const friendsRef = ref(db, 'users/' + currentUid + '/friends');
-            onValue(friendsRef, (snap) => {
-                friendsListContainer.innerHTML = '';
-                if (!snap.exists()) {
-                    friendsListContainer.innerHTML = '<div style="color:#666;">У тебя пока нет друзей</div>';
-                    return;
-                }
-                snap.forEach((child) => {
-                    const data = child.val();
-                    const div = document.createElement('div');
-                    div.className = 'friend-item';
-                    div.innerHTML = `<span>${data.nick || 'Неизвестный'}</span>`;
-                    friendsListContainer.appendChild(div);
-                });
-            });
-        }
-
-        // -------------------- Серверы --------------------
-        function getPublicServers() {
-            return [
-                { id: 'pub1', name: 'Публичный #1', type: 'public', players: 4, max: 8 },
-                { id: 'pub2', name: 'Публичный #2', type: 'public', players: 2, max: 8 },
-                { id: 'pub3', name: 'Публичный #3', type: 'public', players: 7, max: 8 },
-            ];
-        }
-
-        async function loadServers() {
-            const vipRef = ref(db, 'vipServers');
-            const vipSnap = await get(vipRef);
-            let vipServers = [];
-            if (vipSnap.exists()) {
-                vipSnap.forEach((child) => {
-                    const data = child.val();
-                    vipServers.push({
-                        id: child.key,
-                        name: data.name,
-                        type: 'vip',
-                        players: data.players || 0,
-                        max: data.max || 8,
-                        owner: data.owner,
-                        access: data.access || 'all'
-                    });
-                });
-            }
-            const publicServers = getPublicServers();
-            const allServers = [...vipServers, ...publicServers];
-            serverList.innerHTML = '';
-            if (allServers.length === 0) {
-                serverList.innerHTML = '<div style="color:#666;">Нет доступных серверов</div>';
-                return;
-            }
-            allServers.forEach(s => {
-                const div = document.createElement('div');
-                div.className = 'server-item';
-                const isVip = s.type === 'vip';
-                div.innerHTML = `
-                    <div class="server-info">
-                        <strong>${s.name}</strong>
-                        <span class="${isVip ? 'badge-vip' : 'badge-public'}">${isVip ? 'VIP' : 'Публичный'}</span>
-                        <div style="font-size:13px; color:#aaa;">${s.players}/${s.max} игроков</div>
-                        ${isVip ? `<div style="font-size:12px; color:#f7c948;">Владелец: ${s.owner || 'Неизвестный'}</div>` : ''}
-                    </div>
-                    <div class="server-actions">
-                        <button class="join-btn" onclick="joinServer('${s.id}')">Join</button>
-                    </div>
-                `;
-                serverList.appendChild(div);
-            });
-        }
-
-        window.showCreateVip = function() {
-            createVipForm.classList.toggle('hidden');
-        };
-
-        window.createVipServer = async function() {
-            const name = vipName.value.trim();
-            if (!name) return alert('Введи название VIP-сервера');
-            if (!currentUid) return alert('Нет авторизации');
-
-            const vipRef = ref(db, 'vipServers');
-            const newVipRef = push(vipRef);
-            await set(newVipRef, {
-                name: name,
-                owner: currentUserData.nick,
-                ownerUid: currentUid,
+        // Создать новый публичный сервер
+        async function createPublicServer() {
+            const refServers = ref(db, 'publicServers');
+            const newRef = push(refServers);
+            await set(newRef, {
                 players: 0,
                 max: 8,
-                access: vipAccess.value
+                createdAt: Date.now()
             });
-            alert('VIP-сервер создан!');
-            vipName.value = '';
-            createVipForm.classList.add('hidden');
-            loadServers();
+            return newRef.key;
+        }
+
+        // Получить первый свободный публичный сервер (с players < max)
+        async function getAvailablePublicServer() {
+            const refServers = ref(db, 'publicServers');
+            const snap = await get(refServers);
+            if (!snap.exists()) {
+                // создаём первый
+                return await createPublicServer();
+            }
+            let available = null;
+            snap.forEach((child) => {
+                const data = child.val();
+                if (data.players < data.max && !available) {
+                    available = child.key;
+                }
+            });
+            if (!available) {
+                // все заняты — создаём новый
+                available = await createPublicServer();
+            }
+            return available;
+        }
+
+        // Присоединиться к серверу (увеличить счётчик)
+        async function joinServer(serverId, isVip = false) {
+            if (!currentUid) return alert('Сначала войди');
+            if (currentServerId) {
+                await leaveServer(currentServerId);
+            }
+            const path = isVip ? 'vipServers/' + serverId : 'publicServers/' + serverId;
+            const serverRef = ref(db, path);
+            const snap = await get(serverRef);
+            if (!snap.exists()) {
+                alert('Сервер не найден');
+                return;
+            }
+            const data = snap.val();
+            if (data.players >= data.max) {
+                alert('Сервер заполнен!');
+                return;
+            }
+            // Увеличиваем счётчик
+            await update(serverRef, { players: data.players + 1 });
+            // Запоминаем, что мы на сервере
+            currentServerId = serverId;
+            // Запускаем 3D
+            showLoading(() => {
+                init3D();
+            });
+        }
+
+        // Покинуть сервер (уменьшить счётчик)
+        async function leaveServer(serverId) {
+            if (!serverId) return;
+            const path = 'publicServers/' + serverId;
+            const serverRef = ref(db, path);
+            const snap = await get(serverRef);
+            if (snap.exists()) {
+                const data = snap.val();
+                const newCount = Math.max(0, data.players - 1);
+                await update(serverRef, { players: newCount });
+                // Если сервер стал пустым, можно удалить (но оставим для истории)
+            }
+            currentServerId = null;
+        }
+
+        // Быстрая игра
+        window.quickPlay = async function() {
+            if (!currentUid) return alert('Сначала войди');
+            const serverId = await getAvailablePublicServer();
+            await joinServer(serverId, false);
         };
 
-        window.quickPlay = function() {
-            showLoading(() => {
-                alert('Ты зашёл на случайный публичный сервер! (геймплей будет позже)');
+        // Загрузить список серверов и отобразить
+        function loadServers() {
+            // Слушаем публичные серверы
+            const publicRef = ref(db, 'publicServers');
+            onValue(publicRef, async (snap) => {
+                const vipRef = ref(db, 'vipServers');
+                const vipSnap = await get(vipRef);
+                let vipServers = [];
+                if (vipSnap.exists()) {
+                    vipSnap.forEach((child) => {
+                        vipServers.push({
+                            id: child.key,
+                            ...child.val(),
+                            type: 'vip'
+                        });
+                    });
+                }
+                let publicServers = [];
+                if (snap.exists()) {
+                    snap.forEach((child) => {
+                        publicServers.push({
+                            id: child.key,
+                            ...child.val(),
+                            type: 'public',
+                            name: 'Публичный #' + child.key.slice(0, 4)
+                        });
+                    });
+                }
+                // Объединяем: VIP сначала
+                const all = [...vipServers, ...publicServers];
+                serverList.innerHTML = '';
+                if (all.length === 0) {
+                    serverList.innerHTML = '<div style="color:#666;">Нет серверов</div>';
+                    return;
+                }
+                all.forEach(s => {
+                    const div = document.createElement('div');
+                    div.className = 'server-item';
+                    const isVip = s.type === 'vip';
+                    div.innerHTML = `
+                        <div>
+                            <strong>${s.name || 'Сервер'}</strong>
+                            <span class="${isVip ? 'badge-vip' : 'badge-public'}">${isVip ? 'VIP' : 'Публичный'}</span>
+                            <div style="font-size:13px; color:#aaa;">${s.players || 0}/${s.max || 8} игроков</div>
+                            ${isVip ? `<div style="font-size:12px; color:#f7c948;">Владелец: ${s.owner || 'Неизвестный'}</div>` : ''}
+                        </div>
+                        <button class="join-btn" onclick="joinServerUI('${s.id}', ${isVip})">Join</button>
+                    `;
+                    serverList.appendChild(div);
+                });
             });
+        }
+
+        // Обёртка для кнопки Join (вызывается из HTML)
+        window.joinServerUI = async function(serverId, isVip) {
+            if (!currentUid) return alert('Сначала войди');
+            await joinServer(serverId, isVip);
         };
 
-        window.joinServer = function(serverId) {
-            showLoading(() => {
-                alert('Ты зашёл на сервер ' + serverId + '! (геймплей будет позже)');
+        // -------------------- 3D Игра с анимацией --------------------
+        function init3D() {
+            gameContainer.classList.remove('hidden');
+            menuSection.classList.add('hidden');
+            profileSection.classList.add('hidden');
+            serversSection.classList.add('hidden');
+
+            // Сцена
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB);
+
+            // Камера
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
+            camera.position.set(0, 15, 15);
+            camera.lookAt(0, 0, 0);
+
+            // Рендерер
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+
+            // Свет
+            const ambient = new THREE.AmbientLight(0x404060);
+            scene.add(ambient);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+            dirLight.position.set(10, 20, 10);
+            dirLight.castShadow = true;
+            scene.add(dirLight);
+
+            // Пол
+            const groundGeometry = new THREE.PlaneGeometry(50, 50);
+            const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x2a2f3a, side: THREE.DoubleSide });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+
+            // Сетка
+            const gridHelper = new THREE.GridHelper(50, 20, 0x888888, 0x444444);
+            scene.add(gridHelper);
+
+            // Создаём игрока (куб со скином)
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            let material;
+            if (currentUserData.skin) {
+                const texture = new THREE.TextureLoader().load(currentUserData.skin);
+                material = new THREE.MeshStandardMaterial({ map: texture });
+            } else {
+                material = new THREE.MeshStandardMaterial({ color: 0x4a7cf7 });
+            }
+            player = new THREE.Mesh(geometry, material);
+            player.position.set(0, 0.5, 0);
+            player.castShadow = true;
+            scene.add(player);
+
+            // Управление
+            window.addEventListener('keydown', (e) => {
+                const key = e.key.toLowerCase();
+                if (key === 'w' || key === 'a' || key === 's' || key === 'd') {
+                    keys[key] = true;
+                    e.preventDefault();
+                }
             });
+            window.addEventListener('keyup', (e) => {
+                const key = e.key.toLowerCase();
+                if (key === 'w' || key === 'a' || key === 's' || key === 'd') {
+                    keys[key] = false;
+                    e.preventDefault();
+                }
+            });
+
+            // Анимация
+            animate();
+        }
+
+        function animate() {
+            if (!renderer || !player) return;
+            const speed = 0.1;
+            let dx = 0, dz = 0;
+            if (keys.w) dz -= speed;
+            if (keys.s) dz += speed;
+            if (keys.a) dx -= speed;
+            if (keys.d) dx += speed;
+
+            const moving = (dx !== 0 || dz !== 0);
+            if (moving) {
+                // Поворачиваем куб в направлении движения
+                const angle = Math.atan2(dx, dz);
+                player.rotation.y = angle;
+                // Анимация "ходьбы" - небольшое покачивание по оси Y
+                const time = Date.now() * 0.01;
+                player.position.y = 0.5 + Math.sin(time) * 0.05;
+                // Слегка наклоняем вперёд
+                player.rotation.x = Math.sin(time) * 0.1;
+            } else {
+                // Возвращаем в нейтральное положение
+                player.position.y = 0.5;
+                player.rotation.x = 0;
+            }
+
+            player.position.x += dx;
+            player.position.z += dz;
+
+            // Камера следит
+            camera.position.x = player.position.x;
+            camera.position.z = player.position.z + 15;
+            camera.lookAt(player.position.x, 0, player.position.z);
+
+            renderer.render(scene, camera);
+            animationId = requestAnimationFrame(animate);
+        }
+
+        window.exitGame = function() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            if (renderer) {
+                renderer.dispose();
+                renderer = null;
+            }
+            gameContainer.classList.add('hidden');
+            // Покидаем сервер
+            if (currentServerId) {
+                leaveServer(currentServerId);
+                currentServerId = null;
+            }
+            window.removeEventListener('keydown', () => {});
+            window.removeEventListener('keyup', () => {});
+            showMenu();
         };
+
+        // Resize
+        window.addEventListener('resize', () => {
+            if (renderer) {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+        });
 
         // -------------------- Инициализация --------------------
         checkSession();
-
-        console.log('🔥 Платформа "Укради Брэйнрот" загружена!');
+        console.log('🔥 Тест 3D с серверами и анимацией загружен!');
     </script>
 </body>
 </html>
