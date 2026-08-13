@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Укради Брэйнрот - Карта 1 Этаж</title>
+    <title>Укради Брэйнрот - Полный билд</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
@@ -43,10 +43,27 @@
         .flex-row button { width: auto; padding: 10px 20px; margin-bottom: 0; }
         .small-btn { width: auto; padding: 5px 15px; font-size: 14px; margin: 0 5px; }
         #serverList { max-height: 400px; overflow-y: auto; }
-        .steal-msg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 40px; font-weight: bold; color: #f7c948; text-shadow: 0 0 10px #f7c948; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
-        .steal-msg.show { opacity: 1; }
         .vip-settings { background: #1a1f2b; border-radius: 12px; padding: 15px; margin-top: 10px; border: 1px solid #f7c948; }
         #vipAccess { background: #252d3d; color: #fff; border: none; padding: 10px; border-radius: 8px; width: 100%; margin: 10px 0; }
+
+        /* --- Стили для магазина --- */
+        #shopModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); }
+        .shop-window { background: #1e2432; width: 90%; max-width: 800px; max-height: 80vh; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; border: 2px solid #3a4a6b; }
+        .shop-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; }
+        .shop-header h2 { color: #4a7cf7; text-transform: uppercase; }
+        .shop-close { background: #ff4444; padding: 5px 15px; border-radius: 8px; border: none; color: #fff; font-weight: bold; cursor: pointer; width: auto; margin: 0; }
+        .shop-money { color: #f7c948; font-size: 18px; font-weight: bold; }
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; overflow-y: auto; padding-right: 10px; }
+        .shop-item { background: #2a3242; border-radius: 12px; padding: 15px; display: flex; flex-direction: column; border: 1px solid #3f4a5f; }
+        .shop-item h4 { font-size: 18px; margin-bottom: 5px; }
+        .shop-item p { font-size: 13px; color: #aaa; margin-bottom: 10px; flex-grow: 1; }
+        .shop-item .row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+        .price-tag { background: #4caf50; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 14px; }
+        .auto-check { display: flex; align-items: center; gap: 5px; font-size: 14px; color: #aaa; cursor: pointer; }
+        .auto-check input { width: auto; margin: 0; }
+        .owned-btn { background: #4caf50; color: #fff; padding: 5px 15px; border-radius: 20px; font-weight: bold; border: none; width: auto; margin: 0; font-size: 14px; }
+        .buy-btn { background: #4a7cf7; padding: 5px 15px; border-radius: 20px; border: none; color: #fff; font-weight: bold; width: auto; margin: 0; font-size: 14px; }
+        .buy-btn:hover { background: #3a6be0; }
     </style>
 </head>
 <body>
@@ -73,7 +90,8 @@
             <div class="menu-btn" onclick="openProfile()">👤 Профиль</div>
             <div class="menu-btn" onclick="openFriends()">👥 Друзья</div>
             <div class="menu-btn" onclick="openServers()">🖥️ Серверы</div>
-            <div class="menu-btn" onclick="quickPlay()">▶️ Играть (Быстрый вход)</div>
+            <div class="menu-btn" onclick="openShop()">🛒 Магазин (Снаряжение)</div>
+            <div class="menu-btn" onclick="quickPlay()">▶️ Играть (Карта)</div>
             <div style="margin-top:20px; text-align:center; color:#666; font-size:14px; cursor:pointer;" onclick="logout()">Выйти</div>
         </div>
 
@@ -133,6 +151,18 @@
             <div id="serverList"></div>
         </div>
 
+        <!-- Магазин -->
+        <div id="shopModal" class="hidden">
+            <div class="shop-window">
+                <div class="shop-header">
+                    <h2>🛒 Shop</h2>
+                    <div class="shop-money" id="shopMoneyDisplay">💰 $0</div>
+                    <button class="shop-close" onclick="closeShop()">✕</button>
+                </div>
+                <div class="shop-grid" id="shopGrid"></div>
+            </div>
+        </div>
+
         <!-- Загрузка -->
         <div id="loadingOverlay" class="hidden">
             <div style="font-size:30px;">⏳ Загрузка...</div>
@@ -145,7 +175,6 @@
             <div id="gameUI">
                 <button class="exit-btn" onclick="exitGame()">✕ Выйти</button>
             </div>
-            <div id="stealMsg" class="steal-msg">🧠 КРАЖА!</div>
             <canvas id="gameCanvas"></canvas>
         </div>
     </div>
@@ -163,7 +192,7 @@
 
     <script type="module">
         // ------------------------------------------------------------
-        // ПОЛНЫЙ КОД: Карта 1 этаж, объекты со скринов, исправление кнопок Join и VIP
+        // ПОЛНЫЙ КОД: ВСЁ! Карта, Магазин, Управление ПКМ
         // ------------------------------------------------------------
         import { initializeApp } from 'firebase/app';
         import { getDatabase, ref, set, get, update, remove, push, onValue, onChildAdded, onChildChanged, onChildRemoved } from 'firebase/database';
@@ -188,6 +217,9 @@
         const profileSection = document.getElementById('profileSection');
         const friendsSection = document.getElementById('friendsSection');
         const serversSection = document.getElementById('serversSection');
+        const shopModal = document.getElementById('shopModal');
+        const shopGrid = document.getElementById('shopGrid');
+        const shopMoneyDisplay = document.getElementById('shopMoneyDisplay');
         const loadingOverlay = document.getElementById('loadingOverlay');
         const progressFill = document.getElementById('progressFill');
         const progressText = document.getElementById('progressText');
@@ -197,7 +229,6 @@
         const requestsList = document.getElementById('requestsList');
         const friendsListContainer = document.getElementById('friendsListContainer');
         const friendSearch = document.getElementById('friendSearch');
-        const stealMsg = document.getElementById('stealMsg');
         const vipName = document.getElementById('vipName');
         const vipAccess = document.getElementById('vipAccess');
         const createVipForm = document.getElementById('createVipForm');
@@ -222,6 +253,7 @@
         let currentUid = null;
         let currentUserData = null;
         let currentServerId = null;
+        let playerMoney = 50000; // Стартовые деньги
 
         // -------------------- 3D Переменные --------------------
         let scene, camera, renderer, player;
@@ -229,14 +261,30 @@
         let animationId = null;
         let playerPosRef = null;
         let updateInterval = null;
-        let otherPlayers = {}; 
-        let otherPlayersData = {};
+        let otherPlayers = {};
 
-        let camTheta = 0.5; 
+        let camTheta = 0.5;
+        let camPhi = 0.4;
         let camRadius = 15;
         let isDragging = false;
         let previousMouseX = 0;
         let previousMouseY = 0;
+
+        // Данные магазина
+        const shopItems = [
+            { id: 'slap', name: 'Slap', desc: 'An average hand to slap thieves!', price: 500, emoji: '✋' },
+            { id: 'speed_coil', name: 'Speed Coil', desc: 'Zoom around the map!', price: 750, emoji: '🌀' },
+            { id: 'iron_slap', name: 'Iron Slap', desc: 'Heavy iron slap!', price: 2500, emoji: '🗿' },
+            { id: 'gold_slap', name: 'Gold Slap', desc: 'Powerful golden slap!', price: 15000, emoji: '✨' },
+            { id: 'diamond_slap', name: 'Diamond Slap', desc: 'Charge up a diamond slap!', price: 50000, emoji: '💎' },
+            { id: 'emerald_slap', name: 'Emerald Slap', desc: 'Gem-infused slap!', price: 200000, emoji: '💚' },
+            { id: 'ruby_slap', name: 'Ruby Slap', desc: 'Ultimate ruby-powered slap!', price: 1000000, emoji: '❤️' },
+            { id: 'dark_slap', name: 'Dark Matter Slap', desc: 'Power of dark matter!', price: 1500000, emoji: '🖤' },
+            { id: 'flame_slap', name: 'Flame Slap', desc: 'Burn your enemies!', price: 2500000, emoji: '🔥' },
+            { id: 'nuclear_slap', name: 'Nuclear Slap', desc: 'Explodes with nuclear force!', price: 6000000, emoji: '☢️' },
+            { id: 'galaxy_slap', name: 'Galaxy Slap', desc: 'Slap with star power!', price: 15000000, emoji: '🌌' },
+            { id: 'glitched_slap', name: 'Glitched Slap', desc: 'Corrupt reality!', price: 25000000, emoji: '🌀' },
+        ];
 
         // -------------------- Утилиты --------------------
         function showLoading(callback) {
@@ -265,6 +313,7 @@
             const data = snap.val();
             if (data.password !== pass) { authMsg.textContent = '❌ Неверный пароль!'; return false; }
             currentNick = nick; currentUid = nick; currentUserData = data;
+            playerMoney = data.money || 50000;
             localStorage.setItem('stealSession', JSON.stringify({ nick, password: pass }));
             return true;
         }
@@ -276,9 +325,9 @@
             const userRef = ref(db, 'users/' + nick);
             if ((await get(userRef)).exists()) { authMsg.textContent = '❌ Этот ник уже занят!'; return; }
             await set(userRef, {
-                nick: nick, password: pass,
+                nick: nick, password: pass, money: 50000,
                 avatar: 'https://ui-avatars.com/api/?name=' + encodeURIComponent(nick) + '&background=random&color=fff&size=80',
-                skin: '', friends: {}, friendRequests: {}
+                skin: '', friends: {}, friendRequests: {}, inventory: {}
             });
             if (!(await get(ref(db, 'admins/Dushka'))).exists()) {
                 await set(ref(db, 'admins/Dushka'), { nick: 'Dushka', password: '16052014may' });
@@ -307,6 +356,7 @@
         function showMenu() {
             authSection.classList.add('hidden'); menuSection.classList.remove('hidden');
             profileSection.classList.add('hidden'); friendsSection.classList.add('hidden'); serversSection.classList.add('hidden');
+            shopModal.classList.add('hidden');
             gameContainer.classList.add('hidden');
             stopGame();
 
@@ -315,7 +365,7 @@
             profileNick.textContent = currentUserData.nick; profileId.textContent = currentUid.slice(0, 6);
             profileAvatar.src = currentUserData.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(currentUserData.nick) + '&background=random&color=fff&size=80';
 
-            loadFriends(); loadFriendRequests(); loadServers();
+            loadFriends(); loadFriendRequests(); loadServers(); renderShop();
         }
 
         function stopGame() {
@@ -324,23 +374,19 @@
             if (updateInterval) { clearInterval(updateInterval); updateInterval = null; }
             if (playerPosRef) { remove(playerPosRef); playerPosRef = null; }
             if (currentServerId) { leaveServer(currentServerId); currentServerId = null; }
-            
-            Object.keys(otherPlayers).forEach(uid => {
-                scene.remove(otherPlayers[uid]);
-                delete otherPlayers[uid];
-            });
-            otherPlayersData = {};
+            Object.keys(otherPlayers).forEach(uid => { scene.remove(otherPlayers[uid]); delete otherPlayers[uid]; });
         }
 
         window.openProfile = function() { menuSection.classList.add('hidden'); profileSection.classList.remove('hidden'); };
         window.openFriends = function() { menuSection.classList.add('hidden'); friendsSection.classList.remove('hidden'); loadFriends(); loadFriendRequests(); };
         window.openServers = function() { menuSection.classList.add('hidden'); serversSection.classList.remove('hidden'); loadServers(); };
-        window.openMenu = function() { profileSection.classList.add('hidden'); friendsSection.classList.add('hidden'); serversSection.classList.add('hidden'); menuSection.classList.remove('hidden'); };
+        window.openMenu = function() { profileSection.classList.add('hidden'); friendsSection.classList.add('hidden'); serversSection.classList.add('hidden'); shopModal.classList.add('hidden'); menuSection.classList.remove('hidden'); };
         window.logout = function() {
             localStorage.removeItem('stealSession'); currentNick = null; currentUid = null; currentUserData = null;
             if (currentServerId) { leaveServer(currentServerId); currentServerId = null; }
             menuSection.classList.add('hidden'); profileSection.classList.add('hidden'); friendsSection.classList.add('hidden'); serversSection.classList.add('hidden');
             authSection.classList.remove('hidden'); authMsg.textContent = ''; authNick.value = ''; authPass.value = '';
+            stopGame();
         };
 
         // -------------------- Профиль --------------------
@@ -370,10 +416,58 @@
                 const dataUrl = ev.target.result;
                 await update(ref(db, 'users/' + currentUid + '/skin'), { skin: dataUrl });
                 currentUserData.skin = dataUrl;
-                alert('Скин сохранён!'); // Применится при заходе в игру
+                alert('Скин сохранён!');
             };
             reader.readAsDataURL(file);
         });
+
+        // -------------------- Магазин (Кнопки и UI) --------------------
+        window.openShop = function() { menuSection.classList.add('hidden'); shopModal.classList.remove('hidden'); renderShop(); };
+        window.closeShop = function() { shopModal.classList.add('hidden'); menuSection.classList.remove('hidden'); };
+
+        function renderShop() {
+            shopMoneyDisplay.textContent = `💰 $${playerMoney.toLocaleString()}`;
+            shopGrid.innerHTML = '';
+            shopItems.forEach(item => {
+                const owned = currentUserData.inventory && currentUserData.inventory[item.id];
+                const div = document.createElement('div'); div.className = 'shop-item';
+                div.innerHTML = `
+                    <h4>${item.emoji} ${item.name}</h4>
+                    <p>${item.desc}</p>
+                    <div class="row">
+                        <div>
+                            ${owned ? `<span class="owned-btn">OWNED</span>` : `<span class="price-tag">$${item.price.toLocaleString()}</span>`}
+                        </div>
+                        <div class="auto-check">
+                            <input type="checkbox" ${owned ? 'disabled' : ''} onchange="toggleAutoBuy('${item.id}')">
+                            <label>Auto Buy</label>
+                            ${!owned ? `<button class="buy-btn" onclick="buyItem('${item.id}')">Buy</button>` : ''}
+                        </div>
+                    </div>
+                `;
+                shopGrid.appendChild(div);
+            });
+        }
+
+        // Глобальные функции для магазина
+        window.buyItem = async function(itemId) {
+            const item = shopItems.find(i => i.id === itemId);
+            if (!item) return;
+            if (currentUserData.inventory && currentUserData.inventory[itemId]) return alert('У тебя уже есть это!');
+            if (playerMoney < item.price) return alert('Недостаточно денег!');
+            
+            playerMoney -= item.price;
+            if (!currentUserData.inventory) currentUserData.inventory = {};
+            currentUserData.inventory[itemId] = true;
+
+            await update(ref(db, 'users/' + currentUid), { money: playerMoney, inventory: currentUserData.inventory });
+            renderShop();
+            alert(`Куплено: ${item.name}!`);
+        };
+
+        window.toggleAutoBuy = function(itemId) {
+            alert('Функция Auto Buy пока в разработке, но галочка запомнена!');
+        };
 
         // -------------------- Друзья --------------------
         window.sendFriendRequest = async function() {
@@ -431,20 +525,15 @@
             });
         }
 
-        // -------------------- Серверы и VIP --------------------
-        // Делаем функции глобальными (исправление ошибки "is not defined")
+        // -------------------- Серверы --------------------
         window.toggleCreateVip = function() { createVipForm.classList.toggle('hidden'); };
-
         window.createVipServer = async function() {
             const name = vipName.value.trim();
             if (!name) return alert('Введи название VIP-сервера');
             if (!currentUid) return alert('Нет авторизации');
             const vipRef = ref(db, 'vipServers');
             const newVipRef = push(vipRef);
-            await set(newVipRef, {
-                name: name, owner: currentUserData.nick, ownerUid: currentUid,
-                players: 0, max: 8, access: vipAccess.value
-            });
+            await set(newVipRef, { name: name, owner: currentUserData.nick, ownerUid: currentUid, players: 0, max: 8, access: vipAccess.value });
             alert('VIP-сервер создан!'); vipName.value = ''; createVipForm.classList.add('hidden'); loadServers();
         };
 
@@ -467,14 +556,10 @@
             if (!serverId) return;
             const path = 'publicServers/' + serverId;
             const snap = await get(ref(db, path));
-            if (snap.exists()) {
-                const data = snap.val();
-                await update(ref(db, path), { players: Math.max(0, data.players - 1) });
-            }
+            if (snap.exists()) { const data = snap.val(); await update(ref(db, path), { players: Math.max(0, data.players - 1) }); }
             currentServerId = null;
         }
 
-        // ГЛОБАЛЬНЫЕ ФУНКЦИИ для кнопок HTML
         window.quickPlay = async function() {
             if (!currentUid) return alert('Сначала войди');
             const serverId = await getAvailablePublicServer();
@@ -486,10 +571,9 @@
             await joinServerLogic(serverId, isVip);
         };
 
-        // Основная логика входа на сервер
         async function joinServerLogic(serverId, isVip) {
             if (currentServerId) await leaveServer(currentServerId);
-            let path = isVip ? 'vipServers/' + serverId : 'publicServers/' + serverId;
+            const path = isVip ? 'vipServers/' + serverId : 'publicServers/' + serverId;
             const snap = await get(ref(db, path));
             if (!snap.exists()) return alert('Сервер не найден');
             const data = snap.val();
@@ -502,16 +586,10 @@
         function loadServers() {
             onValue(ref(db, 'publicServers'), async (snap) => {
                 let publicServers = [];
-                if (snap.exists()) {
-                    snap.forEach((child) => { publicServers.push({ id: child.key, ...child.val(), type: 'public', name: 'Публичный #' + child.key.slice(0, 4) }); });
-                }
-                
+                if (snap.exists()) { snap.forEach((child) => { publicServers.push({ id: child.key, ...child.val(), type: 'public', name: 'Публичный #' + child.key.slice(0, 4) }); }); }
                 const vipSnap = await get(ref(db, 'vipServers'));
                 let vipServers = [];
-                if (vipSnap.exists()) {
-                    vipSnap.forEach((child) => { vipServers.push({ id: child.key, ...child.val(), type: 'vip' }); });
-                }
-                
+                if (vipSnap.exists()) { vipSnap.forEach((child) => { vipServers.push({ id: child.key, ...child.val(), type: 'vip' }); }); }
                 const all = [...vipServers, ...publicServers];
                 serverList.innerHTML = '';
                 if (all.length === 0) { serverList.innerHTML = '<div style="color:#666;">Нет серверов</div>'; return; }
@@ -531,34 +609,26 @@
             });
         }
 
-        // -------------------- 3D Игра --------------------
-        function makeTextSprite(message, color = 'white') {
+        // -------------------- 3D Игра (КАРТА, БАЗЫ, МАГАЗИНЫ) --------------------
+        function makeLabel(text, color, x, y, z) {
             const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
             canvas.width = 512; canvas.height = 128;
-            context.font = 'Bold 60px Arial';
-            context.textAlign = 'center';
-            context.textBaseline = 'middle';
-            
-            // Тень
-            context.shadowColor = 'black';
-            context.shadowBlur = 10;
-            
-            context.fillStyle = color;
-            context.fillText(message, 256, 64);
-            
+            const ctx = canvas.getContext('2d');
+            ctx.font = 'Bold 50px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.shadowColor = 'black'; ctx.shadowBlur = 10;
+            ctx.fillStyle = color; ctx.fillText(text, 256, 64);
             const texture = new THREE.CanvasTexture(canvas);
-            const material = new THREE.SpriteMaterial({ map: texture, depthTest: false });
-            const sprite = new THREE.Sprite(material);
+            const spriteMat = new THREE.SpriteMaterial({ map: texture, depthTest: false });
+            const sprite = new THREE.Sprite(spriteMat);
             sprite.scale.set(6, 1.5, 1);
-            return sprite;
+            sprite.position.set(x, y, z);
+            scene.add(sprite);
         }
 
         function createPlayerModel(skinUrl, isOther = false) {
             const group = new THREE.Group();
             const headGeo = new THREE.SphereGeometry(0.3, 12, 12);
             const bodyGeo = new THREE.CylinderGeometry(0.35, 0.35, 0.8, 8);
-
             let material;
             if (skinUrl && typeof skinUrl === 'string' && skinUrl.startsWith('data:image')) {
                 const loader = new THREE.TextureLoader();
@@ -568,7 +638,6 @@
             } else {
                 material = new THREE.MeshStandardMaterial({ color: isOther ? 0xff6b6b : 0x4a7cf7 });
             }
-
             const head = new THREE.Mesh(headGeo, material); head.position.y = 0.7;
             const body = new THREE.Mesh(bodyGeo, material); body.position.y = 0.2;
             group.add(head); group.add(body);
@@ -583,11 +652,10 @@
             serversSection.classList.add('hidden');
 
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x87CEEB); // Небо
+            scene.background = new THREE.Color(0x87CEEB);
 
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
-            camTheta = 0.5;
-            camRadius = 15;
+            camTheta = 0.5; camPhi = 0.4; camRadius = 15;
 
             renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -597,246 +665,168 @@
             const dirLight = new THREE.DirectionalLight(0xffffff, 1); dirLight.position.set(5, 20, 10); dirLight.castShadow = true; scene.add(dirLight);
             const hemiLight = new THREE.HemisphereLight(0x87CEEB, 0x3a7bd5, 0.6); scene.add(hemiLight);
 
-            // ----- КАРТА (ЗЕЛЁНАЯ ТРАВА И ЗАБОРЫ) -----
-            const groundGeo = new THREE.PlaneGeometry(60, 60);
-            const groundMat = new THREE.MeshStandardMaterial({ color: 0x6dc85c, side: THREE.DoubleSide }); // Яркая зеленая трава
+            // --- КАРТА ---
+            const groundGeo = new THREE.PlaneGeometry(70, 70);
+            const groundMat = new THREE.MeshStandardMaterial({ color: 0x6dc85c, side: THREE.DoubleSide });
             const ground = new THREE.Mesh(groundGeo, groundMat);
-            ground.rotation.x = -Math.PI / 2;
-            ground.receiveShadow = true;
-            scene.add(ground);
+            ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
 
-            // Коричневый забор по краям
             const wallMat = new THREE.MeshStandardMaterial({ color: 0x8B5A2B });
             const walls = [
-                { x: 0, z: -30, w: 60, h: 0.5 }, { x: 0, z: 30, w: 60, h: 0.5 },
-                { x: -30, z: 0, w: 0.5, h: 60 }, { x: 30, z: 0, w: 0.5, h: 60 }
+                { x: 0, z: -35, w: 70, h: 0.5 }, { x: 0, z: 35, w: 70, h: 0.5 },
+                { x: -35, z: 0, w: 0.5, h: 70 }, { x: 35, z: 0, w: 0.5, h: 70 }
             ];
             walls.forEach(w => {
                 const wallMesh = new THREE.Mesh(new THREE.BoxGeometry(w.w, 1.2, w.h), wallMat);
-                wallMesh.position.set(w.x, 0.6, w.z);
-                scene.add(wallMesh);
+                wallMesh.position.set(w.x, 0.6, w.z); scene.add(wallMesh);
             });
 
-            // КРАСНАЯ ДОРОЖКА (по центру)
             const carpetMat = new THREE.MeshStandardMaterial({ color: 0xcc2233 });
-            const carpet = new THREE.Mesh(new THREE.PlaneGeometry(6, 30), carpetMat);
-            carpet.rotation.x = -Math.PI / 2;
-            carpet.position.set(0, 0.01, 0);
-            scene.add(carpet);
+            const carpet = new THREE.Mesh(new THREE.PlaneGeometry(6, 40), carpetMat);
+            carpet.rotation.x = -Math.PI / 2; carpet.position.set(0, 0.01, 0); scene.add(carpet);
 
-            // ----- БАЗЫ (ВСЕ 1 ЭТАЖНЫЕ) -----
+            // --- БАЗЫ (1 ЭТАЖ) ---
             const baseMat = new THREE.MeshStandardMaterial({ color: 0x888888 });
-            const roofMat = new THREE.MeshStandardMaterial({ color: 0x666666 });
+            const greenMat = new THREE.MeshStandardMaterial({ color: 0x33ff33 });
+            const redMat = new THREE.MeshStandardMaterial({ color: 0xff3333 });
             const woodMat = new THREE.MeshStandardMaterial({ color: 0xD2B48C });
             
-            function create1FloorBase(x, z, label) {
+            function createBase(x, z) {
                 const group = new THREE.Group();
-                const base = new THREE.Mesh(new THREE.BoxGeometry(5, 1.4, 4), baseMat);
-                base.position.y = 0.7;
-                group.add(base);
+                const baseFloor = new THREE.Mesh(new THREE.BoxGeometry(6, 0.2, 6), new THREE.MeshStandardMaterial({color:0x444444}));
+                baseFloor.position.set(0, 0.1, 0); group.add(baseFloor);
+                const wallsBase = new THREE.Mesh(new THREE.BoxGeometry(6, 1.2, 6), new THREE.MeshStandardMaterial({color:0x777777, transparent:true, opacity:0.5}));
+                wallsBase.position.set(0, 0.7, 0); group.add(wallsBase);
                 
-                const roof = new THREE.Mesh(new THREE.BoxGeometry(5, 0.2, 4.2), roofMat);
-                roof.position.y = 1.5;
-                group.add(roof);
-                
-                // Табличка "Base" или "Empty Base"
-                const sign = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.3, 0.1), woodMat);
-                sign.position.set(0, 0.8, 2.1);
-                group.add(sign);
-                
-                group.position.set(x, 0, z);
-                scene.add(group);
-
-                // Лейбл над базой
-                const labelSprite = makeTextSprite(label, '#ffffff');
-                labelSprite.position.set(x, 2.5, z);
-                scene.add(labelSprite);
+                const stairMat = new THREE.MeshStandardMaterial({ color: 0x555555 });
+                const hole = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.1, 3), new THREE.MeshStandardMaterial({color:0x111111}));
+                hole.position.set(0, 0.2, 0); group.add(hole);
+                for(let i=0; i<6; i++) {
+                    const step = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.1, 0.3), stairMat);
+                    step.position.set(0, -0.2 - i*0.3, -1.5 + i*0.6); group.add(step);
+                }
+                const redBar = new THREE.Mesh(new THREE.BoxGeometry(2, 0.1, 1.5), redMat);
+                redBar.position.set(0, -0.8, -0.5); group.add(redBar);
+                const redBar2 = new THREE.Mesh(new THREE.BoxGeometry(2, 0.1, 1.5), redMat);
+                redBar2.position.set(0, -1.5, -0.5); group.add(redBar2);
+                for(let i=0; i<3; i++) {
+                    const plat = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.1, 0.8), greenMat);
+                    plat.position.set(-1.5 + i*1.5, -0.8, 1.5); group.add(plat);
+                }
+                const doorMat = new THREE.MeshStandardMaterial({ color: 0xDD2222 });
+                const door = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.1, 1), doorMat);
+                door.position.set(0, 0.2, 2.8); group.add(door);
+                const sign = new THREE.Mesh(new THREE.BoxGeometry(2, 0.3, 0.1), woodMat);
+                sign.position.set(0, 0.9, 3.1); group.add(sign);
+                group.position.set(x, 0, z); scene.add(group);
             }
+            createBase(-15, -12); createBase(-15, 12); createBase(15, -12); createBase(15, 12);
+            createBase(-25, -12); createBase(-25, 12); createBase(25, -12); createBase(25, 12);
 
-            // 1-этажные базы по бокам (как на скринах)
-            create1FloorBase(-12, -8, 'Empty Base');
-            create1FloorBase(-12, 8, 'Empty Base');
-            create1FloorBase(12, -8, 'Empty Base');
-            create1FloorBase(12, 8, 'Empty Base');
-            create1FloorBase(0, -18, 'Empty Base');
-            create1FloorBase(0, 18, 'Empty Base');
-
-            // ----- ОБЪЕКТЫ (Shop, RNG, Колесо, Robux Shop, Trade Plaza) -----
-            
-            // 1. SHOP (Сине-белая палатка)
+            // --- ОБЪЕКТЫ ---
             const shopGroup = new THREE.Group();
-            const tentMat1 = new THREE.MeshStandardMaterial({ color: 0x4a7cf7 });
-            const tentMat2 = new THREE.MeshStandardMaterial({ color: 0xffffff });
-            const tentBase = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.4, 2.5), new THREE.MeshStandardMaterial({color:0x999999}));
-            tentBase.position.y = 0.2;
-            shopGroup.add(tentBase);
-            const tentPole1 = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 2), new THREE.MeshStandardMaterial({color:0xaaaaaa}));
-            tentPole1.position.set(-1.2, 1.2, 0);
-            shopGroup.add(tentPole1);
-            const tentPole2 = tentPole1.clone(); tentPole2.position.set(1.2, 1.2, 0);
-            shopGroup.add(tentPole2);
-            const tentPole3 = tentPole1.clone(); tentPole3.position.set(0, 1.2, -1.2);
-            shopGroup.add(tentPole3);
-            const tentPole4 = tentPole1.clone(); tentPole4.position.set(0, 1.2, 1.2);
-            shopGroup.add(tentPole4);
-            // Крыша
-            const roof1 = new THREE.Mesh(new THREE.ConeGeometry(2.3, 0.8, 4), tentMat1);
-            roof1.rotation.y = Math.PI/4; roof1.position.y = 1.8;
-            shopGroup.add(roof1);
-            shopGroup.position.set(-18, 0, -10);
-            scene.add(shopGroup);
-            const shopLabel = makeTextSprite('Shop', '#4a7cf7'); shopLabel.position.set(-18, 2.8, -10); scene.add(shopLabel);
+            const shopBase = new THREE.Mesh(new THREE.BoxGeometry(3, 0.3, 3), new THREE.MeshStandardMaterial({color:0x888888}));
+            shopBase.position.y = 0.15; shopGroup.add(shopBase);
+            const poleMat = new THREE.MeshStandardMaterial({color:0xaaaaaa});
+            for(let i=-1; i<=1; i+=2) { for(let j=-1; j<=1; j+=2) { const p = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 2.5), poleMat); p.position.set(i*1.2, 1.3, j*1.2); shopGroup.add(p); } }
+            const roof = new THREE.Mesh(new THREE.ConeGeometry(2.8, 0.8, 4), new THREE.MeshStandardMaterial({color: 0x4a7cf7}));
+            roof.rotation.y = Math.PI/4; roof.position.y = 2.2; shopGroup.add(roof);
+            shopGroup.position.set(-20, 0, -15); scene.add(shopGroup); makeLabel('Shop', '#4a7cf7', -20, 3.5, -15);
 
-            // 2. RNG MACHINE (Синяя машина)
             const rngGroup = new THREE.Group();
-            const rngBase = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 1.5), new THREE.MeshStandardMaterial({color: 0x3a6be0}));
-            rngBase.position.y = 0.75;
-            rngGroup.add(rngBase);
-            const rngLight = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.5), new THREE.MeshStandardMaterial({color: 0xffffff}));
-            rngLight.position.set(0, 1.75, 0.75);
-            rngGroup.add(rngLight);
-            const rngPanel = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.5, 0.1), new THREE.MeshStandardMaterial({color: 0x222222}));
-            rngPanel.position.set(0, 0.9, 0.85);
-            rngGroup.add(rngPanel);
-            rngGroup.position.set(-10, 0, -18);
-            scene.add(rngGroup);
-            const rngLabel = makeTextSprite('RNG Machine', '#3a6be0'); rngLabel.position.set(-10, 2.8, -18); scene.add(rngLabel);
+            const rngBase = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.2, 1.6), new THREE.MeshStandardMaterial({color:0x3a6be0}));
+            rngBase.position.y = 0.6; rngGroup.add(rngBase);
+            const rngFace = new THREE.Mesh(new THREE.BoxGeometry(1, 0.6, 0.1), new THREE.MeshStandardMaterial({color:0x111111}));
+            rngFace.position.set(0, 0.8, 0.85); rngGroup.add(rngFace);
+            rngGroup.position.set(-10, 0, -25); scene.add(rngGroup); makeLabel('RNG Machine', '#3a6be0', -10, 2.8, -25);
 
-            // 3. CRYSTAL WHEEL (Колесо)
             const wheelGroup = new THREE.Group();
-            const wheelBase = new THREE.Mesh(new THREE.BoxGeometry(2, 0.2, 2), new THREE.MeshStandardMaterial({color: 0x444444}));
-            wheelBase.position.y = 0.1;
-            wheelGroup.add(wheelBase);
-            const wheelPole = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 1.5), new THREE.MeshStandardMaterial({color: 0xcccccc}));
-            wheelPole.position.y = 0.85;
-            wheelGroup.add(wheelPole);
-            const wheelDisc = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.2, 32), new THREE.MeshStandardMaterial({color: 0xbf40bf}));
-            wheelDisc.position.y = 1.6;
-            wheelGroup.add(wheelDisc);
-            wheelGroup.position.set(10, 0, -18);
-            scene.add(wheelGroup);
-            const wheelLabel = makeTextSprite('Crystal Wheel', '#bf40bf'); wheelLabel.position.set(10, 2.8, -18); scene.add(wheelLabel);
+            const wheelBase = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.3, 2.5), new THREE.MeshStandardMaterial({color:0x444444}));
+            wheelBase.position.y = 0.15; wheelGroup.add(wheelBase);
+            const wheel = new THREE.Mesh(new THREE.CylinderGeometry(1.8, 1.8, 0.3, 16), new THREE.MeshStandardMaterial({color:0xbf40bf}));
+            wheel.position.y = 1.8; wheelGroup.add(wheel);
+            wheelGroup.position.set(10, 0, -25); scene.add(wheelGroup); makeLabel('Crystal Wheel', '#bf40bf', 10, 3.2, -25);
 
-            // 4. ROBUX SHOP (Красная палатка)
             const robuxGroup = new THREE.Group();
-            const rTent = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.4, 2.5), new THREE.MeshStandardMaterial({color:0x999999}));
-            rTent.position.y = 0.2;
-            robuxGroup.add(rTent);
-            const rPole = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 2), new THREE.MeshStandardMaterial({color:0xaaaaaa}));
-            rPole.position.set(0, 1.2, 0);
-            robuxGroup.add(rPole);
-            const rRoof = new THREE.Mesh(new THREE.ConeGeometry(2.3, 0.8, 4), new THREE.MeshStandardMaterial({color: 0xff3333}));
-            rRoof.rotation.y = Math.PI/4; rRoof.position.y = 1.8;
-            robuxGroup.add(rRoof);
-            robuxGroup.position.set(18, 0, -10);
-            scene.add(robuxGroup);
-            const robuxLabel = makeTextSprite('Robux Shop', '#ff3333'); robuxLabel.position.set(18, 2.8, -10); scene.add(robuxLabel);
+            const rBase = new THREE.Mesh(new THREE.BoxGeometry(3, 0.3, 3), new THREE.MeshStandardMaterial({color:0x888888}));
+            rBase.position.y = 0.15; robuxGroup.add(rBase);
+            const rRoof = new THREE.Mesh(new THREE.ConeGeometry(2.8, 0.8, 4), new THREE.MeshStandardMaterial({color: 0xff3333}));
+            rRoof.rotation.y = Math.PI/4; rRoof.position.y = 2.2; robuxGroup.add(rRoof);
+            robuxGroup.position.set(20, 0, -15); scene.add(robuxGroup); makeLabel('Robux Shop', '#ff3333', 20, 3.5, -15);
 
-            // 5. TRADE PLAZA (Синяя арка)
             const plazaGroup = new THREE.Group();
-            const pillarMat = new THREE.MeshStandardMaterial({color: 0x2a6bb0});
-            const pillar1 = new THREE.Mesh(new THREE.BoxGeometry(0.6, 2, 0.6), pillarMat);
-            pillar1.position.set(-1.5, 1, 0);
-            plazaGroup.add(pillar1);
-            const pillar2 = pillar1.clone(); pillar2.position.set(1.5, 1, 0);
-            plazaGroup.add(pillar2);
-            const arch = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.4, 0.6), pillarMat);
-            arch.position.set(0, 2, 0);
-            plazaGroup.add(arch);
-            const cube = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.4, 0.4), new THREE.MeshStandardMaterial({color: 0x4a7cf7}));
-            cube.position.set(0, 2.3, 0);
-            plazaGroup.add(cube);
-            plazaGroup.position.set(-10, 0, -8);
-            scene.add(plazaGroup);
-            const plazaLabel = makeTextSprite('Trade Plaza', '#2a6bb0'); plazaLabel.position.set(-10, 3.2, -8); scene.add(plazaLabel);
+            const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.5, 2.5, 0.5), new THREE.MeshStandardMaterial({color:0x2a6bb0}));
+            pillar.position.set(-1.5, 1.25, 0); plazaGroup.add(pillar);
+            const pillar2 = pillar.clone(); pillar2.position.set(1.5, 1.25, 0); plazaGroup.add(pillar2);
+            const arch = new THREE.Mesh(new THREE.BoxGeometry(3.5, 0.4, 0.5), new THREE.MeshStandardMaterial({color:0x2a6bb0}));
+            arch.position.set(0, 2.5, 0); plazaGroup.add(arch);
+            plazaGroup.position.set(-10, 0, -8); scene.add(plazaGroup); makeLabel('Trade Plaza', '#2a6bb0', -10, 3.8, -8);
 
-            // 6. QUEEN BEE (Королева Пчела)
             const beeGroup = new THREE.Group();
-            const bodyMat = new THREE.MeshStandardMaterial({color: 0xffcc00});
-            const stripeMat = new THREE.MeshStandardMaterial({color: 0x222222});
-            const beeBody = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.6, 8), bodyMat);
-            beeBody.position.y = 0.8;
-            beeGroup.add(beeBody);
-            const stripe1 = new THREE.Mesh(new THREE.CylinderGeometry(0.52, 0.52, 0.1, 8), stripeMat);
-            stripe1.position.y = 0.9;
-            beeGroup.add(stripe1);
-            const stripe2 = stripe1.clone(); stripe2.position.y = 0.7;
-            beeGroup.add(stripe2);
-            const wings = new THREE.Mesh(new THREE.SphereGeometry(0.4, 8, 8), new THREE.MeshStandardMaterial({color: 0xffffff, transparent: true, opacity: 0.4}));
-            wings.position.set(0.5, 1.2, 0.2);
-            wings.scale.set(0.8, 0.1, 0.4);
-            beeGroup.add(wings);
-            const wings2 = wings.clone(); wings2.position.set(-0.5, 1.2, 0.2);
-            beeGroup.add(wings2);
-            beeGroup.position.set(18, 0, -10);
-            scene.add(beeGroup);
-            const beeLabel = makeTextSprite('Queen Bee', '#ffcc00'); beeLabel.position.set(18, 2.2, -10); scene.add(beeLabel);
+            const beeBody = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 0.6, 6), new THREE.MeshStandardMaterial({color:0xffcc00}));
+            beeBody.position.y = 0.8; beeGroup.add(beeBody);
+            const stripe = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 0.1, 6), new THREE.MeshStandardMaterial({color:0x222222}));
+            stripe.position.y = 0.9; beeGroup.add(stripe);
+            const stripe2 = stripe.clone(); stripe2.position.y = 0.7; beeGroup.add(stripe2);
+            beeGroup.position.set(20, 0, -15); scene.add(beeGroup); makeLabel('Queen Bee', '#ffcc00', 20, 2.5, -15);
 
-            // ----- СОЗДАЁМ ИГРОКА -----
+            // --- ИГРОК ---
             const skinUrl = currentUserData.skin || null;
             player = createPlayerModel(skinUrl, false);
             player.position.set(0, 0.1, 0);
             scene.add(player);
 
-            // МУЛЬТИПЛЕЕР
+            // --- МУЛЬТИПЛЕЕР ---
             if (currentServerId) {
                 playerPosRef = ref(db, 'gameSessions/' + currentServerId + '/' + currentUid);
                 updateInterval = setInterval(async () => {
                     if(player) await set(playerPosRef, { x: player.position.x, z: player.position.z, nick: currentUserData.nick, skin: currentUserData.skin || '' });
                 }, 100);
-
                 const othersRef = ref(db, 'gameSessions/' + currentServerId);
                 onChildAdded(othersRef, (snap) => {
-                    const uid = snap.key;
-                    if (uid === currentUid) return;
+                    const uid = snap.key; if (uid === currentUid) return;
                     const data = snap.val();
-                    otherPlayersData[uid] = data;
                     const model = createPlayerModel(data.skin || null, true);
                     model.position.set(data.x || 0, 0.1, data.z || 0);
-                    scene.add(model);
-                    otherPlayers[uid] = model;
+                    scene.add(model); otherPlayers[uid] = model;
                 });
                 onChildChanged(othersRef, (snap) => {
-                    const uid = snap.key;
-                    if (uid === currentUid || !otherPlayers[uid]) return;
+                    const uid = snap.key; if (uid === currentUid || !otherPlayers[uid]) return;
                     const data = snap.val();
                     otherPlayers[uid].position.x = data.x || 0;
                     otherPlayers[uid].position.z = data.z || 0;
                 });
                 onChildRemoved(othersRef, (snap) => {
-                    const uid = snap.key;
-                    if (uid === currentUid) return;
-                    if (otherPlayers[uid]) { scene.remove(otherPlayers[uid]); delete otherPlayers[uid]; delete otherPlayersData[uid]; }
+                    const uid = snap.key; if (uid === currentUid) return;
+                    if (otherPlayers[uid]) { scene.remove(otherPlayers[uid]); delete otherPlayers[uid]; }
                 });
             }
 
-            // -------------------- УПРАВЛЕНИЕ --------------------
+            // --- УПРАВЛЕНИЕ ---
             window.addEventListener('keydown', (e) => { const k = e.key.toLowerCase(); if (k === 'w' || k === 'a' || k === 's' || k === 'd') { keys[k] = true; e.preventDefault(); } });
             window.addEventListener('keyup', (e) => { const k = e.key.toLowerCase(); if (k === 'w' || k === 'a' || k === 's' || k === 'd') { keys[k] = false; e.preventDefault(); } });
-            window.addEventListener('keydown', (e) => { if (e.key.toLowerCase() === 'e') handleSteal(); });
 
             canvas.addEventListener('mousedown', (e) => { if (e.button === 2) { isDragging = true; previousMouseX = e.clientX; previousMouseY = e.clientY; } });
-            window.addEventListener('mousemove', (e) => { if (isDragging) { const dx = e.clientX - previousMouseX; camTheta -= dx * 0.01; previousMouseX = e.clientX; previousMouseY = e.clientY; } });
+            window.addEventListener('mousemove', (e) => { if (isDragging) {
+                const deltaX = e.clientX - previousMouseX;
+                const deltaY = e.clientY - previousMouseY;
+                camTheta -= deltaX * 0.01;
+                camPhi -= deltaY * 0.01;
+                camPhi = Math.max(0.1, Math.min(1.5, camPhi));
+                previousMouseX = e.clientX; previousMouseY = e.clientY;
+            }});
             window.addEventListener('mouseup', (e) => { if (e.button === 2) isDragging = false; });
-            canvas.addEventListener('wheel', (e) => { e.preventDefault(); camRadius += e.deltaY * 0.05; camRadius = Math.max(5, Math.min(30, camRadius)); });
+            canvas.addEventListener('wheel', (e) => { e.preventDefault(); camRadius += e.deltaY * 0.05; camRadius = Math.max(5, Math.min(35, camRadius)); });
             canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 
             animate();
         }
 
-        function handleSteal() {
-            if (!player || !currentServerId) return;
-            stealMsg.classList.add('show');
-            setTimeout(() => stealMsg.classList.remove('show'), 500);
-        }
-
         function animate() {
             if (!renderer || !player) return;
             const speed = 0.15;
-
             const forward = new THREE.Vector3(-Math.sin(camTheta), 0, -Math.cos(camTheta));
             const right = new THREE.Vector3(forward.z, 0, -forward.x);
-
             const moveX = (keys.w ? forward.x : 0) + (keys.s ? -forward.x : 0) + (keys.a ? -right.x : 0) + (keys.d ? right.x : 0);
             const moveZ = (keys.w ? forward.z : 0) + (keys.s ? -forward.z : 0) + (keys.a ? -right.z : 0) + (keys.d ? right.z : 0);
             const len = Math.sqrt(moveX*moveX + moveZ*moveZ);
@@ -845,16 +835,16 @@
                 player.position.z += (moveZ / len) * speed;
                 player.rotation.y = Math.atan2(moveX, moveZ);
             }
-
-            // Ограничение карты
-            const limit = 28;
+            const limit = 34;
             player.position.x = Math.max(-limit, Math.min(limit, player.position.x));
             player.position.z = Math.max(-limit, Math.min(limit, player.position.z));
 
-            const heightOffset = 8;
-            camera.position.x = player.position.x + camRadius * Math.sin(camTheta);
-            camera.position.z = player.position.z + camRadius * Math.cos(camTheta);
-            camera.position.y = player.position.y + heightOffset;
+            const xOffset = camRadius * Math.sin(camTheta) * Math.cos(camPhi);
+            const zOffset = camRadius * Math.cos(camTheta) * Math.cos(camPhi);
+            const yOffset = camRadius * Math.sin(camPhi);
+            camera.position.x = player.position.x + xOffset;
+            camera.position.z = player.position.z + zOffset;
+            camera.position.y = player.position.y + yOffset;
             camera.lookAt(player.position.x, player.position.y + 0.5, player.position.z);
 
             renderer.render(scene, camera);
@@ -862,14 +852,13 @@
         }
 
         window.exitGame = function() { stopGame(); showMenu(); };
-
         window.addEventListener('resize', () => {
             if (renderer) { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }
         });
 
         // -------------------- Инициализация --------------------
         checkSession();
-        console.log('🔥 Полная карта с 1-этажными базами и объектами загружена!');
+        console.log('🔥 Полный билд с магазином и картой загружен!');
     </script>
 </body>
 </html>
