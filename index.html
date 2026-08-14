@@ -185,7 +185,6 @@
         const baseHeight = 4 * tileSize;
         const panelHeight = 26;
 
-        // ТОЧКА СПАВНА: Первая верхняя база (слева сверху).
         const spawnX = -14 * tileSize;
         const spawnY = -8 * tileSize + baseHeight + panelHeight / 2;
 
@@ -368,6 +367,14 @@
             ctx.save();
             ctx.translate(gameCanvas.width / 2, gameCanvas.height / 2);
 
+            // ========== ДЕБАГ (КРАСНЫЙ КРЕСТИК В ЦЕНТРЕ) ==========
+            ctx.strokeStyle = '#ff0000';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(-5, 0); ctx.lineTo(5, 0);
+            ctx.moveTo(0, -5); ctx.lineTo(0, 5);
+            ctx.stroke();
+
             const grassRange = Math.ceil(Math.max(limitX, limitY) / tileSize) + 2;
             for (let row = -grassRange; row < grassRange; row++) {
                 for (let col = -grassRange; col < grassRange; col++) {
@@ -377,13 +384,10 @@
                 }
             }
 
-            // КРАСНАЯ ДОРОЖКА (ширина 3 клетки)
             ctx.fillStyle = '#cc2233';
             const roadWidth = 3 * tileSize;
             ctx.fillRect(-limitX, -roadWidth/2, limitX * 2, roadWidth);
 
-            // ============ БАЗЫ (АБСОЛЮТНО СИММЕТРИЧНО) ============
-            // Верхний и нижний ряд используют строго одни и те же координаты X
             const baseYs = [-8 * tileSize, 8 * tileSize];
             const baseXs = [-14 * tileSize, -4 * tileSize, 4 * tileSize, 14 * tileSize];
 
@@ -393,7 +397,6 @@
                 const by = cy - baseHeight/2;
                 ctx.fillRect(bx, by, baseWidth, baseHeight);
 
-                // Оранжевая дверь
                 ctx.fillStyle = '#cc6600';
                 const doorHeight = 10;
                 if (cy < 0) {
@@ -402,7 +405,6 @@
                     ctx.fillRect(bx, by, baseWidth, doorHeight);
                 }
 
-                // Зелёная зона спавна
                 ctx.fillStyle = '#33ff33';
                 if (cy < 0) {
                     ctx.fillRect(bx, by + baseHeight, baseWidth, panelHeight);
@@ -411,60 +413,48 @@
                 }
             }
 
-            // Рисуем 4 сверху и 4 снизу
             baseYs.forEach(y => {
                 baseXs.forEach(x => {
                     drawBase(x, y);
                 });
             });
 
-            // ============ ОБЪЕКТЫ ПО ЦЕНТРУ ============
-            // ВЕРХНИЙ РЯД (Y = -3 * tileSize)
-            // Shop (сине-белая палатка)
             ctx.fillStyle = '#4a7cf7';
             ctx.fillRect(-12 * tileSize, -3 * tileSize, 2 * tileSize, 2 * tileSize);
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(-12 * tileSize + 0.2 * tileSize, -3 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
             ctx.fillRect(-12 * tileSize + 1.2 * tileSize, -3 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
 
-            // RNG (синяя L-образная)
             ctx.fillStyle = '#2a6bb0';
             ctx.fillRect(-6 * tileSize, -3 * tileSize, 1.5 * tileSize, 2 * tileSize);
             ctx.fillRect(-6 * tileSize + 1.5 * tileSize, -3 * tileSize + 1 * tileSize, 1 * tileSize, 1 * tileSize);
 
-            // Queen Bee (жёлтая)
             ctx.fillStyle = '#ffcc00';
             ctx.beginPath(); ctx.arc(0, -3 * tileSize, tileSize, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = '#ff3333';
             ctx.beginPath(); ctx.arc(0 + 0.2 * tileSize, -3 * tileSize - 0.2 * tileSize, 0.3 * tileSize, 0, Math.PI*2); ctx.fill();
 
-            // НИЖНИЙ РЯД (Y = 1 * tileSize)
-            // Robux Shop (красная палатка)
             ctx.fillStyle = '#ff3333';
             ctx.fillRect(-12 * tileSize, 1 * tileSize, 2 * tileSize, 2 * tileSize);
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(-12 * tileSize + 0.2 * tileSize, 1 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
             ctx.fillRect(-12 * tileSize + 1.2 * tileSize, 1 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
 
-            // Crystal Wheel (фиолетовый круг)
             ctx.fillStyle = '#bf40bf';
             ctx.beginPath(); ctx.arc(-6 * tileSize, 1 * tileSize, 1.5 * tileSize, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = '#ffffff';
             ctx.beginPath(); ctx.arc(-6 * tileSize, 1 * tileSize, 0.5 * tileSize, 0, Math.PI*2); ctx.fill();
 
-            // Trade Plaza (синий квадрат с белым крестом)
             ctx.fillStyle = '#2a6bb0';
             ctx.fillRect(0, 1 * tileSize, 2 * tileSize, 2 * tileSize);
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0 + 0.8 * tileSize, 1 * tileSize + 0.2 * tileSize, 0.4 * tileSize, 1.6 * tileSize);
             ctx.fillRect(0 + 0.2 * tileSize, 1 * tileSize + 0.8 * tileSize, 1.6 * tileSize, 0.4 * tileSize);
 
-            // ЧЁРНЫЕ КВАДРАТЫ ПО БОКАМ ДОРОГИ
             ctx.fillStyle = '#000000';
             ctx.fillRect(-16 * tileSize, -tileSize/2, tileSize, tileSize);
             ctx.fillRect(16 * tileSize - tileSize, -tileSize/2, tileSize, tileSize);
 
-            // Другие игроки
             for (const uid in otherPlayers) {
                 const p = otherPlayers[uid];
                 ctx.fillStyle = p.color || '#ff6b6b';
@@ -475,7 +465,6 @@
                 ctx.fillText(p.nick || uid, p.x, p.y - 15);
             }
 
-            // Ты
             ctx.fillStyle = '#000000';
             ctx.fillRect(player.x - tileSize/2, player.y - tileSize/2, tileSize, tileSize);
             ctx.fillStyle = '#ffffff';
