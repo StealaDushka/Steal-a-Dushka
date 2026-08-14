@@ -4,28 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Steal Dushka</title>
+    <!-- Пиксельный шрифт для логотипа -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- Исправляем ошибку 404 с иконкой -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: #0b0e14; color: #fff; overflow: hidden; user-select: none; }
         #app { width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; }
         .hidden { display: none !important; }
 
-        /* --- ЗАСТАВКА --- */
+        /* --- ЗАСТАВКА (ПИКСЕЛЬНЫЙ КВАДРАТ) --- */
         #splashScreen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #0b0e14;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 9999; cursor: pointer;
         }
-        #splashScreen canvas { background: #000; border: 4px solid #fff; }
-        .click-hint {
-            color: #4a7cf7; font-size: 16px; font-family: 'Press Start 2P', monospace;
-            animation: pulse 2s infinite; margin-top: 25px;
+        .logo-box {
+            background: #000000;
+            border: 4px solid #ffffff;
+            padding: 30px 25px;
+            display: flex; flex-direction: column; align-items: center;
         }
-        @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+        .logo-text {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 28px;
+            color: #00ffff;
+            line-height: 1.6;
+            text-shadow: 2px 2px 0 #0088ff;
+        }
+        .click-hint {
+            color: #4a7cf7;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 14px;
+            margin-top: 30px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 0.2; } 50% { opacity: 1; } 100% { opacity: 0.2; } }
 
-        /* --- ОКНО ВХОДА (ПИКСЕЛЬНОЕ) --- */
+        /* --- ОКНО ВХОДА --- */
         #authContainer {
             background: #000000; padding: 30px 20px 20px 20px;
             border: 4px solid #ffffff; width: 320px;
@@ -71,11 +89,14 @@
     <div id="app">
         <!-- ================= ЗАСТАВКА ================= -->
         <div id="splashScreen" onclick="closeSplash()">
-            <canvas id="splashCanvas" width="300" height="160"></canvas>
+            <div class="logo-box">
+                <div class="logo-text">STEAL</div>
+                <div class="logo-text">DUSHKA</div>
+            </div>
             <div class="click-hint">НАЖМИТЕ В ЛЮБОЕ МЕСТО</div>
         </div>
 
-        <!-- ================= ПИКСЕЛЬНОЕ ОКНО ВХОДА ================= -->
+        <!-- ================= ОКНО ВХОДА ================= -->
         <div id="authContainer" class="hidden">
             <div class="pixel-label">НИК</div>
             <input type="text" id="authNick" placeholder="" value="Dushka">
@@ -118,7 +139,7 @@
         </div>
     </div>
 
-    <!-- ================= FIREBASE ================= -->
+    <!-- ================= FIREBASE SDK ================= -->
     <script type="importmap">
         {
             "imports": {
@@ -148,8 +169,6 @@
 
         // DOM
         const splashScreen = document.getElementById('splashScreen');
-        const splashCanvas = document.getElementById('splashCanvas');
-        const splashCtx = splashCanvas.getContext('2d');
         const authContainer = document.getElementById('authContainer');
         const authNick = document.getElementById('authNick');
         const authPass = document.getElementById('authPass');
@@ -198,21 +217,6 @@
         ];
 
         // ================= ЗАСТАВКА =================
-        function drawSplashLogo() {
-            const w = splashCanvas.width;
-            const h = splashCanvas.height;
-            splashCtx.fillStyle = '#000000';
-            splashCtx.fillRect(0, 0, w, h);
-            
-            splashCtx.fillStyle = '#00ffff';
-            splashCtx.font = 'bold 42px monospace';
-            splashCtx.textAlign = 'center';
-            splashCtx.textBaseline = 'middle';
-            splashCtx.fillText('STEAL', w/2, h/2 - 20);
-            splashCtx.fillStyle = '#00d4ff';
-            splashCtx.font = 'bold 48px monospace';
-            splashCtx.fillText('DUSHKA', w/2, h/2 + 40);
-        }
         window.closeSplash = function() {
             splashScreen.classList.add('hidden');
             authContainer.classList.remove('hidden');
@@ -351,8 +355,26 @@
                 });
             }
 
-            window.addEventListener('keydown', (e) => { if (e.key === 'w' || e.key === 'a' || e.key === 's' || e.key === 'd') { keys[e.key] = true; e.preventDefault(); } });
-            window.addEventListener('keyup', (e) => { if (e.key === 'w' || e.key === 'a' || e.key === 's' || e.key === 'd') { keys[e.key] = false; e.preventDefault(); } });
+            // ========== ИСПРАВЛЕНИЕ: WASD НЕ РАБОТАЕТ В ПОЛЯХ ВВОДА ==========
+            window.addEventListener('keydown', (e) => {
+                // Если фокус в поле ввода, не обрабатываем WASD
+                if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                    return;
+                }
+                if (e.key === 'w' || e.key === 'a' || e.key === 's' || e.key === 'd') {
+                    keys[e.key] = true;
+                    e.preventDefault();
+                }
+            });
+            window.addEventListener('keyup', (e) => {
+                if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                    return;
+                }
+                if (e.key === 'w' || e.key === 'a' || e.key === 's' || e.key === 'd') {
+                    keys[e.key] = false;
+                    e.preventDefault();
+                }
+            });
 
             lastTimestamp = performance.now();
             gameLoop(lastTimestamp);
@@ -481,7 +503,6 @@
         }
 
         // ================= СТАРТ =================
-        window.addEventListener('load', () => { drawSplashLogo(); });
         checkSession();
 
         window.addEventListener('resize', () => {
