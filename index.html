@@ -3,237 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Укради Брэйнрот - Полная копия</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    <title>Укради Брэйнрот 2D</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: #0b0e14; color: #fff; overflow: hidden; }
-        #app { width: 100%; height: 100vh; }
+        body { background: #0b0e14; color: #fff; overflow: hidden; user-select: none; }
+        #app { width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; }
         .hidden { display: none !important; }
-        .card { background: #1a1f2b; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); max-width: 520px; margin: 20px auto; }
-        input[type="text"], input[type="password"], input[type="file"] { width: 100%; padding: 15px; background: #252d3d; border: none; border-radius: 12px; color: #fff; margin-bottom: 15px; font-size: 16px; }
-        button { width: 100%; padding: 15px; border: none; border-radius: 12px; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-bottom: 10px; }
+        .card { background: #1a1f2b; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); max-width: 400px; width: 90%; }
+        input { width: 100%; padding: 15px; background: #252d3d; border: none; border-radius: 12px; color: #fff; margin-bottom: 10px; font-size: 16px; }
+        button { width: 100%; padding: 12px; border: none; border-radius: 12px; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-bottom: 8px; }
         .btn-primary { background: #4a7cf7; }
         .btn-primary:hover { background: #3a6be0; }
         .btn-secondary { background: #3a3f4e; }
         .btn-secondary:hover { background: #4a5060; }
-        .menu-btn { display: block; width: 100%; padding: 20px; margin-bottom: 12px; background: #252d3d; text-align: center; font-size: 20px; border-radius: 16px; cursor: pointer; transition: 0.2s; }
-        .menu-btn:hover { background: #2f3a50; }
-        .profile-row { display: flex; gap: 15px; align-items: center; margin-bottom: 20px; }
-        .avatar { width: 80px; height: 80px; border-radius: 50%; background: #333; object-fit: cover; border: 3px solid #4a7cf7; }
-        .nick { font-size: 24px; font-weight: bold; }
-        .stat { color: #aaa; font-size: 14px; }
-        .section-title { font-size: 22px; font-weight: bold; margin-bottom: 20px; }
-        .back-btn { background: #3a3f4e; margin-bottom: 20px; }
-        .back-btn:hover { background: #4a5060; }
-        .friend-item, .server-item { background: #252d3d; padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .server-item .join-btn { width: auto; padding: 8px 25px; background: #4a7cf7; border-radius: 30px; font-size: 14px; }
-        .badge-vip { background: #f7c948; color: #000; padding: 4px 12px; border-radius: 30px; font-size: 12px; font-weight: bold; }
-        .badge-public { background: #4a7cf7; color: #fff; padding: 4px 12px; border-radius: 30px; font-size: 12px; }
-        #loadingOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0e14; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 999; }
-        .progress-bar { width: 80%; height: 10px; background: #252d3d; border-radius: 10px; overflow: hidden; margin-top: 20px; }
-        .progress-fill { height: 100%; width: 0%; background: #4a7cf7; transition: width 0.1s; }
-        .progress-text { font-size: 20px; margin-top: 10px; }
-        #gameContainer { position: relative; width: 100%; height: 100vh; }
-        #gameUI { position: absolute; top: 20px; right: 20px; z-index: 10; display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
-        .exit-btn { background: #ff6b6b; padding: 10px 20px; border-radius: 10px; border: none; color: #fff; font-weight: bold; cursor: pointer; }
-        .exit-btn:hover { background: #e55a5a; }
-        .flex-row { display: flex; gap: 10px; align-items: center; }
-        .flex-row input { flex: 1; margin-bottom: 0; }
-        .flex-row button { width: auto; padding: 10px 20px; margin-bottom: 0; }
-        .small-btn { width: auto; padding: 5px 15px; font-size: 14px; margin: 0 5px; }
-        #serverList { max-height: 400px; overflow-y: auto; }
-        .vip-settings { background: #1a1f2b; border-radius: 12px; padding: 15px; margin-top: 10px; border: 1px solid #f7c948; }
-        #vipAccess { background: #252d3d; color: #fff; border: none; padding: 10px; border-radius: 8px; width: 100%; margin: 10px 0; }
-
+        #menuSection { max-width: 400px; width: 90%; text-align: center; }
+        #menuSection h2 { margin-bottom: 20px; }
+        #gameContainer { position: relative; width: 100vw; height: 100vh; background: #1a1f2b; }
+        canvas { display: block; width: 100%; height: 100%; background: #2a2f3a; }
+        #uiOverlay { position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+        #uiOverlay .money { background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 10px; font-size: 20px; font-weight: bold; color: #f7c948; border: 1px solid #f7c948; }
+        #uiOverlay .exit-btn { background: #ff4444; padding: 8px 20px; border: none; border-radius: 10px; color: #fff; font-weight: bold; cursor: pointer; }
         /* Магазин */
         #shopModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); }
-        .shop-window { background: #1e2432; width: 90%; max-width: 800px; max-height: 80vh; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; border: 2px solid #3a4a6b; }
-        .shop-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; }
-        .shop-header h2 { color: #4a7cf7; text-transform: uppercase; }
-        .shop-close { background: #ff4444; padding: 5px 15px; border-radius: 8px; border: none; color: #fff; font-weight: bold; cursor: pointer; width: auto; margin: 0; }
-        .shop-money { color: #f7c948; font-size: 18px; font-weight: bold; }
-        .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; overflow-y: auto; padding-right: 10px; }
-        .shop-item { background: #2a3242; border-radius: 12px; padding: 15px; display: flex; flex-direction: column; border: 1px solid #3f4a5f; }
-        .shop-item h4 { font-size: 18px; margin-bottom: 5px; }
-        .shop-item p { font-size: 13px; color: #aaa; margin-bottom: 10px; flex-grow: 1; }
-        .shop-item .row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-        .price-tag { background: #4caf50; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 14px; }
-        .auto-check { display: flex; align-items: center; gap: 5px; font-size: 14px; color: #aaa; cursor: pointer; }
-        .auto-check input { width: auto; margin: 0; }
-        .owned-btn { background: #4caf50; color: #fff; padding: 5px 15px; border-radius: 20px; font-weight: bold; border: none; width: auto; margin: 0; font-size: 14px; }
-        .buy-btn { background: #4a7cf7; padding: 5px 15px; border-radius: 20px; border: none; color: #fff; font-weight: bold; width: auto; margin: 0; font-size: 14px; }
-        .buy-btn:hover { background: #3a6be0; }
-
-        /* Редактор карт */
-        #editorModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); }
-        .editor-window { background: #1a1f2b; border-radius: 20px; padding: 30px; max-width: 600px; width: 90%; border: 1px solid #f7c948; }
-        .editor-window h2 { margin-bottom: 20px; text-align: center; }
-        .editor-tools { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
-        .editor-tools button { width: auto; padding: 8px 15px; font-size: 14px; margin: 0; flex: 1; min-width: 80px; }
-        .editor-tools .selected { background: #f7c948; color: #000; }
-        .editor-actions { display: flex; gap: 10px; justify-content: center; }
-        .editor-actions button { width: auto; padding: 10px 20px; margin: 0; }
+        .shop-window { background: #1a1f2b; padding: 20px; border-radius: 20px; max-width: 500px; width: 90%; border: 2px solid #4a7cf7; max-height: 80vh; overflow-y: auto; }
+        .shop-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #252d3d; border-radius: 10px; margin-bottom: 10px; }
+        .shop-item button { width: auto; padding: 5px 15px; margin: 0; }
+        .close-shop { background: #ff4444; padding: 10px; border: none; border-radius: 10px; color: #fff; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
     <div id="app">
         <!-- Авторизация -->
-        <div id="authSection" class="card" style="margin-top: 50px;">
-            <h2 style="margin-bottom:20px; text-align:center;">Вход / Регистрация</h2>
-            <input type="text" id="authNick" placeholder="Ваш никнейм">
+        <div id="authSection" class="card">
+            <h2 style="text-align:center; margin-bottom:20px;">Вход / Регистрация</h2>
+            <input type="text" id="authNick" placeholder="Никнейм">
             <input type="password" id="authPass" placeholder="Пароль">
             <button id="registerBtn" class="btn-primary">Создать аккаунт</button>
             <button id="loginBtn" class="btn-secondary">Войти</button>
-            <div id="authMsg" style="margin-top:15px; text-align:center; color:#ff6b6b; font-weight:bold;"></div>
+            <div id="authMsg" style="margin-top:10px; color:#ff6b6b; text-align:center;"></div>
         </div>
 
         <!-- Меню -->
-        <div id="menuSection" class="hidden" style="max-width: 520px; margin: 50px auto;">
-            <div class="profile-row">
-                <img id="menuAvatar" class="avatar" src="https://ui-avatars.com/api/?name=Guest&background=random&color=fff&size=80" alt="avatar">
-                <div>
-                    <div class="nick" id="menuNick">Гость</div>
-                    <div class="stat">ID: <span id="menuId">-</span></div>
-                </div>
-            </div>
-            <div class="menu-btn" onclick="openProfile()">👤 Профиль</div>
-            <div class="menu-btn" onclick="openFriends()">👥 Друзья</div>
-            <div class="menu-btn" onclick="openServers()">🖥️ Серверы</div>
-            <div class="menu-btn" onclick="openShop()">🛒 Магазин (E в игре)</div>
-            <div class="menu-btn" onclick="openEditor()">🗺️ Редактор карт</div>
-            <div class="menu-btn" onclick="quickPlay()">▶️ Играть</div>
-            <div style="margin-top:20px; text-align:center; color:#666; font-size:14px; cursor:pointer;" onclick="logout()">Выйти</div>
+        <div id="menuSection" class="hidden">
+            <h2>Привет, <span id="menuNick">Гость</span></h2>
+            <p style="color:#aaa; margin-bottom:20px;">Баланс: <span id="menuMoney">0</span> монет</p>
+            <button class="btn-primary" onclick="startGame()">▶️ Играть</button>
+            <button class="btn-secondary" onclick="openShop()">🛒 Магазин</button>
+            <button class="btn-secondary" onclick="logout()" style="margin-top:20px; background:#555;">Выйти</button>
         </div>
 
-        <!-- Профиль -->
-        <div id="profileSection" class="hidden card" style="max-width: 520px; margin: 50px auto;">
-            <button class="back-btn" onclick="openMenu()">← Назад</button>
-            <div class="section-title">Профиль</div>
-            <div class="profile-row">
-                <img id="profileAvatar" class="avatar" src="https://ui-avatars.com/api/?name=Guest&background=random&color=fff&size=80" alt="avatar">
-                <div>
-                    <div class="nick" id="profileNick">Гость</div>
-                    <div class="stat">ID: <span id="profileId">-</span></div>
-                </div>
+        <!-- Игра -->
+        <div id="gameContainer" class="hidden">
+            <canvas id="gameCanvas"></canvas>
+            <div id="uiOverlay">
+                <div class="money">💰 <span id="gameMoney">0</span></div>
+                <button class="exit-btn" onclick="exitGame()">✕ Выйти</button>
             </div>
-            <label style="display:block; margin-bottom:5px;">Сменить аватарку (PNG/JPG)</label>
-            <input type="file" id="avatarInput" accept="image/*">
-            <label style="display:block; margin:15px 0 5px;">Сменить скин (для 3D-модели)</label>
-            <input type="file" id="skinInput" accept="image/*">
-            <label style="display:block; margin:15px 0 5px;">Сменить пароль</label>
-            <input type="password" id="newPass" placeholder="Новый пароль">
-            <button onclick="changePassword()" class="btn-primary">Сохранить пароль</button>
-        </div>
-
-        <!-- Друзья -->
-        <div id="friendsSection" class="hidden card" style="max-width: 520px; margin: 50px auto;">
-            <button class="back-btn" onclick="openMenu()">← Назад</button>
-            <div class="section-title">Друзья</div>
-            <div class="flex-row">
-                <input type="text" id="friendSearch" placeholder="Ник друга">
-                <button onclick="sendFriendRequest()" class="btn-primary" style="width:auto; padding:10px 20px;">➕</button>
-            </div>
-            <div id="friendRequests" style="margin-bottom:15px;">
-                <div style="color:#aaa; font-size:14px;">📩 Запросы:</div>
-                <div id="requestsList"></div>
-            </div>
-            <div id="friendsList">
-                <div style="color:#aaa; font-size:14px;">👥 Мои друзья:</div>
-                <div id="friendsListContainer"></div>
-            </div>
-        </div>
-
-        <!-- Серверы -->
-        <div id="serversSection" class="hidden card" style="max-width: 520px; margin: 50px auto;">
-            <button class="back-btn" onclick="openMenu()">← Назад</button>
-            <div class="section-title">Серверы</div>
-            <button class="create-vip-btn" onclick="toggleCreateVip()" style="background:#f7c948; color:#000; padding:10px; border:none; border-radius:10px; margin-bottom:10px; font-weight:bold; cursor:pointer;">✨ Создать VIP-сервер</button>
-            <div id="createVipForm" class="vip-settings hidden">
-                <label>Название VIP-сервера</label>
-                <input type="text" id="vipName" placeholder="Мой VIP">
-                <label>Кто может заходить?</label>
-                <select id="vipAccess">
-                    <option value="all">Все</option>
-                    <option value="friends">Только друзья</option>
-                </select>
-                <button onclick="createVipServer()" class="btn-primary">Создать</button>
-            </div>
-            <div id="serverList"></div>
         </div>
 
         <!-- Магазин -->
         <div id="shopModal" class="hidden">
             <div class="shop-window">
-                <div class="shop-header">
-                    <h2>🛒 Shop</h2>
-                    <div class="shop-money" id="shopMoneyDisplay">💰 $0</div>
-                    <button class="shop-close" onclick="closeShop()">✕</button>
-                </div>
-                <div class="shop-grid" id="shopGrid"></div>
+                <h2 style="text-align:center; color:#4a7cf7; margin-bottom:15px;">🛒 Магазин</h2>
+                <div id="shopList"></div>
+                <button class="close-shop" onclick="closeShop()">Закрыть</button>
             </div>
-        </div>
-
-        <!-- Редактор карт -->
-        <div id="editorModal" class="hidden">
-            <div class="editor-window">
-                <h2>🗺️ Редактор карт</h2>
-                <div class="editor-tools" id="editorTools">
-                    <button class="selected" data-type="base">База</button>
-                    <button data-type="shop">Магазин</button>
-                    <button data-type="rng">RNG</button>
-                    <button data-type="wheel">Колесо</button>
-                    <button data-type="robux">Robux Shop</button>
-                    <button data-type="plaza">Trade Plaza</button>
-                    <button data-type="bee">Queen Bee</button>
-                    <button data-type="wall">Стена</button>
-                    <button data-type="carpet">Дорожка</button>
-                </div>
-                <div style="color:#aaa; margin-bottom:10px;">Кликни по полу, чтобы разместить объект. Перетаскивай объекты мышкой.</div>
-                <div class="editor-actions">
-                    <button class="btn-primary" onclick="saveMap()">💾 Сохранить</button>
-                    <button class="btn-secondary" onclick="closeEditor()">Закрыть</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Загрузка -->
-        <div id="loadingOverlay" class="hidden">
-            <div style="font-size:30px;">⏳ Загрузка...</div>
-            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-            <div class="progress-text" id="progressText">0%</div>
-        </div>
-
-        <!-- 3D Сцена -->
-        <div id="gameContainer" class="hidden">
-            <div id="gameUI">
-                <button class="exit-btn" onclick="exitGame()">✕ Выйти</button>
-            </div>
-            <canvas id="gameCanvas"></canvas>
         </div>
     </div>
 
-    <!-- Firebase SDK + Three.js -->
+    <!-- Firebase -->
     <script type="importmap">
         {
             "imports": {
                 "firebase/app": "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js",
-                "firebase/database": "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js",
-                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+                "firebase/database": "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js"
             }
         }
     </script>
 
     <script type="module">
-        // ------------------------------------------------------------
-        // ПОЛНЫЙ КОД: Игра + Редактор карт + Абсолютное управление WASD
-        // ------------------------------------------------------------
         import { initializeApp } from 'firebase/app';
-        import { getDatabase, ref, set, get, update, remove, push, onValue, onChildAdded, onChildChanged, onChildRemoved } from 'firebase/database';
-        import * as THREE from 'three';
-        import { DragControls } from 'three/addons/controls/DragControls.js';
+        import { getDatabase, ref, set, get, update, remove, onValue, onChildAdded, onChildChanged, onChildRemoved } from 'firebase/database';
 
+        // Твой ключ
         const firebaseConfig = {
             apiKey: "AIzaSyDkXM7aHtofhx8WAT1eSfLnbsOYVXXg28o",
             authDomain: "steal-a-dushka.firebaseapp.com",
@@ -250,791 +102,249 @@
         // DOM
         const authSection = document.getElementById('authSection');
         const menuSection = document.getElementById('menuSection');
-        const profileSection = document.getElementById('profileSection');
-        const friendsSection = document.getElementById('friendsSection');
-        const serversSection = document.getElementById('serversSection');
-        const shopModal = document.getElementById('shopModal');
-        const shopGrid = document.getElementById('shopGrid');
-        const shopMoneyDisplay = document.getElementById('shopMoneyDisplay');
-        const editorModal = document.getElementById('editorModal');
-        const editorTools = document.getElementById('editorTools');
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        const progressFill = document.getElementById('progressFill');
-        const progressText = document.getElementById('progressText');
         const gameContainer = document.getElementById('gameContainer');
         const canvas = document.getElementById('gameCanvas');
-        const serverList = document.getElementById('serverList');
-        const requestsList = document.getElementById('requestsList');
-        const friendsListContainer = document.getElementById('friendsListContainer');
-        const friendSearch = document.getElementById('friendSearch');
-        const vipName = document.getElementById('vipName');
-        const vipAccess = document.getElementById('vipAccess');
-        const createVipForm = document.getElementById('createVipForm');
+        const ctx = canvas.getContext('2d');
+        const shopModal = document.getElementById('shopModal');
+        const shopList = document.getElementById('shopList');
 
         const authNick = document.getElementById('authNick');
         const authPass = document.getElementById('authPass');
         const registerBtn = document.getElementById('registerBtn');
         const loginBtn = document.getElementById('loginBtn');
         const authMsg = document.getElementById('authMsg');
-
         const menuNick = document.getElementById('menuNick');
-        const menuId = document.getElementById('menuId');
-        const menuAvatar = document.getElementById('menuAvatar');
-        const profileNick = document.getElementById('profileNick');
-        const profileId = document.getElementById('profileId');
-        const profileAvatar = document.getElementById('profileAvatar');
-        const newPass = document.getElementById('newPass');
-        const avatarInput = document.getElementById('avatarInput');
-        const skinInput = document.getElementById('skinInput');
+        const menuMoney = document.getElementById('menuMoney');
+        const gameMoney = document.getElementById('gameMoney');
 
-        let currentNick = null;
         let currentUid = null;
-        let currentUserData = null;
-        let currentServerId = null;
-        let playerMoney = 25;
+        let currentNick = null;
+        let currentColor = '#4a7cf7';
+        let money = 25;
 
-        // -------------------- 3D Переменные --------------------
-        let scene, camera, renderer, player;
+        // Игровые переменные
+        let player = { x: 10, y: 10, color: '#4a7cf7' };
         let keys = { w: false, a: false, s: false, d: false };
         let animationId = null;
-        let playerPosRef = null;
         let updateInterval = null;
-        let otherPlayers = {};
+        let otherPlayers = {}; // uid -> {x, y, color, nick}
+        let myPosRef = null;
 
-        let camTheta = 0.5;
-        let camPhi = 0.4;
-        let camRadius = 15;
-        let isDragging = false;
-        let previousMouseX = 0;
-        let previousMouseY = 0;
-
-        // Переменные для редактора
-        let selectedObjectType = 'base';
-        let editorObjects = []; // храним меши, размещённые в редакторе
-        let dragControls = null;
-        let isEditorMode = false;
-        let mapDataRef = null;
-        let mapObjects = {}; // для загрузки
-
-        // Данные магазина
+        // Товары
         const shopItems = [
-            { id: 'slap', name: 'Slap', desc: 'An average hand to slap thieves!', price: 500, emoji: '✋' },
-            { id: 'speed_coil', name: 'Speed Coil', desc: 'Zoom around the map!', price: 750, emoji: '🌀' },
-            { id: 'iron_slap', name: 'Iron Slap', desc: 'Heavy iron slap!', price: 2500, emoji: '🗿' },
-            { id: 'gold_slap', name: 'Gold Slap', desc: 'Powerful golden slap!', price: 15000, emoji: '✨' },
-            { id: 'diamond_slap', name: 'Diamond Slap', desc: 'Charge up a diamond slap!', price: 50000, emoji: '💎' },
-            { id: 'emerald_slap', name: 'Emerald Slap', desc: 'Gem-infused slap!', price: 200000, emoji: '💚' },
-            { id: 'ruby_slap', name: 'Ruby Slap', desc: 'Ultimate ruby-powered slap!', price: 1000000, emoji: '❤️' },
-            { id: 'dark_slap', name: 'Dark Matter Slap', desc: 'Power of dark matter!', price: 1500000, emoji: '🖤' },
-            { id: 'flame_slap', name: 'Flame Slap', desc: 'Burn your enemies!', price: 2500000, emoji: '🔥' },
-            { id: 'nuclear_slap', name: 'Nuclear Slap', desc: 'Explodes with nuclear force!', price: 6000000, emoji: '☢️' },
-            { id: 'galaxy_slap', name: 'Galaxy Slap', desc: 'Slap with star power!', price: 15000000, emoji: '🌌' },
-            { id: 'glitched_slap', name: 'Glitched Slap', desc: 'Corrupt reality!', price: 25000000, emoji: '🌀' },
+            { id: 'red', name: 'Красный', color: '#ff4444', price: 50 },
+            { id: 'green', name: 'Зелёный', color: '#44ff44', price: 100 },
+            { id: 'gold', name: 'Золотой', color: '#f7c948', price: 250 },
+            { id: 'pink', name: 'Розовый', color: '#ff44ff', price: 500 },
         ];
 
-        // -------------------- Утилиты --------------------
-        function showLoading(callback) {
-            loadingOverlay.classList.remove('hidden');
-            progressFill.style.width = '0%';
-            progressText.textContent = '0%';
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 5;
-                progressFill.style.width = progress + '%';
-                progressText.textContent = progress + '%';
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        loadingOverlay.classList.add('hidden');
-                        if (callback) callback();
-                    }, 500);
-                }
-            }, 100);
-        }
-
+        // Утилиты
         async function loginUser(nick, pass) {
             const userRef = ref(db, 'users/' + nick);
             const snap = await get(userRef);
             if (!snap.exists()) { authMsg.textContent = '❌ Пользователь не найден!'; return false; }
             const data = snap.val();
             if (data.password !== pass) { authMsg.textContent = '❌ Неверный пароль!'; return false; }
-            currentNick = nick; currentUid = nick; currentUserData = data;
-            playerMoney = data.money || 25;
-            localStorage.setItem('stealSession', JSON.stringify({ nick, password: pass }));
+            currentUid = nick; currentNick = nick;
+            currentColor = data.color || '#4a7cf7';
+            money = data.money || 25;
+            localStorage.setItem('2d_session', JSON.stringify({ nick, password: pass }));
             return true;
         }
 
-        // -------------------- Регистрация --------------------
         registerBtn.addEventListener('click', async () => {
-            const nick = authNick.value.trim(); const pass = authPass.value.trim();
-            if (!nick || !pass) { authMsg.textContent = 'Заполни все поля!'; return; }
-            const userRef = ref(db, 'users/' + nick);
-            if ((await get(userRef)).exists()) { authMsg.textContent = '❌ Этот ник уже занят!'; return; }
-            await set(userRef, {
-                nick: nick, password: pass, money: 25,
-                avatar: 'https://ui-avatars.com/api/?name=' + encodeURIComponent(nick) + '&background=random&color=fff&size=80',
-                skin: '', friends: {}, friendRequests: {}, inventory: {}
-            });
+            const n = authNick.value.trim(); const p = authPass.value.trim();
+            if (!n || !p) { authMsg.textContent = 'Заполни поля!'; return; }
+            if ((await get(ref(db, 'users/' + n))).exists()) { authMsg.textContent = '❌ Ник занят!'; return; }
+            await set(ref(db, 'users/' + n), { password: p, money: 25, color: '#4a7cf7' });
+            // Админ Dushka
             if (!(await get(ref(db, 'admins/Dushka'))).exists()) {
                 await set(ref(db, 'admins/Dushka'), { nick: 'Dushka', password: '16052014may' });
             }
-            authMsg.textContent = '✅ Аккаунт создан! Теперь войди.'; authMsg.style.color = '#4a7cf7';
+            authMsg.textContent = '✅ Аккаунт создан! Войди.'; authMsg.style.color = '#4a7cf7';
         });
 
-        // -------------------- Вход --------------------
         loginBtn.addEventListener('click', async () => {
-            const nick = authNick.value.trim(); const pass = authPass.value.trim();
-            if (!nick || !pass) { authMsg.textContent = 'Заполни все поля!'; return; }
-            if (await loginUser(nick, pass)) { authMsg.textContent = ''; showMenu(); }
+            const n = authNick.value.trim(); const p = authPass.value.trim();
+            if (!n || !p) { authMsg.textContent = 'Заполни поля!'; return; }
+            if (await loginUser(n, p)) { authMsg.textContent = ''; showMenu(); }
         });
 
         async function checkSession() {
-            const session = localStorage.getItem('stealSession');
+            const session = localStorage.getItem('2d_session');
             if (session) {
                 const { nick, password } = JSON.parse(session);
                 if (await loginUser(nick, password)) { showMenu(); return; }
-                localStorage.removeItem('stealSession');
+                localStorage.removeItem('2d_session');
             }
-            authSection.classList.remove('hidden');
         }
 
-        // -------------------- Навигация --------------------
         function showMenu() {
-            authSection.classList.add('hidden'); menuSection.classList.remove('hidden');
-            profileSection.classList.add('hidden'); friendsSection.classList.add('hidden'); serversSection.classList.add('hidden');
-            shopModal.classList.add('hidden'); editorModal.classList.add('hidden');
+            authSection.classList.add('hidden');
+            menuSection.classList.remove('hidden');
             gameContainer.classList.add('hidden');
+            shopModal.classList.add('hidden');
             stopGame();
-
-            menuNick.textContent = currentUserData.nick; menuId.textContent = currentUid.slice(0, 6);
-            menuAvatar.src = currentUserData.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(currentUserData.nick) + '&background=random&color=fff&size=80';
-            profileNick.textContent = currentUserData.nick; profileId.textContent = currentUid.slice(0, 6);
-            profileAvatar.src = currentUserData.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(currentUserData.nick) + '&background=random&color=fff&size=80';
-
-            loadFriends(); loadFriendRequests(); loadServers(); renderShop();
+            menuNick.textContent = currentNick;
+            menuMoney.textContent = money;
         }
 
-        function stopGame() {
-            if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
-            if (renderer) { renderer.dispose(); renderer = null; }
-            if (updateInterval) { clearInterval(updateInterval); updateInterval = null; }
-            if (playerPosRef) { remove(playerPosRef); playerPosRef = null; }
-            if (currentServerId) { leaveServer(currentServerId); currentServerId = null; }
-            Object.keys(otherPlayers).forEach(uid => { scene.remove(otherPlayers[uid]); delete otherPlayers[uid]; });
-            // Очистить объекты редактора при выходе (если они были)
-            if (isEditorMode) {
-                cleanupEditorObjects();
-                isEditorMode = false;
-            }
-        }
-
-        window.openProfile = function() { menuSection.classList.add('hidden'); profileSection.classList.remove('hidden'); };
-        window.openFriends = function() { menuSection.classList.add('hidden'); friendsSection.classList.remove('hidden'); loadFriends(); loadFriendRequests(); };
-        window.openServers = function() { menuSection.classList.add('hidden'); serversSection.classList.remove('hidden'); loadServers(); };
-        window.openMenu = function() { profileSection.classList.add('hidden'); friendsSection.classList.add('hidden'); serversSection.classList.add('hidden'); shopModal.classList.add('hidden'); editorModal.classList.add('hidden'); menuSection.classList.remove('hidden'); };
         window.logout = function() {
-            localStorage.removeItem('stealSession'); currentNick = null; currentUid = null; currentUserData = null;
-            if (currentServerId) { leaveServer(currentServerId); currentServerId = null; }
-            menuSection.classList.add('hidden'); profileSection.classList.add('hidden'); friendsSection.classList.add('hidden'); serversSection.classList.add('hidden');
-            authSection.classList.remove('hidden'); authMsg.textContent = ''; authNick.value = ''; authPass.value = '';
+            localStorage.removeItem('2d_session'); currentUid = null;
+            menuSection.classList.add('hidden'); authSection.classList.remove('hidden');
+            authMsg.textContent = ''; authNick.value = ''; authPass.value = '';
             stopGame();
         };
 
-        // -------------------- Профиль --------------------
-        window.changePassword = async function() {
-            const newP = newPass.value.trim();
-            if (!newP) return alert('Введи новый пароль');
-            await update(ref(db, 'users/' + currentUid + '/password'), { password: newP });
-            alert('Пароль обновлён!'); newPass.value = '';
-        };
-
-        avatarInput.addEventListener('change', async (e) => {
-            const file = e.target.files[0]; if (!file) return;
-            const reader = new FileReader();
-            reader.onload = async (ev) => {
-                const dataUrl = ev.target.result;
-                await update(ref(db, 'users/' + currentUid + '/avatar'), { avatar: dataUrl });
-                menuAvatar.src = dataUrl; profileAvatar.src = dataUrl;
-                alert('Аватарка обновлена!');
-            };
-            reader.readAsDataURL(file);
-        });
-
-        skinInput.addEventListener('change', async (e) => {
-            const file = e.target.files[0]; if (!file) return;
-            const reader = new FileReader();
-            reader.onload = async (ev) => {
-                const dataUrl = ev.target.result;
-                await update(ref(db, 'users/' + currentUid + '/skin'), { skin: dataUrl });
-                currentUserData.skin = dataUrl;
-                alert('Скин сохранён!');
-            };
-            reader.readAsDataURL(file);
-        });
-
-        // -------------------- Магазин (Кнопки и UI) --------------------
+        // Магазин
         window.openShop = function() {
             shopModal.classList.remove('hidden');
             renderShop();
         };
-        window.closeShop = function() {
-            shopModal.classList.add('hidden');
-        };
+        window.closeShop = function() { shopModal.classList.add('hidden'); };
 
         function renderShop() {
-            shopMoneyDisplay.textContent = `💰 $${playerMoney.toLocaleString()}`;
-            shopGrid.innerHTML = '';
+            shopList.innerHTML = '';
             shopItems.forEach(item => {
-                const owned = currentUserData.inventory && currentUserData.inventory[item.id];
                 const div = document.createElement('div'); div.className = 'shop-item';
                 div.innerHTML = `
-                    <h4>${item.emoji} ${item.name}</h4>
-                    <p>${item.desc}</p>
-                    <div class="row">
-                        <div>
-                            ${owned ? `<span class="owned-btn">OWNED</span>` : `<span class="price-tag">$${item.price.toLocaleString()}</span>`}
-                        </div>
-                        <div class="auto-check">
-                            <input type="checkbox" ${owned ? 'disabled' : ''} onchange="toggleAutoBuy('${item.id}')">
-                            <label>Auto Buy</label>
-                            ${!owned ? `<button class="buy-btn" onclick="buyItem('${item.id}')">Buy</button>` : ''}
-                        </div>
+                    <span>🎨 ${item.name}</span>
+                    <div>
+                        <span style="color:#aaa; margin-right:10px;">${item.price}💰</span>
+                        <button onclick="buyColor('${item.id}')" class="btn-primary">Купить</button>
                     </div>
                 `;
-                shopGrid.appendChild(div);
+                shopList.appendChild(div);
             });
         }
 
-        window.buyItem = async function(itemId) {
-            const item = shopItems.find(i => i.id === itemId);
+        window.buyColor = async function(id) {
+            const item = shopItems.find(i => i.id === id);
             if (!item) return;
-            if (currentUserData.inventory && currentUserData.inventory[itemId]) return alert('У тебя уже есть это!');
-            if (playerMoney < item.price) return alert('Недостаточно денег!');
-            
-            playerMoney -= item.price;
-            if (!currentUserData.inventory) currentUserData.inventory = {};
-            currentUserData.inventory[itemId] = true;
-            currentUserData.money = playerMoney;
-
-            await update(ref(db, 'users/' + currentUid), { money: playerMoney, inventory: currentUserData.inventory });
+            if (money < item.price) return alert('Недостаточно монет!');
+            money -= item.price;
+            currentColor = item.color;
+            await update(ref(db, 'users/' + currentUid), { money: money, color: currentColor });
+            menuMoney.textContent = money;
+            alert(`Куплен скин: ${item.name}!`);
             renderShop();
-            alert(`Куплено: ${item.name}!`);
         };
 
-        window.toggleAutoBuy = function(itemId) {
-            alert('Функция Auto Buy пока в разработке, но галочка запомнена!');
-        };
-
-        // -------------------- Друзья --------------------
-        window.sendFriendRequest = async function() {
-            const targetNick = friendSearch.value.trim();
-            if (!targetNick) return alert('Введи ник друга');
-            if (targetNick === currentUserData.nick) return alert('Нельзя добавить себя');
-            const snap = await get(ref(db, 'users'));
-            if (!snap.exists()) return alert('Нет пользователей');
-            let targetUid = null;
-            snap.forEach((child) => { if (child.val().nick === targetNick) targetUid = child.key; });
-            if (!targetUid) return alert('Пользователь не найден');
-            if (targetUid === currentUid) return alert('Это ты');
-            await set(ref(db, 'users/' + targetUid + '/friendRequests/' + currentUid), { from: currentUserData.nick, timestamp: Date.now() });
-            alert('Запрос отправлен!'); friendSearch.value = '';
-        };
-
-        function loadFriendRequests() {
-            if (!currentUid) return;
-            onValue(ref(db, 'users/' + currentUid + '/friendRequests'), (snap) => {
-                requestsList.innerHTML = '';
-                if (!snap.exists()) { requestsList.innerHTML = '<div style="color:#666;">Нет запросов</div>'; return; }
-                snap.forEach((child) => {
-                    const data = child.val();
-                    const div = document.createElement('div'); div.className = 'friend-item';
-                    div.innerHTML = `<span>${data.from}</span><div><button class="small-btn" onclick="acceptRequest('${child.key}')" style="background:#4a7cf7;">✔</button><button class="small-btn" onclick="rejectRequest('${child.key}')" style="background:#6b6b6b;">✖</button></div>`;
-                    requestsList.appendChild(div);
-                });
-            });
+        // Игра
+        function resizeCanvas() {
+            canvas.width = gameContainer.clientWidth;
+            canvas.height = gameContainer.clientHeight;
         }
 
-        window.acceptRequest = async function(requesterUid) {
-            const userSnap = await get(ref(db, 'users/' + requesterUid));
-            const requesterNick = userSnap.exists() ? userSnap.val().nick : 'Неизвестный';
-            await set(ref(db, 'users/' + currentUid + '/friends/' + requesterUid), { nick: requesterNick });
-            await remove(ref(db, 'users/' + currentUid + '/friendRequests/' + requesterUid));
-            await set(ref(db, 'users/' + requesterUid + '/friends/' + currentUid), { nick: currentUserData.nick });
-            loadFriends(); loadFriendRequests();
-        };
-        window.rejectRequest = async function(requesterUid) {
-            await remove(ref(db, 'users/' + currentUid + '/friendRequests/' + requesterUid));
-            loadFriendRequests();
-        };
-
-        function loadFriends() {
-            if (!currentUid) return;
-            onValue(ref(db, 'users/' + currentUid + '/friends'), (snap) => {
-                friendsListContainer.innerHTML = '';
-                if (!snap.exists()) { friendsListContainer.innerHTML = '<div style="color:#666;">У тебя пока нет друзей</div>'; return; }
-                snap.forEach((child) => {
-                    const data = child.val();
-                    const div = document.createElement('div'); div.className = 'friend-item';
-                    div.innerHTML = `<span>${data.nick || 'Неизвестный'}</span>`;
-                    friendsListContainer.appendChild(div);
-                });
-            });
-        }
-
-        // -------------------- Серверы (с безопасным выводом) --------------------
-        window.toggleCreateVip = function() { createVipForm.classList.toggle('hidden'); };
-        window.createVipServer = async function() {
-            const name = vipName.value.trim();
-            if (!name) return alert('Введи название VIP-сервера');
-            if (!currentUid) return alert('Нет авторизации');
-            const vipRef = ref(db, 'vipServers');
-            const newVipRef = push(vipRef);
-            await set(newVipRef, { name: name, owner: currentUserData.nick, ownerUid: currentUid, players: 0, max: 8, access: vipAccess.value });
-            alert('VIP-сервер создан!'); vipName.value = ''; createVipForm.classList.add('hidden'); loadServers();
-        };
-
-        async function createPublicServer() {
-            const newRef = push(ref(db, 'publicServers'));
-            await set(newRef, { players: 0, max: 8, createdAt: Date.now() });
-            return newRef.key;
-        }
-
-        async function getAvailablePublicServer() {
-            const snap = await get(ref(db, 'publicServers'));
-            if (!snap.exists()) return await createPublicServer();
-            let available = null;
-            snap.forEach((child) => { const data = child.val(); if (data.players < data.max && !available) available = child.key; });
-            if (!available) available = await createPublicServer();
-            return available;
-        }
-
-        async function leaveServer(serverId) {
-            if (!serverId) return;
-            const path = 'publicServers/' + serverId;
-            const snap = await get(ref(db, path));
-            if (snap.exists()) { const data = snap.val(); await update(ref(db, path), { players: Math.max(0, data.players - 1) }); }
-            currentServerId = null;
-        }
-
-        window.quickPlay = async function() {
-            if (!currentUid) return alert('Сначала войди');
-            const serverId = await getAvailablePublicServer();
-            await joinServerLogic(serverId, false);
-        };
-
-        window.joinServer = async function(serverId, isVip) {
-            if (!currentUid) return alert('Сначала войди');
-            await joinServerLogic(serverId, isVip);
-        };
-
-        async function joinServerLogic(serverId, isVip) {
-            if (currentServerId) await leaveServer(currentServerId);
-            const path = isVip ? 'vipServers/' + serverId : 'publicServers/' + serverId;
-            const snap = await get(ref(db, path));
-            if (!snap.exists()) return alert('Сервер не найден');
-            const data = snap.val();
-            if (data.players >= data.max) return alert('Сервер заполнен!');
-            await update(ref(db, path), { players: data.players + 1 });
-            currentServerId = serverId;
-            showLoading(() => { init3D(); });
-        }
-
-        function loadServers() {
-            onValue(ref(db, 'publicServers'), async (snap) => {
-                let publicServers = [];
-                if (snap.exists()) {
-                    snap.forEach((child) => {
-                        publicServers.push({ id: child.key, ...child.val(), type: 'public', name: 'Публичный #' + child.key.slice(0, 4) });
-                    });
-                }
-                const vipSnap = await get(ref(db, 'vipServers'));
-                let vipServers = [];
-                if (vipSnap.exists()) {
-                    vipSnap.forEach((child) => {
-                        vipServers.push({ id: child.key, ...child.val(), type: 'vip' });
-                    });
-                }
-                const all = [...vipServers, ...publicServers];
-                serverList.innerHTML = '';
-                if (all.length === 0) {
-                    serverList.innerHTML = '<div style="color:#666;">Нет серверов</div>';
-                    return;
-                }
-                all.forEach(s => {
-                    const isVip = s.type === 'vip';
-                    const div = document.createElement('div');
-                    div.className = 'server-item';
-                    
-                    // --- Безопасное создание элементов через textContent ---
-                    const infoDiv = document.createElement('div');
-                    
-                    const nameSpan = document.createElement('strong');
-                    nameSpan.textContent = s.name || 'Сервер';
-                    infoDiv.appendChild(nameSpan);
-                    
-                    const badgeSpan = document.createElement('span');
-                    badgeSpan.className = isVip ? 'badge-vip' : 'badge-public';
-                    badgeSpan.textContent = isVip ? 'VIP' : 'Публичный';
-                    infoDiv.appendChild(badgeSpan);
-                    
-                    const playersDiv = document.createElement('div');
-                    playersDiv.style.fontSize = '13px';
-                    playersDiv.style.color = '#aaa';
-                    playersDiv.textContent = `${s.players || 0}/${s.max || 8} игроков`;
-                    infoDiv.appendChild(playersDiv);
-                    
-                    if (isVip && s.owner) {
-                        const ownerDiv = document.createElement('div');
-                        ownerDiv.style.fontSize = '12px';
-                        ownerDiv.style.color = '#f7c948';
-                        ownerDiv.textContent = `Владелец: ${s.owner}`;
-                        infoDiv.appendChild(ownerDiv);
-                    }
-                    
-                    const btn = document.createElement('button');
-                    btn.className = 'join-btn';
-                    btn.textContent = 'Join';
-                    btn.addEventListener('click', () => joinServer(s.id, isVip));
-                    
-                    div.appendChild(infoDiv);
-                    div.appendChild(btn);
-                    serverList.appendChild(div);
-                });
-            });
-        }
-
-        // -------------------- 3D Игра (КАРТА, БАЗЫ, РОБЛОКС МОДЕЛЬ) --------------------
-        function makeLabel(text, color, x, y, z) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 512; canvas.height = 128;
-            const ctx = canvas.getContext('2d');
-            ctx.font = 'Bold 50px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.shadowColor = 'black'; ctx.shadowBlur = 10;
-            ctx.fillStyle = color; ctx.fillText(text, 256, 64);
-            const texture = new THREE.CanvasTexture(canvas);
-            const spriteMat = new THREE.SpriteMaterial({ map: texture, depthTest: false });
-            const sprite = new THREE.Sprite(spriteMat);
-            sprite.scale.set(6, 1.5, 1);
-            sprite.position.set(x, y, z);
-            scene.add(sprite);
-        }
-
-        // НОВАЯ ФУНКЦИЯ: Создаём модель Роблокс из кубиков
-        function createRobloxModel(skinUrl, isOther = false) {
-            const group = new THREE.Group();
-            
-            // Материалы по умолчанию (если нет скина)
-            let material;
-            if (skinUrl && typeof skinUrl === 'string' && skinUrl.startsWith('data:image')) {
-                const loader = new THREE.TextureLoader();
-                const texture = loader.load(skinUrl, undefined, undefined, (err) => { console.warn("Skin failed to load", err); });
-                texture.flipY = false;
-                material = new THREE.MeshStandardMaterial({ map: texture });
-            } else {
-                // Если скина нет, используем синий цвет (как в Роблоксе по дефолту)
-                material = new THREE.MeshStandardMaterial({ color: isOther ? 0xff6b6b : 0x4a7cf7 });
-            }
-
-            // === ЧАСТИ ТЕЛА (ТЕЛОСЛОЖЕНИЕ СО СКРИНА) ===
-            // 1. Голова
-            const head = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.4, 0.4), material);
-            head.position.y = 0.6;
-            group.add(head);
-
-            // 2. Торс
-            const torso = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.6, 0.3), material);
-            torso.position.y = 0.3;
-            group.add(torso);
-
-            // 3. Левая рука
-            const lArm = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.4, 0.15), material);
-            lArm.position.set(-0.35, 0.4, 0);
-            group.add(lArm);
-
-            // 4. Правая рука
-            const rArm = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.4, 0.15), material);
-            rArm.position.set(0.35, 0.4, 0);
-            group.add(rArm);
-
-            // 5. Левая нога
-            const lLeg = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.4, 0.2), material);
-            lLeg.position.set(-0.15, 0, 0);
-            group.add(lLeg);
-
-            // 6. Правая нога
-            const rLeg = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.4, 0.2), material);
-            rLeg.position.set(0.15, 0, 0);
-            group.add(rLeg);
-
-            return group;
-        }
-
-        function init3D() {
-            gameContainer.classList.remove('hidden');
+        window.startGame = function() {
             menuSection.classList.add('hidden');
-            profileSection.classList.add('hidden');
-            friendsSection.classList.add('hidden');
-            serversSection.classList.add('hidden');
+            gameContainer.classList.remove('hidden');
+            resizeCanvas();
+            initGameLoop();
+        };
 
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x87CEEB);
-
-            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
-            camTheta = 0.5; camPhi = 0.4; camRadius = 15;
-
-            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.shadowMap.enabled = true;
-
-            const ambient = new THREE.AmbientLight(0x404060); scene.add(ambient);
-            const dirLight = new THREE.DirectionalLight(0xffffff, 1); dirLight.position.set(5, 20, 10); dirLight.castShadow = true; scene.add(dirLight);
-            const hemiLight = new THREE.HemisphereLight(0x87CEEB, 0x3a7bd5, 0.6); scene.add(hemiLight);
-
-            // --- КАРТА ---
-            const groundGeo = new THREE.PlaneGeometry(70, 70);
-            const groundMat = new THREE.MeshStandardMaterial({ color: 0x6dc85c, side: THREE.DoubleSide });
-            const ground = new THREE.Mesh(groundGeo, groundMat);
-            ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
-
-            const wallMat = new THREE.MeshStandardMaterial({ color: 0x8B5A2B });
-            const walls = [
-                { x: 0, z: -35, w: 70, h: 0.5 }, { x: 0, z: 35, w: 70, h: 0.5 },
-                { x: -35, z: 0, w: 0.5, h: 70 }, { x: 35, z: 0, w: 0.5, h: 70 }
-            ];
-            walls.forEach(w => {
-                const wallMesh = new THREE.Mesh(new THREE.BoxGeometry(w.w, 1.2, w.h), wallMat);
-                wallMesh.position.set(w.x, 0.6, w.z); scene.add(wallMesh);
-            });
-
-            const carpetMat = new THREE.MeshStandardMaterial({ color: 0xcc2233 });
-            const carpet = new THREE.Mesh(new THREE.PlaneGeometry(6, 40), carpetMat);
-            carpet.rotation.x = -Math.PI / 2; carpet.position.set(0, 0.01, 0); scene.add(carpet);
-
-            // --- БАЗЫ (1 ЭТАЖ) ---
-            const baseMat = new THREE.MeshStandardMaterial({ color: 0x888888 });
-            const greenMat = new THREE.MeshStandardMaterial({ color: 0x33ff33 });
-            const redMat = new THREE.MeshStandardMaterial({ color: 0xff3333 });
-            const woodMat = new THREE.MeshStandardMaterial({ color: 0xD2B48C });
-            
-            function createBase(x, z) {
-                const group = new THREE.Group();
-                const baseFloor = new THREE.Mesh(new THREE.BoxGeometry(6, 0.2, 6), new THREE.MeshStandardMaterial({color:0x444444}));
-                baseFloor.position.set(0, 0.1, 0); group.add(baseFloor);
-                const wallsBase = new THREE.Mesh(new THREE.BoxGeometry(6, 1.2, 6), new THREE.MeshStandardMaterial({color:0x777777, transparent:true, opacity:0.5}));
-                wallsBase.position.set(0, 0.7, 0); group.add(wallsBase);
-                
-                const stairMat = new THREE.MeshStandardMaterial({ color: 0x555555 });
-                const hole = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.1, 3), new THREE.MeshStandardMaterial({color:0x111111}));
-                hole.position.set(0, 0.2, 0); group.add(hole);
-                for(let i=0; i<6; i++) {
-                    const step = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.1, 0.3), stairMat);
-                    step.position.set(0, -0.2 - i*0.3, -1.5 + i*0.6); group.add(step);
-                }
-                const redBar = new THREE.Mesh(new THREE.BoxGeometry(2, 0.1, 1.5), redMat);
-                redBar.position.set(0, -0.8, -0.5); group.add(redBar);
-                const redBar2 = new THREE.Mesh(new THREE.BoxGeometry(2, 0.1, 1.5), redMat);
-                redBar2.position.set(0, -1.5, -0.5); group.add(redBar2);
-                for(let i=0; i<3; i++) {
-                    const plat = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.1, 0.8), greenMat);
-                    plat.position.set(-1.5 + i*1.5, -0.8, 1.5); group.add(plat);
-                }
-                const doorMat = new THREE.MeshStandardMaterial({ color: 0xDD2222 });
-                const door = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.1, 1), doorMat);
-                door.position.set(0, 0.2, 2.8); group.add(door);
-                const sign = new THREE.Mesh(new THREE.BoxGeometry(2, 0.3, 0.1), woodMat);
-                sign.position.set(0, 0.9, 3.1); group.add(sign);
-                group.position.set(x, 0, z); scene.add(group);
-            }
-            createBase(-15, -12); createBase(-15, 12); createBase(15, -12); createBase(15, 12);
-            createBase(-25, -12); createBase(-25, 12); createBase(25, -12); createBase(25, 12);
-
-            // --- ОБЪЕКТЫ ---
-            const shopGroup = new THREE.Group();
-            const shopBase = new THREE.Mesh(new THREE.BoxGeometry(3, 0.3, 3), new THREE.MeshStandardMaterial({color:0x888888}));
-            shopBase.position.y = 0.15; shopGroup.add(shopBase);
-            const poleMat = new THREE.MeshStandardMaterial({color:0xaaaaaa});
-            for(let i=-1; i<=1; i+=2) { for(let j=-1; j<=1; j+=2) { const p = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 2.5), poleMat); p.position.set(i*1.2, 1.3, j*1.2); shopGroup.add(p); } }
-            const roof = new THREE.Mesh(new THREE.ConeGeometry(2.8, 0.8, 4), new THREE.MeshStandardMaterial({color: 0x4a7cf7}));
-            roof.rotation.y = Math.PI/4; roof.position.y = 2.2; shopGroup.add(roof);
-            shopGroup.position.set(-20, 0, -15); scene.add(shopGroup); makeLabel('Shop', '#4a7cf7', -20, 3.5, -15);
-
-            const rngGroup = new THREE.Group();
-            const rngBase = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.2, 1.6), new THREE.MeshStandardMaterial({color:0x3a6be0}));
-            rngBase.position.y = 0.6; rngGroup.add(rngBase);
-            const rngFace = new THREE.Mesh(new THREE.BoxGeometry(1, 0.6, 0.1), new THREE.MeshStandardMaterial({color:0x111111}));
-            rngFace.position.set(0, 0.8, 0.85); rngGroup.add(rngFace);
-            rngGroup.position.set(-10, 0, -25); scene.add(rngGroup); makeLabel('RNG Machine', '#3a6be0', -10, 2.8, -25);
-
-            const wheelGroup = new THREE.Group();
-            const wheelBase = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.3, 2.5), new THREE.MeshStandardMaterial({color:0x444444}));
-            wheelBase.position.y = 0.15; wheelGroup.add(wheelBase);
-            const wheel = new THREE.Mesh(new THREE.CylinderGeometry(1.8, 1.8, 0.3, 16), new THREE.MeshStandardMaterial({color:0xbf40bf}));
-            wheel.position.y = 1.8; wheelGroup.add(wheel);
-            wheelGroup.position.set(10, 0, -25); scene.add(wheelGroup); makeLabel('Crystal Wheel', '#bf40bf', 10, 3.2, -25);
-
-            const robuxGroup = new THREE.Group();
-            const rBase = new THREE.Mesh(new THREE.BoxGeometry(3, 0.3, 3), new THREE.MeshStandardMaterial({color:0x888888}));
-            rBase.position.y = 0.15; robuxGroup.add(rBase);
-            const rRoof = new THREE.Mesh(new THREE.ConeGeometry(2.8, 0.8, 4), new THREE.MeshStandardMaterial({color: 0xff3333}));
-            rRoof.rotation.y = Math.PI/4; rRoof.position.y = 2.2; robuxGroup.add(rRoof);
-            robuxGroup.position.set(20, 0, -15); scene.add(robuxGroup); makeLabel('Robux Shop', '#ff3333', 20, 3.5, -15);
-
-            const plazaGroup = new THREE.Group();
-            const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.5, 2.5, 0.5), new THREE.MeshStandardMaterial({color:0x2a6bb0}));
-            pillar.position.set(-1.5, 1.25, 0); plazaGroup.add(pillar);
-            const pillar2 = pillar.clone(); pillar2.position.set(1.5, 1.25, 0); plazaGroup.add(pillar2);
-            const arch = new THREE.Mesh(new THREE.BoxGeometry(3.5, 0.4, 0.5), new THREE.MeshStandardMaterial({color:0x2a6bb0}));
-            arch.position.set(0, 2.5, 0); plazaGroup.add(arch);
-            plazaGroup.position.set(-10, 0, -8); scene.add(plazaGroup); makeLabel('Trade Plaza', '#2a6bb0', -10, 3.8, -8);
-
-            const beeGroup = new THREE.Group();
-            const beeBody = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 0.6, 6), new THREE.MeshStandardMaterial({color:0xffcc00}));
-            beeBody.position.y = 0.8; beeGroup.add(beeBody);
-            const stripe = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 0.1, 6), new THREE.MeshStandardMaterial({color:0x222222}));
-            stripe.position.y = 0.9; beeGroup.add(stripe);
-            const stripe2 = stripe.clone(); stripe2.position.y = 0.7; beeGroup.add(stripe2);
-            beeGroup.position.set(20, 0, -15); scene.add(beeGroup); makeLabel('Queen Bee', '#ffcc00', 20, 2.5, -15);
-
-            // --- ИГРОК (ИСПОЛЬЗУЕМ НОВУЮ МОДЕЛЬ) ---
-            const skinUrl = currentUserData.skin || null;
-            player = createRobloxModel(skinUrl, false);
-            player.position.set(0, 0.1, 0);
-            scene.add(player);
-
-            // --- МУЛЬТИПЛЕЕР ---
-            if (currentServerId) {
-                playerPosRef = ref(db, 'gameSessions/' + currentServerId + '/' + currentUid);
-                updateInterval = setInterval(async () => {
-                    if(player) await set(playerPosRef, { x: player.position.x, z: player.position.z, nick: currentUserData.nick, skin: currentUserData.skin || '' });
-                }, 100);
-                const othersRef = ref(db, 'gameSessions/' + currentServerId);
-                onChildAdded(othersRef, (snap) => {
-                    const uid = snap.key; if (uid === currentUid) return;
-                    const data = snap.val();
-                    const model = createRobloxModel(data.skin || null, true);
-                    model.position.set(data.x || 0, 0.1, data.z || 0);
-                    scene.add(model); otherPlayers[uid] = model;
-                });
-                onChildChanged(othersRef, (snap) => {
-                    const uid = snap.key; if (uid === currentUid || !otherPlayers[uid]) return;
-                    const data = snap.val();
-                    otherPlayers[uid].position.x = data.x || 0;
-                    otherPlayers[uid].position.z = data.z || 0;
-                });
-                onChildRemoved(othersRef, (snap) => {
-                    const uid = snap.key; if (uid === currentUid) return;
-                    if (otherPlayers[uid]) { scene.remove(otherPlayers[uid]); delete otherPlayers[uid]; }
-                });
-            }
-
-            // --- УПРАВЛЕНИЕ (АБСОЛЮТНОЕ WASD) ---
-            window.addEventListener('keydown', (e) => {
-                const k = e.key.toLowerCase();
-                if (k === 'w' || k === 'a' || k === 's' || k === 'd') {
-                    keys[k] = true; e.preventDefault();
-                }
-                if (k === 'e') {
-                    if (shopModal.classList.contains('hidden')) {
-                        openShop();
-                    }
-                    e.preventDefault();
-                }
-            });
-            window.addEventListener('keyup', (e) => {
-                const k = e.key.toLowerCase();
-                if (k === 'w' || k === 'a' || k === 's' || k === 'd') {
-                    keys[k] = false; e.preventDefault();
-                }
-            });
-
-            canvas.addEventListener('mousedown', (e) => { if (e.button === 2) { isDragging = true; previousMouseX = e.clientX; previousMouseY = e.clientY; } });
-            window.addEventListener('mousemove', (e) => { if (isDragging) {
-                const deltaX = e.clientX - previousMouseX;
-                const deltaY = e.clientY - previousMouseY;
-                camTheta -= deltaX * 0.01;
-                camPhi -= deltaY * 0.01;
-                camPhi = Math.max(0.1, Math.min(1.5, camPhi));
-                previousMouseX = e.clientX; previousMouseY = e.clientY;
-            }});
-            window.addEventListener('mouseup', (e) => { if (e.button === 2) isDragging = false; });
-            canvas.addEventListener('wheel', (e) => { e.preventDefault(); camRadius += e.deltaY * 0.05; camRadius = Math.max(0.1, Math.min(35, camRadius)); });
-            canvas.addEventListener('contextmenu', (e) => e.preventDefault());
-
-            animate();
-        }
-
-        function animate() {
-            if (!renderer || !player) return;
-            const speed = 0.15;
-            // Движение абсолютное по осям мира: W=-Z, S=+Z, A=-X, D=+X
-            let dx = 0, dz = 0;
-            if (keys.w) dz -= speed;
-            if (keys.s) dz += speed;
-            if (keys.a) dx -= speed;
-            if (keys.d) dx += speed;
-
-            if (dx !== 0 || dz !== 0) {
-                player.position.x += dx;
-                player.position.z += dz;
-                player.rotation.y = Math.atan2(dx, dz);
-            }
-            const limit = 34;
-            player.position.x = Math.max(-limit, Math.min(limit, player.position.x));
-            player.position.z = Math.max(-limit, Math.min(limit, player.position.z));
-
-            // ЗУМ ОТ 3-ГО ЛИЦА ДО 1-ГО ЛИЦА
-            let xOffset, zOffset, yOffset;
-            if (camRadius < 0.5) {
-                // Вид от первого лица
-                player.visible = false; // Прячем модель себя
-                xOffset = 0;
-                zOffset = 0;
-                yOffset = 1.6; // Высота глаз
-            } else {
-                // Вид от третьего лица
-                player.visible = true;
-                xOffset = camRadius * Math.sin(camTheta) * Math.cos(camPhi);
-                zOffset = camRadius * Math.cos(camTheta) * Math.cos(camPhi);
-                yOffset = camRadius * Math.sin(camPhi);
-            }
-
-            camera.position.x = player.position.x + xOffset;
-            camera.position.z = player.position.z + zOffset;
-            camera.position.y = player.position.y + yOffset;
-            camera.lookAt(player.position.x, player.position.y + 0.5, player.position.z);
-
-            renderer.render(scene, camera);
-            animationId = requestAnimationFrame(animate);
+        function stopGame() {
+            if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+            if (updateInterval) { clearInterval(updateInterval); updateInterval = null; }
+            if (myPosRef) { remove(myPosRef); myPosRef = null; }
+            Object.keys(otherPlayers).forEach(uid => { delete otherPlayers[uid]; });
         }
 
         window.exitGame = function() { stopGame(); showMenu(); };
-        window.addEventListener('resize', () => {
-            if (renderer) { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }
-        });
 
-        // =============== РЕДАКТОР КАРТ ===============
-        function openEditor() {
-            if (!currentUid) return alert('Сначала войди!');
-            menuSection.classList.add('hidden');
-            editorModal.classList.remove('hidden');
-            // При необходимости инициализировать редактор в 3D (если уже в игре)
+        function initGameLoop() {
+            // Синхронизация позиции
+            if (currentUid) {
+                myPosRef = ref(db, 'game2d/' + currentUid);
+                updateInterval = setInterval(async () => {
+                    if (player) await set(myPosRef, { x: player.x, y: player.y, color: currentColor, nick: currentNick });
+                }, 100);
+
+                // Слушаем других
+                const othersRef = ref(db, 'game2d');
+                onChildAdded(othersRef, (snap) => {
+                    const uid = snap.key; if (uid === currentUid) return;
+                    const data = snap.val();
+                    otherPlayers[uid] = data;
+                });
+                onChildChanged(othersRef, (snap) => {
+                    const uid = snap.key; if (uid === currentUid) return;
+                    if (otherPlayers[uid]) otherPlayers[uid] = snap.val();
+                });
+                onChildRemoved(othersRef, (snap) => {
+                    const uid = snap.key; if (uid === currentUid) return;
+                    delete otherPlayers[uid];
+                });
+            }
+
+            // Управление
+            window.addEventListener('keydown', (e) => { if (e.key === 'w' || e.key === 'a' || e.key === 's' || e.key === 'd') { keys[e.key] = true; e.preventDefault(); } });
+            window.addEventListener('keyup', (e) => { if (e.key === 'w' || e.key === 'a' || e.key === 's' || e.key === 'd') { keys[e.key] = false; e.preventDefault(); } });
+
+            gameLoop();
         }
 
-        window.openEditor = function() { openEditor(); };
+        function gameLoop() {
+            // Движение
+            const speed = 3;
+            if (keys.w) player.y -= speed;
+            if (keys.s) player.y += speed;
+            if (keys.a) player.x -= speed;
+            if (keys.d) player.x += speed;
 
-        window.closeEditor = function() {
-            editorModal.classList.add('hidden');
-            menuSection.classList.remove('hidden');
-        };
+            // Ограничение (карта 40x40)
+            const mapSize = 40;
+            const tileSize = 20;
+            const maxX = (canvas.width / tileSize) - 1;
+            const maxY = (canvas.height / tileSize) - 1;
+            player.x = Math.max(0, Math.min(maxX, player.x));
+            player.y = Math.max(0, Math.min(maxY, player.y));
 
-        // Функции для редактора будут добавлены по требованию (пока заготовка)
-        window.saveMap = function() {
-            alert('Сохранение карты будет реализовано позже. Сейчас можно перетаскивать объекты!');
-        };
+            // Рендер
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Трава
+            for (let row = 0; row < canvas.height / tileSize; row++) {
+                for (let col = 0; col < canvas.width / tileSize; col++) {
+                    const isEven = (row + col) % 2 === 0;
+                    ctx.fillStyle = isEven ? '#4caf50' : '#43a047';
+                    ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+                }
+            }
+            // Красная дорожка
+            ctx.fillStyle = '#cc2233';
+            ctx.fillRect(0, canvas.height/2 - 20, canvas.width, 40);
 
-        // -------------------- Инициализация --------------------
+            // Другие игроки
+            for (const uid in otherPlayers) {
+                const p = otherPlayers[uid];
+                ctx.fillStyle = p.color || '#ff6b6b';
+                ctx.fillRect(p.x * tileSize, p.y * tileSize, tileSize, tileSize);
+                ctx.fillStyle = '#fff';
+                ctx.font = '10px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(p.nick || uid, p.x * tileSize + tileSize/2, p.y * tileSize - 5);
+            }
+
+            // Я
+            ctx.fillStyle = currentColor;
+            ctx.fillRect(player.x * tileSize, player.y * tileSize, tileSize, tileSize);
+            ctx.fillStyle = '#fff';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(currentNick, player.x * tileSize + tileSize/2, player.y * tileSize - 5);
+
+            // Обновляем деньги на UI
+            gameMoney.textContent = money;
+
+            animationId = requestAnimationFrame(gameLoop);
+        }
+
+        // Инициализация
         checkSession();
-        console.log('🔥 Полный билд с Роблокс-телосложением, зумом, редактором и безопасным выводом VIP-серверов загружен!');
+
+        window.addEventListener('resize', () => {
+            if (!gameContainer.classList.contains('hidden')) resizeCanvas();
+        });
     </script>
 </body>
 </html>
