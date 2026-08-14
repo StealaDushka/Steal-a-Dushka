@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игра с Firebase</title>
+    <title>Игра с Firebase и джойстиком слева внизу</title>
     <!-- Подключаем библиотеку для сенсорного джойстика -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.10.1/nipplejs.min.js"></script>
     
@@ -330,10 +330,11 @@
         .w-dark { background-color: #003366; }
         .w-white { background-color: #FFFFFF; }
 
+        /* --- СЕНСОРНЫЙ ДЖОЙСТИК (слева внизу) --- */
         #joystick-zone {
             position: fixed;
             bottom: 30px;
-            right: 30px;
+            left: 30px; /* Возвращен в левый нижний угол */
             width: 120px;
             height: 120px;
             z-index: 100;
@@ -342,14 +343,15 @@
             touch-action: none;
         }
 
+        /* Адаптация для маленьких экранов */
         @media (max-width: 700px) {
             #sidebar { width: 160px; min-width: 160px; padding-left: 2px; }
             .action-btn { width: 60px; height: 60px; font-size: 12px; }
             #actions-grid { gap: 10px; }
-            #joystick-zone { width: 100px; height: 100px; right: 10px; bottom: 10px; }
+            #joystick-zone { width: 100px; height: 100px; left: 10px; bottom: 10px; }
         }
         @media (max-height: 500px) {
-            #joystick-zone { width: 80px; height: 80px; right: 10px; bottom: 10px; opacity: 0.4; }
+            #joystick-zone { width: 80px; height: 80px; left: 10px; bottom: 10px; opacity: 0.4; }
         }
     </style>
 </head>
@@ -442,6 +444,7 @@
         </div>
     </div>
 
+    <!-- ДЖОЙСТИК СЛЕВА ВНИЗУ -->
     <div id="joystick-zone"></div>
 
     <script>
@@ -522,7 +525,6 @@
             const pass = document.getElementById('password').value.trim();
             if (!user || !pass) { alert('Заполните НИК и ПАРОЛЬ!'); return; }
             
-            // Сохраняем в Firebase Realtime Database
             const usersRef = db.ref('users/' + user);
             usersRef.once('value').then((snapshot) => {
                 if (snapshot.exists()) {
