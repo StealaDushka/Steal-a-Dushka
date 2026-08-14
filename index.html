@@ -3,486 +3,663 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Steal Dushka</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    <title>Игра с Firebase</title>
+    <!-- Подключаем библиотеку для сенсорного джойстика -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.10.1/nipplejs.min.js"></script>
+    
+    <!-- Подключаем Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: #0b0e14; color: #fff; overflow: hidden; user-select: none; }
-        #app { width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; }
-        .hidden { display: none !important; }
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            touch-action: none;
+        }
 
-        #splashScreen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #0b0e14;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 9999; cursor: pointer;
+        #auth-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1a1a1a;
+            z-index: 999;
         }
-        #splashCanvas {
-            background: #000000; border: 4px solid #ffffff;
-            width: 240px; height: 150px;
+        #auth-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 400px;
+            height: 400px;
+            background-color: #000000;
+            border: 4px solid #111;
+            box-sizing: border-box;
+            padding: 20px;
+            position: relative;
         }
-        .click-hint {
-            color: #4a7cf7; font-family: 'Press Start 2P', monospace;
-            font-size: 12px; margin-top: 20px; animation: pulse 2s infinite;
+        .auth-label {
+            color: #ffffff;
+            font-size: 14px;
+            margin-bottom: 8px;
+            width: 100%;
+            text-align: left;
+            padding-left: 5px;
+            letter-spacing: 1px;
         }
-        @keyframes pulse { 0% { opacity: 0.2; } 50% { opacity: 1; } 100% { opacity: 0.2; } }
+        .auth-input {
+            width: 100%;
+            height: 32px;
+            background-color: #ffffff;
+            border: none;
+            color: #000000;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 0 10px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            outline: none;
+        }
+        .auth-input:focus {
+            background-color: #f0f0f0;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            gap: 10px;
+        }
+        .auth-btn {
+            flex: 1;
+            height: 40px;
+            background-color: #ffffff;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .auth-btn:hover {
+            background-color: #e0e0e0;
+        }
+        .btn-login { color: #000000; }
+        .btn-reg { color: #FF0000; }
 
-        #authContainer {
-            background: #000000; padding: 25px 15px 15px 15px;
-            border: 4px solid #ffffff; width: 280px;
-            display: flex; flex-direction: column; gap: 8px; align-items: center;
+        #app-wrapper {
+            display: none;
+            flex-direction: row;
+            width: 100vw;
+            height: 100vh;
+            background-color: #1a1a1a;
         }
-        .pixel-label { font-family: 'Press Start 2P', monospace; font-size: 14px; color: #fff; width: 100%; text-align: left; margin-top: 8px; }
-        #authContainer input {
-            width: 100%; background: #ffffff; border: none; padding: 6px 10px;
-            font-size: 16px; font-family: monospace; color: #000; outline: none;
-        }
-        .auth-buttons { display: flex; justify-content: space-between; width: 100%; gap: 8px; margin-top: 15px; }
-        .auth-buttons button {
-            flex: 1; background: #ffffff; border: none; padding: 10px 0;
-            font-family: 'Press Start 2P', monospace; font-size: 12px; cursor: pointer; transition: 0.2s;
-        }
-        .auth-buttons button:hover { background: #dddddd; }
-        #loginBtn { color: #000000; }
-        #registerBtn { color: #ff0000; }
 
-        #pixelMenu {
-            background: #000000; padding: 15px;
-            border: 4px solid #ffffff; width: 280px;
-            display: flex; flex-direction: column; gap: 12px;
+        #sidebar {
+            width: 220px;
+            min-width: 220px;
+            height: 100vh;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background-color: #1a1a1a;
+            position: relative;
+            z-index: 10;
+            padding-left: 5px;
+            box-sizing: border-box;
         }
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .menu-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.2s; }
-        .menu-item:hover { opacity: 0.8; }
-        .pixel-btn {
-            background: #ffffff; width: 100%; aspect-ratio: 2/1;
-            display: flex; justify-content: center; align-items: center;
-            font-family: 'Press Start 2P', monospace; font-size: 24px; color: #00ffff;
+        #actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
         }
-        .menu-label {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 8px; color: #4a7cf7; margin-top: 4px; text-align: center;
+        .action-btn {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 16px;
+            color: #ffffff;
+            cursor: pointer;
+            border: 4px solid #000;
+            box-sizing: border-box;
+            text-align: center;
+            user-select: none;
+            transition: transform 0.1s, filter 0.1s;
         }
-        .logout-item { width: 100%; display: flex; flex-direction: column; align-items: center; }
-        .logout-btn { width: 60%; aspect-ratio: 2/1; }
-        .logout-svg { width: 60%; height: 60%; stroke: #00ffff; stroke-width: 8; stroke-linecap: square; stroke-linejoin: square; }
+        .action-btn:active {
+            transform: scale(0.92);
+            filter: brightness(0.8);
+        }
+        .action-btn.pink { background-color: #E54B8C; }
+        .action-btn.gray { background-color: #666666; }
 
-        #gameContainer { position: relative; width: 100vw; height: 100vh; background: #1a1f2b; }
-        canvas { display: block; width: 100%; height: 100%; }
-        #uiOverlay { position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
-        #uiOverlay .money { background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 10px; font-size: 20px; font-weight: bold; color: #f7c948; border: 1px solid #f7c948; }
-        #uiOverlay .exit-btn { background: #ff4444; padding: 8px 20px; border: none; border-radius: 10px; color: #fff; font-weight: bold; cursor: pointer; }
+        #game-wrapper {
+            flex: 1;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #game-container {
+            width: 400px;
+            height: 400px;
+            transform-origin: center center;
+        }
+
+        .game-map {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            background-color: #20b94d;
+            border: 4px solid black;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .center-line {
+            position: absolute;
+            top: 180px;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background-color: #e83e32;
+            z-index: 5;
+        }
+        .center-cap {
+            position: absolute;
+            top: -10px;
+            width: 16px;
+            height: 60px;
+            background-color: black;
+        }
+        .cap-left { left: 0; }
+        .cap-right { right: 0; }
+
+        .base {
+            position: absolute;
+            width: 75px;
+            height: 75px;
+            z-index: 2;
+        }
+        .base .gray { width: 100%; height: 100%; background-color: #869292; }
+        .base .brown { 
+            position: absolute; 
+            width: calc(100% - 8px); 
+            left: 4px;
+            height: 14px; 
+            bottom: 4px; 
+            background-color: #bf5b1a; 
+        }
+        .base .green { 
+            position: absolute; 
+            width: 34px; 
+            height: 14px; 
+            background-color: #22e54c; 
+            left: 50%; 
+            transform: translateX(-50%); 
+        }
+
+        .base-top .brown { bottom: 4px; } 
+        .base-top .green { bottom: -14px; } 
+        .base-top-1 { top: 20px; left: 20px; }
+        .base-top-2 { top: 20px; left: 115px; }
+        .base-top-3 { top: 20px; left: 210px; }
+        .base-top-4 { top: 20px; left: 305px; }
+
+        .base-bottom .brown { top: 4px; } 
+        .base-bottom .green { top: -14px; } 
+        .base-bottom-1 { bottom: 20px; left: 20px; }
+        .base-bottom-2 { bottom: 20px; left: 115px; }
+        .base-bottom-3 { bottom: 20px; left: 210px; }
+        .base-bottom-4 { bottom: 20px; left: 305px; }
+
+        #player {
+            position: absolute;
+            width: 10px;  
+            height: 20px; 
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 1fr;
+            z-index: 20;
+        }
+        #player .pixel { width: 100%; height: 100%; }
+
+        #rng-machine {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            z-index: 15;
+            left: 190px;
+            top: 137px;
+        }
+        #rng-machine .pixel { width: 100%; height: 100%; }
+        .c-cyan { background-color: #00F0FF; }
+        .c-gray { background-color: #808080; }
+        .c-empty { background-color: transparent; }
+
+        #shop {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            z-index: 15;
+            left: 150px; 
+            top: 137px;
+        }
+        #shop .pixel { width: 100%; height: 100%; }
+        .s-blue { background-color: #0000FF; }
+        .s-white { background-color: #FFFFFF; }
+
+        #queen-bee {
+            position: absolute;
+            width: 20px;
+            height: 24px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+            z-index: 15;
+            left: 230px; 
+            top: 137px;
+        }
+        #queen-bee .pixel { width: 100%; height: 100%; }
+        .q-yellow { background-color: #FFD966; }
+        .q-red { background-color: #F44336; }
+        .q-brown { background-color: #8B4513; }
+
+        #rng-circle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #A454B4;
+            border-radius: 50%;
+            z-index: 15;
+            left: 190px;
+            top: 230px;
+        }
+
+        #shop-red {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            z-index: 15;
+            left: 150px; 
+            top: 230px;
+        }
+        #shop-red .pixel { width: 100%; height: 100%; }
+        .r-red { background-color: #FF0000; }
+        .r-white { background-color: #FFFFFF; }
+
+        #shop-white {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            z-index: 15;
+            left: 230px; 
+            top: 230px;
+        }
+        #shop-white .pixel { width: 100%; height: 100%; }
+        .w-dark { background-color: #003366; }
+        .w-white { background-color: #FFFFFF; }
+
+        #joystick-zone {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 120px;
+            height: 120px;
+            z-index: 100;
+            opacity: 0.5;
+            display: none;
+            touch-action: none;
+        }
+
+        @media (max-width: 700px) {
+            #sidebar { width: 160px; min-width: 160px; padding-left: 2px; }
+            .action-btn { width: 60px; height: 60px; font-size: 12px; }
+            #actions-grid { gap: 10px; }
+            #joystick-zone { width: 100px; height: 100px; right: 10px; bottom: 10px; }
+        }
+        @media (max-height: 500px) {
+            #joystick-zone { width: 80px; height: 80px; right: 10px; bottom: 10px; opacity: 0.4; }
+        }
     </style>
 </head>
 <body>
-    <div id="app">
-        <div id="splashScreen" onclick="closeSplash()">
-            <canvas id="splashCanvas" width="240" height="150"></canvas>
-            <div class="click-hint">НАЖМИТЕ В ЛЮБОЕ МЕСТО</div>
-        </div>
 
-        <div id="authContainer" class="hidden">
-            <div class="pixel-label">НИК</div>
-            <input type="text" id="authNick" placeholder="" value="Dushka">
-            <div class="pixel-label">ПАРОЛЬ</div>
-            <input type="password" id="authPass" placeholder="" value="16052014may">
-            <div class="auth-buttons">
-                <button id="loginBtn">ВОЙТИ</button>
-                <button id="registerBtn">РЕГ</button>
-            </div>
-            <div id="authMsg" style="margin-top:8px; color:#ff6b6b; font-size:12px; font-family:monospace; text-align:center;"></div>
-        </div>
-
-        <div id="pixelMenu" class="hidden">
-            <div class="menu-grid">
-                <div class="menu-item" onclick="openProfile()">
-                    <div class="pixel-btn"><span>P</span></div>
-                    <div class="menu-label">ПРОФИЛЬ</div>
-                </div>
-                <div class="menu-item" onclick="quickPlay()">
-                    <div class="pixel-btn"><span>PL</span></div>
-                    <div class="menu-label">ИГРАТЬ</div>
-                </div>
-            </div>
-            <div class="menu-grid">
-                <div class="menu-item" onclick="openServers()">
-                    <div class="pixel-btn"><span>S</span></div>
-                    <div class="menu-label">СЕРВЕРЫ</div>
-                </div>
-                <div class="menu-item" onclick="openFriends()">
-                    <div class="pixel-btn"><span>F</span></div>
-                    <div class="menu-label">ДРУЗЬЯ</div>
-                </div>
-            </div>
-            <div class="menu-item logout-item" onclick="logout()">
-                <div class="pixel-btn logout-btn">
-                    <svg class="logout-svg" viewBox="0 0 100 50" fill="none">
-                        <path d="M10 25 L40 45 L90 5" />
-                    </svg>
-                </div>
-                <div class="menu-label" style="margin-top:6px;">ВЫХОД</div>
-            </div>
-        </div>
-
-        <div id="gameContainer" class="hidden">
-            <canvas id="gameCanvas"></canvas>
-            <div id="uiOverlay">
-                <div class="money">💰 <span id="gameMoney">0</span></div>
-                <button class="exit-btn" onclick="exitGame()">✕ Выйти</button>
+    <!-- ЭКРАН АВТОРИЗАЦИИ -->
+    <div id="auth-container">
+        <div id="auth-box">
+            <label class="auth-label">НИК</label>
+            <input type="text" id="username" class="auth-input" autocomplete="off">
+            <label class="auth-label">ПАРОЛЬ</label>
+            <input type="password" id="password" class="auth-input">
+            <div class="btn-group">
+                <button class="auth-btn btn-login" onclick="handleLogin()">ВОЙТИ</button>
+                <button class="auth-btn btn-reg" onclick="handleRegister()">РЕГ</button>
             </div>
         </div>
     </div>
 
-    <script type="importmap">
-        {
-            "imports": {
-                "firebase/app": "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js",
-                "firebase/database": "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js"
-            }
-        }
-    </script>
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+    <div id="app-wrapper">
+        <div id="sidebar">
+            <div id="actions-grid">
+                <div class="action-btn pink" onclick="doAction('SHOP')">SHOP</div>
+                <div class="action-btn gray" onclick="doAction('TRADE')">TRADE</div>
+                <div class="action-btn gray" onclick="doAction('REBIRTH')">REBIRTH</div>
+                <div class="action-btn gray" onclick="doAction('DUEL')">DUEL</div>
+            </div>
+        </div>
 
-    <script type="module">
-        import { initializeApp } from 'firebase/app';
-        import { getDatabase, ref, set, get, update, remove, onValue, onChildAdded, onChildChanged, onChildRemoved } from 'firebase/database';
+        <div id="game-wrapper">
+            <div id="game-container">
+                <div class="game-map">
+                    <div class="base base-top base-top-1"><div class="gray"></div><div class="brown"></div><div class="green"></div></div>
+                    <div class="base base-top base-top-2"><div class="gray"></div><div class="brown"></div><div class="green"></div></div>
+                    <div class="base base-top base-top-3"><div class="gray"></div><div class="brown"></div><div class="green"></div></div>
+                    <div class="base base-top base-top-4"><div class="gray"></div><div class="brown"></div><div class="green"></div></div>
 
+                    <div class="base base-bottom base-bottom-1"><div class="gray"></div><div class="brown"></div><div class="green"></div></div>
+                    <div class="base base-bottom base-bottom-2"><div class="gray"></div><div class="brown"></div><div class="green"></div></div>
+                    <div class="base base-bottom base-bottom-3"><div class="gray"></div><div class="brown"></div><div class="green"></div></div>
+                    <div class="base base-bottom base-bottom-4"><div class="gray"></div><div class="brown"></div><div class="green"></div></div>
+
+                    <div class="center-line">
+                        <div class="center-cap cap-left"></div>
+                        <div class="center-cap cap-right"></div>
+                    </div>
+
+                    <div id="rng-machine">
+                        <div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div>
+                        <div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div>
+                        <div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div>
+                        <div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div>
+                        <div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div>
+                    </div>
+                    <div id="shop">
+                        <div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div>
+                        <div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div>
+                        <div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div>
+                        <div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div>
+                        <div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div>
+                    </div>
+                    <div id="queen-bee">
+                        <div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div>
+                        <div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div>
+                        <div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div>
+                        <div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div>
+                        <div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div>
+                        <div class="pixel q-yellow"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-yellow"></div>
+                    </div>
+                    <div id="rng-circle"></div>
+                    <div id="shop-red">
+                        <div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div>
+                        <div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div>
+                        <div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div>
+                        <div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div>
+                        <div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div>
+                    </div>
+                    <div id="shop-white">
+                        <div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div>
+                        <div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div>
+                        <div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div>
+                        <div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div>
+                        <div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div>
+                    </div>
+
+                    <div id="player"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="joystick-zone"></div>
+
+    <script>
+        // --- 0. ИНИЦИАЛИЗАЦИЯ FIREBASE ---
         const firebaseConfig = {
-            apiKey: "AIzaSyDkXM7aHtofhx8WAT1eSfLnbsOYVXXg28o",
-            authDomain: "steal-a-dushka.firebaseapp.com",
-            projectId: "steal-a-dushka",
-            storageBucket: "steal-a-dushka.firebasestorage.app",
-            messagingSenderId: "850469516444",
-            appId: "1:850469516444:web:eecdf7fc938824a3f8e959",
-            measurementId: "G-WK4T3127ZX"
+          apiKey: "AIzaSyDkXM7aHtofhx8WAT1eSfLnbsOYVXXg28o",
+          authDomain: "steal-a-dushka.firebaseapp.com",
+          databaseURL: "https://steal-a-dushka-default-rtdb.firebaseio.com",
+          projectId: "steal-a-dushka",
+          storageBucket: "steal-a-dushka.firebasestorage.app",
+          messagingSenderId: "850469516444",
+          appId: "1:850469516444:web:eecdf7fc938824a3f8e959",
+          measurementId: "G-WK4T3127ZX"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-        const splashScreen = document.getElementById('splashScreen');
-        const splashCanvas = document.getElementById('splashCanvas');
-        const splashCtx = splashCanvas.getContext('2d');
-        const authContainer = document.getElementById('authContainer');
-        const authNick = document.getElementById('authNick');
-        const authPass = document.getElementById('authPass');
-        const loginBtn = document.getElementById('loginBtn');
-        const registerBtn = document.getElementById('registerBtn');
-        const authMsg = document.getElementById('authMsg');
-        const pixelMenu = document.getElementById('pixelMenu');
-        const gameContainer = document.getElementById('gameContainer');
-        const gameCanvas = document.getElementById('gameCanvas');
-        const ctx = gameCanvas.getContext('2d');
-        const gameMoney = document.getElementById('gameMoney');
-
-        let currentUid = null;
-        let currentNick = null;
-        let currentColor = '#000000';
-        let money = 25;
-
-        const tileSize = 20;
-        const baseWidth = 4 * tileSize;
-        const baseHeight = 4 * tileSize;
-        const panelHeight = 26;
-
-        const spawnX = -14 * tileSize;
-        const spawnY = -8 * tileSize + baseHeight + panelHeight / 2;
-
-        let player = { x: spawnX, y: spawnY, color: currentColor };
-        let keys = { w: false, a: false, s: false, d: false };
-        let animationId = null;
-        let updateInterval = null;
-        let otherPlayers = {};
-        let myPosRef = null;
-        let lastTimestamp = 0;
-
-        function drawSplashLogo() {
-            const w = splashCanvas.width, h = splashCanvas.height;
-            splashCtx.fillStyle = '#000000';
-            splashCtx.fillRect(0, 0, w, h);
-            splashCtx.strokeStyle = '#ffffff';
-            splashCtx.lineWidth = 4;
-            splashCtx.strokeRect(0, 0, w, h);
-            splashCtx.fillStyle = '#00ffff';
-            splashCtx.font = 'bold 22px "Press Start 2P", monospace';
-            splashCtx.textAlign = 'center'; splashCtx.textBaseline = 'middle';
-            splashCtx.fillText('STEAL', w/2, h/2 - 18);
-            splashCtx.fillStyle = '#00ddff';
-            splashCtx.fillText('DUSHKA', w/2, h/2 + 26);
+        // --- 1. ОБРАБОТЧИК КНОПОК ---
+        function doAction(action) {
+            console.log('Нажата кнопка: ' + action);
+            alert('Вы нажали: ' + action);
         }
 
-        window.closeSplash = function() {
-            splashScreen.classList.add('hidden');
-            authContainer.classList.remove('hidden');
-        };
+        // --- 2. МАСШТАБИРОВАНИЕ ---
+        function resizeGame() {
+            const gameContainer = document.getElementById('game-container');
+            const sidebar = document.getElementById('sidebar');
+            if (!gameContainer || gameContainer.style.display === 'none') return;
+            
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const baseSize = 400;
+            
+            const availWidth = windowWidth - sidebar.offsetWidth;
+            const scaleX = availWidth / baseSize;
+            const scaleY = windowHeight / baseSize;
+            const scale = Math.min(scaleX, scaleY) * 0.95;
+            
+            gameContainer.style.transform = `scale(${scale})`;
+        }
+        window.addEventListener('resize', resizeGame);
 
-        async function loginUser(nick, pass) {
-            const userRef = ref(db, 'users/' + nick);
-            const snap = await get(userRef);
-            if (!snap.exists()) { authMsg.textContent = '❌ Пользователь не найден!'; return false; }
-            const data = snap.val();
-            if (data.password !== pass) { authMsg.textContent = '❌ Неверный пароль!'; return false; }
-            currentUid = nick; currentNick = nick;
-            currentColor = data.color || '#000000';
-            money = data.money || 25;
-            localStorage.setItem('2d_session', JSON.stringify({ nick, password: pass }));
-            return true;
+        let touchDX = 0, touchDY = 0;
+        let joystickManager = null;
+
+        function initJoystick() {
+            const zone = document.getElementById('joystick-zone');
+            zone.style.display = 'block';
+            if (typeof nipplejs === 'undefined') { return; }
+            joystickManager = nipplejs.create({
+                zone: zone, mode: 'static', position: { left: '50%', top: '50%' },
+                color: 'white', size: 100, restOpacity: 0.5, fadeTime: 150
+            });
+            joystickManager.on('move', (evt, data) => {
+                const force = Math.min(data.force, 1);
+                const angle = data.angle.radian;
+                touchDX = Math.cos(angle) * force;
+                touchDY = -Math.sin(angle) * force;
+            });
+            joystickManager.on('end', () => { touchDX = 0; touchDY = 0; });
         }
 
-        registerBtn.addEventListener('click', async () => {
-            const n = authNick.value.trim(); const p = authPass.value.trim();
-            if (!n || !p) { authMsg.textContent = 'Заполни поля!'; return; }
-            if ((await get(ref(db, 'users/' + n))).exists()) { authMsg.textContent = '❌ Ник занят!'; return; }
-            await set(ref(db, 'users/' + n), { password: p, money: 25, color: '#000000' });
-            if (!(await get(ref(db, 'admins/Dushka'))).exists()) {
-                await set(ref(db, 'admins/Dushka'), { nick: 'Dushka', password: '16052014may' });
-            }
-            authMsg.textContent = '✅ Аккаунт создан! Войди.'; authMsg.style.color = '#4a7cf7';
-        });
-
-        loginBtn.addEventListener('click', async () => {
-            const n = authNick.value.trim(); const p = authPass.value.trim();
-            if (!n || !p) { authMsg.textContent = 'Заполни поля!'; return; }
-            if (await loginUser(n, p)) { authMsg.textContent = ''; showMenu(); }
-        });
-
-        async function checkSession() {
-            const session = localStorage.getItem('2d_session');
-            if (session) {
-                const { nick, password } = JSON.parse(session);
-                if (await loginUser(nick, password)) {
-                    showMenu();
-                    return;
-                }
-                localStorage.removeItem('2d_session');
-            }
+        // --- 3. АВТОРИЗАЦИЯ И ЗАПУСК ИГРЫ ---
+        function startGame() {
+            document.getElementById('auth-container').style.display = 'none';
+            document.getElementById('app-wrapper').style.display = 'flex';
+            setTimeout(() => {
+                resizeGame();
+                initJoystick();
+                initPlayer();
+                requestAnimationFrame(updateGame);
+            }, 50);
         }
 
-        function showMenu() {
-            authContainer.classList.add('hidden');
-            pixelMenu.classList.remove('hidden');
-            gameContainer.classList.add('hidden');
-            stopGame();
-        }
-
-        window.logout = function() {
-            localStorage.removeItem('2d_session'); currentUid = null;
-            pixelMenu.classList.add('hidden'); authContainer.classList.remove('hidden');
-            authMsg.textContent = ''; authNick.value = ''; authPass.value = '';
-            stopGame();
-        };
-
-        window.openProfile = function() { alert("Профиль (Здесь будут настройки скина и пароля)"); };
-        window.openFriends = function() { alert("Друзья (Поиск и запросы)"); };
-        window.openServers = function() { alert("Серверы (Выбор и создание VIP)"); };
-
-        function resizeCanvas() {
-            gameCanvas.width = gameContainer.clientWidth;
-            gameCanvas.height = gameContainer.clientHeight;
-        }
-
-        window.startGame = function() {
-            pixelMenu.classList.add('hidden');
-            gameContainer.classList.remove('hidden');
-            resizeCanvas();
-            initGameLoop();
-        };
-
-        function stopGame() {
-            if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
-            if (updateInterval) { clearInterval(updateInterval); updateInterval = null; }
-            if (myPosRef) { remove(myPosRef); myPosRef = null; }
-            Object.keys(otherPlayers).forEach(uid => { delete otherPlayers[uid]; });
-        }
-
-        window.exitGame = function() { stopGame(); showMenu(); };
-        window.quickPlay = function() { startGame(); };
-
-        function initGameLoop() {
-            if (currentUid) {
-                myPosRef = ref(db, 'game2d/' + currentUid);
-                updateInterval = setInterval(async () => {
-                    if (player) await set(myPosRef, { x: player.x, y: player.y, color: currentColor, nick: currentNick });
-                }, 100);
-
-                const othersRef = ref(db, 'game2d');
-                onChildAdded(othersRef, (snap) => {
-                    const uid = snap.key; if (uid === currentUid) return;
-                    const data = snap.val();
-                    otherPlayers[uid] = data;
-                });
-                onChildChanged(othersRef, (snap) => {
-                    const uid = snap.key; if (uid === currentUid) return;
-                    if (otherPlayers[uid]) otherPlayers[uid] = snap.val();
-                });
-                onChildRemoved(othersRef, (snap) => {
-                    const uid = snap.key; if (uid === currentUid) return;
-                    delete otherPlayers[uid];
-                });
-            }
-
-            window.addEventListener('keydown', (e) => {
-                if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
-                if (e.key === 'w' || e.key === 'a' || e.key === 's' || e.key === 'd') {
-                    keys[e.key] = true; e.preventDefault();
+        function handleRegister() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            if (!user || !pass) { alert('Заполните НИК и ПАРОЛЬ!'); return; }
+            
+            // Сохраняем в Firebase Realtime Database
+            const usersRef = db.ref('users/' + user);
+            usersRef.once('value').then((snapshot) => {
+                if (snapshot.exists()) {
+                    alert('Такой пользователь уже существует!');
+                } else {
+                    usersRef.set({
+                        password: pass,
+                        created_at: Date.now()
+                    }).then(() => {
+                        alert('Регистрация успешна! Добро пожаловать, ' + user + '!');
+                        startGame();
+                    });
                 }
             });
-            window.addEventListener('keyup', (e) => {
-                if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
-                if (e.key === 'w' || e.key === 'a' || e.key === 's' || e.key === 'd') {
-                    keys[e.key] = false; e.preventDefault();
-                }
-            });
-
-            lastTimestamp = performance.now();
-            gameLoop(lastTimestamp);
         }
 
-        function gameLoop(timestamp) {
-            const deltaTime = (timestamp - lastTimestamp) / 1000;
-            lastTimestamp = timestamp;
+        function handleLogin() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            if (!user || !pass) { alert('Заполните НИК и ПАРОЛЬ!'); return; }
+            
+            const usersRef = db.ref('users/' + user);
+            usersRef.once('value').then((snapshot) => {
+                if (!snapshot.exists()) {
+                    alert('Вы ещё не зарегистрированы. Нажмите "РЕГ"!');
+                } else {
+                    const data = snapshot.val();
+                    if (data.password === pass) {
+                        alert('Вход выполнен! С возвращением, ' + user + '!');
+                        startGame();
+                    } else {
+                        alert('Неверный ПАРОЛЬ!');
+                    }
+                }
+            });
+        }
 
-            const speed = 2 * tileSize;
+        // --- 4. ИГРА И КОЛЛИЗИИ ---
+        const player = document.getElementById('player');
+
+        const spawnPoints = [
+            {x: 52, y: 22}, {x: 147, y: 22}, {x: 242, y: 22}, {x: 337, y: 22},
+            {x: 52, y: 307}, {x: 147, y: 307}, {x: 242, y: 307}, {x: 337, y: 307}
+        ];
+
+        function initPlayer() {
+            player.innerHTML = `<div class="pixel"></div><div class="pixel"></div>`;
+            const pixels = player.querySelectorAll('.pixel');
+            const BODY_COLORS = ['#26C64F', '#E81B23', '#E9A0D8', '#0D27A1', '#00DFF5', '#7A418F', '#FFFFFF', '#FB7817', '#000000'];
+            const randomIndex = Math.floor(Math.random() * BODY_COLORS.length);
+            const chosenColor = BODY_COLORS[randomIndex];
+            pixels[0].style.backgroundColor = '#FFCC00'; 
+            pixels[1].style.backgroundColor = chosenColor; 
+
+            const spawn = spawnPoints[Math.floor(Math.random() * spawnPoints.length)];
+            x = spawn.x;
+            y = spawn.y;
+            player.style.left = x + 'px';
+            player.style.top = y + 'px';
+        }
+
+        const CELL_SIZE = 20; 
+        const SPEED = 2 * CELL_SIZE; 
+        let x = 195, y = 130;
+        const MIN_X = 10, MAX_X = 400 - 10 - 10, MIN_Y = 10, MAX_Y = 400 - 20 - 10;
+        
+        const obstacles = [
+            {x: 190, y: 137, w: 20, h: 20}, 
+            {x: 150, y: 137, w: 20, h: 20}, 
+            {x: 230, y: 137, w: 20, h: 24},
+            {x: 150, y: 230, w: 20, h: 20},
+            {x: 190, y: 230, w: 20, h: 20},
+            {x: 230, y: 230, w: 20, h: 20}
+        ];
+
+        function rectCollide(r1, r2) {
+            return !(r2.x > r1.x + r1.w || r2.x + r2.w < r1.x || 
+                     r2.y > r1.y + r1.h || r2.y + r2.h < r1.y);
+        }
+
+        const keys = { arrowup: false, arrowdown: false, arrowleft: false, arrowright: false };
+
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+            const key = e.key.toLowerCase();
+            if(key in keys) { keys[key] = true; e.preventDefault(); }
+        });
+        document.addEventListener('keyup', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+            const key = e.key.toLowerCase();
+            if(key in keys) { keys[key] = false; e.preventDefault(); }
+        });
+
+        let previousTime = 0;
+        function updateGame(currentTime) {
+            if (document.getElementById('app-wrapper').style.display === 'none') return;
+            requestAnimationFrame(updateGame);
+            const dt = Math.min((currentTime - previousTime) / 1000, 0.1);
+            previousTime = currentTime;
             let dx = 0, dy = 0;
-            if (keys.w) dy -= speed;
-            if (keys.s) dy += speed;
-            if (keys.a) dx -= speed;
-            if (keys.d) dx += speed;
-
+            if (keys.arrowup) dy -= 1;
+            if (keys.arrowdown) dy += 1;
+            if (keys.arrowleft) dx -= 1;
+            if (keys.arrowright) dx += 1;
+            
+            if (Math.abs(touchDX) > 0.05 || Math.abs(touchDY) > 0.05) {
+                dx += touchDX;
+                dy += touchDY;
+            }
+            
             if (dx !== 0 || dy !== 0) {
                 const len = Math.sqrt(dx*dx + dy*dy);
-                dx = (dx / len) * speed * deltaTime;
-                dy = (dy / len) * speed * deltaTime;
-                player.x += dx;
-                player.y += dy;
-            }
+                const moveX = (dx / len) * SPEED * dt;
+                const moveY = (dy / len) * SPEED * dt;
 
-            const limitX = gameCanvas.width / 2 - tileSize/2;
-            const limitY = gameCanvas.height / 2 - tileSize/2;
-            player.x = Math.max(-limitX, Math.min(limitX, player.x));
-            player.y = Math.max(-limitY, Math.min(limitY, player.y));
-
-            ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-
-            ctx.save();
-            ctx.translate(gameCanvas.width / 2, gameCanvas.height / 2);
-
-            // ========== ДЕБАГ (КРАСНЫЙ КРЕСТИК В ЦЕНТРЕ) ==========
-            ctx.strokeStyle = '#ff0000';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(-5, 0); ctx.lineTo(5, 0);
-            ctx.moveTo(0, -5); ctx.lineTo(0, 5);
-            ctx.stroke();
-
-            const grassRange = Math.ceil(Math.max(limitX, limitY) / tileSize) + 2;
-            for (let row = -grassRange; row < grassRange; row++) {
-                for (let col = -grassRange; col < grassRange; col++) {
-                    const isEven = (row + col) % 2 === 0;
-                    ctx.fillStyle = isEven ? '#4caf50' : '#43a047';
-                    ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+                const testX = x + moveX;
+                const playerRectX = {x: testX, y: y, w: 10, h: 20};
+                let blockedX = false;
+                for (let obs of obstacles) {
+                    if (rectCollide(playerRectX, obs)) { blockedX = true; break; }
                 }
-            }
+                if (!blockedX) x = testX;
 
-            ctx.fillStyle = '#cc2233';
-            const roadWidth = 3 * tileSize;
-            ctx.fillRect(-limitX, -roadWidth/2, limitX * 2, roadWidth);
-
-            const baseYs = [-8 * tileSize, 8 * tileSize];
-            const baseXs = [-14 * tileSize, -4 * tileSize, 4 * tileSize, 14 * tileSize];
-
-            function drawBase(cx, cy) {
-                ctx.fillStyle = '#888888';
-                const bx = cx - baseWidth/2;
-                const by = cy - baseHeight/2;
-                ctx.fillRect(bx, by, baseWidth, baseHeight);
-
-                ctx.fillStyle = '#cc6600';
-                const doorHeight = 10;
-                if (cy < 0) {
-                    ctx.fillRect(bx, by + baseHeight - doorHeight, baseWidth, doorHeight);
-                } else {
-                    ctx.fillRect(bx, by, baseWidth, doorHeight);
+                const testY = y + moveY;
+                const playerRectY = {x: x, y: testY, w: 10, h: 20};
+                let blockedY = false;
+                for (let obs of obstacles) {
+                    if (rectCollide(playerRectY, obs)) { blockedY = true; break; }
                 }
-
-                ctx.fillStyle = '#33ff33';
-                if (cy < 0) {
-                    ctx.fillRect(bx, by + baseHeight, baseWidth, panelHeight);
-                } else {
-                    ctx.fillRect(bx, by - panelHeight, baseWidth, panelHeight);
-                }
+                if (!blockedY) y = testY;
             }
 
-            baseYs.forEach(y => {
-                baseXs.forEach(x => {
-                    drawBase(x, y);
-                });
-            });
-
-            ctx.fillStyle = '#4a7cf7';
-            ctx.fillRect(-12 * tileSize, -3 * tileSize, 2 * tileSize, 2 * tileSize);
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(-12 * tileSize + 0.2 * tileSize, -3 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
-            ctx.fillRect(-12 * tileSize + 1.2 * tileSize, -3 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
-
-            ctx.fillStyle = '#2a6bb0';
-            ctx.fillRect(-6 * tileSize, -3 * tileSize, 1.5 * tileSize, 2 * tileSize);
-            ctx.fillRect(-6 * tileSize + 1.5 * tileSize, -3 * tileSize + 1 * tileSize, 1 * tileSize, 1 * tileSize);
-
-            ctx.fillStyle = '#ffcc00';
-            ctx.beginPath(); ctx.arc(0, -3 * tileSize, tileSize, 0, Math.PI*2); ctx.fill();
-            ctx.fillStyle = '#ff3333';
-            ctx.beginPath(); ctx.arc(0 + 0.2 * tileSize, -3 * tileSize - 0.2 * tileSize, 0.3 * tileSize, 0, Math.PI*2); ctx.fill();
-
-            ctx.fillStyle = '#ff3333';
-            ctx.fillRect(-12 * tileSize, 1 * tileSize, 2 * tileSize, 2 * tileSize);
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(-12 * tileSize + 0.2 * tileSize, 1 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
-            ctx.fillRect(-12 * tileSize + 1.2 * tileSize, 1 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
-
-            ctx.fillStyle = '#bf40bf';
-            ctx.beginPath(); ctx.arc(-6 * tileSize, 1 * tileSize, 1.5 * tileSize, 0, Math.PI*2); ctx.fill();
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath(); ctx.arc(-6 * tileSize, 1 * tileSize, 0.5 * tileSize, 0, Math.PI*2); ctx.fill();
-
-            ctx.fillStyle = '#2a6bb0';
-            ctx.fillRect(0, 1 * tileSize, 2 * tileSize, 2 * tileSize);
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0 + 0.8 * tileSize, 1 * tileSize + 0.2 * tileSize, 0.4 * tileSize, 1.6 * tileSize);
-            ctx.fillRect(0 + 0.2 * tileSize, 1 * tileSize + 0.8 * tileSize, 1.6 * tileSize, 0.4 * tileSize);
-
-            ctx.fillStyle = '#000000';
-            ctx.fillRect(-16 * tileSize, -tileSize/2, tileSize, tileSize);
-            ctx.fillRect(16 * tileSize - tileSize, -tileSize/2, tileSize, tileSize);
-
-            for (const uid in otherPlayers) {
-                const p = otherPlayers[uid];
-                ctx.fillStyle = p.color || '#ff6b6b';
-                ctx.fillRect(p.x - tileSize/2, p.y - tileSize/2, tileSize, tileSize);
-                ctx.fillStyle = '#fff';
-                ctx.font = '12px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText(p.nick || uid, p.x, p.y - 15);
-            }
-
-            ctx.fillStyle = '#000000';
-            ctx.fillRect(player.x - tileSize/2, player.y - tileSize/2, tileSize, tileSize);
-            ctx.fillStyle = '#ffffff';
-            ctx.font = '14px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText(currentNick, player.x, player.y - 20);
-
-            ctx.restore();
-
-            gameMoney.textContent = money;
-            animationId = requestAnimationFrame(gameLoop);
+            x = Math.max(MIN_X, Math.min(MAX_X, x));
+            y = Math.max(MIN_Y, Math.min(MAX_Y, y));
+            player.style.left = x + 'px';
+            player.style.top = y + 'px';
         }
-
-        window.addEventListener('load', () => { drawSplashLogo(); checkSession(); });
-
-        window.addEventListener('resize', () => {
-            if (!gameContainer.classList.contains('hidden')) resizeCanvas();
-        });
     </script>
 </body>
 </html>
