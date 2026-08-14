@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Укради Брэйнрот 2D</title>
+    <title>Steal Dushka</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: #0b0e14; color: #fff; overflow: hidden; user-select: none; }
@@ -19,7 +19,7 @@
         #menuSection { max-width: 400px; width: 90%; text-align: center; }
         #menuSection h2 { margin-bottom: 20px; }
         #gameContainer { position: relative; width: 100vw; height: 100vh; background: #1a1f2b; }
-        canvas { display: block; width: 100%; height: 100%; background: #2a2f3a; }
+        canvas { display: block; width: 100%; height: 100%; }
         #uiOverlay { position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
         #uiOverlay .money { background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 10px; font-size: 20px; font-weight: bold; color: #f7c948; border: 1px solid #f7c948; }
         #uiOverlay .exit-btn { background: #ff4444; padding: 8px 20px; border: none; border-radius: 10px; color: #fff; font-weight: bold; cursor: pointer; }
@@ -28,12 +28,40 @@
         .shop-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #252d3d; border-radius: 10px; margin-bottom: 10px; }
         .shop-item button { width: auto; padding: 5px 15px; margin: 0; }
         .close-shop { background: #ff4444; padding: 10px; border: none; border-radius: 10px; color: #fff; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; }
+
+        /* --- ЗАСТАВКА --- */
+        #splashScreen { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: #0b0e14; 
+            display: flex; flex-direction: column; 
+            z-index: 9999; 
+            cursor: pointer;
+        }
+        #splashScreen #splashTop { flex: 1; display: flex; justify-content: center; align-items: center; background: #0b0e14; }
+        #splashScreen #splashBottom { height: 35vh; background: #000000; display: flex; flex-direction: column; justify-content: center; align-items: center; border-top: 2px solid #1a1f2b; }
+        #splashScreen #splashBottom canvas { display: block; background: #000; }
+        #splashScreen .click-hint {
+            color: #4a7cf7; font-size: 18px; margin-top: 10px; 
+            animation: pulse 2s infinite; font-weight: bold;
+        }
+        @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
     </style>
 </head>
 <body>
     <div id="app">
-        <!-- Авторизация -->
-        <div id="authSection" class="card">
+        <!-- ================= ЗАСТАВКА ================= -->
+        <div id="splashScreen" onclick="closeSplash()">
+            <div id="splashTop">
+                <canvas id="topMapCanvas" style="width: 100%; height: 100%; background: #0b0e14;"></canvas>
+            </div>
+            <div id="splashBottom">
+                <canvas id="logoCanvas" width="320" height="160"></canvas>
+                <div class="click-hint">Нажмите в любое место</div>
+            </div>
+        </div>
+
+        <!-- ================= АВТОРИЗАЦИЯ ================= -->
+        <div id="authSection" class="card hidden">
             <h2 style="text-align:center; margin-bottom:20px;">Вход / Регистрация</h2>
             <input type="text" id="authNick" placeholder="Никнейм">
             <input type="password" id="authPass" placeholder="Пароль">
@@ -42,7 +70,7 @@
             <div id="authMsg" style="margin-top:10px; color:#ff6b6b; text-align:center;"></div>
         </div>
 
-        <!-- Меню -->
+        <!-- ================= МЕНЮ ================= -->
         <div id="menuSection" class="hidden">
             <h2>Привет, <span id="menuNick">Гость</span></h2>
             <p style="color:#aaa; margin-bottom:20px;">Баланс: <span id="menuMoney">0</span> монет</p>
@@ -51,7 +79,7 @@
             <button class="btn-secondary" onclick="logout()" style="margin-top:20px; background:#555;">Выйти</button>
         </div>
 
-        <!-- Игра -->
+        <!-- ================= ИГРА ================= -->
         <div id="gameContainer" class="hidden">
             <canvas id="gameCanvas"></canvas>
             <div id="uiOverlay">
@@ -60,7 +88,7 @@
             </div>
         </div>
 
-        <!-- Магазин -->
+        <!-- ================= МАГАЗИН ================= -->
         <div id="shopModal" class="hidden">
             <div class="shop-window">
                 <h2 style="text-align:center; color:#4a7cf7; margin-bottom:15px;">🛒 Магазин</h2>
@@ -70,7 +98,7 @@
         </div>
     </div>
 
-    <!-- Firebase -->
+    <!-- ================= FIREBASE SDK ================= -->
     <script type="importmap">
         {
             "imports": {
@@ -102,10 +130,17 @@
         const authSection = document.getElementById('authSection');
         const menuSection = document.getElementById('menuSection');
         const gameContainer = document.getElementById('gameContainer');
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+        const gameCanvas = document.getElementById('gameCanvas');
+        const ctx = gameCanvas.getContext('2d');
         const shopModal = document.getElementById('shopModal');
         const shopList = document.getElementById('shopList');
+
+        // DOM Заставки
+        const splashScreen = document.getElementById('splashScreen');
+        const topMapCanvas = document.getElementById('topMapCanvas');
+        const mapCtx = topMapCanvas.getContext('2d');
+        const logoCanvas = document.getElementById('logoCanvas');
+        const logoCtx = logoCanvas.getContext('2d');
 
         const authNick = document.getElementById('authNick');
         const authPass = document.getElementById('authPass');
@@ -123,11 +158,11 @@
 
         // Игровые переменные
         const tileSize = 20;
-        const baseWidth = 4 * tileSize;   // 80 пикселей
-        const baseHeight = 4 * tileSize;  // 80 пикселей
-        const panelHeight = 26; // 1/3 от ширины базы (80/3 ≈ 26)
+        const baseWidth = 4 * tileSize;   // 80px
+        const baseHeight = 4 * tileSize;  // 80px
+        const panelHeight = 26; // 1/3 базы (80/3 ≈ 26)
         
-        // Координаты спавна (зелёная плита первой базы, слева сверху)
+        // Координаты спавна (первая верхняя зеленая зона слева)
         const spawnX = -14 * tileSize + baseWidth / 2; 
         const spawnY = -8 * tileSize + baseHeight + panelHeight / 2;
 
@@ -135,11 +170,11 @@
         let keys = { w: false, a: false, s: false, d: false };
         let animationId = null;
         let updateInterval = null;
-        let otherPlayers = {}; // uid -> {x, y, color, nick}
+        let otherPlayers = {}; 
         let myPosRef = null;
         let lastTimestamp = 0;
 
-        // Товары
+        // Товары в магазине
         const shopItems = [
             { id: 'red', name: 'Красный', color: '#ff4444', price: 50 },
             { id: 'green', name: 'Зелёный', color: '#44ff44', price: 100 },
@@ -147,7 +182,7 @@
             { id: 'pink', name: 'Розовый', color: '#ff44ff', price: 500 },
         ];
 
-        // Утилиты
+        // ================= УТИЛИТЫ =================
         async function loginUser(nick, pass) {
             const userRef = ref(db, 'users/' + nick);
             const snap = await get(userRef);
@@ -166,7 +201,6 @@
             if (!n || !p) { authMsg.textContent = 'Заполни поля!'; return; }
             if ((await get(ref(db, 'users/' + n))).exists()) { authMsg.textContent = '❌ Ник занят!'; return; }
             await set(ref(db, 'users/' + n), { password: p, money: 25, color: '#4a7cf7' });
-            // Админ Dushka
             if (!(await get(ref(db, 'admins/Dushka'))).exists()) {
                 await set(ref(db, 'admins/Dushka'), { nick: 'Dushka', password: '16052014may' });
             }
@@ -205,11 +239,8 @@
             stopGame();
         };
 
-        // Магазин
-        window.openShop = function() {
-            shopModal.classList.remove('hidden');
-            renderShop();
-        };
+        // ================= МАГАЗИН =================
+        window.openShop = function() { shopModal.classList.remove('hidden'); renderShop(); };
         window.closeShop = function() { shopModal.classList.add('hidden'); };
 
         function renderShop() {
@@ -239,10 +270,10 @@
             renderShop();
         };
 
-        // Игра
+        // ================= ИГРА =================
         function resizeCanvas() {
-            canvas.width = gameContainer.clientWidth;
-            canvas.height = gameContainer.clientHeight;
+            gameCanvas.width = gameContainer.clientWidth;
+            gameCanvas.height = gameContainer.clientHeight;
         }
 
         window.startGame = function() {
@@ -262,14 +293,12 @@
         window.exitGame = function() { stopGame(); showMenu(); };
 
         function initGameLoop() {
-            // Синхронизация позиции
             if (currentUid) {
                 myPosRef = ref(db, 'game2d/' + currentUid);
                 updateInterval = setInterval(async () => {
                     if (player) await set(myPosRef, { x: player.x, y: player.y, color: currentColor, nick: currentNick });
                 }, 100);
 
-                // Слушаем других
                 const othersRef = ref(db, 'game2d');
                 onChildAdded(othersRef, (snap) => {
                     const uid = snap.key; if (uid === currentUid) return;
@@ -286,7 +315,6 @@
                 });
             }
 
-            // Управление
             window.addEventListener('keydown', (e) => { if (e.key === 'w' || e.key === 'a' || e.key === 's' || e.key === 'd') { keys[e.key] = true; e.preventDefault(); } });
             window.addEventListener('keyup', (e) => { if (e.key === 'w' || e.key === 'a' || e.key === 's' || e.key === 'd') { keys[e.key] = false; e.preventDefault(); } });
 
@@ -298,7 +326,7 @@
             const deltaTime = (timestamp - lastTimestamp) / 1000;
             lastTimestamp = timestamp;
 
-            // Движение со скоростью 2 клетки в секунду (2 * tileSize = 40 пикселей/сек)
+            // Движение 2 клетки/сек
             const speed = 2 * tileSize; 
             let dx = 0, dy = 0;
             if (keys.w) dy -= speed;
@@ -314,120 +342,110 @@
                 player.y += dy;
             }
 
-            // Ограничение карты (чтобы не улетел)
-            const limitX = canvas.width / 2 - tileSize/2;
-            const limitY = canvas.height / 2 - tileSize/2;
+            // Ограничение карты
+            const limitX = gameCanvas.width / 2 - tileSize/2;
+            const limitY = gameCanvas.height / 2 - tileSize/2;
             player.x = Math.max(-limitX, Math.min(limitX, player.x));
             player.y = Math.max(-limitY, Math.min(limitY, player.y));
 
             // Рендер
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             
-            // 1. Трава
-            for (let row = 0; row < canvas.height / tileSize + 1; row++) {
-                for (let col = 0; col < canvas.width / tileSize + 1; col++) {
+            // Трава
+            for (let row = 0; row < gameCanvas.height / tileSize + 1; row++) {
+                for (let col = 0; col < gameCanvas.width / tileSize + 1; col++) {
                     const isEven = (row + col) % 2 === 0;
                     ctx.fillStyle = isEven ? '#4caf50' : '#43a047';
                     ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
                 }
             }
 
-            // 2. Красная дорожка (3 клетки шириной = 60px)
+            // Красная дорожка (3 клетки = 60px)
             ctx.fillStyle = '#cc2233';
             const roadWidth = 3 * tileSize;
-            ctx.fillRect(0, canvas.height/2 - roadWidth/2, canvas.width, roadWidth);
+            ctx.fillRect(0, gameCanvas.height/2 - roadWidth/2, gameCanvas.width, roadWidth);
 
-            // 3. Серые базы квадраты 4x4 (4 сверху, 4 снизу) + оранжевые двери + зелёные спавны
+            // Базы 4x4 (4 сверху, 4 снизу)
             const basePositions = [-8 * tileSize, -4 * tileSize, 4 * tileSize, 8 * tileSize];
             const leftX = -15 * tileSize;
             const rightX = 15 * tileSize;
 
             function drawBase(cx, cy) {
-                // Сама база (серый квадрат)
                 ctx.fillStyle = '#888888';
                 const bx = cx - baseWidth/2;
                 const by = cy - baseHeight/2;
                 ctx.fillRect(bx, by, baseWidth, baseHeight);
                 
-                // Оранжевая дверь
                 ctx.fillStyle = '#cc6600';
                 const doorHeight = 10;
-                if (cy < 0) { // Верхняя база (вход снизу)
+                if (cy < 0) {
                     ctx.fillRect(bx, by + baseHeight - doorHeight, baseWidth, doorHeight);
-                } else { // Нижняя база (вход сверху)
+                } else {
                     ctx.fillRect(bx, by, baseWidth, doorHeight);
                 }
 
-                // Зелёная спавн-зона (выход)
                 ctx.fillStyle = '#33ff33';
-                if (cy < 0) { // Верхняя база (выход снизу)
+                if (cy < 0) {
                     ctx.fillRect(bx, by + baseHeight, baseWidth, panelHeight);
-                } else { // Нижняя база (выход сверху)
+                } else {
                     ctx.fillRect(bx, by - panelHeight, baseWidth, panelHeight);
                 }
             }
 
-            // Верхние 4 базы
             basePositions.forEach(y => {
                 if (y < 0) drawBase(leftX, y);
                 if (y < 0) drawBase(rightX, y);
             });
-            // Нижние 4 базы
             basePositions.forEach(y => {
                 if (y > 0) drawBase(leftX, y);
                 if (y > 0) drawBase(rightX, y);
             });
 
-            // 4. Объекты по центру (магазины, колёса и т.д.)
-            // Верхний ряд объектов (между верхними базами и дорогой)
-            // Shop (сине-белая палатка)
+            // Объекты по центру
+            // Shop (сине-белая)
             ctx.fillStyle = '#4a7cf7';
             ctx.fillRect(-12 * tileSize, -3 * tileSize, 2 * tileSize, 2 * tileSize);
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(-12 * tileSize + 0.2 * tileSize, -3 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
             ctx.fillRect(-12 * tileSize + 1.2 * tileSize, -3 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
-            ctx.fillStyle = '#4a7cf7';
-            ctx.fillRect(-12 * tileSize + 0.2 * tileSize, -3 * tileSize + 1.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
-            ctx.fillRect(-12 * tileSize + 1.2 * tileSize, -3 * tileSize + 1.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
 
-            // RNG (синяя L-образная)
+            // RNG (синяя L)
             ctx.fillStyle = '#2a6bb0';
             ctx.fillRect(-8 * tileSize, -3 * tileSize, 1.5 * tileSize, 2 * tileSize);
             ctx.fillRect(-8 * tileSize + 1.5 * tileSize, -3 * tileSize + 1 * tileSize, 1 * tileSize, 1 * tileSize);
 
-            // Queen Bee (жёлтая с красным)
+            // Queen Bee (желтая)
             ctx.fillStyle = '#ffcc00';
             ctx.beginPath(); ctx.arc(-4 * tileSize, -2 * tileSize, tileSize, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = '#ff3333';
             ctx.beginPath(); ctx.arc(-4 * tileSize + 0.2 * tileSize, -2 * tileSize - 0.2 * tileSize, 0.3 * tileSize, 0, Math.PI*2); ctx.fill();
 
-            // Нижний ряд объектов (между дорогой и нижними базами)
-            // Robux Shop (красная палатка)
+            // Robux Shop (красная)
             ctx.fillStyle = '#ff3333';
             ctx.fillRect(-12 * tileSize, 1 * tileSize, 2 * tileSize, 2 * tileSize);
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(-12 * tileSize + 0.2 * tileSize, 1 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
             ctx.fillRect(-12 * tileSize + 1.2 * tileSize, 1 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
 
-            // Crystal Wheel (фиолетовый круг)
+            // Crystal Wheel (фиолетовый)
             ctx.fillStyle = '#bf40bf';
             ctx.beginPath(); ctx.arc(-8 * tileSize, 2 * tileSize, 1.5 * tileSize, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = '#ffffff';
             ctx.beginPath(); ctx.arc(-8 * tileSize, 2 * tileSize, 0.5 * tileSize, 0, Math.PI*2); ctx.fill();
 
-            // Trade Plaza (синий квадрат с белым крестом)
+            // Trade Plaza (синий квадрат с крестом)
             ctx.fillStyle = '#2a6bb0';
             ctx.fillRect(-4 * tileSize, 1 * tileSize, 2 * tileSize, 2 * tileSize);
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(-4 * tileSize + 0.8 * tileSize, 1 * tileSize + 0.2 * tileSize, 0.4 * tileSize, 1.6 * tileSize);
             ctx.fillRect(-4 * tileSize + 0.2 * tileSize, 1 * tileSize + 0.8 * tileSize, 1.6 * tileSize, 0.4 * tileSize);
 
-            // Чёрные квадраты по бокам (границы дороги)
+            // Чёрные квадраты по бокам
             ctx.fillStyle = '#000000';
-            ctx.fillRect(-16 * tileSize, canvas.height/2 - tileSize/2, tileSize, tileSize);
-            ctx.fillRect(16 * tileSize - tileSize, canvas.height/2 - tileSize/2, tileSize, tileSize);
+            ctx.fillRect(-16 * tileSize, gameCanvas.height/2 - tileSize/2, tileSize, tileSize);
+            ctx.fillRect(16 * tileSize - tileSize, gameCanvas.height/2 - tileSize/2, tileSize, tileSize);
 
-            // 5. Другие игроки
+            // Другие игроки
             for (const uid in otherPlayers) {
                 const p = otherPlayers[uid];
                 ctx.fillStyle = p.color || '#ff6b6b';
@@ -438,7 +456,7 @@
                 ctx.fillText(p.nick || uid, p.x, p.y - 15);
             }
 
-            // 6. Я
+            // Я
             ctx.fillStyle = currentColor;
             ctx.fillRect(player.x - tileSize/2, player.y - tileSize/2, tileSize, tileSize);
             ctx.fillStyle = '#fff';
@@ -446,13 +464,113 @@
             ctx.textAlign = 'center';
             ctx.fillText(currentNick, player.x, player.y - 20);
 
-            // Обновляем деньги на UI
             gameMoney.textContent = money;
 
             animationId = requestAnimationFrame(gameLoop);
         }
 
-        // Инициализация
+        // ================= ЗАСТАВКА (ЛОГИКА ОТРИСОВКИ) =================
+        function drawSplashMap() {
+            // Рисуем мини-карту на верхнем канвасе заставки
+            const w = topMapCanvas.clientWidth;
+            const h = topMapCanvas.clientHeight;
+            topMapCanvas.width = w;
+            topMapCanvas.height = h;
+            
+            // Рассчитываем масштаб, чтобы карта влезла в канвас
+            const mapWidth = 40 * tileSize; // 800
+            const mapHeight = 30 * tileSize; // 600
+            const scale = Math.min(w / mapWidth, h / mapHeight) * 0.9; // 0.9 отступы
+            
+            mapCtx.save();
+            mapCtx.scale(scale, scale);
+            mapCtx.translate(mapWidth/2, mapHeight/2); // Центрируем
+
+            // Трава на заставке
+            for (let row = -20; row < 20; row++) {
+                for (let col = -20; col < 20; col++) {
+                    const isEven = (row + col) % 2 === 0;
+                    mapCtx.fillStyle = isEven ? '#4caf50' : '#43a047';
+                    mapCtx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+                }
+            }
+
+            // Дорожка на заставке
+            mapCtx.fillStyle = '#cc2233';
+            const roadWidth = 3 * tileSize;
+            mapCtx.fillRect(-20 * tileSize, -roadWidth/2, 40 * tileSize, roadWidth);
+
+            // Базы на заставке
+            const basePositions = [-8 * tileSize, -4 * tileSize, 4 * tileSize, 8 * tileSize];
+            const leftX = -15 * tileSize;
+            const rightX = 15 * tileSize;
+
+            function drawSplashBase(cx, cy) {
+                mapCtx.fillStyle = '#888888';
+                const bx = cx - baseWidth/2;
+                const by = cy - baseHeight/2;
+                mapCtx.fillRect(bx, by, baseWidth, baseHeight);
+                
+                mapCtx.fillStyle = '#cc6600';
+                const doorHeight = 10;
+                if (cy < 0) { mapCtx.fillRect(bx, by + baseHeight - doorHeight, baseWidth, doorHeight); }
+                else { mapCtx.fillRect(bx, by, baseWidth, doorHeight); }
+
+                mapCtx.fillStyle = '#33ff33';
+                if (cy < 0) { mapCtx.fillRect(bx, by + baseHeight, baseWidth, panelHeight); }
+                else { mapCtx.fillRect(bx, by - panelHeight, baseWidth, panelHeight); }
+            }
+            basePositions.forEach(y => { if (y < 0) drawSplashBase(leftX, y); if (y < 0) drawSplashBase(rightX, y); });
+            basePositions.forEach(y => { if (y > 0) drawSplashBase(leftX, y); if (y > 0) drawSplashBase(rightX, y); });
+
+            // Объекты заставки
+            mapCtx.fillStyle = '#4a7cf7'; mapCtx.fillRect(-12 * tileSize, -3 * tileSize, 2 * tileSize, 2 * tileSize);
+            mapCtx.fillStyle = '#2a6bb0'; mapCtx.fillRect(-8 * tileSize, -3 * tileSize, 1.5 * tileSize, 2 * tileSize);
+            mapCtx.fillStyle = '#ffcc00'; mapCtx.beginPath(); mapCtx.arc(-4 * tileSize, -2 * tileSize, tileSize, 0, Math.PI*2); mapCtx.fill();
+            mapCtx.fillStyle = '#ff3333'; mapCtx.fillRect(-12 * tileSize, 1 * tileSize, 2 * tileSize, 2 * tileSize);
+            mapCtx.fillStyle = '#bf40bf'; mapCtx.beginPath(); mapCtx.arc(-8 * tileSize, 2 * tileSize, 1.5 * tileSize, 0, Math.PI*2); mapCtx.fill();
+            mapCtx.fillStyle = '#2a6bb0'; mapCtx.fillRect(-4 * tileSize, 1 * tileSize, 2 * tileSize, 2 * tileSize);
+            mapCtx.fillStyle = '#000000'; mapCtx.fillRect(-16 * tileSize, -tileSize/2, tileSize, tileSize); mapCtx.fillRect(16 * tileSize - tileSize, -tileSize/2, tileSize, tileSize);
+
+            mapCtx.restore();
+        }
+
+        function drawSplashLogo() {
+            // Рисуем логотип STEAL DUSHKA голубым цветом на чёрном фоне
+            const w = logoCanvas.width;
+            const h = logoCanvas.height;
+            logoCtx.fillStyle = '#000000';
+            logoCtx.fillRect(0, 0, w, h);
+
+            // Рисуем пиксельные буквы вручную (или крупным шрифтом с отключенным сглаживанием)
+            logoCtx.fillStyle = '#00ffff'; // Голубой (Cyan)
+            logoCtx.font = 'bold 42px monospace';
+            logoCtx.textAlign = 'center';
+            logoCtx.textBaseline = 'middle';
+            
+            // STEAL
+            logoCtx.fillText('STEAL', w/2, h/2 - 30);
+            // DUSHKA
+            logoCtx.fillStyle = '#00d4ff';
+            logoCtx.font = 'bold 48px monospace';
+            logoCtx.fillText('DUSHKA', w/2, h/2 + 40);
+        }
+
+        // Функция закрытия заставки (вызывается по клику)
+        window.closeSplash = function() {
+            splashScreen.classList.add('hidden');
+            authSection.classList.remove('hidden');
+            // Запускаем отрисовку игрового цикла, если нужно
+            drawSplashMap(); // Если заставка закроется, не перерисовываем её.
+        };
+
+        // Инициализация заставки
+        window.addEventListener('load', () => {
+            drawSplashMap();
+            drawSplashLogo();
+        });
+
+        // ================= СТАРТ =================
         checkSession();
 
         window.addEventListener('resize', () => {
