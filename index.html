@@ -12,16 +12,16 @@
         #app { width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; }
         .hidden { display: none !important; }
 
-        /* --- ЗАСТАВКА (УМЕНЬШЕНА) --- */
+        /* --- ЗАСТАВКА --- */
         #splashScreen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #0b0e14;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 9999; cursor: pointer;
         }
-        #splashCanvas { 
-            background: #000000; border: 4px solid #ffffff; 
-            width: 240px; height: 150px; 
+        #splashCanvas {
+            background: #000000; border: 4px solid #ffffff;
+            width: 240px; height: 150px;
         }
         .click-hint {
             color: #4a7cf7; font-family: 'Press Start 2P', monospace;
@@ -49,15 +49,13 @@
         #loginBtn { color: #000000; }
         #registerBtn { color: #ff0000; }
 
-        /* --- ПИКСЕЛЬНОЕ МЕНЮ (С ПОДПИСЯМИ БУКВ) --- */
+        /* --- ПИКСЕЛЬНОЕ МЕНЮ --- */
         #pixelMenu {
             background: #000000; padding: 15px;
             border: 4px solid #ffffff; width: 280px;
             display: flex; flex-direction: column; gap: 12px;
         }
-        .menu-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-        }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .menu-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.2s; }
         .menu-item:hover { opacity: 0.8; }
         .pixel-btn {
@@ -195,23 +193,25 @@
         let currentColor = '#000000';
         let money = 25;
 
+        // Размеры
         const tileSize = 20;
         const baseWidth = 4 * tileSize;
         const baseHeight = 4 * tileSize;
-        const panelHeight = 26;
-        
-        const spawnX = 0;
-        const spawnY = -6 * tileSize + baseHeight + panelHeight / 2;
+        const panelHeight = 26; // 1/3 базы
+
+        // Координаты спавна (первая верхняя зелёная зона слева)
+        const spawnX = -15 * tileSize + baseWidth / 2;
+        const spawnY = -8 * tileSize + baseHeight + panelHeight / 2;
 
         let player = { x: spawnX, y: spawnY, color: currentColor };
         let keys = { w: false, a: false, s: false, d: false };
         let animationId = null;
         let updateInterval = null;
-        let otherPlayers = {}; 
+        let otherPlayers = {};
         let myPosRef = null;
         let lastTimestamp = 0;
 
-        // ================= ЗАСТАВКА (УМЕНЬШЕНА) =================
+        // ================= ЗАСТАВКА =================
         function drawSplashLogo() {
             const w = splashCanvas.width, h = splashCanvas.height;
             splashCtx.fillStyle = '#000000';
@@ -275,13 +275,12 @@
             }
         }
 
-        // ================= МЕНЮ (ИСПРАВЛЕНА ОШИБКА NULL) =================
+        // ================= МЕНЮ =================
         function showMenu() {
             authContainer.classList.add('hidden');
             pixelMenu.classList.remove('hidden');
             gameContainer.classList.add('hidden');
             stopGame();
-            // Убрал строки, которые вызывали ошибку, так как в пиксельном меню нет ID menuNick и menuMoney
         }
 
         window.logout = function() {
@@ -344,13 +343,15 @@
             window.addEventListener('keydown', (e) => {
                 if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
                 if (e.key === 'w' || e.key === 'a' || e.key === 's' || e.key === 'd') {
-                    keys[e.key] = true; e.preventDefault();
+                    keys[e.key] = true;
+                    e.preventDefault();
                 }
             });
             window.addEventListener('keyup', (e) => {
                 if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
                 if (e.key === 'w' || e.key === 'a' || e.key === 's' || e.key === 'd') {
-                    keys[e.key] = false; e.preventDefault();
+                    keys[e.key] = false;
+                    e.preventDefault();
                 }
             });
 
@@ -363,7 +364,7 @@
             lastTimestamp = timestamp;
 
             // Движение 2 клетки/сек
-            const speed = 2 * tileSize; 
+            const speed = 2 * tileSize;
             let dx = 0, dy = 0;
             if (keys.w) dy -= speed;
             if (keys.s) dy += speed;
@@ -384,7 +385,7 @@
             player.y = Math.max(-limitY, Math.min(limitY, player.y));
 
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-            
+
             ctx.save();
             ctx.translate(gameCanvas.width / 2, gameCanvas.height / 2);
 
@@ -397,12 +398,12 @@
                 }
             }
 
+            // Красная дорожка (3 клетки)
             ctx.fillStyle = '#cc2233';
             const roadWidth = 3 * tileSize;
             ctx.fillRect(-limitX, -roadWidth/2, limitX * 2, roadWidth);
 
-            // ========== ИСПРАВЛЕННАЯ КАРТА (4 СВЕРХУ, 4 СНИЗУ) ==========
-            // Верхний ряд Y = -8, Нижний ряд Y = 8. Координаты X распределены равномерно.
+            // БАЗЫ (4 сверху, 4 снизу)
             const baseYs = [-8 * tileSize, 8 * tileSize];
             const baseXs = [-15 * tileSize, -5 * tileSize, 5 * tileSize, 15 * tileSize];
 
@@ -411,7 +412,8 @@
                 const bx = cx - baseWidth/2;
                 const by = cy - baseHeight/2;
                 ctx.fillRect(bx, by, baseWidth, baseHeight);
-                
+
+                // Оранжевая дверь
                 ctx.fillStyle = '#cc6600';
                 const doorHeight = 10;
                 if (cy < 0) {
@@ -420,6 +422,7 @@
                     ctx.fillRect(bx, by, baseWidth, doorHeight);
                 }
 
+                // Зелёная зона спавна
                 ctx.fillStyle = '#33ff33';
                 if (cy < 0) {
                     ctx.fillRect(bx, by + baseHeight, baseWidth, panelHeight);
@@ -434,29 +437,53 @@
                 });
             });
 
+            // ========== ОБЪЕКТЫ ПО ЦЕНТРУ ==========
+            // ВЕРХНИЙ РЯД (Y = -3 * tileSize)
+            // Shop (сине-белая)
             ctx.fillStyle = '#4a7cf7';
             ctx.fillRect(-12 * tileSize, -3 * tileSize, 2 * tileSize, 2 * tileSize);
-            
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(-12 * tileSize + 0.2 * tileSize, -3 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
+            ctx.fillRect(-12 * tileSize + 1.2 * tileSize, -3 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
+
+            // RNG (синяя L)
             ctx.fillStyle = '#2a6bb0';
             ctx.fillRect(-6 * tileSize, -3 * tileSize, 1.5 * tileSize, 2 * tileSize);
             ctx.fillRect(-6 * tileSize + 1.5 * tileSize, -3 * tileSize + 1 * tileSize, 1 * tileSize, 1 * tileSize);
-            
-            ctx.fillStyle = '#ffcc00';
-            ctx.beginPath(); ctx.arc(0, -2 * tileSize, tileSize, 0, Math.PI*2); ctx.fill();
 
+            // Queen Bee (жёлтая)
+            ctx.fillStyle = '#ffcc00';
+            ctx.beginPath(); ctx.arc(0, -3 * tileSize, tileSize, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#ff3333';
+            ctx.beginPath(); ctx.arc(0 + 0.2 * tileSize, -3 * tileSize - 0.2 * tileSize, 0.3 * tileSize, 0, Math.PI*2); ctx.fill();
+
+            // НИЖНИЙ РЯД (Y = 1 * tileSize)
+            // Robux Shop (красная)
             ctx.fillStyle = '#ff3333';
             ctx.fillRect(-12 * tileSize, 1 * tileSize, 2 * tileSize, 2 * tileSize);
-            
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(-12 * tileSize + 0.2 * tileSize, 1 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
+            ctx.fillRect(-12 * tileSize + 1.2 * tileSize, 1 * tileSize + 0.2 * tileSize, 0.8 * tileSize, 0.8 * tileSize);
+
+            // Crystal Wheel (фиолетовый круг)
             ctx.fillStyle = '#bf40bf';
-            ctx.beginPath(); ctx.arc(-6 * tileSize, 2 * tileSize, 1.5 * tileSize, 0, Math.PI*2); ctx.fill();
-            
+            ctx.beginPath(); ctx.arc(-6 * tileSize, 1 * tileSize, 1.5 * tileSize, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath(); ctx.arc(-6 * tileSize, 1 * tileSize, 0.5 * tileSize, 0, Math.PI*2); ctx.fill();
+
+            // Trade Plaza (синий квадрат с белым крестом)
             ctx.fillStyle = '#2a6bb0';
             ctx.fillRect(0, 1 * tileSize, 2 * tileSize, 2 * tileSize);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0 + 0.8 * tileSize, 1 * tileSize + 0.2 * tileSize, 0.4 * tileSize, 1.6 * tileSize);
+            ctx.fillRect(0 + 0.2 * tileSize, 1 * tileSize + 0.8 * tileSize, 1.6 * tileSize, 0.4 * tileSize);
 
+            // Чёрные квадраты по бокам дороги
             ctx.fillStyle = '#000000';
             ctx.fillRect(-16 * tileSize, -tileSize/2, tileSize, tileSize);
             ctx.fillRect(15 * tileSize, -tileSize/2, tileSize, tileSize);
 
+            // Другие игроки
             for (const uid in otherPlayers) {
                 const p = otherPlayers[uid];
                 ctx.fillStyle = p.color || '#ff6b6b';
@@ -467,6 +494,7 @@
                 ctx.fillText(p.nick || uid, p.x, p.y - 15);
             }
 
+            // Я
             ctx.fillStyle = '#000000';
             ctx.fillRect(player.x - tileSize/2, player.y - tileSize/2, tileSize, tileSize);
             ctx.fillStyle = '#ffffff';
