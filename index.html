@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Steal Dushka</title>
-    <!-- Пиксельный шрифт для логотипа -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <!-- Исправляем ошибку 404 с иконкой -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
@@ -14,36 +12,19 @@
         #app { width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; }
         .hidden { display: none !important; }
 
-        /* --- ЗАСТАВКА (ПИКСЕЛЬНЫЙ КВАДРАТ) --- */
         #splashScreen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #0b0e14;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 9999; cursor: pointer;
         }
-        .logo-box {
-            background: #000000;
-            border: 4px solid #ffffff;
-            padding: 30px 25px;
-            display: flex; flex-direction: column; align-items: center;
-        }
-        .logo-text {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 28px;
-            color: #00ffff;
-            line-height: 1.6;
-            text-shadow: 2px 2px 0 #0088ff;
-        }
+        #splashCanvas { background: #000000; border: 4px solid #ffffff; }
         .click-hint {
-            color: #4a7cf7;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 14px;
-            margin-top: 30px;
-            animation: pulse 2s infinite;
+            color: #4a7cf7; font-family: 'Press Start 2P', monospace;
+            font-size: 14px; margin-top: 25px; animation: pulse 2s infinite;
         }
         @keyframes pulse { 0% { opacity: 0.2; } 50% { opacity: 1; } 100% { opacity: 0.2; } }
 
-        /* --- ОКНО ВХОДА --- */
         #authContainer {
             background: #000000; padding: 30px 20px 20px 20px;
             border: 4px solid #ffffff; width: 320px;
@@ -63,7 +44,6 @@
         #loginBtn { color: #000000; }
         #registerBtn { color: #ff0000; }
 
-        /* --- МЕНЮ --- */
         #menuSection { max-width: 400px; width: 90%; text-align: center; }
         #menuSection h2 { margin-bottom: 20px; }
         button { width: 100%; padding: 12px; border: none; border-radius: 12px; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-bottom: 8px; }
@@ -72,9 +52,8 @@
         .btn-secondary { background: #3a3f4e; }
         .btn-secondary:hover { background: #4a5060; }
 
-        /* --- ИГРА --- */
         #gameContainer { position: relative; width: 100vw; height: 100vh; background: #1a1f2b; }
-        canvas { display: block; width: 100%; height: 100%; background: #2a2f3a; }
+        canvas { display: block; width: 100%; height: 100%; }
         #uiOverlay { position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
         #uiOverlay .money { background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 10px; font-size: 20px; font-weight: bold; color: #f7c948; border: 1px solid #f7c948; }
         #uiOverlay .exit-btn { background: #ff4444; padding: 8px 20px; border: none; border-radius: 10px; color: #fff; font-weight: bold; cursor: pointer; }
@@ -87,23 +66,16 @@
 </head>
 <body>
     <div id="app">
-        <!-- ================= ЗАСТАВКА ================= -->
         <div id="splashScreen" onclick="closeSplash()">
-            <div class="logo-box">
-                <div class="logo-text">STEAL</div>
-                <div class="logo-text">DUSHKA</div>
-            </div>
+            <canvas id="splashCanvas" width="280" height="180"></canvas>
             <div class="click-hint">НАЖМИТЕ В ЛЮБОЕ МЕСТО</div>
         </div>
 
-        <!-- ================= ОКНО ВХОДА ================= -->
         <div id="authContainer" class="hidden">
             <div class="pixel-label">НИК</div>
             <input type="text" id="authNick" placeholder="" value="Dushka">
-            
             <div class="pixel-label">ПАРОЛЬ</div>
             <input type="password" id="authPass" placeholder="" value="16052014may">
-            
             <div class="auth-buttons">
                 <button id="loginBtn">ВОЙТИ</button>
                 <button id="registerBtn">РЕГ</button>
@@ -111,7 +83,6 @@
             <div id="authMsg" style="margin-top:10px; color:#ff6b6b; font-size:14px; font-family:monospace; text-align:center;"></div>
         </div>
 
-        <!-- ================= МЕНЮ ================= -->
         <div id="menuSection" class="hidden">
             <h2>Привет, <span id="menuNick">Гость</span></h2>
             <p style="color:#aaa; margin-bottom:20px;">Баланс: <span id="menuMoney">0</span> монет</p>
@@ -120,7 +91,6 @@
             <button class="btn-secondary" onclick="logout()" style="margin-top:20px; background:#555;">Выйти</button>
         </div>
 
-        <!-- ================= ИГРА ================= -->
         <div id="gameContainer" class="hidden">
             <canvas id="gameCanvas"></canvas>
             <div id="uiOverlay">
@@ -129,7 +99,6 @@
             </div>
         </div>
 
-        <!-- ================= МАГАЗИН ================= -->
         <div id="shopModal" class="hidden">
             <div class="shop-window">
                 <h2 style="text-align:center; color:#4a7cf7; margin-bottom:15px;">🛒 Магазин</h2>
@@ -139,7 +108,6 @@
         </div>
     </div>
 
-    <!-- ================= FIREBASE SDK ================= -->
     <script type="importmap">
         {
             "imports": {
@@ -153,7 +121,6 @@
         import { initializeApp } from 'firebase/app';
         import { getDatabase, ref, set, get, update, remove, onValue, onChildAdded, onChildChanged, onChildRemoved } from 'firebase/database';
 
-        // Твой ключ
         const firebaseConfig = {
             apiKey: "AIzaSyDkXM7aHtofhx8WAT1eSfLnbsOYVXXg28o",
             authDomain: "steal-a-dushka.firebaseapp.com",
@@ -167,8 +134,9 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // DOM
         const splashScreen = document.getElementById('splashScreen');
+        const splashCanvas = document.getElementById('splashCanvas');
+        const splashCtx = splashCanvas.getContext('2d');
         const authContainer = document.getElementById('authContainer');
         const authNick = document.getElementById('authNick');
         const authPass = document.getElementById('authPass');
@@ -187,18 +155,16 @@
 
         let currentUid = null;
         let currentNick = null;
-        let currentColor = '#000000'; // Чёрный персонаж
+        let currentColor = '#000000';
         let money = 25;
 
-        // Игровые переменные
         const tileSize = 20;
-        const baseWidth = 4 * tileSize;   // 80px
-        const baseHeight = 4 * tileSize;  // 80px
-        const panelHeight = 26; // 1/3 базы
+        const baseWidth = 4 * tileSize;
+        const baseHeight = 4 * tileSize;
+        const panelHeight = 26;
         
-        // Координаты спавна (первая верхняя зелёная зона слева)
-        const spawnX = -14 * tileSize;
-        const spawnY = -8 * tileSize + baseHeight + panelHeight / 2;
+        const spawnX = 0;
+        const spawnY = -6 * tileSize + baseHeight + panelHeight / 2;
 
         let player = { x: spawnX, y: spawnY, color: currentColor };
         let keys = { w: false, a: false, s: false, d: false };
@@ -208,7 +174,6 @@
         let myPosRef = null;
         let lastTimestamp = 0;
 
-        // Товары в магазине
         const shopItems = [
             { id: 'red', name: 'Красный', color: '#ff4444', price: 50 },
             { id: 'green', name: 'Зелёный', color: '#44ff44', price: 100 },
@@ -216,13 +181,26 @@
             { id: 'pink', name: 'Розовый', color: '#ff44ff', price: 500 },
         ];
 
-        // ================= ЗАСТАВКА =================
+        function drawSplashLogo() {
+            const w = splashCanvas.width, h = splashCanvas.height;
+            splashCtx.fillStyle = '#000000';
+            splashCtx.fillRect(0, 0, w, h);
+            splashCtx.strokeStyle = '#ffffff';
+            splashCtx.lineWidth = 4;
+            splashCtx.strokeRect(0, 0, w, h);
+            splashCtx.fillStyle = '#00ffff';
+            splashCtx.font = 'bold 28px "Press Start 2P", monospace';
+            splashCtx.textAlign = 'center'; splashCtx.textBaseline = 'middle';
+            splashCtx.fillText('STEAL', w/2, h/2 - 22);
+            splashCtx.fillStyle = '#00ddff';
+            splashCtx.fillText('DUSHKA', w/2, h/2 + 32);
+        }
+
         window.closeSplash = function() {
             splashScreen.classList.add('hidden');
             authContainer.classList.remove('hidden');
         };
 
-        // ================= АВТОРИЗАЦИЯ =================
         async function loginUser(nick, pass) {
             const userRef = ref(db, 'users/' + nick);
             const snap = await get(userRef);
@@ -279,7 +257,6 @@
             stopGame();
         };
 
-        // ================= МАГАЗИН =================
         window.openShop = function() { shopModal.classList.remove('hidden'); renderShop(); };
         window.closeShop = function() { shopModal.classList.add('hidden'); };
 
@@ -310,7 +287,6 @@
             renderShop();
         };
 
-        // ================= ИГРА =================
         function resizeCanvas() {
             gameCanvas.width = gameContainer.clientWidth;
             gameCanvas.height = gameContainer.clientHeight;
@@ -355,24 +331,16 @@
                 });
             }
 
-            // ========== ИСПРАВЛЕНИЕ: WASD НЕ РАБОТАЕТ В ПОЛЯХ ВВОДА ==========
             window.addEventListener('keydown', (e) => {
-                // Если фокус в поле ввода, не обрабатываем WASD
-                if (document.activeElement && document.activeElement.tagName === 'INPUT') {
-                    return;
-                }
+                if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
                 if (e.key === 'w' || e.key === 'a' || e.key === 's' || e.key === 'd') {
-                    keys[e.key] = true;
-                    e.preventDefault();
+                    keys[e.key] = true; e.preventDefault();
                 }
             });
             window.addEventListener('keyup', (e) => {
-                if (document.activeElement && document.activeElement.tagName === 'INPUT') {
-                    return;
-                }
+                if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
                 if (e.key === 'w' || e.key === 'a' || e.key === 's' || e.key === 'd') {
-                    keys[e.key] = false;
-                    e.preventDefault();
+                    keys[e.key] = false; e.preventDefault();
                 }
             });
 
@@ -384,7 +352,6 @@
             const deltaTime = (timestamp - lastTimestamp) / 1000;
             lastTimestamp = timestamp;
 
-            // Движение 2 клетки/сек
             const speed = 2 * tileSize; 
             let dx = 0, dy = 0;
             if (keys.w) dy -= speed;
@@ -405,27 +372,30 @@
             player.x = Math.max(-limitX, Math.min(limitX, player.x));
             player.y = Math.max(-limitY, Math.min(limitY, player.y));
 
-            // Рендер
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             
-            // Трава
-            for (let row = 0; row < gameCanvas.height / tileSize + 1; row++) {
-                for (let col = 0; col < gameCanvas.width / tileSize + 1; col++) {
+            // ========== ЦЕНТРИРОВАНИЕ МИРА ==========
+            ctx.save();
+            ctx.translate(gameCanvas.width / 2, gameCanvas.height / 2);
+
+            // 1. Трава (отрисовываем с запасом)
+            const grassRange = Math.ceil(Math.max(limitX, limitY) / tileSize) + 2;
+            for (let row = -grassRange; row < grassRange; row++) {
+                for (let col = -grassRange; col < grassRange; col++) {
                     const isEven = (row + col) % 2 === 0;
                     ctx.fillStyle = isEven ? '#4caf50' : '#43a047';
                     ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
                 }
             }
 
-            // Красная дорожка (3 клетки = 60px)
+            // 2. Красная дорожка (3 клетки)
             ctx.fillStyle = '#cc2233';
             const roadWidth = 3 * tileSize;
-            ctx.fillRect(0, gameCanvas.height/2 - roadWidth/2, gameCanvas.width, roadWidth);
+            ctx.fillRect(-limitX, -roadWidth/2, limitX * 2, roadWidth);
 
-            // Базы 4x4 (4 сверху, 4 снизу)
-            const basePositions = [-8 * tileSize, -4 * tileSize, 4 * tileSize, 8 * tileSize];
-            const leftX = -15 * tileSize;
-            const rightX = 15 * tileSize;
+            // 3. Базы 4x4 (4 сверху, 4 снизу)
+            const basePositionsY = [-8 * tileSize, -4 * tileSize, 4 * tileSize, 8 * tileSize];
+            const basePositionsX = [-15 * tileSize, 15 * tileSize];
 
             function drawBase(cx, cy) {
                 ctx.fillStyle = '#888888';
@@ -449,37 +419,38 @@
                 }
             }
 
-            basePositions.forEach(y => {
-                if (y < 0) drawBase(leftX, y);
-                if (y < 0) drawBase(rightX, y);
-            });
-            basePositions.forEach(y => {
-                if (y > 0) drawBase(leftX, y);
-                if (y > 0) drawBase(rightX, y);
+            basePositionsX.forEach(x => {
+                basePositionsY.forEach(y => {
+                    drawBase(x, y);
+                });
             });
 
-            // Объекты по центру
+            // 4. Объекты по центру (магазины, RNG, и т.д.)
             ctx.fillStyle = '#4a7cf7';
             ctx.fillRect(-12 * tileSize, -3 * tileSize, 2 * tileSize, 2 * tileSize);
+            
             ctx.fillStyle = '#2a6bb0';
             ctx.fillRect(-6 * tileSize, -3 * tileSize, 1.5 * tileSize, 2 * tileSize);
             ctx.fillRect(-6 * tileSize + 1.5 * tileSize, -3 * tileSize + 1 * tileSize, 1 * tileSize, 1 * tileSize);
+            
             ctx.fillStyle = '#ffcc00';
             ctx.beginPath(); ctx.arc(0, -2 * tileSize, tileSize, 0, Math.PI*2); ctx.fill();
 
             ctx.fillStyle = '#ff3333';
             ctx.fillRect(-12 * tileSize, 1 * tileSize, 2 * tileSize, 2 * tileSize);
+            
             ctx.fillStyle = '#bf40bf';
             ctx.beginPath(); ctx.arc(-6 * tileSize, 2 * tileSize, 1.5 * tileSize, 0, Math.PI*2); ctx.fill();
+            
             ctx.fillStyle = '#2a6bb0';
             ctx.fillRect(0, 1 * tileSize, 2 * tileSize, 2 * tileSize);
 
             // Чёрные квадраты по бокам дороги
             ctx.fillStyle = '#000000';
-            ctx.fillRect(-16 * tileSize, gameCanvas.height/2 - tileSize/2, tileSize, tileSize);
-            ctx.fillRect(16 * tileSize - tileSize, gameCanvas.height/2 - tileSize/2, tileSize, tileSize);
+            ctx.fillRect(-16 * tileSize, -tileSize/2, tileSize, tileSize);
+            ctx.fillRect(15 * tileSize, -tileSize/2, tileSize, tileSize);
 
-            // Другие игроки
+            // 5. Другие игроки
             for (const uid in otherPlayers) {
                 const p = otherPlayers[uid];
                 ctx.fillStyle = p.color || '#ff6b6b';
@@ -490,7 +461,7 @@
                 ctx.fillText(p.nick || uid, p.x, p.y - 15);
             }
 
-            // Я (чёрный квадрат с белым ником)
+            // 6. Я (чёрный квадрат с белым ником)
             ctx.fillStyle = '#000000';
             ctx.fillRect(player.x - tileSize/2, player.y - tileSize/2, tileSize, tileSize);
             ctx.fillStyle = '#ffffff';
@@ -498,11 +469,14 @@
             ctx.textAlign = 'center';
             ctx.fillText(currentNick, player.x, player.y - 20);
 
+            ctx.restore();
+
             gameMoney.textContent = money;
             animationId = requestAnimationFrame(gameLoop);
         }
 
-        // ================= СТАРТ =================
+        // ================= ИНИЦИАЛИЗАЦИЯ =================
+        window.addEventListener('load', () => { drawSplashLogo(); });
         checkSession();
 
         window.addEventListener('resize', () => {
