@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игра с меню (Стабильная версия)</title>
-    <!-- Безопасная загрузка библиотеки джойстика -->
+    <title>Steal A Dushka</title>
+    <!-- Подключаем библиотеку джойстика -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.10.1/nipplejs.min.js"></script>
     
     <style>
@@ -503,10 +503,59 @@
     <script>
         console.log("Игра загружается...");
 
-        // --- Баланс игрока ---
-        let playerBalance = 25;
-        const balanceDisplay = document.getElementById('balance-amount');
-        function updateBalanceUI() { balanceDisplay.textContent = playerBalance; }
+        // === ЗАЩИТА: ПРИВАТНЫЙ БАЛАНС (НЕЛЬЗЯ ИЗМЕНИТЬ ИЗ КОНСОЛИ) ===
+        let _balance = 25;
+        let _locked = false;
+
+        function getBalance() {
+            return _balance;
+        }
+
+        function setBalance(value) {
+            if (_locked) return;
+            if (typeof value !== 'number' || value < 0 || value > 999999) {
+                console.warn("⚠️ Попытка взлома баланса! Игра заблокирована.");
+                _locked = true;
+                _balance = 0;
+                alert("Обнаружена попытка взлома! Игра заблокирована. Перезагрузите страницу.");
+                return;
+            }
+            _balance = value;
+            localStorage.setItem('gameBalance', _balance.toString());
+            localStorage.setItem('gameBalanceHash', simpleHash(_balance.toString()).toString());
+            document.getElementById('balance-amount').textContent = _balance;
+        }
+
+        // Восстановление сохранения
+        function verifyAndLoadBalance() {
+            const saved = localStorage.getItem('gameBalance');
+            const savedHash = localStorage.getItem('gameBalanceHash');
+            if (saved !== null && savedHash !== null) {
+                const parsed = parseInt(saved, 10);
+                if (!isNaN(parsed) && simpleHash(saved) === parseInt(savedHash, 10)) {
+                    _balance = parsed;
+                } else {
+                    console.warn("Обнаружена попытка взлома сохранения! Сброс до 25.");
+                    _balance = 25;
+                }
+            } else {
+                _balance = 25;
+            }
+            localStorage.setItem('gameBalance', _balance.toString());
+            localStorage.setItem('gameBalanceHash', simpleHash(_balance.toString()).toString());
+            document.getElementById('balance-amount').textContent = _balance;
+        }
+        verifyAndLoadBalance();
+
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash |= 0;
+            }
+            return hash;
+        }
 
         // --- Обработчик кнопок панели ---
         function doAction(action) { console.log('Нажата кнопка: ' + action); }
@@ -533,9 +582,8 @@
         function initJoystick() {
             const zone = document.getElementById('joystick-zone');
             zone.style.display = 'block';
-            // Проверка, что библиотека загрузилась
             if (typeof nipplejs === 'undefined') { 
-                console.warn("Библиотека nipplejs не загружена (проверьте интернет). Управление с телефона недоступно.");
+                console.warn("Библиотека nipplejs не загружена. Управление с телефона недоступно.");
                 return; 
             }
             joystickManager = nipplejs.create({
@@ -557,7 +605,7 @@
             document.getElementById('auth-container').style.display = 'none';
             document.getElementById('app-wrapper').style.display = 'flex';
             document.getElementById('balance-container').style.display = 'block';
-            updateBalanceUI();
+            verifyAndLoadBalance();
             setTimeout(() => {
                 resizeGame();
                 initJoystick();
@@ -656,6 +704,10 @@
         ];
 
         function handleInteract() {
+            const now = Date.now();
+            if (now - lastInteractTime < 300) return;
+            lastInteractTime = now;
+
             if (!targetObject) return;
             resetKeys();
             if (targetObject.id === 'shop') {
@@ -672,6 +724,8 @@
                 targetObject = null;
             }
         }
+
+        let lastInteractTime = 0;
 
         function openShop() {
             const content = document.querySelector('#shop-menu .content');
@@ -707,9 +761,9 @@
                 buyBtn.onclick = function(e) {
                     e.stopPropagation();
                     if (item.owned) return;
-                    if (playerBalance >= item.price) {
-                        playerBalance -= item.price;
-                        updateBalanceUI();
+                    if (_locked) { alert("Игра заблокирована из-за попытки взлома!"); return; }
+                    if (getBalance() >= item.price) {
+                        setBalance(getBalance() - item.price);
                         item.owned = true;
                         buyBtn.textContent = 'OWNED';
                         buyBtn.classList.add('owned');
