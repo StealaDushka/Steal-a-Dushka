@@ -610,8 +610,6 @@
             if (!isMobile) {
                 document.getElementById('auth-container').style.display = 'none';
                 document.getElementById('app-wrapper').style.display = 'flex';
-                // Автоматический вход, если пользователь уже зарегистрирован
-                // (данные из Firebase будут читаться после login/register)
             }
         }
 
@@ -809,7 +807,10 @@
 
         let lastInteractTime = 0;
 
+        // ==================== ПРАВИЛЬНОЕ ОТКРЫТИЕ/ЗАКРЫТИЕ МЕНЮ ====================
         function openShop() {
+            closeBee();   // Закрываем пчел
+            closeWheel(); // Закрываем колесо
             const content = document.querySelector('#shop-menu .content');
             content.innerHTML = '';
 
@@ -868,10 +869,22 @@
 
         function closeShop() { document.getElementById('shop-menu').style.display = 'none'; resetKeys(); }
 
-        function openBee() { document.getElementById('bee-menu').style.display = 'flex'; resetKeys(); }
+        function openBee() {
+            closeShop();   // Закрываем магазин
+            closeWheel(); // Закрываем колесо
+            document.getElementById('bee-menu').style.display = 'flex';
+            resetKeys();
+        }
+
         function closeBee() { document.getElementById('bee-menu').style.display = 'none'; resetKeys(); }
 
-        function openWheel() { document.getElementById('wheel-menu').style.display = 'flex'; resetKeys(); }
+        function openWheel() {
+            closeShop();   // Закрываем магазин
+            closeBee();    // Закрываем пчел
+            document.getElementById('wheel-menu').style.display = 'flex';
+            resetKeys();
+        }
+
         function closeWheel() { document.getElementById('wheel-menu').style.display = 'none'; resetKeys(); }
 
         function buySpin(amount) {
