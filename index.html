@@ -398,8 +398,8 @@
         </div>
     </div>
 
-    <!-- МЕНЮ МАГАЗИНА -->
-    <div id="shop-menu" class="menu-overlay">
+    <!-- МЕНЮ МАГАЗИНА (СКРЫТО ПО УМОЛЧАНИЮ) -->
+    <div id="shop-menu" class="menu-overlay" style="display: none;">
         <div class="header">
             <div class="title">
                 <h2>Shop</h2>
@@ -410,8 +410,8 @@
         <div class="content"></div>
     </div>
 
-    <!-- МЕНЮ КОРОЛЕВЫ ПЧЁЛ -->
-    <div id="bee-menu" class="menu-overlay">
+    <!-- МЕНЮ КОРОЛЕВЫ ПЧЁЛ (СКРЫТО ПО УМОЛЧАНИЮ) -->
+    <div id="bee-menu" class="menu-overlay" style="display: none;">
         <div class="header">
             <div class="title">
                 <h2>Leaves in 1h 20m</h2>
@@ -487,8 +487,8 @@
         </div>
     </div>
 
-    <!-- МЕНЮ КОЛЕСА ФОРТУНЫ -->
-    <div id="wheel-menu" class="menu-overlay">
+    <!-- МЕНЮ КОЛЕСА ФОРТУНЫ (СКРЫТО ПО УМОЛЧАНИЮ) -->
+    <div id="wheel-menu" class="menu-overlay" style="display: none;">
         <div class="header">
             <div class="title">
                 <h2>CRYSTAL WHEEL</h2>
@@ -593,11 +593,9 @@
             const width = window.innerWidth;
             const height = window.innerHeight;
 
-            // Если ширина меньше 700 и высота меньше ширины (горизонтальный телефон)
             if (width < 700 && height < width) {
                 isMobile = true;
             } else if (width < 700) {
-                // Вертикальный телефон - показываем сообщение
                 document.getElementById('app-wrapper').style.display = 'none';
                 document.getElementById('auth-container').style.display = 'flex';
                 document.getElementById('auth-box').innerHTML = "<h2 style='color: white; text-align: center;'>⛔ Поверни телефон горизонтально! 📱↔️</h2>";
@@ -606,7 +604,6 @@
                 isMobile = false;
             }
 
-            // Если ПК - игра работает как раньше
             if (!isMobile) {
                 document.getElementById('auth-container').style.display = 'none';
                 document.getElementById('app-wrapper').style.display = 'flex';
@@ -620,7 +617,6 @@
         // ==================== FIREBASE (ПО НИКУ И ПАРОЛЮ) ====================
         let currentNickname = null;
 
-        // Регистрация (Ник + Пароль) — создает аккаунт в Firebase
         async function handleRegister() {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
@@ -645,7 +641,6 @@
             startGame();
         }
 
-        // Вход (Ник + Пароль) — проверяет данные в Firebase
         async function handleLogin() {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
@@ -665,7 +660,6 @@
             }
         }
 
-        // ==================== Чтение баланса из Firebase (по Нику) ====================
         async function loadBalance() {
             if (currentNickname) {
                 const data = await readUserData(currentNickname);
@@ -674,9 +668,8 @@
                 }
             }
         }
-        setInterval(loadBalance, 5000); // Обновляем баланс каждые 5 секунд
+        setInterval(loadBalance, 5000);
 
-        // ==================== ЗАПУСК ИГРЫ ====================
         function startGame() {
             console.log("Запуск игры...");
             document.getElementById('auth-container').style.display = 'none';
@@ -696,7 +689,6 @@
 
         document.addEventListener('keydown', function(e) {
             const key = e.key.toLowerCase();
-
             if (key === 'w' || key === 'arrowup') { keys.w = true; keys.arrowup = true; e.preventDefault(); }
             if (key === 's' || key === 'arrowdown') { keys.s = true; keys.arrowdown = true; e.preventDefault(); }
             if (key === 'a' || key === 'arrowleft') { keys.a = true; keys.arrowleft = true; e.preventDefault(); }
@@ -705,7 +697,6 @@
 
         document.addEventListener('keyup', function(e) {
             const key = e.key.toLowerCase();
-
             if (key === 'w' || key === 'arrowup') { keys.w = false; keys.arrowup = false; e.preventDefault(); }
             if (key === 's' || key === 'arrowdown') { keys.s = false; keys.arrowdown = false; e.preventDefault(); }
             if (key === 'a' || key === 'arrowleft') { keys.a = false; keys.arrowleft = false; e.preventDefault(); }
@@ -730,7 +721,6 @@
             const chosenColor = BODY_COLORS[randomIndex];
             pixels[0].style.backgroundColor = '#FFCC00'; 
             pixels[1].style.backgroundColor = chosenColor; 
-
             const spawn = spawnPoints[Math.floor(Math.random() * spawnPoints.length)];
             x = spawn.x;
             y = spawn.y;
@@ -783,7 +773,6 @@
             const now = Date.now();
             if (now - lastInteractTime < 300) return;
             lastInteractTime = now;
-
             if (!targetObject) return;
             resetKeys();
             if (targetObject.id === 'shop') {
@@ -809,29 +798,25 @@
 
         // ==================== ПРАВИЛЬНОЕ ОТКРЫТИЕ/ЗАКРЫТИЕ МЕНЮ ====================
         function openShop() {
-            closeBee();   // Закрываем пчел
-            closeWheel(); // Закрываем колесо
+            closeBee();
+            closeWheel();
             const content = document.querySelector('#shop-menu .content');
             content.innerHTML = '';
 
             shopItems.forEach((item) => {
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'item';
-
                 const iconDiv = document.createElement('div');
                 iconDiv.className = 'icon';
                 iconDiv.textContent = '🛒';
-
                 const infoDiv = document.createElement('div');
                 infoDiv.className = 'info';
                 infoDiv.innerHTML = `
                     <div class="name">${item.name}</div>
                     <div class="desc">Buy this item to enhance your gameplay!</div>
                 `;
-
                 const actionsDiv = document.createElement('div');
                 actionsDiv.className = 'actions';
-
                 const buyBtn = document.createElement('button');
                 buyBtn.className = 'buy-btn';
                 if (item.owned) {
@@ -840,7 +825,6 @@
                 } else {
                     buyBtn.textContent = `$ ${item.price.toLocaleString()}`;
                 }
-
                 buyBtn.onclick = function(e) {
                     e.stopPropagation();
                     if (item.owned) return;
@@ -855,7 +839,6 @@
                         alert(`Недостаточно средств! Нужно $${item.price.toLocaleString()}`);
                     }
                 };
-
                 actionsDiv.appendChild(buyBtn);
                 itemDiv.appendChild(iconDiv);
                 itemDiv.appendChild(infoDiv);
@@ -870,8 +853,8 @@
         function closeShop() { document.getElementById('shop-menu').style.display = 'none'; resetKeys(); }
 
         function openBee() {
-            closeShop();   // Закрываем магазин
-            closeWheel(); // Закрываем колесо
+            closeShop();
+            closeWheel();
             document.getElementById('bee-menu').style.display = 'flex';
             resetKeys();
         }
@@ -879,8 +862,8 @@
         function closeBee() { document.getElementById('bee-menu').style.display = 'none'; resetKeys(); }
 
         function openWheel() {
-            closeShop();   // Закрываем магазин
-            closeBee();    // Закрываем пчел
+            closeShop();
+            closeBee();
             document.getElementById('wheel-menu').style.display = 'flex';
             resetKeys();
         }
