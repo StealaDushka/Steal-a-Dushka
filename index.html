@@ -66,7 +66,7 @@
             -webkit-user-select: none;
         }
 
-        /* ==================== ОКНО 1: ВХОД ==================== */
+        /* ==================== ОКНО 1: ВХОД (ВСЕГДА ПЕРВОЕ) ==================== */
         #auth-container {
             position: fixed;
             top: 0;
@@ -144,7 +144,6 @@
         .btn-reg {
             color: #FF0000;
         }
-
         .password-hint {
             color: #888;
             font-size: 11px;
@@ -164,8 +163,8 @@
         }
 
         #sidebar {
-            width: 130px;
-            min-width: 130px;
+            width: 140px;
+            min-width: 140px;
             height: auto;
             display: flex;
             justify-content: center;
@@ -173,7 +172,7 @@
             background-color: transparent;
             position: relative;
             z-index: 10;
-            margin-right: 5px;
+            margin-right: 8px;
             padding: 0;
         }
         #actions-grid {
@@ -384,7 +383,7 @@
             touch-action: none;
         }
 
-        /* ==================== БАЛАНС / DUSHKA COINS ==================== */
+        /* ==================== БАЛАНСЫ ==================== */
         #balance-container {
             position: fixed;
             bottom: 30px;
@@ -397,24 +396,31 @@
             border: 2px solid #444;
             font-family: 'Courier New', monospace;
             font-weight: bold;
-            font-size: 18px;
             color: #ffffff;
             user-select: none;
             pointer-events: none;
+            flex-direction: column;
+            gap: 4px;
         }
-        #balance-container .icon {
-            color: #ffd700;
-            font-size: 20px;
+        #balance-container .coin-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
         }
-        #balance-container .amount {
-            color: #4caf50;
+        #balance-container .coin-box .icon {
             font-size: 18px;
         }
-        #balance-container .label {
-            color: #ffffff;
+        #balance-container .coin-box .label {
             font-size: 12px;
-            margin-bottom: 4px;
-            text-align: center;
+            color: #aaa;
+        }
+        #balance-container .coin-box .amount {
+            font-size: 16px;
+            color: #4caf50;
+        }
+        #balance-container .dushka-box .amount {
+            color: #ffd700;
         }
 
         /* ==================== КНОПКА E ==================== */
@@ -760,6 +766,12 @@
             text-shadow: 1px 1px 0 #000;
             transition: background 0.2s;
         }
+        #bee-menu .banner .right-stats .buy-row .price-btn:active {
+            transform: scale(0.95);
+        }
+        #bee-menu .banner .right-stats .buy-row .price-btn:hover {
+            background-color: #388e3c;
+        }
 
         /* ==================== МЕНЮ КОЛЕСА ФОРТУНЫ ==================== */
         #wheel-menu {
@@ -978,12 +990,17 @@
         </div>
     </div>
 
-    <!-- БАЛАНС / DUSHKA COINS -->
-    <div id="balance-container" style="display: flex; flex-direction: column;">
-        <div class="label">Dushka Coins</div>
-        <div style="display: flex; align-items: center; justify-content: center;">
+    <!-- БАЛАНСЫ (ПОЯВЯТСЯ ТОЛЬКО ПОСЛЕ ВХОДА) -->
+    <div id="balance-container" style="display: none;">
+        <div class="coin-box dushka-box">
             <span class="icon">💰</span>
-            <span class="amount" id="balance-amount">0</span>
+            <span class="label">Dushka Coins</span>
+            <span class="amount" id="dushka-coins-amount">0</span>
+        </div>
+        <div class="coin-box">
+            <span class="icon">🪙</span>
+            <span class="label">Монеты</span>
+            <span class="amount" id="balance-amount">25</span>
         </div>
     </div>
 
@@ -1252,7 +1269,7 @@
             await writeUserData(user, {
                 nickname: user,
                 password: pass,
-                coins: 25,
+                coins: 0,
                 level: 1,
                 last_online: Date.now()
             });
@@ -1282,15 +1299,15 @@
         }
 
         // ==================== Чтение баланса из Firebase (по Нику) ====================
-        async function loadBalance() {
+        async function loadDushkaCoins() {
             if (currentNickname) {
                 const data = await readUserData(currentNickname);
                 if (data) {
-                    document.getElementById('balance-amount').textContent = data.coins || 0;
+                    document.getElementById('dushka-coins-amount').textContent = data.coins || 0;
                 }
             }
         }
-        setInterval(loadBalance, 5000); // Обновляем баланс каждые 5 секунд
+        setInterval(loadDushkaCoins, 5000);
 
         // ==================== ЗАПУСК ИГРЫ ====================
         function startGame() {
@@ -1298,7 +1315,7 @@
             document.getElementById('auth-container').style.display = 'none';
             document.getElementById('app-wrapper').style.display = 'flex';
             document.getElementById('balance-container').style.display = 'flex';
-            loadBalance();
+            loadDushkaCoins();
             setTimeout(() => {
                 resizeGame();
                 initJoystick();
@@ -1307,28 +1324,25 @@
             }, 50);
         }
 
-        // ==================== УПРАВЛЕНИЕ (WASD) ====================
-        const keys = { w: false, s: false, a: false, d: false };
+        // ==================== УПРАВЛЕНИЕ (СТРЕЛКИ + WASD) ====================
+        const keys = { w: false, s: false, a: false, d: false, arrowup: false, arrowdown: false, arrowleft: false, arrowright: false };
 
         document.addEventListener('keydown', function(e) {
-            // В окне входа можно печатать все буквы
-            if (document.getElementById('auth-container').style.display !== 'none') return;
-
+            if (document.getElementById('auth-container').style.display !== 'none') return; // можно печатать в окне входа
             const key = e.key.toLowerCase();
-            if (key === 'w') { keys.w = true; e.preventDefault(); }
-            if (key === 's') { keys.s = true; e.preventDefault(); }
-            if (key === 'a') { keys.a = true; e.preventDefault(); }
-            if (key === 'd') { keys.d = true; e.preventDefault(); }
+            if (key === 'w' || key === 'arrowup') { keys.w = true; keys.arrowup = true; e.preventDefault(); }
+            if (key === 's' || key === 'arrowdown') { keys.s = true; keys.arrowdown = true; e.preventDefault(); }
+            if (key === 'a' || key === 'arrowleft') { keys.a = true; keys.arrowleft = true; e.preventDefault(); }
+            if (key === 'd' || key === 'arrowright') { keys.d = true; keys.arrowright = true; e.preventDefault(); }
         });
 
         document.addEventListener('keyup', function(e) {
             if (document.getElementById('auth-container').style.display !== 'none') return;
-
             const key = e.key.toLowerCase();
-            if (key === 'w') { keys.w = false; e.preventDefault(); }
-            if (key === 's') { keys.s = false; e.preventDefault(); }
-            if (key === 'a') { keys.a = false; e.preventDefault(); }
-            if (key === 'd') { keys.d = false; e.preventDefault(); }
+            if (key === 'w' || key === 'arrowup') { keys.w = false; keys.arrowup = false; e.preventDefault(); }
+            if (key === 's' || key === 'arrowdown') { keys.s = false; keys.arrowdown = false; e.preventDefault(); }
+            if (key === 'a' || key === 'arrowleft') { keys.a = false; keys.arrowleft = false; e.preventDefault(); }
+            if (key === 'd' || key === 'arrowright') { keys.d = false; keys.arrowright = false; e.preventDefault(); }
         });
 
         // ==================== Игрок и объекты ====================
@@ -1365,12 +1379,14 @@
             keys.s = false;
             keys.a = false;
             keys.d = false;
+            keys.arrowup = false;
+            keys.arrowdown = false;
+            keys.arrowleft = false;
+            keys.arrowright = false;
         }
 
         // ==================== Логика магазина ====================
-        function handleOpenSideShop() {
-            openCharacters();
-        }
+        function handleOpenSideShop() { openCharacters(); }
 
         function handleInteract() {
             const now = Date.now();
@@ -1484,10 +1500,10 @@
             previousTime = currentTime;
             let dx = 0, dy = 0;
 
-            if (keys.w) dy -= 1;
-            if (keys.s) dy += 1;
-            if (keys.a) dx -= 1;
-            if (keys.d) dx += 1;
+            if (keys.w || keys.arrowup) dy -= 1;
+            if (keys.s || keys.arrowdown) dy += 1;
+            if (keys.a || keys.arrowleft) dx -= 1;
+            if (keys.d || keys.arrowright) dx += 1;
 
             if (Math.abs(touchDX) > 0.05 || Math.abs(touchDY) > 0.05) {
                 dx += touchDX;
