@@ -66,7 +66,7 @@
             -webkit-user-select: none;
         }
 
-        /* ==================== ОКНО 1: ВХОД (ВСЕГДА ПЕРВОЕ) ==================== */
+        /* ==================== ОКНО 1: ВХОД ==================== */
         #auth-container {
             position: fixed;
             top: 0;
@@ -990,7 +990,7 @@
         </div>
     </div>
 
-    <!-- БАЛАНСЫ (ПОЯВЯТСЯ ТОЛЬКО ПОСЛЕ ВХОДА) -->
+    <!-- БАЛАНСЫ -->
     <div id="balance-container" style="display: none;">
         <div class="coin-box dushka-box">
             <span class="icon">💰</span>
@@ -1225,34 +1225,61 @@
     <div id="joystick-zone"></div>
 
     <script>
-        // ==================== ПРОВЕРКА ТИПА УСТРОЙСТВА ====================
-        let isMobile = false;
+        // ==================== БАЛАНС ====================
+        let _balance = 25;
+        let _spins = 0;
+        let _locked = false;
 
-        function checkDevice() {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-
-            if (width < 700 && height < width) {
-                isMobile = true;
-            } else if (width < 700) {
-                document.getElementById('app-wrapper').style.display = 'none';
-                document.getElementById('auth-container').style.display = 'flex';
-                document.getElementById('auth-box').innerHTML = "<h2 style='color: white; text-align: center;'>⛔ Поверни телефон горизонтально! 📱↔️</h2>";
+        function getBalance() { return _balance; }
+        function setBalance(value) {
+            if (_locked) return;
+            if (typeof value !== 'number' || value < 0 || value > 999999) {
+                console.warn("⚠️ Попытка взлома баланса! Игра заблокирована.");
+                _locked = true;
+                _balance = 0;
+                alert("Обнаружена попытка взлома! Игра заблокирована. Перезагрузите страницу.");
                 return;
-            } else {
-                isMobile = false;
             }
-
-            if (!isMobile) {
-                document.getElementById('auth-container').style.display = 'flex';
-            }
+            _balance = value;
+            localStorage.setItem('gameBalance', _balance.toString());
+            localStorage.setItem('gameBalanceHash', simpleHash(_balance.toString()).toString());
+            document.getElementById('balance-amount').textContent = _balance;
         }
 
-        window.addEventListener('resize', checkDevice);
-        window.addEventListener('orientationchange', checkDevice);
-        checkDevice();
+        function addSpins(amount) { _spins += amount; updateSpinBtn(); }
+        function updateSpinBtn() { document.querySelector('#wheel-menu .spin-btn').textContent = `Spin (${_spins})`; }
 
-        // ==================== FIREBASE (ПО НИКУ И ПАРОЛЮ) ====================
+        function verifyAndLoadBalance() {
+            const saved = localStorage.getItem('gameBalance');
+            const savedHash = localStorage.getItem('gameBalanceHash');
+            if (saved !== null && savedHash !== null) {
+                const parsed = parseInt(saved, 10);
+                if (!isNaN(parsed) && simpleHash(saved) === parseInt(savedHash, 10)) {
+                    _balance = parsed;
+                } else {
+                    console.warn("Обнаружена попытка взлома сохранения! Сброс до 25.");
+                    _balance = 25;
+                }
+            } else {
+                _balance = 25;
+            }
+            localStorage.setItem('gameBalance', _balance.toString());
+            localStorage.setItem('gameBalanceHash', simpleHash(_balance.toString()).toString());
+            document.getElementById('balance-amount').textContent = _balance;
+        }
+        verifyAndLoadBalance();
+
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash |= 0;
+            }
+            return hash;
+        }
+
+        // ==================== FIREBASE / DUSHKA COINS ====================
         let currentNickname = null;
 
         async function handleRegister() {
@@ -1298,7 +1325,6 @@
             }
         }
 
-        // ==================== Чтение баланса из Firebase (по Нику) ====================
         async function loadDushkaCoins() {
             if (currentNickname) {
                 const data = await readUserData(currentNickname);
@@ -1315,6 +1341,7 @@
             document.getElementById('auth-container').style.display = 'none';
             document.getElementById('app-wrapper').style.display = 'flex';
             document.getElementById('balance-container').style.display = 'flex';
+            verifyAndLoadBalance();
             loadDushkaCoins();
             setTimeout(() => {
                 resizeGame();
@@ -1328,7 +1355,7 @@
         const keys = { w: false, s: false, a: false, d: false, arrowup: false, arrowdown: false, arrowleft: false, arrowright: false };
 
         document.addEventListener('keydown', function(e) {
-            if (document.getElementById('auth-container').style.display !== 'none') return; // можно печатать в окне входа
+            if (document.getElementById('auth-container').style.display !== 'none') return;
             const key = e.key.toLowerCase();
             if (key === 'w' || key === 'arrowup') { keys.w = true; keys.arrowup = true; e.preventDefault(); }
             if (key === 's' || key === 'arrowdown') { keys.s = true; keys.arrowdown = true; e.preventDefault(); }
