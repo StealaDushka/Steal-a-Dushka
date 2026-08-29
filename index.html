@@ -5,51 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Steal A Dushka</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.10.1/nipplejs.min.js"></script>
-
-    <!-- ==================== FIREBASE ==================== -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDkXM7aHtofhx8WAT1eSfLnbsOYVXXg28o",
-            authDomain: "steal-a-dushka.firebaseapp.com",
-            databaseURL: "https://steal-a-dushka-default-rtdb.firebaseio.com",
-            projectId: "steal-a-dushka",
-            storageBucket: "steal-a-dushka.firebasestorage.app",
-            messagingSenderId: "850469516444",
-            appId: "1:850469516444:web:eecdf7fc938824a3f8e959",
-            measurementId: "G-WK4T3127ZX"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        window.readUserData = async function (nickname) {
-            const userRef = ref(db, 'users/' + nickname);
-            const snapshot = await get(userRef);
-            if (snapshot.exists()) {
-                return snapshot.val();
-            }
-            return null;
-        };
-
-        window.writeUserData = async function (nickname, data) {
-            const userRef = ref(db, 'users/' + nickname);
-            await set(userRef, data);
-        };
-
-        window.getDushkaCoins = async function (nickname) {
-            const userRef = ref(db, 'users/' + nickname);
-            const snapshot = await get(userRef);
-            if (snapshot.exists()) {
-                return snapshot.val().coins || 0;
-            }
-            return null;
-        };
-    </script>
-    <!-- ==================== /FIREBASE ==================== -->
-
     <style>
         body {
             margin: 0;
@@ -66,94 +21,8 @@
             -webkit-user-select: none;
         }
 
-        /* ==================== ОКНО 1: ВХОД ==================== */
-        #auth-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #1a1a1a;
-            z-index: 999;
-        }
-        #auth-box {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 400px;
-            height: 400px;
-            background-color: #000000;
-            border: 4px solid #111;
-            box-sizing: border-box;
-            padding: 20px;
-            position: relative;
-        }
-        .auth-label {
-            color: #ffffff;
-            font-size: 14px;
-            margin-bottom: 8px;
-            width: 100%;
-            text-align: left;
-            padding-left: 5px;
-            letter-spacing: 1px;
-        }
-        .auth-input {
-            width: 100%;
-            height: 32px;
-            background-color: #ffffff;
-            border: none;
-            color: #000000;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            font-size: 12px;
-            padding: 0 10px;
-            box-sizing: border-box;
-            margin-bottom: 20px;
-            outline: none;
-        }
-        .auth-input:focus {
-            background-color: #f0f0f0;
-        }
-        .btn-group {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            gap: 10px;
-        }
-        .auth-btn {
-            flex: 1;
-            height: 40px;
-            background-color: #ffffff;
-            border: none;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            font-size: 12px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .auth-btn:hover {
-            background-color: #e0e0e0;
-        }
-        .btn-login {
-            color: #000000;
-        }
-        .btn-reg {
-            color: #FF0000;
-        }
-        .password-hint {
-            color: #888;
-            font-size: 11px;
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        /* ==================== ОКНО 2: ИГРА ==================== */
         #app-wrapper {
-            display: none;
+            display: flex;
             flex-direction: row;
             width: 100vw;
             height: 100vh;
@@ -383,13 +252,12 @@
             touch-action: none;
         }
 
-        /* ==================== БАЛАНСЫ ==================== */
         #balance-container {
             position: fixed;
             bottom: 30px;
             right: 30px;
             z-index: 1000;
-            display: none;
+            display: flex;
             background-color: rgba(0, 0, 0, 0.8);
             padding: 8px 16px;
             border-radius: 8px;
@@ -423,7 +291,6 @@
             color: #ffd700;
         }
 
-        /* ==================== КНОПКА E ==================== */
         #interact-btn {
             position: absolute;
             display: none;
@@ -530,7 +397,6 @@
             border-radius: 4px;
         }
 
-        /* ==================== МЕНЮ ПЕРСОНАЖЕЙ ==================== */
         #character-list-menu {
             background-color: #1a1a2e;
         }
@@ -571,7 +437,6 @@
             font-size: 14px;
         }
 
-        /* ==================== МЕНЮ КОРОЛЕВЫ ПЧЁЛ ==================== */
         #bee-menu {
             background-image: repeating-linear-gradient(45deg, #f2d64a 0px, #f2d64a 8px, #eac032 8px, #eac032 16px);
             background-color: #e8b425;
@@ -773,7 +638,6 @@
             background-color: #388e3c;
         }
 
-        /* ==================== МЕНЮ КОЛЕСА ФОРТУНЫ ==================== */
         #wheel-menu {
             background-color: #1a1a3a;
         }
@@ -975,36 +839,6 @@
 </head>
 <body>
 
-    <!-- ЭКРАН АВТОРИЗАЦИИ -->
-    <div id="auth-container">
-        <div id="auth-box">
-            <label class="auth-label">НИК</label>
-            <input type="text" id="username" class="auth-input" autocomplete="off">
-            <label class="auth-label">ПАРОЛЬ</label>
-            <input type="password" id="password" class="auth-input">
-            <div class="btn-group">
-                <button class="auth-btn btn-login" onclick="handleLogin()">ВОЙТИ</button>
-                <button class="auth-btn btn-reg" onclick="handleRegister()">РЕГ</button>
-            </div>
-            <div class="password-hint">Запишите ваш пароль. Спасибо за внимание</div>
-        </div>
-    </div>
-
-    <!-- БАЛАНСЫ -->
-    <div id="balance-container" style="display: none;">
-        <div class="coin-box dushka-box">
-            <span class="icon">💰</span>
-            <span class="label">Dushka Coins</span>
-            <span class="amount" id="dushka-coins-amount">0</span>
-        </div>
-        <div class="coin-box">
-            <span class="icon">🪙</span>
-            <span class="label">Монеты</span>
-            <span class="amount" id="balance-amount">25</span>
-        </div>
-    </div>
-
-    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
     <div id="app-wrapper">
         <div id="sidebar">
             <div id="actions-grid">
@@ -1225,154 +1059,30 @@
     <div id="joystick-zone"></div>
 
     <script>
-        // ==================== БАЛАНС ====================
-        let _balance = 25;
-        let _spins = 0;
-        let _locked = false;
+        let touchDX = 0, touchDY = 0;
+        let joystickManager = null;
 
-        function getBalance() { return _balance; }
-        function setBalance(value) {
-            if (_locked) return;
-            if (typeof value !== 'number' || value < 0 || value > 999999) {
-                console.warn("⚠️ Попытка взлома баланса! Игра заблокирована.");
-                _locked = true;
-                _balance = 0;
-                alert("Обнаружена попытка взлома! Игра заблокирована. Перезагрузите страницу.");
-                return;
+        function initJoystick() {
+            const zone = document.getElementById('joystick-zone');
+            zone.style.display = 'block';
+            if (typeof nipplejs === 'undefined') { 
+                console.warn("Библиотека nipplejs не загружена. Управление с телефона недоступно.");
+                return; 
             }
-            _balance = value;
-            localStorage.setItem('gameBalance', _balance.toString());
-            localStorage.setItem('gameBalanceHash', simpleHash(_balance.toString()).toString());
-            document.getElementById('balance-amount').textContent = _balance;
-        }
-
-        function addSpins(amount) { _spins += amount; updateSpinBtn(); }
-        function updateSpinBtn() { document.querySelector('#wheel-menu .spin-btn').textContent = `Spin (${_spins})`; }
-
-        function verifyAndLoadBalance() {
-            const saved = localStorage.getItem('gameBalance');
-            const savedHash = localStorage.getItem('gameBalanceHash');
-            if (saved !== null && savedHash !== null) {
-                const parsed = parseInt(saved, 10);
-                if (!isNaN(parsed) && simpleHash(saved) === parseInt(savedHash, 10)) {
-                    _balance = parsed;
-                } else {
-                    console.warn("Обнаружена попытка взлома сохранения! Сброс до 25.");
-                    _balance = 25;
-                }
-            } else {
-                _balance = 25;
-            }
-            localStorage.setItem('gameBalance', _balance.toString());
-            localStorage.setItem('gameBalanceHash', simpleHash(_balance.toString()).toString());
-            document.getElementById('balance-amount').textContent = _balance;
-        }
-        verifyAndLoadBalance();
-
-        function simpleHash(str) {
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                const char = str.charCodeAt(i);
-                hash = ((hash << 5) - hash) + char;
-                hash |= 0;
-            }
-            return hash;
-        }
-
-        // ==================== FIREBASE / DUSHKA COINS ====================
-        let currentNickname = null;
-
-        async function handleRegister() {
-            const user = document.getElementById('username').value.trim();
-            const pass = document.getElementById('password').value.trim();
-            if (!user || !pass) { alert('Заполните НИК и ПАРОЛЬ!'); return; }
-
-            const existingUser = await readUserData(user);
-            if (existingUser) {
-                alert('Данный НИК уже зарегистрирован!');
-                return;
-            }
-
-            await writeUserData(user, {
-                nickname: user,
-                password: pass,
-                coins: 0,
-                level: 1,
-                last_online: Date.now()
+            joystickManager = nipplejs.create({
+                zone: zone, mode: 'static', position: { left: '50%', top: '50%' },
+                color: 'white', size: 100, restOpacity: 0.5, fadeTime: 150
             });
-
-            currentNickname = user;
-            alert('Регистрация успешна! Добро пожаловать, ' + user + '!');
-            startGame();
+            joystickManager.on('move', (evt, data) => {
+                const force = Math.min(data.force, 1);
+                const angle = data.angle.radian;
+                touchDX = Math.cos(angle) * force;
+                touchDY = -Math.sin(angle) * force;
+            });
+            joystickManager.on('end', () => { touchDX = 0; touchDY = 0; });
         }
 
-        async function handleLogin() {
-            const user = document.getElementById('username').value.trim();
-            const pass = document.getElementById('password').value.trim();
-            if (!user || !pass) { alert('Заполните НИК и ПАРОЛЬ!'); return; }
-
-            const existingUser = await readUserData(user);
-            if (existingUser) {
-                if (existingUser.password === pass) {
-                    currentNickname = user;
-                    alert('Вход выполнен! С возвращением, ' + user + '!');
-                    startGame();
-                } else {
-                    alert('Неверный ПАРОЛЬ!');
-                }
-            } else {
-                alert('Данный НИК не зарегистрирован. Нажмите "РЕГ"!');
-            }
-        }
-
-        async function loadDushkaCoins() {
-            if (currentNickname) {
-                const data = await readUserData(currentNickname);
-                if (data) {
-                    document.getElementById('dushka-coins-amount').textContent = data.coins || 0;
-                }
-            }
-        }
-        setInterval(loadDushkaCoins, 5000);
-
-        // ==================== ЗАПУСК ИГРЫ ====================
-        function startGame() {
-            console.log("Запуск игры...");
-            document.getElementById('auth-container').style.display = 'none';
-            document.getElementById('app-wrapper').style.display = 'flex';
-            document.getElementById('balance-container').style.display = 'flex';
-            verifyAndLoadBalance();
-            loadDushkaCoins();
-            setTimeout(() => {
-                resizeGame();
-                initJoystick();
-                initPlayer();
-                requestAnimationFrame(updateGame);
-            }, 50);
-        }
-
-        // ==================== УПРАВЛЕНИЕ (СТРЕЛКИ + WASD) ====================
-        const keys = { w: false, s: false, a: false, d: false, arrowup: false, arrowdown: false, arrowleft: false, arrowright: false };
-
-        document.addEventListener('keydown', function(e) {
-            if (document.getElementById('auth-container').style.display !== 'none') return;
-            const key = e.key.toLowerCase();
-            if (key === 'w' || key === 'arrowup') { keys.w = true; keys.arrowup = true; e.preventDefault(); }
-            if (key === 's' || key === 'arrowdown') { keys.s = true; keys.arrowdown = true; e.preventDefault(); }
-            if (key === 'a' || key === 'arrowleft') { keys.a = true; keys.arrowleft = true; e.preventDefault(); }
-            if (key === 'd' || key === 'arrowright') { keys.d = true; keys.arrowright = true; e.preventDefault(); }
-        });
-
-        document.addEventListener('keyup', function(e) {
-            if (document.getElementById('auth-container').style.display !== 'none') return;
-            const key = e.key.toLowerCase();
-            if (key === 'w' || key === 'arrowup') { keys.w = false; keys.arrowup = false; e.preventDefault(); }
-            if (key === 's' || key === 'arrowdown') { keys.s = false; keys.arrowdown = false; e.preventDefault(); }
-            if (key === 'a' || key === 'arrowleft') { keys.a = false; keys.arrowleft = false; e.preventDefault(); }
-            if (key === 'd' || key === 'arrowright') { keys.d = false; keys.arrowright = false; e.preventDefault(); }
-        });
-
-        // ==================== Игрок и объекты ====================
+        // --- Игрок и объекты ---
         const player = document.getElementById('player');
         const interactBtn = document.getElementById('interact-btn');
         let targetObject = null;
@@ -1402,18 +1112,18 @@
         ];
 
         function resetKeys() {
-            keys.w = false;
-            keys.s = false;
-            keys.a = false;
-            keys.d = false;
             keys.arrowup = false;
             keys.arrowdown = false;
             keys.arrowleft = false;
             keys.arrowright = false;
+            touchDX = 0;
+            touchDY = 0;
         }
 
-        // ==================== Логика магазина ====================
-        function handleOpenSideShop() { openCharacters(); }
+        // --- Логика магазина ---
+        function handleOpenSideShop() {
+            openCharacters();
+        }
 
         function handleInteract() {
             const now = Date.now();
@@ -1502,7 +1212,7 @@
             }
         });
 
-        // ==================== Движение и коллизии ====================
+        // --- Движение и коллизии ---
         const CELL_SIZE = 20;
         const SPEED = 2 * CELL_SIZE;
         let x = 195, y = 130;
@@ -1519,6 +1229,19 @@
                      r2.y > r1.y + r1.h || r2.y + r2.h < r1.y);
         }
 
+        const keys = { arrowup: false, arrowdown: false, arrowleft: false, arrowright: false };
+
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+            const key = e.key.toLowerCase();
+            if(key in keys) { keys[key] = true; e.preventDefault(); }
+        });
+        document.addEventListener('keyup', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+            const key = e.key.toLowerCase();
+            if(key in keys) { keys[key] = false; e.preventDefault(); }
+        });
+
         let previousTime = 0;
         function updateGame(currentTime) {
             if (document.getElementById('app-wrapper').style.display === 'none') return;
@@ -1526,11 +1249,10 @@
             const dt = Math.min((currentTime - previousTime) / 1000, 0.1);
             previousTime = currentTime;
             let dx = 0, dy = 0;
-
-            if (keys.w || keys.arrowup) dy -= 1;
-            if (keys.s || keys.arrowdown) dy += 1;
-            if (keys.a || keys.arrowleft) dx -= 1;
-            if (keys.d || keys.arrowright) dx += 1;
+            if (keys.arrowup) dy -= 1;
+            if (keys.arrowdown) dy += 1;
+            if (keys.arrowleft) dx -= 1;
+            if (keys.arrowright) dx += 1;
 
             if (Math.abs(touchDX) > 0.05 || Math.abs(touchDY) > 0.05) {
                 dx += touchDX;
