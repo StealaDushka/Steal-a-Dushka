@@ -145,6 +145,13 @@
             color: #FF0000;
         }
 
+        .password-hint {
+            color: #888;
+            font-size: 11px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
         #app-wrapper {
             display: none;
             flex-direction: row;
@@ -955,6 +962,7 @@
                 <button class="auth-btn btn-login" onclick="handleLogin()">ВОЙТИ</button>
                 <button class="auth-btn btn-reg" onclick="handleRegister()">РЕГ</button>
             </div>
+            <div class="password-hint">Запишите его на листочке. Спасибо за внимание</div>
         </div>
     </div>
 
@@ -1203,8 +1211,7 @@
             }
 
             if (!isMobile) {
-                document.getElementById('auth-container').style.display = 'none';
-                document.getElementById('app-wrapper').style.display = 'flex';
+                document.getElementById('auth-container').style.display = 'flex';
             }
         }
 
@@ -1215,6 +1222,7 @@
         // ==================== FIREBASE (ПО НИКУ И ПАРОЛЮ) ====================
         let currentNickname = null;
 
+        // Регистрация (Ник + Пароль) — создает аккаунт в Firebase
         async function handleRegister() {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
@@ -1239,6 +1247,7 @@
             startGame();
         }
 
+        // Вход (Ник + Пароль) — проверяет данные в Firebase
         async function handleLogin() {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
@@ -1258,6 +1267,7 @@
             }
         }
 
+        // ==================== Чтение баланса из Firebase (по Нику) ====================
         async function loadBalance() {
             if (currentNickname) {
                 const data = await readUserData(currentNickname);
@@ -1268,6 +1278,7 @@
         }
         setInterval(loadBalance, 5000);
 
+        // ==================== ЗАПУСК ИГРЫ ====================
         function startGame() {
             console.log("Запуск игры...");
             document.getElementById('auth-container').style.display = 'none';
@@ -1315,6 +1326,7 @@
             pixels[0].style.backgroundColor = '#FFCC00';
             pixels[1].style.backgroundColor = chosenColor;
 
+            // ВАЖНО: Спавн в центре!
             x = 195;
             y = 130;
             player.style.left = x + 'px';
