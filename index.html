@@ -1327,6 +1327,35 @@
         }
         setInterval(loadDushkaCoins, 5000);
 
+        // ==================== ДЖОЙСТИК (работает везде) ====================
+        let touchDX = 0, touchDY = 0;
+        let joystickManager = null;
+
+        function initJoystick() {
+            const zone = document.getElementById('joystick-zone');
+            zone.style.display = 'block';
+            if (typeof nipplejs === 'undefined') {
+                console.warn("Библиотека nipplejs не загружена. Управление с джойстика недоступно.");
+                return;
+            }
+            joystickManager = nipplejs.create({
+                zone: zone,
+                mode: 'static',
+                position: { left: '50%', top: '50%' },
+                color: 'white',
+                size: 100,
+                restOpacity: 0.5,
+                fadeTime: 150
+            });
+            joystickManager.on('move', (evt, data) => {
+                const force = Math.min(data.force, 1);
+                const angle = data.angle.radian;
+                touchDX = Math.cos(angle) * force;
+                touchDY = -Math.sin(angle) * force;
+            });
+            joystickManager.on('end', () => { touchDX = 0; touchDY = 0; });
+        }
+
         // ==================== ЗАПУСК ИГРЫ ====================
         function startGame() {
             console.log("Запуск игры...");
@@ -1336,6 +1365,7 @@
             verifyAndLoadBalance();
             loadDushkaCoins();
             setTimeout(() => {
+                initJoystick();
                 initPlayer();
                 requestAnimationFrame(updateGame);
             }, 50);
@@ -1399,6 +1429,8 @@
             keys.arrowdown = false;
             keys.arrowleft = false;
             keys.arrowright = false;
+            touchDX = 0;
+            touchDY = 0;
         }
 
         // ==================== Логика магазина ====================
