@@ -30,11 +30,9 @@ window.getDushkaCoins=async function(n){try{const s=await db.ref('users/'+n).onc
 .action-btn:active{transform:scale(.95);filter:brightness(.8)}
 .action-btn.pink{background:#E54B8C}
 #game-container{width:400px;height:400px;background:#20b94d;border:4px solid black;position:relative;overflow:hidden}
-/* КРАСНАЯ ДОРОЖКА */
 .center-line{position:absolute;top:180px;left:0;width:100%;height:40px;background:#e83e32;z-index:5}
 .center-cap{position:absolute;top:-10px;width:16px;height:60px;background:black}
 .cap-left{left:0}.cap-right{right:0}
-/* БАЗЫ */
 .base{position:absolute;width:75px;height:75px;background:#869292}
 .base .brown{position:absolute;width:100%;height:14px;background:#bf5b1a;bottom:4px}
 .base .green{position:absolute;width:34px;height:14px;background:#22e54c;left:50%;transform:translateX(-50%);bottom:-14px}
@@ -42,7 +40,6 @@ window.getDushkaCoins=async function(n){try{const s=await db.ref('users/'+n).onc
 .base-bottom-1{bottom:20px;left:20px}.base-bottom-2{bottom:20px;left:115px}.base-bottom-3{bottom:20px;left:210px}.base-bottom-4{bottom:20px;left:305px}
 .base-bottom .brown{top:4px;bottom:auto}
 .base-bottom .green{top:-14px;bottom:auto}
-/* ОБЪЕКТЫ */
 #rng-machine,#shop-blue,#shop-red,#queen-bee,#rng-circle,#shop-white{position:absolute;width:20px;height:20px;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);z-index:15}
 #queen-bee{height:24px;grid-template-rows:repeat(6,1fr)}
 #rng-machine{left:190px;top:137px}.c-cyan{background:#00F0FF}.c-gray{background:#808080}.c-empty{background:transparent}
@@ -98,12 +95,12 @@ function startGame(){document.getElementById('auth').style.display='none';docume
 function initPlayer(){let pl=document.getElementById('player');pl.innerHTML='<div class="pixel"></div><div class="pixel"></div>';let px=pl.querySelectorAll('.pixel');px[0].style.background='#FFCC00';px[1].style.background='#00DFF5';pl.style.left=x+'px';pl.style.top=y+'px'}
 document.addEventListener('keydown',function(e){const k=e.key.toLowerCase();if(k==='w'||k==='arrowup'){keys.w=true;keys.arrowup=true;e.preventDefault()}if(k==='s'||k==='arrowdown'){keys.s=true;keys.arrowdown=true;e.preventDefault()}if(k==='a'||k==='arrowleft'){keys.a=true;keys.arrowleft=true;e.preventDefault()}if(k==='d'||k==='arrowright'){keys.d=true;keys.arrowright=true;e.preventDefault()}});
 document.addEventListener('keyup',function(e){const k=e.key.toLowerCase();if(k==='w'||k==='arrowup'){keys.w=false;keys.arrowup=false;e.preventDefault()}if(k==='s'||k==='arrowdown'){keys.s=false;keys.arrowdown=false;e.preventDefault()}if(k==='a'||k==='arrowleft'){keys.a=false;keys.arrowleft=false;e.preventDefault()}if(k==='d'||k==='arrowright'){keys.d=false;keys.arrowright=false;e.preventDefault()}});
-const SPEED=1,MAX_X=380,MAX_Y=380; // СКОРОСТЬ = 1
+const SPEED=1,MAX_X=380,MAX_Y=380;
 const obstacles=[{x:190,y:137,w:20,h:20},{x:150,y:137,w:20,h:20},{x:230,y:137,w:20,h:24},{x:150,y:230,w:20,h:20},{x:190,y:230,w:20,h:20},{x:230,y:230,w:20,h:20}];
 const interactables=[{x:190,y:137,name:'RNG'},{x:150,y:137,name:'Магазин'},{x:230,y:137,name:'Пчелы'},{x:150,y:230,name:'Красный магазин'},{x:190,y:230,name:'Колесо'},{x:230,y:230,name:'Белый магазин'}];
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y)}
 let lastTime=0;
-function update(time=0){requestAnimationFrame(update);const dt=Math.min((time-lastTime)/1000,0.1);lastTime=time;let dx=0,dy=0;if(keys.w||keys.arrowup)dy-=1;if(keys.s||keys.arrowdown)dy+=1;if(keys.a||keys.arrowleft)dx-=1;if(keys.d||keys.arrowright)dx+=1;if(dx!==0||dy!==0){const len=Math.sqrt(dx*dx+dy*dy);let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60;let rX={x:nx,y:y,w:10,h:20},bX=false;for(let o of obstacles)if(collide(rX,o)){bX=true;break}if(!bX)x=nx;let rY={x:x,y:ny,w:10,h:20},bY=false;for(let o of obstacles)if(collide(rY,o)){bY=true;break}if(!bY)y=ny;x=Math.max(10,Math.min(MAX_X,x));y=Math.max(10,Math.min(MAX_Y,y));document.getElementById('player').style.left=x+'px';document.getElementById('player').style.top=y+'px'}let found=false;for(let obj of interactables){let dist=Math.sqrt(Math.pow(x-obj.x,2)+Math.pow(y-obj.y,2));if(dist<15){let btn=document.getElementById('interact');btn.style.display='flex';btn.style.left=(x-29)+'px';btn.style.top=(y-5)+'px';btn.dataset.obj=obj.name;found=true;break}}if(!found)document.getElementById('interact').style.display='none'}
+function update(time=0){requestAnimationFrame(update);const dt=Math.min((time-lastTime)/1000,0.1);lastTime=time;let dx=0,dy=0;if(keys.w||keys.arrowup)dy-=1;if(keys.s||keys.arrowdown)dy+=1;if(keys.a||keys.arrowleft)dx-=1;if(keys.d||keys.arrowright)dx+=1;if(dx!==0||dy!==0){const len=Math.sqrt(dx*dx+dy*dy);let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60;let rX={x:nx,y:y,w:10,h:20},bX=false;for(let o of obstacles)if(collide(rX,o)){bX=true;break}if(!bX)x=nx;let rY={x:x,y:ny,w:10,h:20},bY=false;for(let o of obstacles)if(collide(rY,o)){bY=true;break}if(!bY)y=ny;x=Math.max(10,Math.min(MAX_X,x));y=Math.max(10,Math.min(MAX_Y,y));document.getElementById('player').style.left=x+'px';document.getElementById('player').style.top=y+'px'}let found=false;for(let obj of interactables){let dist=Math.sqrt(Math.pow(x-obj.x,2)+Math.pow(y-obj.y,2));if(dist<45){let btn=document.getElementById('interact');btn.style.display='flex';btn.style.left=(x-0.5)+'px';btn.style.top=(y-0.5)+'px';btn.dataset.obj=obj.name;found=true;break}}if(!found)document.getElementById('interact').style.display='none'}
 function interact(){let btn=document.getElementById('interact');if(btn.style.display==='none')return;let obj=btn.dataset.obj;if(obj==='Пчелы')openBee();else if(obj==='Колесо')openWheel();else if(obj==='Магазин')openCharacters();else alert('Взаимодействие с: '+obj)}
 function openCharacters(){document.getElementById('char-menu').style.display='flex'}function closeCharacters(){document.getElementById('char-menu').style.display='none'}function openBee(){document.getElementById('bee-menu').style.display='flex'}function closeBee(){document.getElementById('bee-menu').style.display='none'}function openWheel(){document.getElementById('wheel-menu').style.display='flex'}function closeWheel(){document.getElementById('wheel-menu').style.display='none'}
 function buySpin(a){let c=a===1?49:199;if(coins>=c){coins-=c;_spins+=a;document.getElementById('balance-amount').textContent=coins;alert(`Куплено ${a} спин(ов) за ${c} монет!`)}else alert('Недостаточно монет!')}
