@@ -6,50 +6,6 @@
     <title>Steal A Dushka</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.10.1/nipplejs.min.js"></script>
 
-    <!-- ==================== FIREBASE ==================== -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDkXM7aHtofhx8WAT1eSfLnbsOYVXXg28o",
-            authDomain: "steal-a-dushka.firebaseapp.com",
-            databaseURL: "https://steal-a-dushka-default-rtdb.firebaseio.com",
-            projectId: "steal-a-dushka",
-            storageBucket: "steal-a-dushka.firebasestorage.app",
-            messagingSenderId: "850469516444",
-            appId: "1:850469516444:web:eecdf7fc938824a3f8e959",
-            measurementId: "G-WK4T3127ZX"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        window.readUserData = async function (nickname) {
-            const userRef = ref(db, 'users/' + nickname);
-            const snapshot = await get(userRef);
-            if (snapshot.exists()) {
-                return snapshot.val();
-            }
-            return null;
-        };
-
-        window.writeUserData = async function (nickname, data) {
-            const userRef = ref(db, 'users/' + nickname);
-            await set(userRef, data);
-        };
-
-        window.getDushkaCoins = async function (nickname) {
-            const userRef = ref(db, 'users/' + nickname);
-            const snapshot = await get(userRef);
-            if (snapshot.exists()) {
-                return snapshot.val().coins || 0;
-            }
-            return null;
-        };
-    </script>
-    <!-- ==================== /FIREBASE ==================== -->
-
     <style>
         body {
             margin: 0;
@@ -1392,7 +1348,7 @@
             if (key === 'd' || key === 'arrowright') { keys.d = false; keys.arrowright = false; e.preventDefault(); }
         });
 
-        // ==================== ИГРОК И ОБЪЕКТЫ (СПАВН НА ЗЕЛЁНОЙ ПЛАСТИНЕ!) ====================
+        // ==================== ИГРОК И ОБЪЕКТЫ ====================
         const player = document.getElementById('player');
         const interactBtn = document.getElementById('interact-btn');
         let targetObject = null;
@@ -1406,7 +1362,7 @@
             pixels[0].style.backgroundColor = '#FFCC00';
             pixels[1].style.backgroundColor = chosenColor;
 
-            // СПАВН НА ЗЕЛЁНОЙ ПЛАСТИНЕ (в левой верхней части, подальше от красной линии!)
+            // Спавн на зелёной пластине
             x = 52;
             y = 81;
             player.style.left = x + 'px';
@@ -1598,8 +1554,8 @@
 
                 if (dist < obj.radius) {
                     interactBtn.style.display = 'flex';
-                    interactBtn.style.left = (x - 7) + 'px'; // Кнопка почти вплотную (0.2 мм)
-                    interactBtn.style.top = y + 'px';
+                    interactBtn.style.left = (x - 60) + 'px'; // Кнопка слева от персонажа
+                    interactBtn.style.top = (y - 10) + 'px';
                     targetObject = obj;
                     found = true;
                     break;
