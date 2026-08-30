@@ -1392,7 +1392,7 @@
             if (key === 'd' || key === 'arrowright') { keys.d = false; keys.arrowright = false; e.preventDefault(); }
         });
 
-        // ==================== ИГРОК И ОБЪЕКТЫ (ИСПРАВЛЕНО!) ====================
+        // ==================== ИГРОК И ОБЪЕКТЫ (СПАВН НА ЗЕЛЁНОЙ ПЛАСТИНЕ!) ====================
         const player = document.getElementById('player');
         const interactBtn = document.getElementById('interact-btn');
         let targetObject = null;
@@ -1406,9 +1406,9 @@
             pixels[0].style.backgroundColor = '#FFCC00';
             pixels[1].style.backgroundColor = chosenColor;
 
-            // ВАЖНО: Спавн в центре, вне объектов!
-            x = 195;
-            y = 130;
+            // СПАВН НА ЗЕЛЁНОЙ ПЛАСТИНЕ (слева от красной линии)
+            x = 52;
+            y = 81;
             player.style.left = x + 'px';
             player.style.top = y + 'px';
         }
@@ -1527,7 +1527,7 @@
         // ==================== ДВИЖЕНИЕ И КОЛЛИЗИИ ====================
         const CELL_SIZE = 20;
         const SPEED = 2 * CELL_SIZE;
-        let x = 195, y = 130;
+        let x = 52, y = 81;
         const MIN_X = 10, MAX_X = 400 - 10 - 10, MIN_Y = 10, MAX_Y = 400 - 20 - 10;
 
         const obstacles = [
