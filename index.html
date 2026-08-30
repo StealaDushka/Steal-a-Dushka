@@ -1174,6 +1174,7 @@
     <div id="joystick-zone"></div>
 
     <script>
+        // ==================== БАЛАНС ====================
         let _balance = 25;
         let _spins = 0;
         let _locked = false;
@@ -1227,7 +1228,7 @@
             return hash;
         }
 
-        // ==================== ВХОД / РЕГИСТРАЦИЯ ====================
+        // ==================== FIREBASE / DUSHKA COINS ====================
         let currentNickname = null;
 
         async function handleRegister() {
@@ -1283,7 +1284,7 @@
         }
         setInterval(loadDushkaCoins, 5000);
 
-        // ==================== ДЖОЙСТИК (работает везде) ====================
+        // ==================== ДЖОЙСТИК ====================
         let touchDX = 0, touchDY = 0;
         let joystickManager = null;
 
@@ -1554,8 +1555,8 @@
 
                 if (dist < obj.radius) {
                     interactBtn.style.display = 'flex';
-                    interactBtn.style.left = (x - 60) + 'px'; // Кнопка слева от персонажа
-                    interactBtn.style.top = (y - 10) + 'px';
+                    interactBtn.style.left = (x - 0.2) + 'px'; // 0.2 пикселя (впритык)
+                    interactBtn.style.top = (y - 0.2) + 'px';  // 0.2 пикселя (впритык)
                     targetObject = obj;
                     found = true;
                     break;
