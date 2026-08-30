@@ -1392,7 +1392,7 @@
             if (key === 'd' || key === 'arrowright') { keys.d = false; keys.arrowright = false; e.preventDefault(); }
         });
 
-        // ==================== Игрок и объекты ====================
+        // ==================== ИГРОК И ОБЪЕКТЫ (ИСПРАВЛЕНО!) ====================
         const player = document.getElementById('player');
         const interactBtn = document.getElementById('interact-btn');
         let targetObject = null;
@@ -1406,6 +1406,7 @@
             pixels[0].style.backgroundColor = '#FFCC00';
             pixels[1].style.backgroundColor = chosenColor;
 
+            // ВАЖНО: Спавн в центре, вне объектов!
             x = 195;
             y = 130;
             player.style.left = x + 'px';
@@ -1433,7 +1434,7 @@
             touchDY = 0;
         }
 
-        // ==================== Логика магазина ====================
+        // ==================== ЛОГИКА МАГАЗИНА ====================
         function handleOpenSideShop() { openCharacters(); }
 
         function handleInteract() {
@@ -1523,7 +1524,7 @@
             }
         });
 
-        // ==================== Движение и коллизии ====================
+        // ==================== ДВИЖЕНИЕ И КОЛЛИЗИИ ====================
         const CELL_SIZE = 20;
         const SPEED = 2 * CELL_SIZE;
         let x = 195, y = 130;
