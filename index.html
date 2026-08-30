@@ -1365,11 +1365,11 @@
             document.getElementById('balance-container').style.display = 'flex';
             verifyAndLoadBalance();
             loadDushkaCoins();
-            setTimeout(() => {
-                initJoystick();
-                initPlayer();
-                requestAnimationFrame(updateGame);
-            }, 50);
+            
+            // ВАЖНО: Запускаем игру сразу, без setTimeout
+            initJoystick();
+            initPlayer();
+            requestAnimationFrame(updateGame);
         }
 
         // ==================== УПРАВЛЕНИЕ (СТРЕЛКИ + WASD) ====================
