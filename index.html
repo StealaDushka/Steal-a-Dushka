@@ -25,7 +25,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // Чтение данных игрока (по Нику)
         window.readUserData = async function (nickname) {
             const userRef = ref(db, 'users/' + nickname);
             const snapshot = await get(userRef);
@@ -35,13 +34,11 @@
             return null;
         };
 
-        // Запись данных игрока (по Нику)
         window.writeUserData = async function (nickname, data) {
             const userRef = ref(db, 'users/' + nickname);
             await set(userRef, data);
         };
 
-        // Начисление коинов (по Нику)
         window.getDushkaCoins = async function (nickname) {
             const userRef = ref(db, 'users/' + nickname);
             const snapshot = await get(userRef);
