@@ -36,11 +36,30 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 #player,#other-player{position:absolute;width:10px;height:20px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20}#player .pixel,#other-player .pixel{width:100%;height:100%}#other-player .pixel{background:red}
 #interact{position:absolute;display:none;z-index:1000;width:24px;height:24px;background:#777;border:1px solid #444;display:flex;justify-content:center;align-items:center;color:#fff;font-size:18px;cursor:pointer}
 #balance{position:fixed;bottom:20px;right:20px;background:rgba(0,0,0,.8);padding:10px;border:2px solid #444;color:#fff;font-size:14px;display:none;flex-direction:column;gap:5px;border-radius:8px}#balance .box{display:flex;justify-content:space-between;gap:10px}#balance .icon{font-size:16px}#balance .label{color:#aaa}#balance .amount{color:#4caf50}#balance .dushka .amount{color:#ffd700}
-.menu-overlay{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:80%;max-width:700px;max-height:90vh;background:#1e2426;border:2px solid #0f1214;border-radius:8px;z-index:2000;flex-direction:column;box-shadow:0 0 20px rgba(0,0,0,.8);padding:0;overflow:hidden}.menu-overlay .header{display:flex;justify-content:space-between;align-items:flex-start;padding:15px 20px;background:transparent;flex-shrink:0}.menu-overlay .header .title h2{margin:0;color:#fff;font-size:22px;font-weight:bold}.menu-overlay .header .title p{margin:0;color:#ccc;font-size:12px}.menu-overlay .header .close-btn{background:#c0392b;border:2px solid #922b21;color:#fff;font-size:20px;font-weight:bold;width:40px;height:40px;display:flex;justify-content:center;align-items:center;cursor:pointer;border-radius:4px}.menu-overlay .content{padding:0 15px 15px 15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;flex:1}
-#char-menu{background:#1a1a2e}#char-menu .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}#char-menu .char-card{background:#0f1a2c;border:2px solid #1a2a4a;border-radius:6px;padding:8px;display:flex;flex-direction:column;align-items:center;text-align:center}#char-menu .char-card .icon{width:60px;height:60px;background:#3a3a3a;border-radius:6px;display:flex;justify-content:center;align-items:center;font-size:35px;margin-bottom:5px}#char-menu .char-card .name{color:#fff;font-weight:bold;font-size:14px}
-#bee-menu{background:#e8b425}#bee-menu .content{background:#1a1a1a;padding:10px 15px 15px 15px}#bee-menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}#bee-menu .card{position:relative;background:#2c2c2c;border:2px solid #444;border-radius:6px;padding:8px;display:flex;flex-direction:column;align-items:center;min-height:120px}#bee-menu .card .img-placeholder{width:100%;height:70px;background:#3a3a3a;border-radius:4px;display:flex;justify-content:center;align-items:center;font-size:40px;margin-bottom:4px}#bee-menu .card .status{position:absolute;top:4px;right:8px;color:#ff4444;font-weight:bold;font-size:14px}#bee-menu .card .mps{color:#4caf50;font-weight:bold;font-size:14px}#bee-menu .card .name{color:#fff;font-weight:bold;font-size:16px}#bee-menu .card .buy-row{display:flex;justify-content:space-between;width:100%;margin-top:6px;gap:4px}#bee-menu .card .count-box{background:#ffd700;color:#000;font-weight:bold;font-size:14px;padding:4px 10px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex:1}#bee-menu .card .price-btn{background:#4caf50;border:none;color:#fff;font-weight:bold;font-size:13px;padding:4px 10px;border-radius:4px;cursor:pointer;flex:1.5}
-#shop-menu{background:#3a6b8c;max-width:650px;max-height:90vh}#shop-menu .header{background:#1a4a6e}#shop-menu .content{background:#2c3e50;padding:15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}.shop-item{display:flex;background:#2c2c2c;border:2px solid #444;border-radius:8px;padding:10px;align-items:center;gap:12px}.shop-item .icon{width:80px;height:80px;background:#3a3a3a;border-radius:8px;display:flex;justify-content:center;align-items:center}.shop-item .icon svg{width:60px;height:60px}.shop-item .info{flex:1}.shop-item .info .name{font-size:18px;font-weight:bold;color:#fff}.shop-item .info .desc{font-size:12px;color:#aaa}.shop-item .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}.shop-item .price-btn{background:#4caf50;color:#fff;padding:8px 15px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center}.shop-item .price-btn.owned{background:#555;cursor:default}
-#red-shop-menu{background:#8b2c2c;max-width:650px;max-height:90vh}#red-shop-menu .header{background:#5c1a1a}#red-shop-menu .content{background:#3e2c2c;padding:15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}.red-shop-item{display:flex;background:#2c2c2c;border:2px solid #444;border-radius:8px;padding:10px;align-items:center;gap:12px}.red-shop-item .icon{width:80px;height:80px;background:#3a3a3a;border-radius:8px;display:flex;justify-content:center;align-items:center}.red-shop-item .icon svg{width:60px;height:60px}.red-shop-item .info{flex:1}.red-shop-item .info .name{font-size:18px;font-weight:bold;color:#fff}.red-shop-item .info .desc{font-size:12px;color:#aaa}.red-shop-item .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}.red-shop-item .price-btn{background:#c0392b;color:#fff;padding:8px 15px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center}.red-shop-item .price-btn.owned{background:#555;cursor:default}.gift-player-btn{background:#f39c12;color:#000;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;text-align:center;margin-top:15px}
+.menu-overlay{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:85%;max-width:900px;max-height:90vh;background:#1e2426;border:2px solid #0f1214;border-radius:8px;z-index:2000;flex-direction:column;box-shadow:0 0 20px rgba(0,0,0,.8);padding:0;overflow:hidden}
+.menu-overlay .header{display:flex;justify-content:space-between;align-items:flex-start;padding:15px 20px;background:transparent;flex-shrink:0}
+.menu-overlay .header .title h2{margin:0;color:#fff;font-size:22px;font-weight:bold}.menu-overlay .header .title p{margin:0;color:#ccc;font-size:12px}
+.menu-overlay .header .close-btn{background:#c0392b;border:2px solid #922b21;color:#fff;font-size:20px;font-weight:bold;width:40px;height:40px;display:flex;justify-content:center;align-items:center;cursor:pointer;border-radius:4px}
+.menu-overlay .content{padding:0 15px 15px 15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;flex:1}
+
+/* ВКЛАДКИ PREMIUM SHOP */
+#red-shop-menu{background:#8b2c2c;max-width:800px}
+#red-shop-menu .header{background:#5c1a1a}
+#red-shop-menu .tabs{display:flex;gap:5px;padding:10px 15px 0;background:#2c2c2c;flex-wrap:wrap}
+#red-shop-menu .tab{background:#444;padding:8px 15px;border-radius:5px 5px 0 0;cursor:pointer;font-weight:bold;color:#fff;font-size:13px}
+#red-shop-menu .tab.active{background:#666}
+#red-shop-menu .content{background:#3e2c2c;padding:15px;overflow-y:auto}
+.red-shop-item{display:flex;background:#2c2c2c;border:2px solid #444;border-radius:8px;padding:10px;margin-bottom:10px;align-items:center;gap:12px}
+.red-shop-item .icon{width:80px;height:80px;background:#3a3a3a;border-radius:8px;display:flex;justify-content:center;align-items:center}
+.red-shop-item .icon svg{width:60px;height:60px}
+.red-shop-item .info{flex:1}
+.red-shop-item .info .name{font-size:18px;font-weight:bold;color:#fff}
+.red-shop-item .info .desc{font-size:12px;color:#aaa}
+.red-shop-item .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.red-shop-item .price-btn{background:#c0392b;color:#fff;padding:8px 15px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center}
+.red-shop-item .price-btn.owned{background:#555;cursor:default}
+.gift-player-btn{background:#f39c12;color:#000;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;text-align:center;margin-top:15px}
+
 #wheel-menu{background:#1a1a3a;max-width:560px;max-height:90vh}#wheel-menu .content{background:rgba(0,0,0,.3);padding:15px;display:flex;flex-direction:column;align-items:center;gap:15px;overflow-y:auto}.wheel-container{position:relative;width:280px;height:280px;display:flex;justify-content:center;align-items:center;flex-shrink:0}.wheel-container .pin{position:absolute;top:-20px;left:50%;transform:translateX(-50%);z-index:10;font-size:30px;color:#ff3333}.wheel{width:260px;height:260px;border-radius:50%;position:relative;overflow:hidden;border:4px solid #4a90e2;box-shadow:0 0 15px rgba(74,144,226,.5);background:conic-gradient(#2e86de 0deg 60deg,#10ac84 60deg 120deg,#feca57 120deg 180deg,#ff9f43 180deg 240deg,#5f27cd 240deg 300deg,#ff6b6b 300deg 360deg)}.wheel .label{position:absolute;top:50%;left:50%;width:80px;height:50px;margin-left:-40px;margin-top:-25px;text-align:center;color:#fff;font-size:11px;font-weight:bold;text-shadow:1px 1px 2px rgba(0,0,0,.8);pointer-events:none;transform:rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle)));white-space:nowrap}.wheel .label .icon{display:block;font-size:18px;margin-bottom:2px}.wheel .label .chance{font-size:10px;opacity:.8}.secret-panel{background:rgba(0,0,0,.6);border:1px solid #4a90e2;border-radius:8px;padding:10px;width:100%;margin-top:5px}.secret-panel h3{color:#4a90e2;text-align:center;margin:0 0 8px;font-size:16px}.secret-panel .row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:13px}.secret-panel .row:last-child{border-bottom:none}.secret-panel .row .name{color:#ccc}.secret-panel .row .mps{color:#4caf50;font-size:12px;margin-left:auto;margin-right:10px}.secret-panel .row .val{color:#fff;font-weight:bold}.controls{display:flex;flex-direction:column;align-items:center;width:100%;gap:10px}.controls .timer{color:#fff;font-size:14px}.controls .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}.controls .actions .spin-btn{background:#222;color:#fff;border:2px solid #4a90e2;border-radius:6px;padding:8px 20px;font-size:14px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn{background:linear-gradient(135deg,#f7b731,#f5a623);color:#000;border:2px solid #f7b731;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn .price{display:flex;align-items:center;justify-content:center;gap:4px}.controls .actions .buy-btn .sub{font-size:10px;opacity:.8}
 #custom-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #0f1214;border-radius:12px;padding:20px;z-index:9999;max-width:400px;width:90%;box-shadow:0 0 30px rgba(0,0,0,.9);color:#fff;text-align:center}#custom-modal .modal-title{font-size:18px;font-weight:bold;margin-bottom:10px;color:#4a90e2}#custom-modal .modal-text{font-size:14px;margin-bottom:20px}#custom-modal .modal-close{background:#c0392b;border:2px solid #922b21;color:#fff;padding:8px 20px;border-radius:4px;cursor:pointer;font-weight:bold}
 @media(max-width:700px){#game-container{width:300px;height:300px}#game-container .base{width:55px;height:55px}#wheel-menu{max-width:90vw}.wheel-container{width:220px;height:220px}.wheel{width:200px;height:200px}}
@@ -73,353 +92,375 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <div id="interact" onclick="interact()">E</div>
 <div id="player"></div>
 </div></div></div>
+
+<!-- ПЕРСОНАЖИ -->
 <div id="char-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>PERSONAJI</h2><p>Все персонажи!</p></div><div class="close-btn" onclick="closeCharacters()">X</div></div><div class="content"><div class="grid"><div class="char-card"><div class="icon">🟢</div><div class="name">Verde</div></div><div class="char-card"><div class="icon">🔴</div><div class="name">Ross</div></div><div class="char-card"><div class="icon">🟪</div><div class="name">Viola</div></div><div class="char-card"><div class="icon">🟦</div><div class="name">Blu</div></div><div class="char-card"><div class="icon">🟥</div><div class="name">Rosso</div></div><div class="char-card"><div class="icon">🟨</div><div class="name">Giallo</div></div><div class="char-card"><div class="icon">🟩</div><div class="name">Prato</div></div><div class="char-card"><div class="icon">🟫</div><div class="name">Marrone</div></div><div class="char-card"><div class="icon">⬛</div><div class="name">Nero</div></div></div></div></div>
+
+<!-- ПЧЁЛЫ -->
 <div id="bee-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Королева Пчёл</h2><p>Она улетит через 1ч 20м</p></div><div class="close-btn" onclick="closeBee()">X</div></div><div class="content"><div class="grid"><div class="card"><div class="img-placeholder">🦝</div><div class="status">100</div><div class="mps">$10M/s</div><div class="name">Conetto Morsetto</div><div class="buy-row"><div class="count-box">📦 20</div><button class="price-btn">🪙 499</button></div></div><div class="card"><div class="img-placeholder">🐻</div><div class="status">100</div><div class="mps">$32M/s</div><div class="name">Honey Honey Bear</div><div class="buy-row"><div class="count-box">📦 40</div><button class="price-btn">🪙 999</button></div></div><div class="card"><div class="img-placeholder">🐝</div><div class="status">100</div><div class="mps">$65M/s</div><div class="name">Queen Bee</div><div class="buy-row"><div class="count-box">📦 100</div><button class="price-btn">🪙 2,499</button></div></div><div class="card"><div class="img-placeholder">🍫</div><div class="status">100</div><div class="mps">$85M/s</div><div class="name">S'more Serat</div><div class="buy-row"><div class="count-box">📦 200</div><button class="price-btn">🪙 4,999</button></div></div></div></div></div>
-<div id="shop-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Shop</h2><p>Buy tools to protect your base and troll others!</p></div><div class="close-btn" onclick="closeShop()">X</div></div><div class="content" id="shop-items"></div></div>
-<div id="red-shop-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Premium Shop</h2><p>Buy exclusive items with Dushka Coins!</p></div><div class="close-btn" onclick="closeRedShop()">X</div></div><div class="content" id="red-shop-items"></div></div>
+
+<!-- КРАСНЫЙ МАГАЗИН (PREMIUM SHOP) -->
+<div id="red-shop-menu" class="menu-overlay" style="display:none">
+  <div class="header">
+    <div class="title"><h2>Premium Shop</h2><p>Buy exclusive items with Dushka Coins!</p></div>
+    <div class="close-btn" onclick="closeRedShop()">X</div>
+  </div>
+  <div class="tabs">
+    <div class="tab active" data-tab="gear" onclick="switchRedTab('gear')">GEAR</div>
+    <div class="tab" data-tab="gamepasses" onclick="switchRedTab('gamepasses')">GAMEPASSES</div>
+    <div class="tab" data-tab="money" onclick="switchRedTab('money')">MONEY</div>
+    <div class="tab" data-tab="lucky" onclick="switchRedTab('lucky')">LUCKY BLOCKS</div>
+    <div class="tab" data-tab="server" onclick="switchRedTab('server')">SERVER LUCK</div>
+    <div class="tab" data-tab="redeem" onclick="switchRedTab('redeem')">REDEEM CODES</div>
+  </div>
+  <div class="content" id="red-shop-items"></div>
+</div>
+
+<!-- КОЛЕСО -->
 <div id="wheel-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>CRYSTAL WHEEL</h2></div><div class="close-btn" onclick="closeWheel()">X</div></div><div class="content"><div class="wheel-container"><div class="pin">📍</div><div class="wheel"><div class="label" style="--angle:30deg"><div class="icon">💵</div><div class="label-text">$12K</div><div class="chance">45%</div></div><div class="label" style="--angle:90deg"><div class="icon">💵</div><div class="label-text">$12K</div><div class="chance">45%</div></div><div class="label" style="--angle:150deg"><div class="icon">🍀</div><div class="label-text">2x<br>Lucky</div><div class="chance">2%</div></div><div class="label" style="--angle:210deg"><div class="icon">💵</div><div class="label-text">$1M</div><div class="chance">7%</div></div><div class="label" style="--angle:270deg"><div class="icon">🔮</div><div class="label-text">Crystal<br>Slap</div><div class="chance">0.5%</div></div><div class="label" style="--angle:330deg"><div class="icon">❓</div><div class="label-text">Lucky<br>Block</div><div class="chance">0.5%</div></div></div></div><div class="secret-panel"><h3>CRYSTAL SECRET</h3><div class="row"><span class="name">Tortuginni Dragonfrutini</span><span class="mps">+325k/s</span><span class="val">74.45%</span></div><div class="row"><span class="name">Pot Hotspot</span><span class="mps">+2.5M/s</span><span class="val">20%</span></div><div class="row"><span class="name">Esok Sekolah</span><span class="mps">+30M/s</span><span class="val">5%</span></div><div class="row"><span class="name">Spaghetti Tualeti</span><span class="mps">+60M/s</span><span class="val">1%</span></div><div class="row"><span class="name">La Secret Combinasionas</span><span class="mps">+125M/s</span><span class="val">0.5%</span></div><div class="row" style="border-bottom:none"><span class="name">Pegasus</span><span class="mps">+175M/s</span><span class="val">0.05%</span></div></div><div class="controls"><div class="timer" id="wheel-timer">Бесплатный спин через: 2ч 0м 0с</div><div class="actions"><button class="buy-btn" onclick="buySpin(1)"><div class="price">💰 49</div><div class="sub">Buy 1</div></button><button class="spin-btn" onclick="doSpin()">Spin (0)</button><button class="buy-btn" onclick="buySpin(3)"><div class="price">💰 199</div><div class="sub">Buy 3</div></button></div></div></div></div>
+
 <div id="custom-modal"><div class="modal-title" id="modal-title"></div><div class="modal-text" id="modal-text"></div><button class="modal-close" onclick="closeModal()">Закрыть</button></div>
+
 <script>
 // ========== ЗУМ ==========
 function resizeGame(){const game=document.getElementById('game-container');if(!game)return;const availW=window.innerWidth,availH=window.innerHeight;let scale=Math.min(availW/500,availH/500);scale=Math.max(0.6,Math.min(1.2,scale));game.style.transform=`scale(${scale})`;}
 window.addEventListener('resize',resizeGame);
-// ========== МОДАЛКА ==========
+
 function showModal(title, text){document.getElementById('modal-title').textContent=title;document.getElementById('modal-text').textContent=text;document.getElementById('custom-modal').style.display='block';}
 function closeModal(){document.getElementById('custom-modal').style.display='none';}
-// ========== ПЕРЕМЕННЫЕ ==========
+
 let x=52,y=81,coins=25,dushka=0,currentNickname=null,_spins=0;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
 let otherPlayers={};
 let typedCode = '';
 const baseSpawnPoints = {1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81},5:{x:52,y:307},6:{x:147,y:307},7:{x:242,y:307},8:{x:337,y:307}};
-// ========== МАССИВЫ ==========
-const shopItems = [
-    {id:'slap', name:'Slap', desc:'An average hand to slap thieves and send them flying!', price:500, icon:'slap'},
-    {id:'speed-coil', name:'Speed Coil', desc:'Zoom around the map with additional speed.', price:750, icon:'speed-coil'},
-    {id:'trap', name:'Trap', desc:'Place traps that freeze thieves for 10 seconds (5 Max)', price:1000, icon:'trap'},
-    {id:'iron-slap', name:'Iron Slap', desc:'Heavy iron slap that knocks players flying!', price:2500, icon:'iron-slap'},
-    {id:'gravity-coil', name:'Gravity Coil', desc:'Reduced gravity coil lets you jump extra high!', price:3000, icon:'gravity-coil'},
-    {id:'bee-launcher', name:'Bee Launcher', desc:'Release bees to attack your opponent and invert their controls!', price:10000, icon:'bee-launcher'},
-    {id:'coil-combo', name:'Coil Combo', desc:'Combine speed and gravity coils for ultimate mobility!', price:20000, icon:'coil-combo'},
-    {id:'rage-table', name:'Rage Table', desc:'Throw a table to fling players and return your Brainrots.', price:25000, icon:'rage-table'},
-    {id:'diamond-slap', name:'Diamond Slap', desc:'Charge up a diamond slap to knock others away.', price:50000, icon:'diamond-slap'}
-];
-const redShopItems = [
-    {id:'vip', name:'VIP', desc:'Many benefits including multi!', price:375, icon:'vip'},
-    {id:'2x-money', name:'2X MONEY', desc:'Earn twice as much money!', price:199, icon:'money2x'},
-    {id:'carpet', name:'Carpet', desc:'A stylish carpet for your base!', price:275, icon:'carpet'},
-    {id:'flying-bee', name:'Flying Bee', desc:'Attack ability with a bee!', price:699, icon:'bee'},
-    {id:'laser-gun', name:'Laser Gun', desc:'Fling lasers at players!', price:565, icon:'laser'}
-];
-let ownedItems = [];
+
+// Данные красного магазина (по категориям)
+const redShopItems = {
+  gear: [
+    {id:'blackhole-slap', name:'Blackhole Slap', desc:'Pull, hold and push players!', price:199},
+    {id:'ban-hammer', name:'Ban Hammer', desc:'Smash players & traps with admin powers!', price:1125},
+    {id:'laser-gun', name:'Laser Gun', desc:'Fling lasers at players!', price:565},
+    {id:'flying-bee', name:'Flying Bee', desc:'Attack ability with a bee!', price:699}
+  ],
+  gamepasses: [
+    {id:'vip', name:'VIP', desc:'Many benefits including multi!', price:375},
+    {id:'2x-money', name:'2X MONEY', desc:'Earn twice as much money!', price:199},
+    {id:'admin-panel', name:'Admin Panel', desc:'Get Admin Commands!', price:7999}
+  ],
+  money: [
+    {id:'m51k', name:'$51,000', desc:'Money', price:59},
+    {id:'m425k', name:'$425,000', desc:'Money', price:379},
+    {id:'m1700k', name:'$1,700,000', desc:'Money', price:659},
+    {id:'m8500k', name:'$8,500,000', desc:'Money', price:1249},
+    {id:'m17m', name:'$17,000,000', desc:'Money', price:2499}
+  ],
+  lucky: [
+    {id:'mythic', name:'Mythic', desc:'Lucky Block', price:175},
+    {id:'brainrot-god', name:'Brainrot God', desc:'Lucky Block', price:399},
+    {id:'secret', name:'Secret', desc:'Lucky Block', price:1499}
+  ],
+  server: [
+    {id:'server-luck', name:'Server Luck', desc:'1x > 2x', price:249}
+  ],
+  redeem: []
+};
+
 let ownedRedItems = [];
-// SVG-иконки обычного магазина
-function getIcon(type){
-    switch(type){
-        case 'slap': return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="white" stroke-width="6" fill="none"/></svg>`;
-        case 'speed-coil': return `<svg viewBox="0 0 100 100"><path d="M50 15 Q20 30 50 45 Q80 60 50 75 Q20 90 50 95" stroke="#e74c3c" stroke-width="8" fill="none"/></svg>`;
-        case 'trap': return `<svg viewBox="0 0 100 100"><path d="M20 80 Q50 40 80 80 L70 90 L30 90 Z" fill="#777"/><path d="M25 70 L35 55 M45 70 L50 50 M65 70 L60 50" stroke="#555" stroke-width="5"/></svg>`;
-        case 'iron-slap': return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="#aaa" stroke-width="6" fill="none"/></svg>`;
-        case 'gravity-coil': return `<svg viewBox="0 0 100 100"><path d="M50 15 Q20 30 50 45 Q80 60 50 75 Q20 90 50 95" stroke="#3498db" stroke-width="8" fill="none"/></svg>`;
-        case 'bee-launcher': return `<svg viewBox="0 0 100 100"><rect x="30" y="30" width="40" height="40" fill="#f1c40f" rx="10"/><path d="M50 20 L60 40 L40 40 Z" fill="#333"/><circle cx="60" cy="25" r="5" fill="#fff"/></svg>`;
-        case 'coil-combo': return `<svg viewBox="0 0 100 100"><path d="M20 20 Q0 40 20 60 Q40 80 20 90" stroke="#e74c3c" stroke-width="6" fill="none"/><path d="M80 20 Q100 40 80 60 Q60 80 80 90" stroke="#3498db" stroke-width="6" fill="none"/></svg>`;
-        case 'rage-table': return `<svg viewBox="0 0 100 100"><rect x="15" y="40" width="70" height="15" fill="#d35400"/><rect x="20" y="55" width="10" height="35" fill="#8e44ad"/><rect x="70" y="55" width="10" height="35" fill="#8e44ad"/></svg>`;
-        case 'diamond-slap': return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="#00FFFF" stroke-width="6" fill="none"/></svg>`;
-        default: return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#fff"/></svg>`;
-    }
+let currentRedTab = 'gear';
+
+// Загрузка купленных предметов
+async function loadRedShopData(){
+  if(!currentNickname) return;
+  const data = await readUserData(currentNickname);
+  if(data) ownedRedItems = data.ownedRedItems || [];
 }
-function getRedIcon(type){
-    switch(type){
-        case 'vip': return `<svg viewBox="0 0 100 100"><text x="10" y="70" font-size="40" fill="#f1c40f" font-weight="bold">VIP</text></svg>`;
-        case 'money2x': return `<svg viewBox="0 0 100 100"><text x="10" y="60" font-size="30" fill="#2ecc71" font-weight="bold">x2</text></svg>`;
-        case 'carpet': return `<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#8e44ad" rx="5"/></svg>`;
-        case 'bee': return `<svg viewBox="0 0 100 100"><rect x="30" y="30" width="40" height="40" fill="#f1c40f" rx="10"/><path d="M50 20 L60 40 L40 40 Z" fill="#333"/></svg>`;
-        case 'laser': return `<svg viewBox="0 0 100 100"><path d="M20 60 L80 40" stroke="red" stroke-width="6"/><rect x="15" y="55" width="15" height="10" fill="#333"/></svg>`;
-        default: return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#fff"/></svg>`;
-    }
+
+// Переключение вкладок
+function switchRedTab(tab){
+  currentRedTab = tab;
+  document.querySelectorAll('#red-shop-menu .tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`#red-shop-menu .tab[data-tab="${tab}"]`).classList.add('active');
+  renderRedShop();
 }
-// ========== ЗАГРУЗКА ДАННЫХ ==========
-async function loadPlayerShopData(){
-    if(!currentNickname) return;
-    const data = await readUserData(currentNickname);
-    if(data){
-        ownedItems = data.ownedItems || [];
-        ownedRedItems = data.ownedRedItems || [];
-    }
+
+// Отрисовка красного магазина
+function renderRedShop(){
+  const container = document.getElementById('red-shop-items');
+  container.innerHTML = '';
+  let items = redShopItems[currentRedTab] || [];
+  
+  if(currentRedTab === 'redeem'){
+    container.innerHTML = '<div style="text-align:center;color:#fff;font-size:16px;padding:20px;">Введите код ниже:</div><input type="text" placeholder="Code Here..." style="width:100%;padding:10px;font-size:16px;border-radius:8px;border:none;margin-top:10px;">';
+    return;
+  }
+
+  items.forEach(item => {
+    const isOwned = ownedRedItems.includes(item.id);
+    const div = document.createElement('div');
+    div.className = 'red-shop-item';
+    div.innerHTML = `
+      <div class="icon"><svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="#666" rx="5"/></svg></div>
+      <div class="info">
+        <div class="name">${item.name}</div>
+        <div class="desc">${item.desc}</div>
+      </div>
+      <div class="right">
+        <div class="price-btn ${isOwned ? 'owned' : ''}" onclick="buyRedShopItem('${item.id}')">${isOwned ? 'OWNED' : '🪙 ' + item.price.toLocaleString()}</div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+  
+  // Кнопка Gift Player (только на вкладке gear)
+  if(currentRedTab === 'gear'){
+    const giftBtn = document.createElement('div');
+    giftBtn.className = 'gift-player-btn';
+    giftBtn.textContent = '🎁 Gift Player';
+    giftBtn.onclick = giftPlayer;
+    container.appendChild(giftBtn);
+  }
 }
-// ========== ОТКРЫТИЕ СИНЕГО МАГАЗИНА ==========
-function openShop(){
-    loadPlayerShopData().then(() => {
-        const container = document.getElementById('shop-items');
-        container.innerHTML = '';
-        shopItems.forEach(item => {
-            const isOwned = ownedItems.includes(item.id);
-            const div = document.createElement('div');
-            div.className = 'shop-item';
-            div.innerHTML = `<div class="icon">${getIcon(item.icon)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned ? 'owned' : ''}" onclick="buyShopItem('${item.id}')">${isOwned ? 'OWNED' : '$' + item.price.toLocaleString()}</div></div>`;
-            container.appendChild(div);
-        });
-        document.getElementById('shop-menu').style.display = 'flex';
-    });
-}
-function closeShop(){document.getElementById('shop-menu').style.display='none';}
-function buyShopItem(id){
-    const item = shopItems.find(i => i.id === id);
-    if(!item) return;
-    if(ownedItems.includes(id)) return;
-    if(coins >= item.price){
-        coins -= item.price;
-        ownedItems.push(id);
-        document.getElementById('balance-amount').textContent = coins;
-        db.ref('users/'+currentNickname).update({coins:coins, ownedItems:ownedItems});
-        openShop();
-        showModal('Покупка', `Вы купили ${item.name} за $${item.price.toLocaleString()}!`);
-    } else {
-        showModal('Ошибка', `Недостаточно монет! Нужно $${item.price.toLocaleString()}`);
-    }
-}
-// ========== ОТКРЫТИЕ КРАСНОГО МАГАЗИНА ==========
+
 function openRedShop(){
-    loadPlayerShopData().then(() => {
-        const container = document.getElementById('red-shop-items');
-        container.innerHTML = '';
-        redShopItems.forEach(item => {
-            const isOwned = ownedRedItems.includes(item.id);
-            const div = document.createElement('div');
-            div.className = 'red-shop-item';
-            div.innerHTML = `<div class="icon">${getRedIcon(item.icon)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned ? 'owned' : ''}" onclick="buyRedShopItem('${item.id}')">${isOwned ? 'OWNED' : '🪙 ' + item.price.toLocaleString()}</div></div>`;
-            container.appendChild(div);
-        });
-        const giftBtn = document.createElement('div');
-        giftBtn.className = 'gift-player-btn';
-        giftBtn.textContent = '🎁 Gift Player';
-        giftBtn.onclick = giftPlayer;
-        container.appendChild(giftBtn);
-        document.getElementById('red-shop-menu').style.display = 'flex';
-    });
+  loadRedShopData().then(() => {
+    switchRedTab('gear');
+    document.getElementById('red-shop-menu').style.display = 'flex';
+  });
 }
 function closeRedShop(){document.getElementById('red-shop-menu').style.display='none';}
+
 function buyRedShopItem(id){
-    const item = redShopItems.find(i => i.id === id);
-    if(!item) return;
-    if(ownedRedItems.includes(id)) return;
-    if(dushka >= item.price){
-        dushka -= item.price;
-        ownedRedItems.push(id);
-        document.getElementById('dushka-coins').textContent = dushka;
-        db.ref('users/'+currentNickname).update({dushka:dushka, ownedRedItems:ownedRedItems});
-        openRedShop();
-        showModal('Покупка', `Вы купили ${item.name} за ${item.price} Dushka Coins!`);
-    } else {
-        showModal('Ошибка', `Недостаточно Dushka Coins! Нужно ${item.price}`);
-    }
+  const item = Object.values(redShopItems).flat().find(i => i.id === id);
+  if(!item) return;
+  if(ownedRedItems.includes(id)) return;
+  if(dushka >= item.price){
+    dushka -= item.price;
+    ownedRedItems.push(id);
+    document.getElementById('dushka-coins').textContent = dushka;
+    db.ref('users/'+currentNickname).update({dushka:dushka, ownedRedItems:ownedRedItems});
+    renderRedShop();
+    showModal('Покупка', `Вы купили ${item.name} за ${item.price} Dushka Coins!`);
+  } else {
+    showModal('Ошибка', `Недостаточно Dushka Coins! Нужно ${item.price}`);
+  }
 }
+
 function giftPlayer(){
-    const target = prompt("Введите ник игрока, которому хотите подарить предмет:");
-    if(!target) return;
-    const itemId = prompt("Введите ID предмета (например: vip, carpet, laser-gun):");
-    if(!itemId) return;
-    const item = redShopItems.find(i => i.id === itemId);
-    if(!item){ alert("Предмет не найден!"); return; }
-    readUserData(target).then(userData => {
-        if(!userData){ alert("Игрок не найден!"); return; }
-        if(dushka < item.price){ alert("Недостаточно Dushka Coins!"); return; }
-        dushka -= item.price;
-        document.getElementById('dushka-coins').textContent = dushka;
-        const receiverOwned = userData.ownedRedItems || [];
-        if(!receiverOwned.includes(itemId)) receiverOwned.push(itemId);
-        db.ref('users/'+currentNickname).update({dushka:dushka});
-        db.ref('users/'+target).update({ownedRedItems:receiverOwned});
-        alert(`Подарок отправлен игроку ${target}!`);
-    });
+  const target = prompt("Введите ник игрока, которому хотите подарить предмет:");
+  if(!target) return;
+  const itemId = prompt("Введите ID предмета (например: vip, ban-hammer, laser-gun):");
+  if(!itemId) return;
+  const item = Object.values(redShopItems).flat().find(i => i.id === itemId);
+  if(!item){ alert("Предмет не найден!"); return; }
+  readUserData(target).then(userData => {
+    if(!userData){ alert("Игрок не найден!"); return; }
+    if(dushka < item.price){ alert("Недостаточно Dushka Coins!"); return; }
+    dushka -= item.price;
+    document.getElementById('dushka-coins').textContent = dushka;
+    const receiverOwned = userData.ownedRedItems || [];
+    if(!receiverOwned.includes(itemId)) receiverOwned.push(itemId);
+    db.ref('users/'+currentNickname).update({dushka:dushka});
+    db.ref('users/'+target).update({ownedRedItems:receiverOwned});
+    alert(`Подарок отправлен игроку ${target}!`);
+  });
 }
-// ========== ТАЙМЕР БЕСПЛАТНОГО СПИНА ==========
+
+// Таймер бесплатного спина
 const FREE_SPIN_INTERVAL = 7200;
 let lastFreeSpinTime = localStorage.getItem('lastFreeSpinTime');
 if (!lastFreeSpinTime) { lastFreeSpinTime = Date.now(); localStorage.setItem('lastFreeSpinTime', lastFreeSpinTime.toString()); } else { lastFreeSpinTime = parseInt(lastFreeSpinTime); }
 function updateFreeSpinTimer() {
-    const elapsed = Math.floor((Date.now() - lastFreeSpinTime) / 1000);
-    const remaining = FREE_SPIN_INTERVAL - elapsed;
-    if (remaining <= 0) {
-        _spins++;
-        lastFreeSpinTime = Date.now();
-        localStorage.setItem('lastFreeSpinTime', lastFreeSpinTime.toString());
-        updateSpinBtn();
-        showModal('Бесплатный спин!', 'Вы получили 1 бесплатное вращение!');
-    }
-    const hours = Math.floor(remaining / 3600);
-    const minutes = Math.floor((remaining % 3600) / 60);
-    const seconds = remaining % 60;
-    const timerEl = document.getElementById('wheel-timer');
-    if (timerEl) timerEl.textContent = `Бесплатный спин через: ${hours}ч ${minutes}м ${seconds}с`;
+  const elapsed = Math.floor((Date.now() - lastFreeSpinTime) / 1000);
+  const remaining = FREE_SPIN_INTERVAL - elapsed;
+  if (remaining <= 0) {
+    _spins++;
+    lastFreeSpinTime = Date.now();
+    localStorage.setItem('lastFreeSpinTime', lastFreeSpinTime.toString());
+    updateSpinBtn();
+    showModal('Бесплатный спин!', 'Вы получили 1 бесплатное вращение!');
+  }
+  const hours = Math.floor(remaining / 3600);
+  const minutes = Math.floor((remaining % 3600) / 60);
+  const seconds = remaining % 60;
+  const timerEl = document.getElementById('wheel-timer');
+  if (timerEl) timerEl.textContent = `Бесплатный спин через: ${hours}ч ${minutes}м ${seconds}с`;
 }
 setInterval(updateFreeSpinTimer, 1000);
-// ========== FIREBASE ==========
+
 async function readUserData(n){try{const s=await db.ref('users/'+n).once('value');return s.exists()?s.val():null}catch(e){return null}}
 async function writeUserData(n,d){try{await db.ref('users/'+n).set(d)}catch(e){}}
 async function getFreeBase(){
-    const s=await db.ref('users').once('value');const users=s.val()||{};const occ=[];
-    for(let k in users){if(users[k].base)occ.push(users[k].base)}
-    const free=[];for(let i=1;i<=8;i++){if(!occ.includes(i))free.push(i)}
-    if(free.length===0)return null;return free[Math.floor(Math.random()*free.length)];
+  const s=await db.ref('users').once('value');const users=s.val()||{};const occ=[];
+  for(let k in users){if(users[k].base)occ.push(users[k].base)}
+  const free=[];for(let i=1;i<=8;i++){if(!occ.includes(i))free.push(i)}
+  if(free.length===0)return null;return free[Math.floor(Math.random()*free.length)];
 }
+
 async function handleRegister(){
-    const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();
-    if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return}
-    const e=await readUserData(u);if(e){showModal('Ошибка','Ник занят!');return}
-    const base=await getFreeBase();if(!base){showModal('Ошибка','Все базы заняты!');return}
-    const spawn=baseSpawnPoints[base];
-    await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,level:1,last_online:Date.now(),base:base,x:spawn.x,y:spawn.y,ownedItems:[],ownedRedItems:[]});
-    currentNickname=u;startGame();
+  const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();
+  if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return}
+  const e=await readUserData(u);if(e){showModal('Ошибка','Ник занят!');return}
+  const base=await getFreeBase();if(!base){showModal('Ошибка','Все базы заняты!');return}
+  const spawn=baseSpawnPoints[base];
+  await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,level:1,last_online:Date.now(),base:base,x:spawn.x,y:spawn.y,ownedRedItems:[]});
+  currentNickname=u;startGame();
 }
 async function handleLogin(){
-    const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();
-    if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return}
-    const e=await readUserData(u);
-    if(e){
-        if(e.password===p){
-            currentNickname=u;
-            if(!e.base){const base=await getFreeBase();if(!base){showModal('Ошибка','Все базы заняты!');return}const spawn=baseSpawnPoints[base];e.base=base;e.x=spawn.x;e.y=spawn.y;}
-            if(typeof e.dushka === 'undefined'){e.dushka=0;}
-            if(typeof e.spins === 'undefined'){e.spins=0;}
-            if(typeof e.ownedItems === 'undefined'){e.ownedItems=[];}
-            if(typeof e.ownedRedItems === 'undefined'){e.ownedRedItems=[];}
-            await writeUserData(u,e);
-            startGame();
-        } else showModal('Ошибка','Неверный пароль!');
-    } else showModal('Ошибка','Ник не найден! Нажми РЕГ.');
+  const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();
+  if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return}
+  const e=await readUserData(u);
+  if(e){
+    if(e.password===p){
+      currentNickname=u;
+      if(!e.base){const base=await getFreeBase();if(!base){showModal('Ошибка','Все базы заняты!');return}const spawn=baseSpawnPoints[base];e.base=base;e.x=spawn.x;e.y=spawn.y;}
+      if(typeof e.dushka === 'undefined'){e.dushka=0;}
+      if(typeof e.spins === 'undefined'){e.spins=0;}
+      if(typeof e.ownedRedItems === 'undefined'){e.ownedRedItems=[];}
+      await writeUserData(u,e);
+      startGame();
+    } else showModal('Ошибка','Неверный пароль!');
+  } else showModal('Ошибка','Ник не найден! Нажми РЕГ.');
 }
+
 async function loadDushkaCoins(){
-    if(currentNickname){
-        const d=await readUserData(currentNickname);
-        if(d){ dushka = d.dushka || 0; document.getElementById('dushka-coins').textContent = dushka; }
-    }
+  if(currentNickname){
+    const d=await readUserData(currentNickname);
+    if(d){ dushka = d.dushka || 0; document.getElementById('dushka-coins').textContent = dushka; }
+  }
 }
 async function loadCoins(){
-    if(currentNickname){
-        const d=await readUserData(currentNickname);
-        if(d){ coins = d.coins || 25; document.getElementById('balance-amount').textContent = coins; }
-    }
+  if(currentNickname){
+    const d=await readUserData(currentNickname);
+    if(d){ coins = d.coins || 25; document.getElementById('balance-amount').textContent = coins; }
+  }
 }
 setInterval(loadDushkaCoins,5000);
 setInterval(loadCoins,5000);
+
 async function startGame(){
-    document.getElementById('auth').style.display='none';document.getElementById('app').style.display='flex';document.getElementById('balance').style.display='flex';loadDushkaCoins();loadCoins();
-    const data=await readUserData(currentNickname);
-    if(data&&data.base){
-        let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`);
-        if(nickEl)nickEl.textContent="База "+currentNickname;
-        let spawn=baseSpawnPoints[data.base];
-        if(spawn){x=spawn.x;y=spawn.y}else{x=data.x||52;y=data.y||81}
-    }
-    initPlayer();startOtherPlayersListener();update();window.focus();resizeGame();
-    updateFreeSpinTimer();
-    await loadPlayerShopData();
+  document.getElementById('auth').style.display='none';document.getElementById('app').style.display='flex';document.getElementById('balance').style.display='flex';loadDushkaCoins();loadCoins();
+  const data=await readUserData(currentNickname);
+  if(data&&data.base){
+    let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`);
+    if(nickEl)nickEl.textContent="База "+currentNickname;
+    let spawn=baseSpawnPoints[data.base];
+    if(spawn){x=spawn.x;y=spawn.y}else{x=data.x||52;y=data.y||81}
+  }
+  initPlayer();startOtherPlayersListener();update();window.focus();resizeGame();
+  updateFreeSpinTimer();
+  await loadRedShopData();
 }
+
 function initPlayer(){let pl=document.getElementById('player');pl.innerHTML='<div class="pixel"></div><div class="pixel"></div>';let px=pl.querySelectorAll('.pixel');px[0].style.background='#FFCC00';px[1].style.background='#00DFF5';pl.style.left=x+'px';pl.style.top=y+'px'}
+
 function startOtherPlayersListener(){
-    db.ref('users').on('value',snapshot=>{
-        const users=snapshot.val()||{};
-        for(let key in otherPlayers){if(!users[key]||key===currentNickname){if(otherPlayers[key])otherPlayers[key].remove();delete otherPlayers[key]}}
-        for(let key in users){
-            if(key===currentNickname)continue;
-            const data=users[key];
-            if(data&&data.x!==undefined&&data.y!==undefined){
-                if(!otherPlayers[key]){let div=document.createElement('div');div.id='other-'+key;div.className='other-player';div.innerHTML='<div class="pixel"></div><div class="pixel"></div>';document.getElementById('game-container').appendChild(div);otherPlayers[key]=div;}
-                otherPlayers[key].style.left=data.x+'px';otherPlayers[key].style.top=data.y+'px';
-            }
-        }
-    });
+  db.ref('users').on('value',snapshot=>{
+    const users=snapshot.val()||{};
+    for(let key in otherPlayers){if(!users[key]||key===currentNickname){if(otherPlayers[key])otherPlayers[key].remove();delete otherPlayers[key]}}
+    for(let key in users){
+      if(key===currentNickname)continue;
+      const data=users[key];
+      if(data&&data.x!==undefined&&data.y!==undefined){
+        if(!otherPlayers[key]){let div=document.createElement('div');div.id='other-'+key;div.className='other-player';div.innerHTML='<div class="pixel"></div><div class="pixel"></div>';document.getElementById('game-container').appendChild(div);otherPlayers[key]=div;}
+        otherPlayers[key].style.left=data.x+'px';otherPlayers[key].style.top=data.y+'px';
+      }
+    }
+  });
 }
+
 document.addEventListener('keydown',function(e){
-    const k=String(e.key).toLowerCase();
-    typedCode += k;typedCode = typedCode.slice(-17);
-    if (typedCode === 'ядушкамистердушка' && currentNickname === 'MrDushka') { showModal('Админ-панель','Заглушка: здесь будет админка MrDushka'); typedCode = ''; }
-    if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;keys.arrowup=true;e.preventDefault()}
-    if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;keys.arrowdown=true;e.preventDefault()}
-    if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;keys.arrowleft=true;e.preventDefault()}
-    if(k==='d'||k==='в'||k==='arrowright'){keys.d=true;keys.arrowright=true;e.preventDefault()}
-    if(k==='e'||k==='у'){interact();e.preventDefault()}
+  const k=String(e.key).toLowerCase();
+  typedCode += k;typedCode = typedCode.slice(-17);
+  if (typedCode === 'ядушкамистердушка' && currentNickname === 'MrDushka') { showModal('Админ-панель','Заглушка: здесь будет админка MrDushka'); typedCode = ''; }
+  if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;keys.arrowup=true;e.preventDefault()}
+  if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;keys.arrowdown=true;e.preventDefault()}
+  if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;keys.arrowleft=true;e.preventDefault()}
+  if(k==='d'||k==='в'||k==='arrowright'){keys.d=true;keys.arrowright=true;e.preventDefault()}
+  if(k==='e'||k==='у'){interact();e.preventDefault()}
 });
 document.addEventListener('keyup',function(e){
-    const k=String(e.key).toLowerCase();
-    if(k==='w'||k==='ц'||k==='arrowup'){keys.w=false;keys.arrowup=false;e.preventDefault()}
-    if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=false;keys.arrowdown=false;e.preventDefault()}
-    if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=false;keys.arrowleft=false;e.preventDefault()}
-    if(k==='d'||k==='в'||k==='arrowright'){keys.d=false;keys.arrowright=false;e.preventDefault()}
+  const k=String(e.key).toLowerCase();
+  if(k==='w'||k==='ц'||k==='arrowup'){keys.w=false;keys.arrowup=false;e.preventDefault()}
+  if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=false;keys.arrowdown=false;e.preventDefault()}
+  if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=false;keys.arrowleft=false;e.preventDefault()}
+  if(k==='d'||k==='в'||k==='arrowright'){keys.d=false;keys.arrowright=false;e.preventDefault()}
 });
+
 const SPEED=1,MAX_X=380,MAX_Y=380;
 const obstacles=[{x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},{x:150,y:137,w:20,h:20},{x:190,y:137,w:20,h:20},{x:230,y:137,w:20,h:24},{x:150,y:230,w:20,h:20},{x:190,y:230,w:20,h:20},{x:230,y:230,w:20,h:20}];
 const interactables=[
-    {id:'rng-machine', name:'RNG', x:190, y:137},
-    {id:'shop-blue', name:'Синий магазин', x:150, y:137},
-    {id:'queen-bee', name:'Пчелы', x:230, y:137},
-    {id:'shop-red', name:'Красный магазин', x:150, y:230},
-    {id:'rng-circle', name:'Колесо', x:190, y:230},
-    {id:'shop-white', name:'Белый магазин', x:230, y:230}
+  {id:'rng-machine', name:'RNG', x:190, y:137},
+  {id:'shop-blue', name:'Синий магазин', x:150, y:137},
+  {id:'queen-bee', name:'Пчелы', x:230, y:137},
+  {id:'shop-red', name:'Красный магазин', x:150, y:230},
+  {id:'rng-circle', name:'Колесо', x:190, y:230},
+  {id:'shop-white', name:'Белый магазин', x:230, y:230}
 ];
-function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y)}
+
 let lastTime=0,lastSync=0;
 function update(time=0){
-    requestAnimationFrame(update);const dt=Math.min((time-lastTime)/1000,0.1);lastTime=time;let dx=0,dy=0;
-    if(keys.w||keys.arrowup)dy-=1; if(keys.s||keys.arrowdown)dy+=1; if(keys.a||keys.arrowleft)dx-=1; if(keys.d||keys.arrowright)dx+=1;
-    if(dx!==0||dy!==0){
-        const len=Math.sqrt(dx*dx+dy*dy);
-        let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60;
-        let rX={x:nx,y:y,w:10,h:20},bX=false;for(let o of obstacles)if(collide(rX,o)){bX=true;break}if(!bX)x=nx;
-        let rY={x:x,y:ny,w:10,h:20},bY=false;for(let o of obstacles)if(collide(rY,o)){bY=true;break}if(!bY)y=ny;
-        x=Math.max(10,Math.min(MAX_X,x));y=Math.max(10,Math.min(MAX_Y,y));
-        document.getElementById('player').style.left=x+'px';document.getElementById('player').style.top=y+'px';
-        if(Date.now()-lastSync>200){db.ref('users/'+currentNickname).update({x:x,y:y});lastSync=Date.now();}
+  requestAnimationFrame(update);const dt=Math.min((time-lastTime)/1000,0.1);lastTime=time;let dx=0,dy=0;
+  if(keys.w||keys.arrowup)dy-=1; if(keys.s||keys.arrowdown)dy+=1; if(keys.a||keys.arrowleft)dx-=1; if(keys.d||keys.arrowright)dx+=1;
+  if(dx!==0||dy!==0){
+    const len=Math.sqrt(dx*dx+dy*dy);
+    let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60;
+    x=Math.max(10,Math.min(MAX_X,nx));y=Math.max(10,Math.min(MAX_Y,ny));
+    document.getElementById('player').style.left=x+'px';document.getElementById('player').style.top=y+'px';
+    if(Date.now()-lastSync>200){db.ref('users/'+currentNickname).update({x:x,y:y});lastSync=Date.now();}
+  }
+  let found=false;
+  for(let obj of interactables){
+    let dist = Math.sqrt(Math.pow(x-obj.x,2) + Math.pow(y-obj.y,2));
+    if(dist < 15){ // КНОПКА ПО РАССТОЯНИЮ 15 ПИКСЕЛЕЙ
+      let btn=document.getElementById('interact');
+      btn.style.display='flex';
+      btn.style.left=(x-7)+'px';btn.style.top=(y-25)+'px';
+      btn.dataset.obj=obj.id;
+      found=true;break;
     }
-    let found=false;let playerRect={x:x,y:y,w:10,h:20};
-    for(let obj of interactables){
-        let dist = Math.sqrt(Math.pow(x-obj.x,2) + Math.pow(y-obj.y,2));
-        if(dist < 15){
-            let btn=document.getElementById('interact');
-            btn.style.display='flex';
-            btn.style.left=(x-7)+'px';btn.style.top=(y-25)+'px';
-            btn.dataset.obj=obj.id;
-            found=true;break;
-        }
-    }
-    if(!found)document.getElementById('interact').style.display='none';
+  }
+  if(!found)document.getElementById('interact').style.display='none';
 }
+
 function interact(){
-    let btn=document.getElementById('interact');if(btn.style.display==='none')return;let obj=btn.dataset.obj;
-    if(obj==='shop-blue' || obj==='shop-white'){openShop();}
-    else if(obj==='shop-red'){openRedShop();}
-    else if(obj==='queen-bee'){openBee();}
-    else if(obj==='rng-circle'){openWheel();}
-    else if(obj==='rng-machine'){showModal('RNG Машина','Здесь будет случайный приз!');}
-    else showModal('Взаимодействие', 'Объект: ' + obj);
+  let btn=document.getElementById('interact');if(btn.style.display==='none')return;let obj=btn.dataset.obj;
+  if(obj==='shop-blue'){openShop();}
+  else if(obj==='shop-red'){openRedShop();}
+  else if(obj==='shop-white'){openShop();}
+  else if(obj==='queen-bee'){openBee();}
+  else if(obj==='rng-circle'){openWheel();}
+  else if(obj==='rng-machine'){showModal('RNG Машина','Здесь будет случайный приз!');}
+  else showModal('Взаимодействие', 'Объект: ' + obj);
 }
+
 function openCharacters(){document.getElementById('char-menu').style.display='flex'}function closeCharacters(){document.getElementById('char-menu').style.display='none'}function openBee(){document.getElementById('bee-menu').style.display='flex'}function closeBee(){document.getElementById('bee-menu').style.display='none'}function openWheel(){document.getElementById('wheel-menu').style.display='flex'}function closeWheel(){document.getElementById('wheel-menu').style.display='none'}
+
 function buySpin(a){
-    let c=a===1?49:199;
-    if(dushka>=c){ dushka-=c; _spins+=a; document.getElementById('dushka-coins').textContent=dushka; db.ref('users/'+currentNickname).update({dushka:dushka, spins:_spins}); updateSpinBtn(); showModal('Покупка',`Куплено ${a} спин(ов) за ${c} Dushka Coins!`); }
-    else showModal('Ошибка','Недостаточно Dushka Coins!');
+  let c=a===1?49:199;
+  if(dushka>=c){ dushka-=c; _spins+=a; document.getElementById('dushka-coins').textContent=dushka; db.ref('users/'+currentNickname).update({dushka:dushka, spins:_spins}); updateSpinBtn(); showModal('Покупка',`Куплено ${a} спин(ов) за ${c} Dushka Coins!`); }
+  else showModal('Ошибка','Недостаточно Dushka Coins!');
 }
 function updateSpinBtn(){document.querySelector('#wheel-menu .spin-btn').textContent = `Spin (${_spins})`;}
 function doSpin(){
-    if(_spins<=0){showModal('Ошибка','Нет спинов!');return}
-    _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn();
-    const prizes = [
-        {name: '$12K', chance: 45, reward: 12000},
-        {name: '$12K', chance: 45, reward: 12000},
-        {name: '2x Lucky', chance: 2, reward: 0},
-        {name: '$1M', chance: 7, reward: 1000000},
-        {name: 'Crystal Slap', chance: 0.5, reward: 0},
-        {name: 'Lucky Block', chance: 0.5, reward: 0}
-    ];
-    let total = prizes.reduce((sum, p) => sum + p.chance, 0);
-    let random = Math.random() * total;
-    let selected = prizes[0];
-    for(let p of prizes){ if(random < p.chance){ selected = p; break; } random -= p.chance; }
-    setTimeout(() => {
-        if(selected.reward > 0){ coins += selected.reward; document.getElementById('balance-amount').textContent = coins; db.ref('users/'+currentNickname).update({coins:coins}); }
-        showModal('Колесо', `Выпало: ${selected.name}!`);
-    }, 2000);
+  if(_spins<=0){showModal('Ошибка','Нет спинов!');return}
+  _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn();
+  const prizes = [
+    {name: '$12K', chance: 45, reward: 12000},
+    {name: '$12K', chance: 45, reward: 12000},
+    {name: '2x Lucky', chance: 2, reward: 0},
+    {name: '$1M', chance: 7, reward: 1000000},
+    {name: 'Crystal Slap', chance: 0.5, reward: 0},
+    {name: 'Lucky Block', chance: 0.5, reward: 0}
+  ];
+  let total = prizes.reduce((sum, p) => sum + p.chance, 0);
+  let random = Math.random() * total;
+  let selected = prizes[0];
+  for(let p of prizes){ if(random < p.chance){ selected = p; break; } random -= p.chance; }
+  setTimeout(() => {
+    if(selected.reward > 0){ coins += selected.reward; document.getElementById('balance-amount').textContent = coins; db.ref('users/'+currentNickname).update({coins:coins}); }
+    showModal('Колесо', `Выпало: ${selected.name}!`);
+  }, 2000);
 }
 </script>
 </body>
