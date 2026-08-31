@@ -20,12 +20,14 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .auth-btn{flex:1;height:40px;border:none;font-weight:bold;cursor:pointer;font-size:13px}
 .btn-login{background:#fff;color:#000}.btn-reg{background:#fff;color:red}
 .hint{color:#888;font-size:12px;margin-top:15px;text-align:center}
+
 #app{display:none;flex-direction:row;width:100vw;height:100vh;justify-content:center;align-items:center}
 #sidebar{width:140px;display:flex;justify-content:center;align-items:center;margin-right:12px}
 #actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .action-btn{width:60px;height:60px;display:flex;justify-content:center;align-items:center;background:#666;border:4px solid #000;color:#fff;font-weight:bold;font-size:12px;cursor:pointer;transition:transform .1s,filter .1s}
 .action-btn:active{transform:scale(.95);filter:brightness(.8)}
 .action-btn.pink{background:#E54B8C}
+
 #game-wrapper{flex:1;height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden}
 #game-container{width:400px;height:400px;background:#20b94d;border:4px solid black;position:relative;overflow:hidden;transform-origin:left center}
 .center-line{position:absolute;top:180px;left:0;width:100%;height:40px;background:#e83e32;z-index:5}
@@ -38,6 +40,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .base-top-1{top:20px;left:20px}.base-top-2{top:20px;left:115px}.base-top-3{top:20px;left:210px}.base-top-4{top:20px;left:305px}
 .base-bottom-1{bottom:20px;left:20px}.base-bottom-2{bottom:20px;left:115px}.base-bottom-3{bottom:20px;left:210px}.base-bottom-4{bottom:20px;left:305px}
 .base-bottom .brown{top:4px;bottom:auto}.base-bottom .green{top:-14px;bottom:auto}.base-bottom .nickname{top:4px;bottom:auto}
+
 #rng-machine,#shop-blue,#shop-red,#queen-bee,#rng-circle,#shop-white{position:absolute;width:20px;height:20px;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);z-index:15}
 #queen-bee{height:24px;grid-template-rows:repeat(6,1fr)}
 #rng-machine{left:190px;top:137px}.c-cyan{background:#00F0FF}.c-gray{background:#808080}.c-empty{background:transparent}
@@ -46,60 +49,144 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 #queen-bee{left:230px;top:137px}.q-yellow{background:#FFD966}.q-red{background:#F44336}.q-brown{background:#8B4513}
 #rng-circle{left:190px;top:230px;background:#A454B4;border-radius:50%}
 #shop-white{left:230px;top:230px}.w-dark{background:#003366}.w-white{background:#FFFFFF}
+
 #player,#other-player{position:absolute;width:10px;height:20px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20}
 #player .pixel,#other-player .pixel{width:100%;height:100%}
 #other-player .pixel{background:red}
 #interact{position:absolute;display:none;z-index:1000;width:24px;height:24px;background:#777;border:1px solid #444;display:flex;justify-content:center;align-items:center;color:#fff;font-size:18px;cursor:pointer}
+
 #balance{position:fixed;bottom:20px;right:20px;background:rgba(0,0,0,.8);padding:10px;border:2px solid #444;color:#fff;font-size:14px;display:none;flex-direction:column;gap:5px;border-radius:8px}
 #balance .box{display:flex;justify-content:space-between;gap:10px}
 #balance .icon{font-size:16px}#balance .label{color:#aaa}#balance .amount{color:#4caf50}#balance .dushka .amount{color:#ffd700}
+
 .menu-overlay{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:80%;max-width:700px;max-height:90vh;background:#1e2426;border:2px solid #0f1214;border-radius:8px;z-index:2000;flex-direction:column;box-shadow:0 0 20px rgba(0,0,0,.8);padding:0;overflow:hidden}
 .menu-overlay .header{display:flex;justify-content:space-between;align-items:flex-start;padding:15px 20px;background:transparent;flex-shrink:0}
 .menu-overlay .header .title h2{margin:0;color:#fff;font-size:22px;font-weight:bold}.menu-overlay .header .title p{margin:0;color:#ccc;font-size:12px}
 .menu-overlay .header .close-btn{background:#c0392b;border:2px solid #922b21;color:#fff;font-size:20px;font-weight:bold;width:40px;height:40px;display:flex;justify-content:center;align-items:center;cursor:pointer;border-radius:4px}
 .menu-overlay .content{padding:0 15px 15px 15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;flex:1}
+
 #char-menu{background:#1a1a2e}#char-menu .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}#char-menu .char-card{background:#0f1a2c;border:2px solid #1a2a4a;border-radius:6px;padding:8px;display:flex;flex-direction:column;align-items:center;text-align:center}#char-menu .char-card .icon{width:60px;height:60px;background:#3a3a3a;border-radius:6px;display:flex;justify-content:center;align-items:center;font-size:35px;margin-bottom:5px}#char-menu .char-card .name{color:#fff;font-weight:bold;font-size:14px}
+
 #bee-menu{background:#e8b425}#bee-menu .content{background:#1a1a1a;padding:10px 15px 15px 15px}#bee-menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}#bee-menu .card{position:relative;background:#2c2c2c;border:2px solid #444;border-radius:6px;padding:8px;display:flex;flex-direction:column;align-items:center;min-height:120px}#bee-menu .card .img-placeholder{width:100%;height:70px;background:#3a3a3a;border-radius:4px;display:flex;justify-content:center;align-items:center;font-size:40px;margin-bottom:4px}#bee-menu .card .status{position:absolute;top:4px;right:8px;color:#ff4444;font-weight:bold;font-size:14px}#bee-menu .card .mps{color:#4caf50;font-weight:bold;font-size:14px}#bee-menu .card .name{color:#fff;font-weight:bold;font-size:16px}#bee-menu .card .buy-row{display:flex;justify-content:space-between;width:100%;margin-top:6px;gap:4px}#bee-menu .card .count-box{background:#ffd700;color:#000;font-weight:bold;font-size:14px;padding:4px 10px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex:1}#bee-menu .card .price-btn{background:#4caf50;border:none;color:#fff;font-weight:bold;font-size:13px;padding:4px 10px;border-radius:4px;cursor:pointer;flex:1.5}
-#wheel-menu{background:#1a1a3a;max-width:520px}#wheel-menu .content{background:rgba(0,0,0,.3);padding:20px;display:flex;flex-direction:column;align-items:center;gap:15px}.wheel-container{position:relative;width:220px;height:220px;display:flex;justify-content:center;align-items:center}.wheel-container .pin{position:absolute;top:-15px;left:50%;transform:translateX(-50%);z-index:10;font-size:25px;color:#ff3333}.wheel{width:200px;height:200px;border-radius:50%;position:relative;overflow:hidden;border:4px solid #4a90e2}.wheel .slice{position:absolute;width:50%;height:50%;top:0;left:50%;transform-origin:0% 100%;display:flex;justify-content:center;align-items:center;flex-direction:column}.wheel .slice:nth-child(1){transform:rotate(0deg) skewY(-30deg);background:rgba(0,150,255,.6)}.wheel .slice:nth-child(2){transform:rotate(60deg) skewY(-30deg);background:rgba(50,200,50,.6)}.wheel .slice:nth-child(3){transform:rotate(120deg) skewY(-30deg);background:rgba(255,215,0,.6)}.wheel .slice:nth-child(4){transform:rotate(180deg) skewY(-30deg);background:rgba(255,100,0,.6)}.wheel .slice:nth-child(5){transform:rotate(240deg) skewY(-30deg);background:rgba(180,50,255,.6)}.wheel .slice:nth-child(6){transform:rotate(300deg) skewY(-30deg);background:rgba(255,50,50,.6)}.wheel .slice .label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(0deg);color:#fff;font-size:10px;font-weight:bold;text-align:center;line-height:1.2;width:60px;text-shadow:1px 1px 2px rgba(0,0,0,.8)}.wheel .slice .icon{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);font-size:18px}.wheel .slice .chance{position:absolute;bottom:20%;left:50%;transform:translateX(-50%);color:#fff;font-size:12px;font-weight:bold}.controls{display:flex;flex-direction:column;align-items:center;width:100%;gap:10px}.controls .timer{color:#fff;font-size:13px}.controls .actions{display:flex;gap:10px;align-items:center}.controls .actions .spin-btn{background:#222;color:#fff;border:2px solid #4a90e2;border-radius:4px;padding:6px 12px;font-size:13px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn{background:linear-gradient(135deg,#4a90e2,#357abd);color:#fff;border:2px solid #4a90e2;border-radius:4px;padding:6px 12px;font-size:13px;font-weight:bold;cursor:pointer}
+
+/* ==== КОЛЕСО ФОРТУНЫ (НОВОЕ) ==== */
+#wheel-menu{background:#1a1a3a;max-width:520px;max-height:80vh}
+#wheel-menu .content{background:rgba(0,0,0,.3);padding:20px;display:flex;flex-direction:column;align-items:center;gap:15px;overflow-y:auto}
+.wheel-container{position:relative;width:300px;height:300px;display:flex;justify-content:center;align-items:center;flex-shrink:0}
+.wheel-container .pin{position:absolute;top:-20px;left:50%;transform:translateX(-50%);z-index:10;font-size:30px;color:#ff3333}
+.wheel{width:280px;height:280px;border-radius:50%;position:relative;overflow:hidden;border:4px solid #4a90e2;box-shadow:0 0 15px rgba(74,144,226,.5)}
+/* Сектора через conic-gradient */
+.wheel{background:conic-gradient(
+    #2e86de 0deg 60deg,
+    #10ac84 60deg 120deg,
+    #feca57 120deg 180deg,
+    #ff9f43 180deg 240deg,
+    #5f27cd 240deg 300deg,
+    #ff6b6b 300deg 360deg
+)}
+.wheel .label{position:absolute;top:50%;left:50%;width:70px;height:40px;margin-left:-35px;margin-top:-20px;text-align:center;color:#fff;font-size:12px;font-weight:bold;text-shadow:1px 1px 2px rgba(0,0,0,.8);pointer-events:none;transform:rotate(var(--angle)) translateY(-90px) rotate(calc(-1 * var(--angle)));white-space:nowrap}
+.wheel .label .icon{display:block;font-size:20px;margin-bottom:2px}
+.wheel .label .chance{font-size:10px;opacity:.8}
+.controls{display:flex;flex-direction:column;align-items:center;width:100%;gap:10px}
+.controls .timer{color:#fff;font-size:14px}
+.controls .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+.controls .actions .spin-btn{background:#222;color:#fff;border:2px solid #4a90e2;border-radius:6px;padding:8px 20px;font-size:14px;font-weight:bold;cursor:pointer;transition:transform .1s}
+.controls .actions .spin-btn:hover{background:#333}
+.controls .actions .spin-btn:active{transform:scale(.95)}
+.controls .actions .buy-btn{background:linear-gradient(135deg,#4a90e2,#357abd);color:#fff;border:2px solid #4a90e2;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:bold;cursor:pointer;transition:transform .1s}
+.controls .actions .buy-btn:hover{background:linear-gradient(135deg,#5aa0f2,#4a8ad2)}
+.controls .actions .buy-btn:active{transform:scale(.95)}
+.controls .actions .buy-btn .price{display:block}
+.controls .actions .buy-btn .sub{font-size:10px;opacity:.8}
+
 #custom-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #0f1214;border-radius:12px;padding:20px;z-index:9999;max-width:400px;width:90%;box-shadow:0 0 30px rgba(0,0,0,.9);color:#fff;text-align:center}
 #custom-modal .modal-title{font-size:18px;font-weight:bold;margin-bottom:10px;color:#4a90e2}#custom-modal .modal-text{font-size:14px;margin-bottom:20px}#custom-modal .modal-close{background:#c0392b;border:2px solid #922b21;color:#fff;padding:8px 20px;border-radius:4px;cursor:pointer;font-weight:bold}
-@media(max-width:700px){#game-container{width:300px;height:300px}#game-container .base{width:55px;height:55px}}
+
+@media(max-width:700px){#game-container{width:300px;height:300px}#game-container .base{width:55px;height:55px}#wheel-menu{max-width:90vw}.wheel-container{width:240px;height:240px}.wheel{width:220px;height:220px}}
 </style>
 </head>
 <body>
+<!-- ЭКРАН ВХОДА -->
 <div id="auth"><div id="auth-box"><label class="auth-label">НИК</label><input type="text" id="username" class="auth-input" autocomplete="off"><label class="auth-label">ПАРОЛЬ</label><input type="password" id="password" class="auth-input"><div class="auth-btns"><button class="auth-btn btn-login" onclick="handleLogin()">ВОЙТИ</button><button class="auth-btn btn-reg" onclick="handleRegister()">РЕГ</button></div><div class="hint">Запишите ваш пароль. Спасибо за внимание</div></div></div>
+
+<!-- БАЛАНС -->
 <div id="balance"><div class="box dushka"><span class="icon">💰</span><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div><div class="box"><span class="icon">🪙</span><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div></div>
-<div id="app"><div id="sidebar"><div id="actions">
-<div class="action-btn pink" onclick="openCharacters()">SHOP</div>
-<div class="action-btn" onclick="showModal('Ребирт','Скоро появится!')">REBIRTH</div>
-<div class="action-btn" onclick="showModal('Трейд','Скоро появится!')">TRADE</div>
-<div class="action-btn" onclick="showModal('INDEX','Твой индекс: ' + (currentNickname ? 'База ' + currentNickname : 'Неизвестно'))">INDEX</div>
-</div></div><div id="game-wrapper"><div id="game-container">
-<div class="center-line"><div class="center-cap cap-left"></div><div class="center-cap cap-right"></div></div>
-<div class="base base-top-1"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
-<div class="base base-top-2"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
-<div class="base base-top-3"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
-<div class="base base-top-4"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
-<div class="base base-bottom base-bottom-1"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
-<div class="base base-bottom base-bottom-2"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
-<div class="base base-bottom base-bottom-3"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
-<div class="base base-bottom base-bottom-4"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
-<div id="rng-machine"><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div></div>
-<div id="shop-blue"><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div></div>
-<div id="shop-red"><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div></div>
-<div id="queen-bee"><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-yellow"></div></div>
-<div id="rng-circle"></div>
-<div id="shop-white"><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div></div>
-<div id="interact" onclick="interact()">E</div>
-<div id="player"></div>
-</div></div></div>
+
+<!-- ИГРА -->
+<div id="app">
+  <div id="sidebar">
+    <div id="actions">
+      <div class="action-btn pink" onclick="openCharacters()">SHOP</div>
+      <div class="action-btn" onclick="showModal('Ребирт','Скоро появится!')">REBIRTH</div>
+      <div class="action-btn" onclick="showModal('Трейд','Скоро появится!')">TRADE</div>
+      <div class="action-btn" onclick="showModal('INDEX','Твой индекс: ' + (currentNickname ? 'База ' + currentNickname : 'Неизвестно'))">INDEX</div>
+    </div>
+  </div>
+  <div id="game-wrapper">
+    <div id="game-container">
+      <div class="center-line"><div class="center-cap cap-left"></div><div class="center-cap cap-right"></div></div>
+      <div class="base base-top-1"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
+      <div class="base base-top-2"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
+      <div class="base base-top-3"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
+      <div class="base base-top-4"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
+      <div class="base base-bottom base-bottom-1"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
+      <div class="base base-bottom base-bottom-2"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
+      <div class="base base-bottom base-bottom-3"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
+      <div class="base base-bottom base-bottom-4"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
+      <div id="rng-machine"><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div></div>
+      <div id="shop-blue"><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div></div>
+      <div id="shop-red"><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div></div>
+      <div id="queen-bee"><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-yellow"></div></div>
+      <div id="rng-circle"></div>
+      <div id="shop-white"><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div></div>
+      <div id="interact" onclick="interact()">E</div>
+      <div id="player"></div>
+    </div>
+  </div>
+</div>
+
+<!-- МЕНЮ ПЕРСОНАЖЕЙ -->
 <div id="char-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>PERSONAJI</h2><p>Все персонажи!</p></div><div class="close-btn" onclick="closeCharacters()">X</div></div><div class="content"><div class="grid"><div class="char-card"><div class="icon">🟢</div><div class="name">Verde</div></div><div class="char-card"><div class="icon">🔴</div><div class="name">Ross</div></div><div class="char-card"><div class="icon">🟪</div><div class="name">Viola</div></div><div class="char-card"><div class="icon">🟦</div><div class="name">Blu</div></div><div class="char-card"><div class="icon">🟥</div><div class="name">Rosso</div></div><div class="char-card"><div class="icon">🟨</div><div class="name">Giallo</div></div><div class="char-card"><div class="icon">🟩</div><div class="name">Prato</div></div><div class="char-card"><div class="icon">🟫</div><div class="name">Marrone</div></div><div class="char-card"><div class="icon">⬛</div><div class="name">Nero</div></div></div></div></div>
+
+<!-- МЕНЮ ПЧЁЛ -->
 <div id="bee-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Королева Пчёл</h2><p>Она улетит через 1ч 20м</p></div><div class="close-btn" onclick="closeBee()">X</div></div><div class="content"><div class="grid"><div class="card"><div class="img-placeholder">🦝</div><div class="status">100</div><div class="mps">$10M/s</div><div class="name">Conetto Morsetto</div><div class="buy-row"><div class="count-box">📦 20</div><button class="price-btn">🪙 499</button></div></div><div class="card"><div class="img-placeholder">🐻</div><div class="status">100</div><div class="mps">$32M/s</div><div class="name">Honey Honey Bear</div><div class="buy-row"><div class="count-box">📦 40</div><button class="price-btn">🪙 999</button></div></div><div class="card"><div class="img-placeholder">🐝</div><div class="status">100</div><div class="mps">$65M/s</div><div class="name">Queen Bee</div><div class="buy-row"><div class="count-box">📦 100</div><button class="price-btn">🪙 2,499</button></div></div><div class="card"><div class="img-placeholder">🍫</div><div class="status">100</div><div class="mps">$85M/s</div><div class="name">S'more Serat</div><div class="buy-row"><div class="count-box">📦 200</div><button class="price-btn">🪙 4,999</button></div></div></div></div></div>
-<div id="wheel-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>CRYSTAL WHEEL</h2></div><div class="close-btn" onclick="closeWheel()">X</div></div><div class="content"><div class="wheel-container"><div class="pin">📍</div><div class="wheel"><div class="slice"><div class="icon">💵</div><div class="label">$12K</div><div class="chance">45%</div></div><div class="slice"><div class="icon">💵</div><div class="label">$12K</div><div class="chance">45%</div></div><div class="slice"><div class="icon">🍀</div><div class="label">2x<br>Lucky</div><div class="chance">2%</div></div><div class="slice"><div class="icon">💵</div><div class="label">$1M</div><div class="chance">7%</div></div><div class="slice"><div class="icon">🔮</div><div class="label">Crystal<br>Slap</div><div class="chance">0.5%</div></div><div class="slice"><div class="icon">❓</div><div class="label">Lucky<br>Block</div><div class="chance">0.5%</div></div></div></div><div class="controls"><div class="timer">Бесплатный спин через: 1ч 23м</div><div class="actions"><button class="buy-btn" onclick="buySpin(1)">🪙 49</button><button class="spin-btn" onclick="doSpin()">Spin (0)</button><button class="buy-btn" onclick="buySpin(3)">🪙 199</button></div></div></div></div>
+
+<!-- МЕНЮ КОЛЕСА (НОВОЕ) -->
+<div id="wheel-menu" class="menu-overlay" style="display:none">
+  <div class="header">
+    <div class="title"><h2>CRYSTAL WHEEL</h2></div>
+    <div class="close-btn" onclick="closeWheel()">X</div>
+  </div>
+  <div class="content">
+    <div class="wheel-container">
+      <div class="pin">📍</div>
+      <div class="wheel">
+        <!-- Сектора и подписи -->
+        <div class="label" style="--angle:30deg"><div class="icon">💵</div><div class="label-text">$12K</div><div class="chance">45%</div></div>
+        <div class="label" style="--angle:90deg"><div class="icon">💵</div><div class="label-text">$12K</div><div class="chance">45%</div></div>
+        <div class="label" style="--angle:150deg"><div class="icon">🍀</div><div class="label-text">2x<br>Lucky</div><div class="chance">2%</div></div>
+        <div class="label" style="--angle:210deg"><div class="icon">💵</div><div class="label-text">$1M</div><div class="chance">7%</div></div>
+        <div class="label" style="--angle:270deg"><div class="icon">🔮</div><div class="label-text">Crystal<br>Slap</div><div class="chance">0.5%</div></div>
+        <div class="label" style="--angle:330deg"><div class="icon">❓</div><div class="label-text">Lucky<br>Block</div><div class="chance">0.5%</div></div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="timer">Бесплатный спин через: 1ч 23м</div>
+      <div class="actions">
+        <button class="buy-btn" onclick="buySpin(1)"><div class="price">🪙 49</div><div class="sub">Buy 1</div></button>
+        <button class="spin-btn" onclick="doSpin()">Spin (0)</button>
+        <button class="buy-btn" onclick="buySpin(3)"><div class="price">🪙 199</div><div class="sub">Buy 3</div></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО -->
 <div id="custom-modal"><div class="modal-title" id="modal-title"></div><div class="modal-text" id="modal-text"></div><button class="modal-close" onclick="closeModal()">Закрыть</button></div>
+
 <script>
 // ========== РАЗБЛОКИРОВКА ЗУМА (Ctrl + колесо работают) ==========
-// УБРАНА БЛОКИРОВКА КОЛЕСА И CTRL
+// Колесо и Ctrl НЕ блокируются
 
 // Масштабирование карты
 function resizeGame(){const game=document.getElementById('game-container');if(!game)return;const availW=window.innerWidth,availH=window.innerHeight;let scale=Math.min(availW/500,availH/500);scale=Math.max(0.6,Math.min(1.2,scale));game.style.transform=`scale(${scale})`;}
@@ -113,7 +200,7 @@ function closeModal(){document.getElementById('custom-modal').style.display='non
 let x=52,y=81,coins=25,dushka=0,currentNickname=null,_spins=0;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
 let otherPlayers={};
-let typedCode = ''; // Переменная для секретного кода
+let typedCode = '';
 
 const baseSpawnPoints = {
     1: {x: 52, y: 81},  2: {x: 147, y: 81},  3: {x: 242, y: 81},  4: {x: 337, y: 81},
@@ -185,12 +272,12 @@ function startOtherPlayersListener(){
 
 document.addEventListener('keydown',function(e){
     const k=String(e.key).toLowerCase();
-    // Секретный код "ядушкамистердушка"
+    // Секретный код
     typedCode += k;
-    typedCode = typedCode.slice(-17); // оставляем последние 17 символов
+    typedCode = typedCode.slice(-17);
     if (typedCode === 'ядушкамистердушка' && currentNickname === 'MrDushka') {
         showModal('Админ-панель','Заглушка: здесь будет админка MrDushka');
-        typedCode = ''; // сброс кода
+        typedCode = '';
     }
     // Управление
     if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;keys.arrowup=true;e.preventDefault()}
