@@ -21,7 +21,6 @@
   const db = firebase.database();
 </script>
 <style>
-  /* ===== ОБЩИЕ СТИЛИ ===== */
   * { box-sizing: border-box; }
   body { margin: 0; overflow: hidden; background: #1a1a1a; font-family: 'Courier New', monospace; touch-action: none; user-select: none; -webkit-user-select: none; }
   #auth { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; background: #1a1a1a; z-index: 999; }
@@ -97,7 +96,6 @@
   .menu-overlay .header .close-btn { background: #c0392b; border: 2px solid #922b21; color: #fff; font-size: 20px; font-weight: bold; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; cursor: pointer; border-radius: 4px; }
   .menu-overlay .content { padding: 0 15px 15px 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; flex: 1; }
 
-  /* СИНИЙ МАГАЗИН */
   #shop-menu { background: #2c4f6e; max-width: 800px; }
   #shop-menu .header { background: #1a3a5a; }
   #shop-menu .content { background: #2a3f52; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
@@ -111,7 +109,6 @@
   .shop-item .price-btn { background: #4caf50; color: #fff; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; text-align: center; }
   .shop-item .price-btn.owned { background: #555; cursor: default; }
 
-  /* КРАСНЫЙ МАГАЗИН */
   #red-shop-menu { background: #8b2c2c; max-width: 800px; }
   #red-shop-menu .header { background: #5c1a1a; }
   #red-shop-menu .tabs { display: flex; gap: 5px; padding: 10px 15px 0; background: #2c2c2c; flex-wrap: wrap; }
@@ -129,7 +126,6 @@
   .red-shop-item .price-btn.owned { background: #555; cursor: default; }
   .gift-player-btn { background: #f39c12; color: #000; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; margin-top: 15px; }
 
-  /* МЕНЮ ПЧЁЛ */
   #bee-menu { background: #e8b425; max-width: 600px; }
   #bee-menu .header { background: #d4a017; background-image: repeating-linear-gradient(45deg, #f2d64a 0px, #f2d64a 8px, #eac032 8px, #eac032 16px); }
   #bee-menu .header .title h2 { color: #fff; text-shadow: 2px 2px 0 #000; }
@@ -155,7 +151,6 @@
   #bee-menu .banner .right-stats .buy-row .count-box { background: #ffd700; color: #000; font-weight: bold; font-size: 14px; padding: 5px 12px; border-radius: 4px; }
   #bee-menu .banner .right-stats .buy-row .price-btn { background: #4caf50; border: none; color: #fff; font-weight: bold; font-size: 14px; padding: 5px 12px; border-radius: 4px; cursor: pointer; }
 
-  /* КОЛЕСО */
   #wheel-menu { background: #1a1a3a; max-width: 560px; max-height: 90vh; }
   #wheel-menu .content { background: rgba(0,0,0,.3); padding: 15px; display: flex; flex-direction: column; align-items: center; gap: 15px; overflow-y: auto; }
   .wheel-container { position: relative; width: 280px; height: 280px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
@@ -194,7 +189,6 @@
 </head>
 <body>
 
-<!-- АВТОРИЗАЦИЯ -->
 <div id="auth">
   <div id="auth-box">
     <label class="auth-label">НИК</label>
@@ -209,7 +203,6 @@
   </div>
 </div>
 
-<!-- БАЛАНС -->
 <div id="balance">
   <div class="box dushka">
     <span class="icon">💰</span>
@@ -223,7 +216,6 @@
   </div>
 </div>
 
-<!-- ОСНОВНОЙ КОНТЕЙНЕР -->
 <div id="app">
   <div id="sidebar">
     <div id="actions">
@@ -287,7 +279,6 @@
   </div>
 </div>
 
-<!-- МЕНЮ ПЕРСОНАЖЕЙ -->
 <div id="char-menu" class="menu-overlay" style="display:none">
   <div class="header">
     <div class="title"><h2>PERSONAJI</h2><p>Все персонажи!</p></div>
@@ -308,7 +299,6 @@
   </div>
 </div>
 
-<!-- МЕНЮ ПЧЁЛ -->
 <div id="bee-menu" class="menu-overlay" style="display:none">
   <div class="header">
     <div class="title"><h2>Королева Пчёл</h2><p>Она улетит через 1ч 20м</p></div>
@@ -329,7 +319,6 @@
   </div>
 </div>
 
-<!-- СИНИЙ МАГАЗИН -->
 <div id="shop-menu" class="menu-overlay" style="display:none">
   <div class="header">
     <div class="title"><h2>Обычный магазин</h2><p>Покупай за монеты</p></div>
@@ -338,7 +327,6 @@
   <div class="content" id="shop-items"></div>
 </div>
 
-<!-- КРАСНЫЙ МАГАЗИН -->
 <div id="red-shop-menu" class="menu-overlay" style="display:none">
   <div class="header">
     <div class="title"><h2>Premium Shop</h2><p>Эксклюзив за Dushka Coins</p></div>
@@ -355,7 +343,6 @@
   <div class="content" id="red-shop-items"></div>
 </div>
 
-<!-- КОЛЕСО -->
 <div id="wheel-menu" class="menu-overlay" style="display:none">
   <div class="header">
     <div class="title"><h2>CRYSTAL WHEEL</h2></div>
@@ -393,7 +380,6 @@
   </div>
 </div>
 
-<!-- ПОРТАЛ (ЗАГЛУШКА) -->
 <div id="trade-plaza-modal" class="menu-overlay" style="display:none;">
   <div class="header">
     <div class="title"><h2>Trade Plaza</h2></div>
@@ -408,7 +394,6 @@
   </div>
 </div>
 
-<!-- ОБЩЕЕ МОДАЛЬНОЕ ОКНО -->
 <div id="custom-modal">
   <div class="modal-title" id="modal-title"></div>
   <div class="modal-text" id="modal-text"></div>
@@ -936,7 +921,7 @@ document.addEventListener('keyup', function(e) {
   if (k === 'd' || k === 'в' || k === 'arrowright') { keys.d = false; keys.arrowright = false; e.preventDefault(); }
 });
 
-// ===== ДВИЖЕНИЕ И КОЛЛИЗИИ =====
+// ===== ДВИЖЕНИЕ И КОЛЛИЗИИ (С ОТЛАДКОЙ) =====
 var SPEED = 1;
 var MAX_X = 380, MAX_Y = 380;
 
@@ -1014,10 +999,12 @@ function update(time) {
   var found = false;
   var px = x + 5;
   var py = y + 10;
+
   for (var k = 0; k < interactables.length; k++) {
     var obj = interactables[k];
     var dist = Math.sqrt((px - obj.cx) * (px - obj.cx) + (py - obj.cy) * (py - obj.cy));
-    if (dist < 15) {
+    
+    if (dist < 20) {
       var btn = document.getElementById('interact');
       btn.style.display = 'flex';
       btn.style.left = (x - 7) + 'px';
@@ -1036,21 +1023,13 @@ function interact() {
   var btn = document.getElementById('interact');
   if (btn.style.display === 'none') return;
   var obj = btn.dataset.obj;
-  if (obj === 'shop-blue') {
-    openShop();
-  } else if (obj === 'shop-red') {
-    openRedShop();
-  } else if (obj === 'shop-white') {
-    openTradePlaza();
-  } else if (obj === 'queen-bee') {
-    openBee();
-  } else if (obj === 'rng-circle') {
-    openWheel();
-  } else if (obj === 'rng-machine') {
-    showModal('RNG Машина', 'Здесь будет случайный приз!');
-  } else {
-    showModal('Взаимодействие', 'Объект: ' + obj);
-  }
+  if (obj === 'shop-blue') { openShop(); }
+  else if (obj === 'shop-red') { openRedShop(); }
+  else if (obj === 'shop-white') { openTradePlaza(); }
+  else if (obj === 'queen-bee') { openBee(); }
+  else if (obj === 'rng-circle') { openWheel(); }
+  else if (obj === 'rng-machine') { showModal('RNG Машина', 'Здесь будет случайный приз!'); }
+  else { showModal('Взаимодействие', 'Объект: ' + obj); }
 }
 
 // ===== ОТКРЫТИЕ / ЗАКРЫТИЕ МЕНЮ =====
