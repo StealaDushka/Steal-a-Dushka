@@ -20,7 +20,6 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .auth-btn{flex:1;height:40px;border:none;font-weight:bold;cursor:pointer;font-size:13px}
 .btn-login{background:#fff;color:#000}.btn-reg{background:#fff;color:red}
 .hint{color:#888;font-size:12px;margin-top:15px;text-align:center}
-
 #app{display:none;flex-direction:row;width:100vw;height:100vh;justify-content:center;align-items:center}
 #sidebar{width:140px;display:flex;justify-content:center;align-items:center;margin-right:12px}
 #actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}
@@ -63,6 +62,16 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 
 #wheel-menu{background:#1a1a3a;max-width:560px;max-height:90vh}#wheel-menu .content{background:rgba(0,0,0,.3);padding:15px;display:flex;flex-direction:column;align-items:center;gap:15px;overflow-y:auto}.wheel-container{position:relative;width:280px;height:280px;display:flex;justify-content:center;align-items:center;flex-shrink:0}.wheel-container .pin{position:absolute;top:-20px;left:50%;transform:translateX(-50%);z-index:10;font-size:30px;color:#ff3333}.wheel{width:260px;height:260px;border-radius:50%;position:relative;overflow:hidden;border:4px solid #4a90e2;box-shadow:0 0 15px rgba(74,144,226,.5);background:conic-gradient(#2e86de 0deg 60deg,#10ac84 60deg 120deg,#feca57 120deg 180deg,#ff9f43 180deg 240deg,#5f27cd 240deg 300deg,#ff6b6b 300deg 360deg)}.wheel .label{position:absolute;top:50%;left:50%;width:80px;height:50px;margin-left:-40px;margin-top:-25px;text-align:center;color:#fff;font-size:11px;font-weight:bold;text-shadow:1px 1px 2px rgba(0,0,0,.8);pointer-events:none;transform:rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle)));white-space:nowrap}.wheel .label .icon{display:block;font-size:18px;margin-bottom:2px}.wheel .label .chance{font-size:10px;opacity:.8}.secret-panel{background:rgba(0,0,0,.6);border:1px solid #4a90e2;border-radius:8px;padding:10px;width:100%;margin-top:5px}.secret-panel h3{color:#4a90e2;text-align:center;margin:0 0 8px;font-size:16px}.secret-panel .row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:13px}.secret-panel .row:last-child{border-bottom:none}.secret-panel .row .name{color:#ccc}.secret-panel .row .mps{color:#4caf50;font-size:12px;margin-left:auto;margin-right:10px}.secret-panel .row .val{color:#fff;font-weight:bold}.controls{display:flex;flex-direction:column;align-items:center;width:100%;gap:10px}.controls .timer{color:#fff;font-size:14px}.controls .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}.controls .actions .spin-btn{background:#222;color:#fff;border:2px solid #4a90e2;border-radius:6px;padding:8px 20px;font-size:14px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn{background:linear-gradient(135deg,#f7b731,#f5a623);color:#000;border:2px solid #f7b731;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn .price{display:flex;align-items:center;justify-content:center;gap:4px}.controls .actions .buy-btn .sub{font-size:10px;opacity:.8}
 #custom-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #0f1214;border-radius:12px;padding:20px;z-index:9999;max-width:400px;width:90%;box-shadow:0 0 30px rgba(0,0,0,.9);color:#fff;text-align:center}#custom-modal .modal-title{font-size:18px;font-weight:bold;margin-bottom:10px;color:#4a90e2}#custom-modal .modal-text{font-size:14px;margin-bottom:20px}#custom-modal .modal-close{background:#c0392b;border:2px solid #922b21;color:#fff;padding:8px 20px;border-radius:4px;cursor:pointer;font-weight:bold}
+
+/* ЗАГЛУШКА TRADE PLAZA */
+#trade-plaza-modal{background:#1a2b3c;max-width:600px}
+#trade-plaza-modal .header{background:#0f1a2c}
+#trade-plaza-modal .content{background:#1e3a5f;padding:30px;text-align:center}
+#trade-plaza-modal .content p{color:#fff;font-size:24px;font-weight:bold}
+#trade-plaza-modal .content .buttons{display:flex;gap:20px;justify-content:center;margin-top:20px}
+#trade-plaza-modal .content .buttons button{background:#4caf50;color:#fff;padding:15px 30px;font-size:20px;border:none;border-radius:8px;cursor:pointer}
+#trade-plaza-modal .content .buttons button.cancel{background:#c0392b}
+
 @media(max-width:700px){#game-container{width:300px;height:300px}#game-container .base{width:55px;height:55px}#wheel-menu{max-width:90vw}.wheel-container{width:220px;height:220px}.wheel{width:200px;height:200px}}
 </style>
 </head>
@@ -120,6 +129,21 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <!-- КОЛЕСО -->
 <div id="wheel-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>CRYSTAL WHEEL</h2></div><div class="close-btn" onclick="closeWheel()">X</div></div><div class="content"><div class="wheel-container"><div class="pin">📍</div><div class="wheel"><div class="label" style="--angle:30deg"><div class="icon">💵</div><div class="label-text">$12K</div><div class="chance">45%</div></div><div class="label" style="--angle:90deg"><div class="icon">💵</div><div class="label-text">$12K</div><div class="chance">45%</div></div><div class="label" style="--angle:150deg"><div class="icon">🍀</div><div class="label-text">2x<br>Lucky</div><div class="chance">2%</div></div><div class="label" style="--angle:210deg"><div class="icon">💵</div><div class="label-text">$1M</div><div class="chance">7%</div></div><div class="label" style="--angle:270deg"><div class="icon">🔮</div><div class="label-text">Crystal<br>Slap</div><div class="chance">0.5%</div></div><div class="label" style="--angle:330deg"><div class="icon">❓</div><div class="label-text">Lucky<br>Block</div><div class="chance">0.5%</div></div></div></div><div class="secret-panel"><h3>CRYSTAL SECRET</h3><div class="row"><span class="name">Tortuginni Dragonfrutini</span><span class="mps">+325k/s</span><span class="val">74.45%</span></div><div class="row"><span class="name">Pot Hotspot</span><span class="mps">+2.5M/s</span><span class="val">20%</span></div><div class="row"><span class="name">Esok Sekolah</span><span class="mps">+30M/s</span><span class="val">5%</span></div><div class="row"><span class="name">Spaghetti Tualeti</span><span class="mps">+60M/s</span><span class="val">1%</span></div><div class="row"><span class="name">La Secret Combinasionas</span><span class="mps">+125M/s</span><span class="val">0.5%</span></div><div class="row" style="border-bottom:none"><span class="name">Pegasus</span><span class="mps">+175M/s</span><span class="val">0.05%</span></div></div><div class="controls"><div class="timer" id="wheel-timer">Бесплатный спин через: 2ч 0м 0с</div><div class="actions"><button class="buy-btn" onclick="buySpin(1)"><div class="price">💰 49</div><div class="sub">Buy 1</div></button><button class="spin-btn" onclick="doSpin()">Spin (0)</button><button class="buy-btn" onclick="buySpin(3)"><div class="price">💰 199</div><div class="sub">Buy 3</div></button></div></div></div></div>
 
+<!-- ЗАГЛУШКА TRADE PLAZA -->
+<div id="trade-plaza-modal" class="menu-overlay" style="display:none;">
+    <div class="header">
+        <div class="title"><h2>Trade Plaza</h2></div>
+        <div class="close-btn" onclick="closeTradePlaza()">X</div>
+    </div>
+    <div class="content">
+        <p>Are you sure you want to join the Trade Plaza?</p>
+        <div class="buttons">
+            <button onclick="closeTradePlaza()">Join</button>
+            <button class="cancel" onclick="closeTradePlaza()">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <div id="custom-modal"><div class="modal-title" id="modal-title"></div><div class="modal-text" id="modal-text"></div><button class="modal-close" onclick="closeModal()">Закрыть</button></div>
 
 <script>
@@ -129,6 +153,10 @@ window.addEventListener('resize',resizeGame);
 
 function showModal(title, text){document.getElementById('modal-title').textContent=title;document.getElementById('modal-text').textContent=text;document.getElementById('custom-modal').style.display='block';}
 function closeModal(){document.getElementById('custom-modal').style.display='none';}
+
+// ========== ФУНКЦИИ ДЛЯ TRADE PLAZA (заглушка) ==========
+function openTradePlaza() { document.getElementById('trade-plaza-modal').style.display = 'flex'; }
+function closeTradePlaza() { document.getElementById('trade-plaza-modal').style.display = 'none'; }
 
 let x=52,y=81,coins=25,dushka=0,currentNickname=null,_spins=0;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
@@ -449,12 +477,19 @@ function interact(){
   let btn=document.getElementById('interact');if(btn.style.display==='none')return;let obj=btn.dataset.obj;
   if(obj==='shop-blue'){openShop();}
   else if(obj==='shop-red'){openRedShop();}
-  else if(obj==='shop-white'){openShop();}
+  else if(obj==='shop-white'){openTradePlaza();} // ИЗМЕНЕНО: белый магазин открывает заглушку
   else if(obj==='queen-bee'){openBee();}
   else if(obj==='rng-circle'){openWheel();}
   else if(obj==='rng-machine'){showModal('RNG Машина','Здесь будет случайный приз!');}
   else showModal('Взаимодействие', 'Объект: ' + obj);
 }
+
+// ========== ФУНКЦИИ ДЛЯ СИНЕГО МАГАЗИНА (за обычные монеты) ==========
+function openShop(){
+  // Простая заглушка для синего магазина (можно заменить на реальный)
+  showModal('Синий магазин', 'Здесь будет покупка предметов за обычные монеты!');
+}
+function closeShop(){document.getElementById('shop-menu').style.display='none';}
 
 function openCharacters(){document.getElementById('char-menu').style.display='flex'}function closeCharacters(){document.getElementById('char-menu').style.display='none'}function openBee(){document.getElementById('bee-menu').style.display='flex'}function closeBee(){document.getElementById('bee-menu').style.display='none'}function openWheel(){document.getElementById('wheel-menu').style.display='flex'}function closeWheel(){document.getElementById('wheel-menu').style.display='none'}
 
