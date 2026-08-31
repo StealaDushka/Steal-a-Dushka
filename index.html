@@ -49,7 +49,7 @@ body{zoom:1 !important;-moz-transform:none !important;-webkit-transform:none !im
 #shop-white{left:230px;top:230px}.w-dark{background:#003366}.w-white{background:#FFFFFF}
 #player,#other-player{position:absolute;width:10px;height:20px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20}
 #player .pixel,#other-player .pixel{width:100%;height:100%}
-#other-player .pixel{background:red} /* другие игроки красные */
+#other-player .pixel{background:red}
 #interact{position:absolute;display:none;z-index:1000;width:24px;height:24px;background:#777;border:1px solid #444;display:flex;justify-content:center;align-items:center;color:#fff;font-size:18px;cursor:pointer}
 #balance{position:fixed;bottom:20px;right:20px;background:rgba(0,0,0,.8);padding:10px;border:2px solid #444;color:#fff;font-size:14px;display:none;flex-direction:column;gap:5px;border-radius:8px}
 #balance .box{display:flex;justify-content:space-between;gap:10px}
@@ -68,13 +68,7 @@ body{zoom:1 !important;-moz-transform:none !important;-webkit-transform:none !im
 <body>
 <div id="auth"><div id="auth-box"><label class="auth-label">НИК</label><input type="text" id="username" class="auth-input" autocomplete="off"><label class="auth-label">ПАРОЛЬ</label><input type="password" id="password" class="auth-input"><div class="auth-btns"><button class="auth-btn btn-login" onclick="handleLogin()">ВОЙТИ</button><button class="auth-btn btn-reg" onclick="handleRegister()">РЕГ</button></div><div class="hint">Запишите ваш пароль. Спасибо за внимание</div></div></div>
 <div id="balance"><div class="box dushka"><span class="icon">💰</span><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div><div class="box"><span class="icon">🪙</span><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div></div>
-<div id="app"><div id="sidebar"><div id="actions">
-<!-- ИЗМЕНИЛ ПОРЯДОК: SHOP, REBIRTH, TRADE, DUEL -->
-<div class="action-btn pink" onclick="openCharacters()">SHOP</div>
-<div class="action-btn" onclick="alert('Ребирт скоро!')">REBIRTH</div>
-<div class="action-btn" onclick="alert('Трейд скоро!')">TRADE</div>
-<div class="action-btn" onclick="alert('Дуэль скоро!')">DUEL</div>
-</div></div><div id="game-container">
+<div id="app"><div id="sidebar"><div id="actions"><div class="action-btn pink" onclick="openCharacters()">SHOP</div><div class="action-btn" onclick="alert('Ребирт скоро!')">REBIRTH</div><div class="action-btn" onclick="alert('Трейд скоро!')">TRADE</div><div class="action-btn" onclick="alert('Дуэль скоро!')">DUEL</div></div></div><div id="game-container">
 <div class="center-line"><div class="center-cap cap-left"></div><div class="center-cap cap-right"></div></div>
 <div class="base base-top-1"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
 <div class="base base-top-2"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
@@ -104,20 +98,20 @@ function resizeGame() { const game=document.getElementById('game-container'); if
 window.addEventListener('resize', resizeGame);
 
 // Переменные
-let x=52,y=81,coins=25,dushka=0,currentNickname=null,_spins=0;
+let x=52,y=95,coins=25,dushka=0,currentNickname=null,_spins=0;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
 let otherPlayers={};
 
-// Точки спавна на зелёных пластинах (своя база)
+// Точки спавна на зелёных пластинах (ИСПРАВЛЕННЫЕ!)
 const baseSpawnPoints = {
-    1: {x: 52, y: 81},   // top-1
-    2: {x: 147, y: 81},  // top-2
-    3: {x: 242, y: 81},  // top-3
-    4: {x: 337, y: 81},  // top-4
-    5: {x: 52, y: 319},  // bottom-1 (пластина сверху)
-    6: {x: 147, y: 319}, // bottom-2
-    7: {x: 242, y: 319}, // bottom-3
-    8: {x: 337, y: 319}  // bottom-4
+    1: {x: 52, y: 95},   // top-1
+    2: {x: 147, y: 95},  // top-2
+    3: {x: 242, y: 95},  // top-3
+    4: {x: 337, y: 95},  // top-4
+    5: {x: 52, y: 291},  // bottom-1
+    6: {x: 147, y: 291}, // bottom-2
+    7: {x: 242, y: 291}, // bottom-3
+    8: {x: 337, y: 291}  // bottom-4
 };
 
 // Функции Firebase
@@ -143,10 +137,10 @@ async function startGame(){
     if(data&&data.base){
         let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`);
         if(nickEl)nickEl.textContent="База "+currentNickname;
-        // Спавн на своей зелёной пластине
+        // ВАЖНО: всегда ставим игрока на его базу (игнорируем сохранённые координаты)
         let spawn = baseSpawnPoints[data.base];
         if(spawn){ x = spawn.x; y = spawn.y; }
-        else { x = data.x || 52; y = data.y || 81; }
+        else { x = data.x || 52; y = data.y || 95; }
     }
     initPlayer();
     startOtherPlayersListener();
