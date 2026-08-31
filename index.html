@@ -34,7 +34,8 @@ window.getDushkaCoins=async function(n){try{const s=await db.ref('users/'+n).onc
 .center-cap{position:absolute;top:-10px;width:16px;height:60px;background:black}
 .cap-left{left:0}.cap-right{right:0}
 .base{position:absolute;width:75px;height:75px;background:#869292}
-.base .brown{position:absolute;width:100%;height:14px;background:#bf5b1a;bottom:4px}
+/* Коричневая полоса с отступами по бокам */
+.base .brown{position:absolute;width:calc(100% - 8px);left:4px;height:14px;background:#bf5b1a;bottom:4px}
 .base .green{position:absolute;width:34px;height:14px;background:#22e54c;left:50%;transform:translateX(-50%);bottom:-14px}
 .base .nickname{position:absolute;bottom:4px;left:0;width:100%;height:14px;line-height:14px;text-align:center;color:#fff;font-size:10px;font-weight:bold;text-shadow:1px 1px 1px #000;z-index:5;pointer-events:none;overflow:hidden}
 .base-top-1{top:20px;left:20px}.base-top-2{top:20px;left:115px}.base-top-3{top:20px;left:210px}.base-top-4{top:20px;left:305px}
@@ -109,8 +110,8 @@ const interactables=[{x:190,y:137,name:'RNG'},{x:150,y:137,name:'Магазин'
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y)}
 let lastTime=0;
 function update(time=0){requestAnimationFrame(update);const dt=Math.min((time-lastTime)/1000,0.1);lastTime=time;let dx=0,dy=0;if(keys.w||keys.arrowup)dy-=1;if(keys.s||keys.arrowdown)dy+=1;if(keys.a||keys.arrowleft)dx-=1;if(keys.d||keys.arrowright)dx+=1;if(dx!==0||dy!==0){const len=Math.sqrt(dx*dx+dy*dy);let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60;let rX={x:nx,y:y,w:10,h:20},bX=false;for(let o of obstacles)if(collide(rX,o)){bX=true;break}if(!bX)x=nx;let rY={x:x,y:ny,w:10,h:20},bY=false;for(let o of obstacles)if(collide(rY,o)){bY=true;break}if(!bY)y=ny;x=Math.max(10,Math.min(MAX_X,x));y=Math.max(10,Math.min(MAX_Y,y));document.getElementById('player').style.left=x+'px';document.getElementById('player').style.top=y+'px'}let found=false;for(let obj of interactables){let dist=Math.sqrt(Math.pow(x-obj.x,2)+Math.pow(y-obj.y,2));
-// РАДИУС ПОЯВЛЕНИЯ 1 ПИКСЕЛЬ
-if(dist<=1){let btn=document.getElementById('interact');btn.style.display='flex';btn.style.left=(x-7)+'px';btn.style.top=(y-25)+'px';btn.dataset.obj=obj.name;found=true;break}}if(!found)document.getElementById('interact').style.display='none'}
+// РАДИУС ПОЯВЛЕНИЯ КНОПКИ 30 ПИКСЕЛЕЙ
+if(dist<=30){let btn=document.getElementById('interact');btn.style.display='flex';btn.style.left=(x-7)+'px';btn.style.top=(y-25)+'px';btn.dataset.obj=obj.name;found=true;break}}if(!found)document.getElementById('interact').style.display='none'}
 function interact(){let btn=document.getElementById('interact');if(btn.style.display==='none')return;let obj=btn.dataset.obj;if(obj==='Пчелы')openBee();else if(obj==='Колесо')openWheel();else if(obj==='Магазин')openCharacters();else alert('Взаимодействие с: '+obj)}
 function openCharacters(){document.getElementById('char-menu').style.display='flex'}function closeCharacters(){document.getElementById('char-menu').style.display='none'}function openBee(){document.getElementById('bee-menu').style.display='flex'}function closeBee(){document.getElementById('bee-menu').style.display='none'}function openWheel(){document.getElementById('wheel-menu').style.display='flex'}function closeWheel(){document.getElementById('wheel-menu').style.display='none'}
 function buySpin(a){let c=a===1?49:199;if(coins>=c){coins-=c;_spins+=a;document.getElementById('balance-amount').textContent=coins;alert(`Куплено ${a} спин(ов) за ${c} монет!`)}else alert('Недостаточно монет!')}
