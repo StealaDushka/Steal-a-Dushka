@@ -20,6 +20,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .auth-btn{flex:1;height:40px;border:none;font-weight:bold;cursor:pointer;font-size:13px}
 .btn-login{background:#fff;color:#000}.btn-reg{background:#fff;color:red}
 .hint{color:#888;font-size:12px;margin-top:15px;text-align:center}
+
 #app{display:none;flex-direction:row;width:100vw;height:100vh;justify-content:center;align-items:center}
 #sidebar{width:140px;display:flex;justify-content:center;align-items:center;margin-right:12px}
 #actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}
@@ -169,6 +170,29 @@ const redShopItems = {
 let ownedRedItems = [];
 let currentRedTab = 'gear';
 
+// SVG-иконки для красного магазина
+function getRedIcon(type){
+  switch(type){
+    case 'blackhole-slap': return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="25" fill="black"/><path d="M20 50 L80 50 M50 20 L50 80 M30 30 L70 70 M70 30 L30 70" stroke="white" stroke-width="3"/></svg>`;
+    case 'ban-hammer': return `<svg viewBox="0 0 100 100"><rect x="20" y="30" width="60" height="15" fill="#7f8c8d"/><rect x="45" y="20" width="10" height="60" fill="#95a5a6"/></svg>`;
+    case 'laser-gun': return `<svg viewBox="0 0 100 100"><rect x="10" y="40" width="60" height="15" fill="#2c3e50"/><rect x="20" y="55" width="15" height="15" fill="#34495e"/><path d="M70 45 L90 42" stroke="red" stroke-width="5"/></svg>`;
+    case 'flying-bee': return `<svg viewBox="0 0 100 100"><rect x="20" y="30" width="60" height="40" fill="#f1c40f" rx="20"/><path d="M40 25 L60 15 L60 35 Z" fill="black"/><path d="M40 75 L60 85 L60 65 Z" fill="black"/></svg>`;
+    case 'vip': return `<svg viewBox="0 0 100 100"><text x="10" y="70" font-size="45" fill="#f1c40f" font-weight="bold">VIP</text></svg>`;
+    case '2x-money': return `<svg viewBox="0 0 100 100"><text x="10" y="65" font-size="40" fill="#2ecc71" font-weight="bold">x2</text></svg>`;
+    case 'admin-panel': return `<svg viewBox="0 0 100 100"><rect x="10" y="20" width="80" height="60" fill="#34495e"/><text x="25" y="60" fill="white" font-size="25" font-weight="bold">AP</text></svg>`;
+    case 'm51k': return `<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#27ae60" rx="5"/><text x="20" y="58" fill="white" font-size="18" font-weight="bold">$</text></svg>`;
+    case 'm425k': return `<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#2ecc71" rx="5"/><text x="20" y="58" fill="white" font-size="18" font-weight="bold">$</text></svg>`;
+    case 'm1700k': return `<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#27ae60" rx="5"/><rect x="20" y="30" width="25" height="40" fill="#1e8449"/></svg>`;
+    case 'm8500k': return `<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#2ecc71" rx="5"/><rect x="30" y="30" width="30" height="40" fill="#229954"/></svg>`;
+    case 'm17m': return `<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#27ae60" rx="5"/><rect x="40" y="30" width="40" height="40" fill="#1e8449"/></svg>`;
+    case 'mythic': return `<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="#8e44ad" rx="5"/><text x="30" y="60" fill="white" font-size="20" font-weight="bold">M</text></svg>`;
+    case 'brainrot-god': return `<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="#3498db" rx="5"/><text x="25" y="60" fill="white" font-size="15" font-weight="bold">BR</text></svg>`;
+    case 'secret': return `<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="#2c3e50" rx="5"/><text x="25" y="60" fill="white" font-size="20" font-weight="bold">S</text></svg>`;
+    case 'server-luck': return `<svg viewBox="0 0 100 100"><text x="10" y="70" font-size="40" fill="#2ecc71" font-weight="bold">2x</text></svg>`;
+    default: return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#fff"/></svg>`;
+  }
+}
+
 // Загрузка купленных предметов
 async function loadRedShopData(){
   if(!currentNickname) return;
@@ -189,7 +213,7 @@ function renderRedShop(){
   const container = document.getElementById('red-shop-items');
   container.innerHTML = '';
   let items = redShopItems[currentRedTab] || [];
-  
+
   if(currentRedTab === 'redeem'){
     container.innerHTML = '<div style="text-align:center;color:#fff;font-size:16px;padding:20px;">Введите код ниже:</div><input type="text" placeholder="Code Here..." style="width:100%;padding:10px;font-size:16px;border-radius:8px;border:none;margin-top:10px;">';
     return;
@@ -200,7 +224,7 @@ function renderRedShop(){
     const div = document.createElement('div');
     div.className = 'red-shop-item';
     div.innerHTML = `
-      <div class="icon"><svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="#666" rx="5"/></svg></div>
+      <div class="icon">${getRedIcon(item.id)}</div>
       <div class="info">
         <div class="name">${item.name}</div>
         <div class="desc">${item.desc}</div>
@@ -211,15 +235,13 @@ function renderRedShop(){
     `;
     container.appendChild(div);
   });
-  
-  // Кнопка Gift Player (только на вкладке gear)
-  if(currentRedTab === 'gear'){
-    const giftBtn = document.createElement('div');
-    giftBtn.className = 'gift-player-btn';
-    giftBtn.textContent = '🎁 Gift Player';
-    giftBtn.onclick = giftPlayer;
-    container.appendChild(giftBtn);
-  }
+
+  // Кнопка Gift Player на каждой вкладке
+  const giftBtn = document.createElement('div');
+  giftBtn.className = 'gift-player-btn';
+  giftBtn.textContent = '🎁 Gift Player';
+  giftBtn.onclick = giftPlayer;
+  container.appendChild(giftBtn);
 }
 
 function openRedShop(){
