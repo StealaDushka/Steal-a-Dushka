@@ -8,7 +8,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script>
 const firebaseConfig={apiKey:"AIzaSyDkXM7aHtofhx8WAT1eSfLnbsOYVXXg28o",authDomain:"steal-a-dushka.firebaseapp.com",databaseURL:"https://steal-a-dushka-default-rtdb.firebaseio.com",projectId:"steal-a-dushka",storageBucket:"steal-a-dushka.firebasestorage.app",messagingSenderId:"850469516444",appId:"1:850469516444:web:eecdf7fc938824a3f8e959",measurementId:"G-WK4T3127ZX"};
-firebase.initializeApp(firebaseConfig);const db=firebase.database();
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
 </script>
 <style>
 *{box-sizing:border-box}body{margin:0;overflow:hidden;background:#1a1a1a;font-family:'Courier New',monospace;touch-action:none;user-select:none;-webkit-user-select:none}
@@ -95,7 +96,11 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <div id="bee-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Королева Пчёл</h2><p>Она улетит через 1ч 20м</p></div><div class="close-btn" onclick="closeBee()">X</div></div><div class="content"><div class="grid"><div class="card"><div class="img-placeholder">🦝</div><div class="status">100</div><div class="mps">$10M/s</div><div class="name">Conetto Morsetto</div><div class="buy-row"><div class="count-box">📦 20</div><button class="price-btn">🪙 499</button></div></div><div class="card"><div class="img-placeholder">🐻</div><div class="status">100</div><div class="mps">$32M/s</div><div class="name">Honey Honey Bear</div><div class="buy-row"><div class="count-box">📦 40</div><button class="price-btn">🪙 999</button></div></div><div class="card"><div class="img-placeholder">🐝</div><div class="status">100</div><div class="mps">$65M/s</div><div class="name">Queen Bee</div><div class="buy-row"><div class="count-box">📦 100</div><button class="price-btn">🪙 2,499</button></div></div><div class="card"><div class="img-placeholder">🍫</div><div class="status">100</div><div class="mps">$85M/s</div><div class="name">S'more Serat</div><div class="buy-row"><div class="count-box">📦 200</div><button class="price-btn">🪙 4,999</button></div></div></div></div></div>
 <div id="wheel-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>CRYSTAL WHEEL</h2></div><div class="close-btn" onclick="closeWheel()">X</div></div><div class="content"><div class="wheel-container"><div class="pin">📍</div><div class="wheel"><div class="slice"><div class="icon">💵</div><div class="label">$12K</div><div class="chance">45%</div></div><div class="slice"><div class="icon">💵</div><div class="label">$12K</div><div class="chance">45%</div></div><div class="slice"><div class="icon">🍀</div><div class="label">2x<br>Lucky</div><div class="chance">2%</div></div><div class="slice"><div class="icon">💵</div><div class="label">$1M</div><div class="chance">7%</div></div><div class="slice"><div class="icon">🔮</div><div class="label">Crystal<br>Slap</div><div class="chance">0.5%</div></div><div class="slice"><div class="icon">❓</div><div class="label">Lucky<br>Block</div><div class="chance">0.5%</div></div></div></div><div class="controls"><div class="timer">Бесплатный спин через: 1ч 23м</div><div class="actions"><button class="buy-btn" onclick="buySpin(1)">🪙 49</button><button class="spin-btn" onclick="doSpin()">Spin (0)</button><button class="buy-btn" onclick="buySpin(3)">🪙 199</button></div></div></div></div>
 <script>
-// Зум разблокирован
+// ==================== БЛОКИРОВКА ЗУМА ====================
+window.addEventListener('wheel', e => e.preventDefault(), { passive: false });
+window.addEventListener('keydown', e => { if (e.ctrlKey && ['+','-','=','0'].includes(e.key)) e.preventDefault(); });
+
+// Масштабирование игры под экран
 function resizeGame(){const game=document.getElementById('game-container');if(!game)return;const availW=window.innerWidth,availH=window.innerHeight;let scale=Math.min(availW/500,availH/500);scale=Math.max(0.6,Math.min(1.2,scale));game.style.transform=`scale(${scale})`;}
 window.addEventListener('resize',resizeGame);
 
