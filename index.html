@@ -68,7 +68,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .red-shop-item .price-btn.owned{background:#555;cursor:default}
 .gift-player-btn{background:#f39c12;color:#000;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;text-align:center;margin-top:15px}
 
-/* ===== МЕНЮ ПЧЁЛ (исправленное) ===== */
+/* ===== МЕНЮ ПЧЁЛ (стилизованное) ===== */
 #bee-menu{background:#e8b425;max-width:600px}
 #bee-menu .header{background:#d4a017;background-image:repeating-linear-gradient(45deg,#f2d64a 0px,#f2d64a 8px,#eac032 8px,#eac032 16px)}
 #bee-menu .header .title h2{color:#fff;text-shadow:2px 2px 0 #000}
@@ -132,7 +132,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 </div></div></div>
 <!-- Меню персонажей -->
 <div id="char-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>PERSONAJI</h2><p>Все персонажи!</p></div><div class="close-btn" onclick="closeCharacters()">X</div></div><div class="content"><div class="grid"><div class="char-card"><div class="icon">🟢</div><div class="name">Verde</div></div><div class="char-card"><div class="icon">🔴</div><div class="name">Ross</div></div><div class="char-card"><div class="icon">🟪</div><div class="name">Viola</div></div><div class="char-card"><div class="icon">🟦</div><div class="name">Blu</div></div><div class="char-card"><div class="icon">🟥</div><div class="name">Rosso</div></div><div class="char-card"><div class="icon">🟨</div><div class="name">Giallo</div></div><div class="char-card"><div class="icon">🟩</div><div class="name">Prato</div></div><div class="char-card"><div class="icon">🟫</div><div class="name">Marrone</div></div><div class="char-card"><div class="icon">⬛</div><div class="name">Nero</div></div></div></div></div>
-<!-- МЕНЮ ПЧЁЛ (уже стилизовано) -->
+<!-- МЕНЮ ПЧЁЛ -->
 <div id="bee-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Королева Пчёл</h2><p>Она улетит через 1ч 20м</p></div><div class="close-btn" onclick="closeBee()">X</div></div><div class="content"><div class="grid"><div class="card"><div class="img-placeholder">🦝</div><div class="status">100</div><div class="mps">$10M/s</div><div class="name">Conetto Morsetto</div><div class="buy-row"><div class="count-box">📦 20</div><button class="price-btn">🪙 499</button></div></div><div class="card"><div class="img-placeholder">🐻</div><div class="status">100</div><div class="mps">$32M/s</div><div class="name">Honey Honey Bear</div><div class="buy-row"><div class="count-box">📦 40</div><button class="price-btn">🪙 999</button></div></div><div class="card"><div class="img-placeholder">🐝</div><div class="status">100</div><div class="mps">$65M/s</div><div class="name">Queen Bee</div><div class="buy-row"><div class="count-box">📦 100</div><button class="price-btn">🪙 2,499</button></div></div><div class="card"><div class="img-placeholder">🍫</div><div class="status">100</div><div class="mps">$85M/s</div><div class="name">S'more Serat</div><div class="buy-row"><div class="count-box">📦 200</div><button class="price-btn">🪙 4,999</button></div></div></div><div class="banner"><div class="img-placeholder">🤖</div><div class="stats"><div class="mps">$172.5M/s</div><div class="name">Bumbatron</div></div><div class="right-stats"><div class="stock">25 left</div><div class="buy-row"><div class="count-box">📦 400</div><button class="price-btn">🪙 9,999</button></div></div></div></div></div>
 <!-- СИНИЙ МАГАЗИН -->
 <div id="shop-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Обычный магазин</h2><p>Покупай за монеты</p></div><div class="close-btn" onclick="closeShop()">X</div></div><div class="content" id="shop-items"></div></div>
@@ -477,24 +477,25 @@ document.addEventListener('keyup',function(e){
 });
 
 const SPEED=1,MAX_X=380,MAX_Y=380;
-// ===== НЕПРОХОДИМЫЕ ОБЪЕКТЫ (включая чёрные полоски) =====
+// ===== НЕПРОХОДИМЫЕ ОБЪЕКТЫ (чёрные полоски + магазины) =====
 const obstacles=[
-  {x:0,y:170,w:16,h:60},   // левая чёрная полоска
-  {x:384,y:170,w:16,h:60}, // правая чёрная полоска
-  {x:150,y:137,w:20,h:20}, // shop-blue
-  {x:190,y:137,w:20,h:20}, // rng-machine
-  {x:230,y:137,w:20,h:24}, // queen-bee
-  {x:150,y:230,w:20,h:20}, // shop-red
-  {x:190,y:230,w:20,h:20}, // rng-circle
-  {x:230,y:230,w:20,h:20}  // shop-white
+  {x:0,y:170,w:16,h:60},
+  {x:384,y:170,w:16,h:60},
+  {x:150,y:137,w:20,h:20},
+  {x:190,y:137,w:20,h:20},
+  {x:230,y:137,w:20,h:24},
+  {x:150,y:230,w:20,h:20},
+  {x:190,y:230,w:20,h:20},
+  {x:230,y:230,w:20,h:20}
 ];
+// ===== КООРДИНАТЫ ЦЕНТРОВ ОБЪЕКТОВ ДЛЯ КНОПКИ E =====
 const interactables=[
-  {id:'rng-machine',x:190,y:137},
-  {id:'shop-blue',x:150,y:137},
-  {id:'queen-bee',x:230,y:137},
-  {id:'shop-red',x:150,y:230},
-  {id:'rng-circle',x:190,y:230},
-  {id:'shop-white',x:230,y:230}
+  {id:'rng-machine', cx:200, cy:147},   // 190+10, 137+10
+  {id:'shop-blue',   cx:160, cy:147},   // 150+10, 137+10
+  {id:'queen-bee',   cx:240, cy:149},   // 230+10, 137+12
+  {id:'shop-red',    cx:160, cy:240},   // 150+10, 230+10
+  {id:'rng-circle',  cx:200, cy:240},   // 190+10, 230+10
+  {id:'shop-white',  cx:240, cy:240}    // 230+10, 230+10
 ];
 
 let lastTime=0,lastSync=0;
@@ -504,11 +505,11 @@ function update(time=0){
   if(dx!==0||dy!==0){
     const len=Math.sqrt(dx*dx+dy*dy);
     let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60;
-    // Проверка коллизий по X
+    // коллизия по X
     let rX={x:nx,y:y,w:10,h:20}; let blockedX=false;
     for(let o of obstacles){if(rectCollide(rX,o)){blockedX=true;break;}}
     if(!blockedX)x=nx;
-    // Проверка коллизий по Y
+    // коллизия по Y
     let rY={x:x,y:ny,w:10,h:20}; let blockedY=false;
     for(let o of obstacles){if(rectCollide(rY,o)){blockedY=true;break;}}
     if(!blockedY)y=ny;
@@ -516,11 +517,13 @@ function update(time=0){
     document.getElementById('player').style.left=x+'px';document.getElementById('player').style.top=y+'px';
     if(Date.now()-lastSync>200){db.ref('users/'+currentNickname).update({x:x,y:y});lastSync=Date.now();}
   }
-  // ===== КНОПКА E: РАССТОЯНИЕ 15 ПИКСЕЛЕЙ =====
+  // ===== КНОПКА E: РАССТОЯНИЕ ОТ ЦЕНТРА ПЕРСОНАЖА ДО ЦЕНТРА ОБЪЕКТА (15 ПИКСЕЛЕЙ) =====
   let found=false;
+  let px = x + 5;  // центр персонажа по X
+  let py = y + 10; // центр персонажа по Y
   for(let obj of interactables){
-    let dist=Math.sqrt(Math.pow(x-obj.x,2)+Math.pow(y-obj.y,2));
-    if(dist<15){
+    let dist = Math.sqrt(Math.pow(px - obj.cx, 2) + Math.pow(py - obj.cy, 2));
+    if(dist < 15){
       let btn=document.getElementById('interact');
       btn.style.display='flex';
       btn.style.left=(x-7)+'px';btn.style.top=(y-25)+'px';
