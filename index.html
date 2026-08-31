@@ -36,7 +36,7 @@ window.getDushkaCoins=async function(n){try{const s=await db.ref('users/'+n).onc
 .base{position:absolute;width:75px;height:75px;background:#869292}
 .base .brown{position:absolute;width:calc(100% - 8px);left:4px;height:14px;background:#bf5b1a;bottom:4px}
 .base .green{position:absolute;width:34px;height:14px;background:#22e54c;left:50%;transform:translateX(-50%);bottom:-14px}
-.base .nickname{position:absolute;bottom:4px;left:0;width:100%;height:14px;line-height:14px;text-align:center;color:#fff;font-size:8px;font-weight:bold;text-shadow:1px 1px 1px #000;z-index:5;pointer-events:none;/* убрал overflow:hidden, чтобы ник не обрезался */}
+.base .nickname{position:absolute;bottom:4px;left:0;width:100%;height:14px;line-height:14px;text-align:center;color:#fff;font-size:8px;font-weight:bold;text-shadow:1px 1px 1px #000;z-index:5;pointer-events:none}
 .base-top-1{top:20px;left:20px}.base-top-2{top:20px;left:115px}.base-top-3{top:20px;left:210px}.base-top-4{top:20px;left:305px}
 .base-bottom-1{bottom:20px;left:20px}.base-bottom-2{bottom:20px;left:115px}.base-bottom-3{bottom:20px;left:210px}.base-bottom-4{bottom:20px;left:305px}
 .base-bottom .brown{top:4px;bottom:auto}
@@ -104,18 +104,14 @@ function initPlayer(){let pl=document.getElementById('player');pl.innerHTML='<di
 document.addEventListener('keydown',function(e){const k=String(e.key).toLowerCase();if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;keys.arrowup=true;e.preventDefault()}if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;keys.arrowdown=true;e.preventDefault()}if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;keys.arrowleft=true;e.preventDefault()}if(k==='d'||k==='в'||k==='arrowright'){keys.d=true;keys.arrowright=true;e.preventDefault()}if(k==='e'||k==='у'){interact();e.preventDefault()}});
 document.addEventListener('keyup',function(e){const k=String(e.key).toLowerCase();if(k==='w'||k==='ц'||k==='arrowup'){keys.w=false;keys.arrowup=false;e.preventDefault()}if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=false;keys.arrowdown=false;e.preventDefault()}if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=false;keys.arrowleft=false;e.preventDefault()}if(k==='d'||k==='в'||k==='arrowright'){keys.d=false;keys.arrowright=false;e.preventDefault()}});
 const SPEED=1,MAX_X=380,MAX_Y=380;
-// ДОБАВИЛ ВСЕ ОБЪЕКТЫ В ПРЕПЯТСТВИЯ (НЕЛЬЗЯ ПРОХОДИТЬ)
+// ВСЕ ОБЪЕКТЫ И ЧЁРНЫЕ ВЫСТУПЫ - ПРЕПЯТСТВИЯ
 const obstacles=[{x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},{x:190,y:137,w:20,h:20},{x:150,y:137,w:20,h:20},{x:230,y:137,w:20,h:24},{x:150,y:230,w:20,h:20},{x:190,y:230,w:20,h:20},{x:230,y:230,w:20,h:20}];
-// ХИТБОКСЫ ДЛЯ КНОПКИ E С РАСШИРЕНИЕМ 1.5 ПИКСЕЛЯ (С ЛЮБОЙ СТОРОНЫ)
+// ХИТБОКСЫ ДЛЯ КНОПКИ E (с расширением 1.5 пикселя)
 const interactables=[{x:190-1.5,y:137-1.5,w:23,h:23,name:'RNG'},{x:150-1.5,y:137-1.5,w:23,h:23,name:'Магазин'},{x:230-1.5,y:137-1.5,w:23,h:27,name:'Пчелы'},{x:150-1.5,y:230-1.5,w:23,h:23,name:'Красный магазин'},{x:190-1.5,y:230-1.5,w:23,h:23,name:'Колесо'},{x:230-1.5,y:230-1.5,w:23,h:23,name:'Белый магазин'}];
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y)}
 let lastTime=0;
-function update(time=0){requestAnimationFrame(update);const dt=Math.min((time-lastTime)/1000,0.1);lastTime=time;let dx=0,dy=0;if(keys.w||keys.arrowup)dy-=1;if(keys.s||keys.arrowdown)dy+=1;if(keys.a||keys.arrowleft)dx-=1;if(keys.d||keys.arrowright)dx+=1;if(dx!==0||dy!==0){const len=Math.sqrt(dx*dx+dy*dy);let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60;
-// Проверка столкновений со всеми объектами
-let rX={x:nx,y:y,w:10,h:20},bX=false;for(let o of obstacles)if(collide(rX,o)){bX=true;break}if(!bX)x=nx;
-let rY={x:x,y:ny,w:10,h:20},bY=false;for(let o of obstacles)if(collide(rY,o)){bY=true;break}if(!bY)y=ny;
-x=Math.max(10,Math.min(MAX_X,x));y=Math.max(10,Math.min(MAX_Y,y));document.getElementById('player').style.left=x+'px';document.getElementById('player').style.top=y+'px'}
-// Проверка пересечения с расширенными хитбоксами для появления E
+function update(time=0){requestAnimationFrame(update);const dt=Math.min((time-lastTime)/1000,0.1);lastTime=time;let dx=0,dy=0;if(keys.w||keys.arrowup)dy-=1;if(keys.s||keys.arrowdown)dy+=1;if(keys.a||keys.arrowleft)dx-=1;if(keys.d||keys.arrowright)dx+=1;if(dx!==0||dy!==0){const len=Math.sqrt(dx*dx+dy*dy);let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60;let rX={x:nx,y:y,w:10,h:20},bX=false;for(let o of obstacles)if(collide(rX,o)){bX=true;break}if(!bX)x=nx;let rY={x:x,y:ny,w:10,h:20},bY=false;for(let o of obstacles)if(collide(rY,o)){bY=true;break}if(!bY)y=ny;x=Math.max(10,Math.min(MAX_X,x));y=Math.max(10,Math.min(MAX_Y,y));document.getElementById('player').style.left=x+'px';document.getElementById('player').style.top=y+'px'}
+// Проверка появления кнопки E
 let found=false;let playerRect={x:x,y:y,w:10,h:20};for(let obj of interactables){if(collide(playerRect,obj)){let btn=document.getElementById('interact');btn.style.display='flex';btn.style.left=(x-7)+'px';btn.style.top=(y-25)+'px';btn.dataset.obj=obj.name;found=true;break}}if(!found)document.getElementById('interact').style.display='none'}
 function interact(){let btn=document.getElementById('interact');if(btn.style.display==='none')return;let obj=btn.dataset.obj;if(obj==='Пчелы')openBee();else if(obj==='Колесо')openWheel();else if(obj==='Магазин')openCharacters();else alert('Взаимодействие с: '+obj)}
 function openCharacters(){document.getElementById('char-menu').style.display='flex'}function closeCharacters(){document.getElementById('char-menu').style.display='none'}function openBee(){document.getElementById('bee-menu').style.display='flex'}function closeBee(){document.getElementById('bee-menu').style.display='none'}function openWheel(){document.getElementById('wheel-menu').style.display='flex'}function closeWheel(){document.getElementById('wheel-menu').style.display='none'}
