@@ -27,7 +27,6 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .action-btn{width:60px;height:60px;display:flex;justify-content:center;align-items:center;background:#666;border:4px solid #000;color:#fff;font-weight:bold;font-size:12px;cursor:pointer;transition:transform .1s,filter .1s}
 .action-btn:active{transform:scale(.95);filter:brightness(.8)}
 .action-btn.pink{background:#E54B8C}
-.action-btn.gold{background:#F7B731;color:#000}
 
 #game-wrapper{flex:1;height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden}
 #game-container{width:400px;height:400px;background:#20b94d;border:4px solid black;position:relative;overflow:hidden;transform-origin:left center}
@@ -70,21 +69,15 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 
 #bee-menu{background:#e8b425}#bee-menu .content{background:#1a1a1a;padding:10px 15px 15px 15px}#bee-menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}#bee-menu .card{position:relative;background:#2c2c2c;border:2px solid #444;border-radius:6px;padding:8px;display:flex;flex-direction:column;align-items:center;min-height:120px}#bee-menu .card .img-placeholder{width:100%;height:70px;background:#3a3a3a;border-radius:4px;display:flex;justify-content:center;align-items:center;font-size:40px;margin-bottom:4px}#bee-menu .card .status{position:absolute;top:4px;right:8px;color:#ff4444;font-weight:bold;font-size:14px}#bee-menu .card .mps{color:#4caf50;font-weight:bold;font-size:14px}#bee-menu .card .name{color:#fff;font-weight:bold;font-size:16px}#bee-menu .card .buy-row{display:flex;justify-content:space-between;width:100%;margin-top:6px;gap:4px}#bee-menu .card .count-box{background:#ffd700;color:#000;font-weight:bold;font-size:14px;padding:4px 10px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex:1}#bee-menu .card .price-btn{background:#4caf50;border:none;color:#fff;font-weight:bold;font-size:13px;padding:4px 10px;border-radius:4px;cursor:pointer;flex:1.5}
 
-/* МЕНЮ ДОНАТА */
-#donate-menu{background:#1e2426;max-width:520px}
-#donate-menu .content{background:rgba(0,0,0,.3);padding:20px}
-#donate-menu .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
-#donate-menu .donate-card{background:#2c2c2c;border:2px solid #444;border-radius:10px;padding:15px;display:flex;flex-direction:column;align-items:center;gap:10px}
-#donate-menu .donate-card .coins{font-size:24px;font-weight:bold;color:#F7B731}
-#donate-menu .donate-card .price{font-size:14px;color:#aaa}
-#donate-menu .donate-card .buy-donate-btn{background:#F7B731;border:none;color:#000;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:bold}
-
 /* КОЛЕСО */
 #wheel-menu{background:#1a1a3a;max-width:560px;max-height:90vh}
 #wheel-menu .content{background:rgba(0,0,0,.3);padding:15px;display:flex;flex-direction:column;align-items:center;gap:15px;overflow-y:auto}
 .wheel-container{position:relative;width:280px;height:280px;display:flex;justify-content:center;align-items:center;flex-shrink:0}
 .wheel-container .pin{position:absolute;top:-20px;left:50%;transform:translateX(-50%);z-index:10;font-size:30px;color:#ff3333}
 .wheel{width:260px;height:260px;border-radius:50%;position:relative;overflow:hidden;border:4px solid #4a90e2;box-shadow:0 0 15px rgba(74,144,226,.5);background:conic-gradient(#2e86de 0deg 60deg,#10ac84 60deg 120deg,#feca57 120deg 180deg,#ff9f43 180deg 240deg,#5f27cd 240deg 300deg,#ff6b6b 300deg 360deg)}
+/* Анимация вращения при открытии */
+.wheel.spinning{animation:spinWheel 2s ease-out forwards}
+@keyframes spinWheel{from{transform:rotate(0deg)}to{transform:rotate(1080deg)}}
 .wheel .label{position:absolute;top:50%;left:50%;width:80px;height:50px;margin-left:-40px;margin-top:-25px;text-align:center;color:#fff;font-size:11px;font-weight:bold;text-shadow:1px 1px 2px rgba(0,0,0,.8);pointer-events:none;transform:rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle)));white-space:nowrap}
 .wheel .label .icon{display:block;font-size:18px;margin-bottom:2px}
 .wheel .label .chance{font-size:10px;opacity:.8}
@@ -126,7 +119,6 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
       <div class="action-btn" onclick="showModal('Ребирт','Скоро появится!')">REBIRTH</div>
       <div class="action-btn" onclick="showModal('Трейд','Скоро появится!')">TRADE</div>
       <div class="action-btn" onclick="showModal('INDEX','Твой индекс: ' + (currentNickname ? 'База ' + currentNickname : 'Неизвестно'))">INDEX</div>
-      <div class="action-btn gold" onclick="openDonate()">DONATE</div>
     </div>
   </div>
   <div id="game-wrapper">
@@ -158,37 +150,13 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <!-- МЕНЮ ПЧЁЛ -->
 <div id="bee-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Королева Пчёл</h2><p>Она улетит через 1ч 20м</p></div><div class="close-btn" onclick="closeBee()">X</div></div><div class="content"><div class="grid"><div class="card"><div class="img-placeholder">🦝</div><div class="status">100</div><div class="mps">$10M/s</div><div class="name">Conetto Morsetto</div><div class="buy-row"><div class="count-box">📦 20</div><button class="price-btn">🪙 499</button></div></div><div class="card"><div class="img-placeholder">🐻</div><div class="status">100</div><div class="mps">$32M/s</div><div class="name">Honey Honey Bear</div><div class="buy-row"><div class="count-box">📦 40</div><button class="price-btn">🪙 999</button></div></div><div class="card"><div class="img-placeholder">🐝</div><div class="status">100</div><div class="mps">$65M/s</div><div class="name">Queen Bee</div><div class="buy-row"><div class="count-box">📦 100</div><button class="price-btn">🪙 2,499</button></div></div><div class="card"><div class="img-placeholder">🍫</div><div class="status">100</div><div class="mps">$85M/s</div><div class="name">S'more Serat</div><div class="buy-row"><div class="count-box">📦 200</div><button class="price-btn">🪙 4,999</button></div></div></div></div></div>
 
-<!-- МЕНЮ ДОНАТА -->
-<div id="donate-menu" class="menu-overlay" style="display:none">
-  <div class="header"><div class="title"><h2>ПОПОЛНИТЬ БАЛАНС</h2><p>Поддержи игру и получи Dushka Coins!</p></div><div class="close-btn" onclick="closeDonate()">X</div></div>
-  <div class="content">
-    <div class="grid">
-      <div class="donate-card">
-        <div class="coins">100💰</div>
-        <div class="price">0.99 USD</div>
-        <button class="buy-donate-btn" onclick="donate(100)">Купить</button>
-      </div>
-      <div class="donate-card">
-        <div class="coins">550💰</div>
-        <div class="price">4.99 USD</div>
-        <button class="buy-donate-btn" onclick="donate(550)">Купить</button>
-      </div>
-      <div class="donate-card">
-        <div class="coins">1200💰</div>
-        <div class="price">9.99 USD</div>
-        <button class="buy-donate-btn" onclick="donate(1200)">Купить</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- МЕНЮ КОЛЕСА -->
 <div id="wheel-menu" class="menu-overlay" style="display:none">
   <div class="header"><div class="title"><h2>CRYSTAL WHEEL</h2></div><div class="close-btn" onclick="closeWheel()">X</div></div>
   <div class="content">
     <div class="wheel-container">
       <div class="pin">📍</div>
-      <div class="wheel">
+      <div class="wheel" id="wheel">
         <div class="label" style="--angle:30deg"><div class="icon">💵</div><div class="label-text">$12K</div><div class="chance">45%</div></div>
         <div class="label" style="--angle:90deg"><div class="icon">💵</div><div class="label-text">$12K</div><div class="chance">45%</div></div>
         <div class="label" style="--angle:150deg"><div class="icon">🍀</div><div class="label-text">2x<br>Lucky</div><div class="chance">2%</div></div>
@@ -280,18 +248,18 @@ async function getFreeBase(){
     if(free.length===0)return null;return free[Math.floor(Math.random()*free.length)];
 }
 
-// ========== РЕГИСТРАЦИЯ (добавляем dushka:0) ==========
+// ========== РЕГИСТРАЦИЯ (добавляем dushka:0, spins:0) ==========
 async function handleRegister(){
     const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();
     if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return}
     const e=await readUserData(u);if(e){showModal('Ошибка','Ник занят!');return}
     const base=await getFreeBase();if(!base){showModal('Ошибка','Все базы заняты!');return}
     const spawn=baseSpawnPoints[base];
-    // ВАЖНО: добавляем dushka:0
-    await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,level:1,last_online:Date.now(),base:base,x:spawn.x,y:spawn.y});
+    // ВАЖНО: добавляем dushka:0, spins:0
+    await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,level:1,last_online:Date.now(),base:base,x:spawn.x,y:spawn.y});
     currentNickname=u;startGame();
 }
-// ========== ВХОД (если нет dushka, создаём) ==========
+// ========== ВХОД (если нет dushka или spins, создаём) ==========
 async function handleLogin(){
     const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();
     if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return}
@@ -300,27 +268,40 @@ async function handleLogin(){
         if(e.password===p){
             currentNickname=u;
             if(!e.base){const base=await getFreeBase();if(!base){showModal('Ошибка','Все базы заняты!');return}const spawn=baseSpawnPoints[base];e.base=base;e.x=spawn.x;e.y=spawn.y;}
-            // Если нет dushka, создаём
-            if(typeof e.dushka === 'undefined'){e.dushka=0;await writeUserData(u,e);}
+            // Если нет dushka или spins, создаём
+            if(typeof e.dushka === 'undefined'){e.dushka=0;}
+            if(typeof e.spins === 'undefined'){e.spins=0;}
+            await writeUserData(u,e);
             startGame();
         } else showModal('Ошибка','Неверный пароль!');
     } else showModal('Ошибка','Ник не найден! Нажми РЕГ.');
 }
 
-// ========== ЧТЕНИЕ DUSHKA COINS (читаем из Firebase) ==========
+// ========== ЧТЕНИЕ БАЛАНСА И СПИНОВ ==========
 async function loadDushkaCoins(){
     if(currentNickname){
         const d=await readUserData(currentNickname);
         if(d){
-            dushka = d.dushka || 0; // читаем dushka
+            dushka = d.dushka || 0;
             document.getElementById('dushka-coins').textContent = dushka;
         }
     }
 }
+async function loadSpins(){
+    if(currentNickname){
+        const d=await readUserData(currentNickname);
+        if(d){
+            _spins = d.spins || 0;
+            updateSpinBtn();
+        }
+    }
+}
+
 setInterval(loadDushkaCoins,5000);
+setInterval(loadSpins,5000);
 
 async function startGame(){
-    document.getElementById('auth').style.display='none';document.getElementById('app').style.display='flex';document.getElementById('balance').style.display='flex';loadDushkaCoins();
+    document.getElementById('auth').style.display='none';document.getElementById('app').style.display='flex';document.getElementById('balance').style.display='flex';loadDushkaCoins();loadSpins();
     const data=await readUserData(currentNickname);
     if(data&&data.base){
         let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`);
@@ -402,27 +383,14 @@ function interact(){
 
 function openCharacters(){document.getElementById('char-menu').style.display='flex'}function closeCharacters(){document.getElementById('char-menu').style.display='none'}function openBee(){document.getElementById('bee-menu').style.display='flex'}function closeBee(){document.getElementById('bee-menu').style.display='none'}function openWheel(){document.getElementById('wheel-menu').style.display='flex'}function closeWheel(){document.getElementById('wheel-menu').style.display='none'}
 
-// ========== ДОНАТ (пишем в Firebase) ==========
-function openDonate(){document.getElementById('donate-menu').style.display='flex';}
-function closeDonate(){document.getElementById('donate-menu').style.display='none';}
-
-function donate(amount){
-    if(!currentNickname){showModal('Ошибка','Войдите в аккаунт!');return;}
-    dushka += amount;
-    document.getElementById('dushka-coins').textContent = dushka;
-    // ВАЖНО: записываем именно в поле dushka
-    db.ref('users/'+currentNickname).update({dushka:dushka});
-    showModal('Спасибо за поддержку!', `Вы получили ${amount} Dushka Coins!`);
-}
-
-// ========== ПОКУПКА СПИНОВ (списываем dushka) ==========
+// ========== ПОКУПКА СПИНОВ ЗА DUSHKA COINS (сохраняем в Firebase) ==========
 function buySpin(a){
     let c=a===1?49:199;
     if(dushka>=c){
         dushka-=c;
         _spins+=a;
         document.getElementById('dushka-coins').textContent=dushka;
-        db.ref('users/'+currentNickname).update({dushka:dushka});
+        db.ref('users/'+currentNickname).update({dushka:dushka, spins:_spins});
         updateSpinBtn();
         showModal('Покупка',`Куплено ${a} спин(ов) за ${c} Dushka Coins!`);
     } else showModal('Ошибка','Недостаточно Dushka Coins!');
@@ -432,12 +400,71 @@ function updateSpinBtn(){
     document.querySelector('#wheel-menu .spin-btn').textContent = `Spin (${_spins})`;
 }
 
+// ========== ВЫБОР ПРИЗА ПО ШАНСАМ ==========
+const prizes = [
+    {name: '$12K', chance: 45, reward: 12000},
+    {name: '$12K', chance: 45, reward: 12000},
+    {name: '2x Lucky', chance: 2, reward: 0},
+    {name: '$1M', chance: 7, reward: 1000000},
+    {name: 'Crystal Slap', chance: 0.5, reward: 0},
+    {name: 'Lucky Block', chance: 0.5, reward: 0}
+];
+
+function getRandomPrize(){
+    const total = prizes.reduce((sum, p) => sum + p.chance, 0);
+    let random = Math.random() * total;
+    for(let prize of prizes){
+        if(random < prize.chance) return prize;
+        random -= prize.chance;
+    }
+    return prizes[0];
+}
+
+// ========== ВРАЩЕНИЕ КОЛЕСА ==========
 function doSpin(){
     if(_spins<=0){showModal('Ошибка','Нет спинов!');return}
     _spins--;
+    // Сохраняем спины в Firebase
+    db.ref('users/'+currentNickname).update({spins:_spins});
     updateSpinBtn();
-    const prizes=['$12K','$12K','2x Lucky','$1M','Crystal Slap','Lucky Block'];
-    showModal('Колесо','Колесо крутится! Выпало: '+prizes[Math.floor(Math.random()*prizes.length)]);
+
+    // Анимация вращения
+    const wheel = document.getElementById('wheel');
+    wheel.classList.remove('spinning');
+    void wheel.offsetWidth; // перезапуск анимации
+    wheel.classList.add('spinning');
+
+    // Выбор приза по шансам
+    setTimeout(() => {
+        const prize = getRandomPrize();
+        // Начисляем деньги за приз (если это деньги)
+        if(prize.reward > 0){
+            coins += prize.reward;
+            document.getElementById('balance-amount').textContent = coins;
+            db.ref('users/'+currentNickname).update({coins:coins});
+        }
+        showModal('Колесо', `Выпало: ${prize.name}!`);
+    }, 2000); // ждём окончание анимации
+}
+
+// ========== ТАЙМЕР БЕСПЛАТНОГО СПИНА (каждые 2 часа) ==========
+// (уже есть выше, но сохраняем спины в Firebase при начислении)
+function updateFreeSpinTimer() {
+    const elapsed = Math.floor((Date.now() - lastFreeSpinTime) / 1000);
+    const remaining = FREE_SPIN_INTERVAL - elapsed;
+    if (remaining <= 0) {
+        _spins++;
+        lastFreeSpinTime = Date.now();
+        localStorage.setItem('lastFreeSpinTime', lastFreeSpinTime.toString());
+        db.ref('users/'+currentNickname).update({spins:_spins});
+        updateSpinBtn();
+        showModal('Бесплатный спин!', 'Вы получили 1 бесплатное вращение!');
+    }
+    const hours = Math.floor(remaining / 3600);
+    const minutes = Math.floor((remaining % 3600) / 60);
+    const seconds = remaining % 60;
+    const timerEl = document.getElementById('wheel-timer');
+    if (timerEl) timerEl.textContent = `Бесплатный спин через: ${hours}ч ${minutes}м ${seconds}с`;
 }
 </script>
 </body>
