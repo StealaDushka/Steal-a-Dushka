@@ -69,7 +69,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 
 #bee-menu{background:#e8b425}#bee-menu .content{background:#1a1a1a;padding:10px 15px 15px 15px}#bee-menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}#bee-menu .card{position:relative;background:#2c2c2c;border:2px solid #444;border-radius:6px;padding:8px;display:flex;flex-direction:column;align-items:center;min-height:120px}#bee-menu .card .img-placeholder{width:100%;height:70px;background:#3a3a3a;border-radius:4px;display:flex;justify-content:center;align-items:center;font-size:40px;margin-bottom:4px}#bee-menu .card .status{position:absolute;top:4px;right:8px;color:#ff4444;font-weight:bold;font-size:14px}#bee-menu .card .mps{color:#4caf50;font-weight:bold;font-size:14px}#bee-menu .card .name{color:#fff;font-weight:bold;font-size:16px}#bee-menu .card .buy-row{display:flex;justify-content:space-between;width:100%;margin-top:6px;gap:4px}#bee-menu .card .count-box{background:#ffd700;color:#000;font-weight:bold;font-size:14px;padding:4px 10px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex:1}#bee-menu .card .price-btn{background:#4caf50;border:none;color:#fff;font-weight:bold;font-size:13px;padding:4px 10px;border-radius:4px;cursor:pointer;flex:1.5}
 
-/* МЕНЮ МАГАЗИНА */
+/* МЕНЮ МАГАЗИНА (синяя крыша) */
 #shop-menu{background:#3a6b8c;max-width:600px;max-height:90vh}
 #shop-menu .header{background:#1a4a6e}
 #shop-menu .content{background:#2c3e50;padding:15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
@@ -117,8 +117,8 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <div id="auth"><div id="auth-box"><label class="auth-label">НИК</label><input type="text" id="username" class="auth-input" autocomplete="off"><label class="auth-label">ПАРОЛЬ</label><input type="password" id="password" class="auth-input"><div class="auth-btns"><button class="auth-btn btn-login" onclick="handleLogin()">ВОЙТИ</button><button class="auth-btn btn-reg" onclick="handleRegister()">РЕГ</button></div><div class="hint">Запишите ваш пароль. Спасибо за внимание</div></div></div>
 <div id="balance"><div class="box dushka"><span class="icon">💰</span><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div><div class="box"><span class="icon">🪙</span><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div></div>
 <div id="app"><div id="sidebar"><div id="actions">
-<div class="action-btn pink" onclick="openCharacters()">SHOP</div>
-<div class="action-btn" onclick="showModal('Ребирт','Скоро появится!')">REBIRTH</div>
+<div class="action-btn pink" onclick="openShop()">SHOP</div>
+<div class="action-btn" onclick="openCharacters()">PERSONAJI</div>
 <div class="action-btn" onclick="showModal('Трейд','Скоро появится!')">TRADE</div>
 <div class="action-btn" onclick="showModal('INDEX','Твой индекс: ' + (currentNickname ? 'База ' + currentNickname : 'Неизвестно'))">INDEX</div>
 </div></div><div id="game-wrapper"><div id="game-container">
@@ -146,26 +146,18 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <div id="wheel-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>CRYSTAL WHEEL</h2></div><div class="close-btn" onclick="closeWheel()">X</div></div><div class="content"><div class="wheel-container"><div class="pin">📍</div><div class="wheel"><div class="label" style="--angle:30deg"><div class="icon">💵</div><div class="label-text">$12K</div><div class="chance">45%</div></div><div class="label" style="--angle:90deg"><div class="icon">💵</div><div class="label-text">$12K</div><div class="chance">45%</div></div><div class="label" style="--angle:150deg"><div class="icon">🍀</div><div class="label-text">2x<br>Lucky</div><div class="chance">2%</div></div><div class="label" style="--angle:210deg"><div class="icon">💵</div><div class="label-text">$1M</div><div class="chance">7%</div></div><div class="label" style="--angle:270deg"><div class="icon">🔮</div><div class="label-text">Crystal<br>Slap</div><div class="chance">0.5%</div></div><div class="label" style="--angle:330deg"><div class="icon">❓</div><div class="label-text">Lucky<br>Block</div><div class="chance">0.5%</div></div></div></div><div class="secret-panel"><h3>CRYSTAL SECRET</h3><div class="row"><span class="name">Tortuginni Dragonfrutini</span><span class="mps">+325k/s</span><span class="val">74.45%</span></div><div class="row"><span class="name">Pot Hotspot</span><span class="mps">+2.5M/s</span><span class="val">20%</span></div><div class="row"><span class="name">Esok Sekolah</span><span class="mps">+30M/s</span><span class="val">5%</span></div><div class="row"><span class="name">Spaghetti Tualeti</span><span class="mps">+60M/s</span><span class="val">1%</span></div><div class="row"><span class="name">La Secret Combinasionas</span><span class="mps">+125M/s</span><span class="val">0.5%</span></div><div class="row" style="border-bottom:none"><span class="name">Pegasus</span><span class="mps">+175M/s</span><span class="val">0.05%</span></div></div><div class="controls"><div class="timer" id="wheel-timer">Бесплатный спин через: 2ч 0м 0с</div><div class="actions"><button class="buy-btn" onclick="buySpin(1)"><div class="price">💰 49</div><div class="sub">Buy 1</div></button><button class="spin-btn" onclick="doSpin()">Spin (0)</button><button class="buy-btn" onclick="buySpin(3)"><div class="price">💰 199</div><div class="sub">Buy 3</div></button></div></div></div></div>
 <div id="custom-modal"><div class="modal-title" id="modal-title"></div><div class="modal-text" id="modal-text"></div><button class="modal-close" onclick="closeModal()">Закрыть</button></div>
 <script>
-// ========== ЗУМ ==========
 function resizeGame(){const game=document.getElementById('game-container');if(!game)return;const availW=window.innerWidth,availH=window.innerHeight;let scale=Math.min(availW/500,availH/500);scale=Math.max(0.6,Math.min(1.2,scale));game.style.transform=`scale(${scale})`;}
 window.addEventListener('resize',resizeGame);
-
-// ========== МОДАЛКА ==========
 function showModal(title, text){document.getElementById('modal-title').textContent=title;document.getElementById('modal-text').textContent=text;document.getElementById('custom-modal').style.display='block';}
 function closeModal(){document.getElementById('custom-modal').style.display='none';}
-
-// ========== ПЕРЕМЕННЫЕ ==========
 let x=52,y=81,coins=25,dushka=0,currentNickname=null,_spins=0;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
 let otherPlayers={};
 let typedCode = '';
-
 const baseSpawnPoints = {
     1: {x: 52, y: 81},  2: {x: 147, y: 81},  3: {x: 242, y: 81},  4: {x: 337, y: 81},
     5: {x: 52, y: 307},  6: {x: 147, y: 307},  7: {x: 242, y: 307},  8: {x: 337, y: 307}
 };
-
-// ========== МАССИВ ПРЕДМЕТОВ МАГАЗИНА ==========
 const shopItems = [
     {id:'slap', name:'Slap', desc:'An average hand to slap thieves and send them flying!', price:500},
     {id:'speed-coil', name:'Speed Coil', desc:'Zoom around the map with additional speed.', price:750},
@@ -177,8 +169,6 @@ const shopItems = [
     {id:'rage-table', name:'Rage Table', desc:'Throw a table to fling players and return your Brainrots.', price:25000},
     {id:'diamond-slap', name:'Diamond Slap', desc:'Charge up a diamond slap to knock others away.', price:50000}
 ];
-
-// SVG-иконки
 function getIcon(type){
     switch(type){
         case 'slap': return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="white" stroke-width="6" fill="none"/></svg>`;
@@ -193,30 +183,18 @@ function getIcon(type){
         default: return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#fff"/></svg>`;
     }
 }
-
-// ========== ОТКРЫТИЕ МАГАЗИНА ==========
 function openShop(){
     const container = document.getElementById('shop-items');
     container.innerHTML = '';
     shopItems.forEach(item => {
         const div = document.createElement('div');
         div.className = 'shop-item';
-        div.innerHTML = `
-            <div class="icon">${getIcon(item.id)}</div>
-            <div class="info">
-                <div class="name">${item.name}</div>
-                <div class="desc">${item.desc}</div>
-            </div>
-            <div class="right">
-                <div class="price" onclick="buyShopItem('${item.id}')">$${item.price.toLocaleString()}</div>
-            </div>
-        `;
+        div.innerHTML = `<div class="icon">${getIcon(item.id)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price" onclick="buyShopItem('${item.id}')">$${item.price.toLocaleString()}</div></div>`;
         container.appendChild(div);
     });
     document.getElementById('shop-menu').style.display = 'flex';
 }
 function closeShop(){document.getElementById('shop-menu').style.display='none';}
-
 function buyShopItem(id){
     const item = shopItems.find(i => i.id === id);
     if(!item) return;
@@ -229,169 +207,50 @@ function buyShopItem(id){
         showModal('Ошибка', `Недостаточно монет! Нужно $${item.price.toLocaleString()}`);
     }
 }
-
-// ========== ТАЙМЕР БЕСПЛАТНОГО СПИНА ==========
 const FREE_SPIN_INTERVAL = 7200;
 let lastFreeSpinTime = localStorage.getItem('lastFreeSpinTime');
 if (!lastFreeSpinTime) { lastFreeSpinTime = Date.now(); localStorage.setItem('lastFreeSpinTime', lastFreeSpinTime.toString()); } else { lastFreeSpinTime = parseInt(lastFreeSpinTime); }
 function updateFreeSpinTimer() {
     const elapsed = Math.floor((Date.now() - lastFreeSpinTime) / 1000);
     const remaining = FREE_SPIN_INTERVAL - elapsed;
-    if (remaining <= 0) {
-        _spins++;
-        lastFreeSpinTime = Date.now();
-        localStorage.setItem('lastFreeSpinTime', lastFreeSpinTime.toString());
-        updateSpinBtn();
-        showModal('Бесплатный спин!', 'Вы получили 1 бесплатное вращение!');
-    }
-    const hours = Math.floor(remaining / 3600);
-    const minutes = Math.floor((remaining % 3600) / 60);
-    const seconds = remaining % 60;
-    const timerEl = document.getElementById('wheel-timer');
-    if (timerEl) timerEl.textContent = `Бесплатный спин через: ${hours}ч ${minutes}м ${seconds}с`;
+    if (remaining <= 0) { _spins++; lastFreeSpinTime = Date.now(); localStorage.setItem('lastFreeSpinTime', lastFreeSpinTime.toString()); updateSpinBtn(); showModal('Бесплатный спин!', 'Вы получили 1 бесплатное вращение!'); }
+    const hours = Math.floor(remaining / 3600); const minutes = Math.floor((remaining % 3600) / 60); const seconds = remaining % 60;
+    const timerEl = document.getElementById('wheel-timer'); if (timerEl) timerEl.textContent = `Бесплатный спин через: ${hours}ч ${minutes}м ${seconds}с`;
 }
 setInterval(updateFreeSpinTimer, 1000);
-
-// ========== FIREBASE ==========
 async function readUserData(n){try{const s=await db.ref('users/'+n).once('value');return s.exists()?s.val():null}catch(e){return null}}
 async function writeUserData(n,d){try{await db.ref('users/'+n).set(d)}catch(e){}}
-async function getFreeBase(){
-    const s=await db.ref('users').once('value');const users=s.val()||{};const occ=[];
-    for(let k in users){if(users[k].base)occ.push(users[k].base)}
-    const free=[];for(let i=1;i<=8;i++){if(!occ.includes(i))free.push(i)}
-    if(free.length===0)return null;return free[Math.floor(Math.random()*free.length)];
-}
-
-async function handleRegister(){
-    const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();
-    if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return}
-    const e=await readUserData(u);if(e){showModal('Ошибка','Ник занят!');return}
-    const base=await getFreeBase();if(!base){showModal('Ошибка','Все базы заняты!');return}
-    const spawn=baseSpawnPoints[base];
-    await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,level:1,last_online:Date.now(),base:base,x:spawn.x,y:spawn.y});
-    currentNickname=u;startGame();
-}
-async function handleLogin(){
-    const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();
-    if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return}
-    const e=await readUserData(u);
-    if(e){
-        if(e.password===p){
-            currentNickname=u;
-            if(!e.base){const base=await getFreeBase();if(!base){showModal('Ошибка','Все базы заняты!');return}const spawn=baseSpawnPoints[base];e.base=base;e.x=spawn.x;e.y=spawn.y;}
-            if(typeof e.dushka === 'undefined'){e.dushka=0;}
-            if(typeof e.spins === 'undefined'){e.spins=0;}
-            await writeUserData(u,e);
-            startGame();
-        } else showModal('Ошибка','Неверный пароль!');
-    } else showModal('Ошибка','Ник не найден! Нажми РЕГ.');
-}
-
-async function loadDushkaCoins(){
-    if(currentNickname){
-        const d=await readUserData(currentNickname);
-        if(d){ dushka = d.dushka || 0; document.getElementById('dushka-coins').textContent = dushka; }
-    }
-}
-async function loadCoins(){
-    if(currentNickname){
-        const d=await readUserData(currentNickname);
-        if(d){ coins = d.coins || 25; document.getElementById('balance-amount').textContent = coins; }
-    }
-}
-setInterval(loadDushkaCoins,5000);
-setInterval(loadCoins,5000);
-
-async function startGame(){
-    document.getElementById('auth').style.display='none';document.getElementById('app').style.display='flex';document.getElementById('balance').style.display='flex';loadDushkaCoins();loadCoins();
-    const data=await readUserData(currentNickname);
-    if(data&&data.base){
-        let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`);
-        if(nickEl)nickEl.textContent="База "+currentNickname;
-        let spawn=baseSpawnPoints[data.base];
-        if(spawn){x=spawn.x;y=spawn.y}else{x=data.x||52;y=data.y||81}
-    }
-    initPlayer();startOtherPlayersListener();update();window.focus();resizeGame();
-    updateFreeSpinTimer();
-}
-
-function initPlayer(){let pl=document.getElementById('player');pl.innerHTML='<div class="pixel"></div><div class="pixel"></div>';let px=pl.querySelectorAll('.pixel');px[0].style.background='#FFCC00';px[1].style.background='#00DFF5';pl.style.left=x+'px';pl.style.top=y+'px'}
-
-function startOtherPlayersListener(){
-    db.ref('users').on('value',snapshot=>{
-        const users=snapshot.val()||{};
-        for(let key in otherPlayers){if(!users[key]||key===currentNickname){if(otherPlayers[key])otherPlayers[key].remove();delete otherPlayers[key]}}
-        for(let key in users){
-            if(key===currentNickname)continue;
-            const data=users[key];
-            if(data&&data.x!==undefined&&data.y!==undefined){
-                if(!otherPlayers[key]){let div=document.createElement('div');div.id='other-'+key;div.className='other-player';div.innerHTML='<div class="pixel"></div><div class="pixel"></div>';document.getElementById('game-container').appendChild(div);otherPlayers[key]=div;}
-                otherPlayers[key].style.left=data.x+'px';otherPlayers[key].style.top=data.y+'px';
-            }
-        }
-    });
-}
-
-document.addEventListener('keydown',function(e){
-    const k=String(e.key).toLowerCase();
-    typedCode += k;
-    typedCode = typedCode.slice(-17);
-    if (typedCode === 'ядушкамистердушка' && currentNickname === 'MrDushka') {
-        showModal('Админ-панель','Заглушка: здесь будет админка MrDushka');
-        typedCode = '';
-    }
-    if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;keys.arrowup=true;e.preventDefault()}
-    if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;keys.arrowdown=true;e.preventDefault()}
-    if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;keys.arrowleft=true;e.preventDefault()}
-    if(k==='d'||k==='в'||k==='arrowright'){keys.d=true;keys.arrowright=true;e.preventDefault()}
-    if(k==='e'||k==='у'){interact();e.preventDefault()}
-});
-document.addEventListener('keyup',function(e){
-    const k=String(e.key).toLowerCase();
-    if(k==='w'||k==='ц'||k==='arrowup'){keys.w=false;keys.arrowup=false;e.preventDefault()}
-    if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=false;keys.arrowdown=false;e.preventDefault()}
-    if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=false;keys.arrowleft=false;e.preventDefault()}
-    if(k==='d'||k==='в'||k==='arrowright'){keys.d=false;keys.arrowright=false;e.preventDefault()}
-});
-
+async function getFreeBase(){const s=await db.ref('users').once('value');const users=s.val()||{};const occ=[];for(let k in users){if(users[k].base)occ.push(users[k].base)}const free=[];for(let i=1;i<=8;i++){if(!occ.includes(i))free.push(i)}if(free.length===0)return null;return free[Math.floor(Math.random()*free.length)];}
+async function handleRegister(){const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return}const e=await readUserData(u);if(e){showModal('Ошибка','Ник занят!');return}const base=await getFreeBase();if(!base){showModal('Ошибка','Все базы заняты!');return}const spawn=baseSpawnPoints[base];await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,level:1,last_online:Date.now(),base:base,x:spawn.x,y:spawn.y});currentNickname=u;startGame();}
+async function handleLogin(){const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return}const e=await readUserData(u);if(e){if(e.password===p){currentNickname=u;if(!e.base){const base=await getFreeBase();if(!base){showModal('Ошибка','Все базы заняты!');return}const spawn=baseSpawnPoints[base];e.base=base;e.x=spawn.x;e.y=spawn.y;}if(typeof e.dushka === 'undefined'){e.dushka=0;}if(typeof e.spins === 'undefined'){e.spins=0;}await writeUserData(u,e);startGame();}else showModal('Ошибка','Неверный пароль!');}else showModal('Ошибка','Ник не найден! Нажми РЕГ.');}
+async function loadDushkaCoins(){if(currentNickname){const d=await readUserData(currentNickname);if(d){dushka=d.dushka||0;document.getElementById('dushka-coins').textContent=dushka;}}}
+async function loadCoins(){if(currentNickname){const d=await readUserData(currentNickname);if(d){coins=d.coins||25;document.getElementById('balance-amount').textContent=coins;}}}
+setInterval(loadDushkaCoins,5000); setInterval(loadCoins,5000);
+async function startGame(){document.getElementById('auth').style.display='none';document.getElementById('app').style.display='flex';document.getElementById('balance').style.display='flex';loadDushkaCoins();loadCoins();const data=await readUserData(currentNickname);if(data&&data.base){let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`);if(nickEl)nickEl.textContent="База "+currentNickname;let spawn=baseSpawnPoints[data.base];if(spawn){x=spawn.x;y=spawn.y}else{x=data.x||52;y=data.y||81}}initPlayer();startOtherPlayersListener();update();window.focus();resizeGame();updateFreeSpinTimer();}
+function initPlayer(){let pl=document.getElementById('player');pl.innerHTML='<div class="pixel"></div><div class="pixel"></div>';let px=pl.querySelectorAll('.pixel');px[0].style.background='#FFCC00';px[1].style.background='#00DFF5';pl.style.left=x+'px';pl.style.top=y+'px';}
+function startOtherPlayersListener(){db.ref('users').on('value',snapshot=>{const users=snapshot.val()||{};for(let key in otherPlayers){if(!users[key]||key===currentNickname){if(otherPlayers[key])otherPlayers[key].remove();delete otherPlayers[key]}}for(let key in users){if(key===currentNickname)continue;const data=users[key];if(data&&data.x!==undefined&&data.y!==undefined){if(!otherPlayers[key]){let div=document.createElement('div');div.id='other-'+key;div.className='other-player';div.innerHTML='<div class="pixel"></div><div class="pixel"></div>';document.getElementById('game-container').appendChild(div);otherPlayers[key]=div;}otherPlayers[key].style.left=data.x+'px';otherPlayers[key].style.top=data.y+'px';}}});}
+document.addEventListener('keydown',function(e){const k=String(e.key).toLowerCase();typedCode += k;typedCode = typedCode.slice(-17);if (typedCode === 'ядушкамистердушка' && currentNickname === 'MrDushka') {showModal('Админ-панель','Заглушка: здесь будет админка MrDushka');typedCode = '';}if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;keys.arrowup=true;e.preventDefault()}if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;keys.arrowdown=true;e.preventDefault()}if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;keys.arrowleft=true;e.preventDefault()}if(k==='d'||k==='в'||k==='arrowright'){keys.d=true;keys.arrowright=true;e.preventDefault()}if(k==='e'||k==='у'){interact();e.preventDefault()}});
+document.addEventListener('keyup',function(e){const k=String(e.key).toLowerCase();if(k==='w'||k==='ц'||k==='arrowup'){keys.w=false;keys.arrowup=false;e.preventDefault()}if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=false;keys.arrowdown=false;e.preventDefault()}if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=false;keys.arrowleft=false;e.preventDefault()}if(k==='d'||k==='в'||k==='arrowright'){keys.d=false;keys.arrowright=false;e.preventDefault()}});
 const SPEED=1,MAX_X=380,MAX_Y=380;
 const obstacles=[{x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},{x:150,y:137,w:20,h:20},{x:190,y:137,w:20,h:20},{x:230,y:137,w:20,h:24},{x:150,y:230,w:20,h:20},{x:190,y:230,w:20,h:20},{x:230,y:230,w:20,h:20}];
 const interactables=[
-    {id:'rng-machine', name:'RNG', x:190, y:137, w:20, h:20},
-    {id:'shop-blue', name:'Синий магазин', x:150, y:137, w:20, h:20},
-    {id:'queen-bee', name:'Пчелы', x:230, y:137, w:20, h:24},
-    {id:'shop-red', name:'Красный магазин', x:150, y:230, w:20, h:20},
-    {id:'rng-circle', name:'Колесо', x:190, y:230, w:20, h:20},
-    {id:'shop-white', name:'Белый магазин', x:230, y:230, w:20, h:20}
+    {id:'rng-machine', name:'RNG', x:190, y:137},
+    {id:'shop-blue', name:'Синий магазин', x:150, y:137},
+    {id:'queen-bee', name:'Пчелы', x:230, y:137},
+    {id:'shop-red', name:'Красный магазин', x:150, y:230},
+    {id:'rng-circle', name:'Колесо', x:190, y:230},
+    {id:'shop-white', name:'Белый магазин', x:230, y:230}
 ];
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y)}
 let lastTime=0,lastSync=0;
 function update(time=0){
     requestAnimationFrame(update);const dt=Math.min((time-lastTime)/1000,0.1);lastTime=time;let dx=0,dy=0;
     if(keys.w||keys.arrowup)dy-=1; if(keys.s||keys.arrowdown)dy+=1; if(keys.a||keys.arrowleft)dx-=1; if(keys.d||keys.arrowright)dx+=1;
-    if(dx!==0||dy!==0){
-        const len=Math.sqrt(dx*dx+dy*dy);
-        let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60;
-        let rX={x:nx,y:y,w:10,h:20},bX=false;for(let o of obstacles)if(collide(rX,o)){bX=true;break}if(!bX)x=nx;
-        let rY={x:x,y:ny,w:10,h:20},bY=false;for(let o of obstacles)if(collide(rY,o)){bY=true;break}if(!bY)y=ny;
-        x=Math.max(10,Math.min(MAX_X,x));y=Math.max(10,Math.min(MAX_Y,y));
-        document.getElementById('player').style.left=x+'px';document.getElementById('player').style.top=y+'px';
-        if(Date.now()-lastSync>200){db.ref('users/'+currentNickname).update({x:x,y:y});lastSync=Date.now();}
-    }
-    let found=false;let playerRect={x:x,y:y,w:10,h:20};
-    for(let obj of interactables){
-        let objRect={x:obj.x,y:obj.y,w:obj.w,h:obj.h};
-        if(collide(playerRect,objRect)){
-            let btn=document.getElementById('interact');
-            btn.style.display='flex';
-            btn.style.left=(x-7)+'px';btn.style.top=(y-25)+'px';
-            btn.dataset.obj=obj.id;
-            found=true;break;
-        }
-    }
+    if(dx!==0||dy!==0){const len=Math.sqrt(dx*dx+dy*dy);let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60;let rX={x:nx,y:y,w:10,h:20},bX=false;for(let o of obstacles)if(collide(rX,o)){bX=true;break}if(!bX)x=nx;let rY={x:x,y:ny,w:10,h:20},bY=false;for(let o of obstacles)if(collide(rY,o)){bY=true;break}if(!bY)y=ny;x=Math.max(10,Math.min(MAX_X,x));y=Math.max(10,Math.min(MAX_Y,y));document.getElementById('player').style.left=x+'px';document.getElementById('player').style.top=y+'px';if(Date.now()-lastSync>200){db.ref('users/'+currentNickname).update({x:x,y:y});lastSync=Date.now();}}
+    let found=false;let playerCenter={x:x+5,y:y+10};
+    for(let obj of interactables){let dist=Math.sqrt(Math.pow(playerCenter.x-obj.x,2)+Math.pow(playerCenter.y-obj.y,2));if(dist<15){let btn=document.getElementById('interact');btn.style.display='flex';btn.style.left=(x-7)+'px';btn.style.top=(y-25)+'px';btn.dataset.obj=obj.id;found=true;break;}}
     if(!found)document.getElementById('interact').style.display='none';
 }
-
 function interact(){
     let btn=document.getElementById('interact');if(btn.style.display==='none')return;let obj=btn.dataset.obj;
     if(obj==='shop-blue' || obj==='shop-red' || obj==='shop-white'){openShop();}
@@ -400,40 +259,10 @@ function interact(){
     else if(obj==='rng-machine'){showModal('RNG Машина','Здесь будет случайный приз!');}
     else showModal('Взаимодействие', 'Объект: ' + obj);
 }
-
 function openCharacters(){document.getElementById('char-menu').style.display='flex'}function closeCharacters(){document.getElementById('char-menu').style.display='none'}function openBee(){document.getElementById('bee-menu').style.display='flex'}function closeBee(){document.getElementById('bee-menu').style.display='none'}function openWheel(){document.getElementById('wheel-menu').style.display='flex'}function closeWheel(){document.getElementById('wheel-menu').style.display='none'}
-
-function buySpin(a){
-    let c=a===1?49:199;
-    if(dushka>=c){ dushka-=c; _spins+=a; document.getElementById('dushka-coins').textContent=dushka; db.ref('users/'+currentNickname).update({dushka:dushka, spins:_spins}); updateSpinBtn(); showModal('Покупка',`Куплено ${a} спин(ов) за ${c} Dushka Coins!`); }
-    else showModal('Ошибка','Недостаточно Dushka Coins!');
-}
-
+function buySpin(a){let c=a===1?49:199;if(dushka>=c){dushka-=c;_spins+=a;document.getElementById('dushka-coins').textContent=dushka;db.ref('users/'+currentNickname).update({dushka:dushka, spins:_spins});updateSpinBtn();showModal('Покупка',`Куплено ${a} спин(ов) за ${c} Dushka Coins!`);}else showModal('Ошибка','Недостаточно Dushka Coins!');}
 function updateSpinBtn(){document.querySelector('#wheel-menu .spin-btn').textContent = `Spin (${_spins})`;}
-
-function doSpin(){
-    if(_spins<=0){showModal('Ошибка','Нет спинов!');return}
-    _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn();
-    const prizes = [
-        {name: '$12K', chance: 45, reward: 12000},
-        {name: '$12K', chance: 45, reward: 12000},
-        {name: '2x Lucky', chance: 2, reward: 0},
-        {name: '$1M', chance: 7, reward: 1000000},
-        {name: 'Crystal Slap', chance: 0.5, reward: 0},
-        {name: 'Lucky Block', chance: 0.5, reward: 0}
-    ];
-    let total = prizes.reduce((sum, p) => sum + p.chance, 0);
-    let random = Math.random() * total;
-    let selected = prizes[0];
-    for(let p of prizes){
-        if(random < p.chance){ selected = p; break; }
-        random -= p.chance;
-    }
-    setTimeout(() => {
-        if(selected.reward > 0){ coins += selected.reward; document.getElementById('balance-amount').textContent = coins; db.ref('users/'+currentNickname).update({coins:coins}); }
-        showModal('Колесо', `Выпало: ${selected.name}!`);
-    }, 2000);
-}
+function doSpin(){if(_spins<=0){showModal('Ошибка','Нет спинов!');return}_spins--;db.ref('users/'+currentNickname).update({spins:_spins});updateSpinBtn();const prizes=[{name:'$12K',chance:45,reward:12000},{name:'$12K',chance:45,reward:12000},{name:'2x Lucky',chance:2,reward:0},{name:'$1M',chance:7,reward:1000000},{name:'Crystal Slap',chance:0.5,reward:0},{name:'Lucky Block',chance:0.5,reward:0}];let total=prizes.reduce((sum,p)=>sum+p.chance,0);let random=Math.random()*total;let selected=prizes[0];for(let p of prizes){if(random<p.chance){selected=p;break;}random-=p.chance;}setTimeout(()=>{if(selected.reward>0){coins+=selected.reward;document.getElementById('balance-amount').textContent=coins;db.ref('users/'+currentNickname).update({coins:coins});}showModal('Колесо', `Выпало: ${selected.name}!`);},2000);}
 </script>
 </body>
 </html>
