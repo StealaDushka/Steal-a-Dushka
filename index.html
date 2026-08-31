@@ -68,7 +68,13 @@ body{zoom:1 !important;-moz-transform:none !important;-webkit-transform:none !im
 <body>
 <div id="auth"><div id="auth-box"><label class="auth-label">НИК</label><input type="text" id="username" class="auth-input" autocomplete="off"><label class="auth-label">ПАРОЛЬ</label><input type="password" id="password" class="auth-input"><div class="auth-btns"><button class="auth-btn btn-login" onclick="handleLogin()">ВОЙТИ</button><button class="auth-btn btn-reg" onclick="handleRegister()">РЕГ</button></div><div class="hint">Запишите ваш пароль. Спасибо за внимание</div></div></div>
 <div id="balance"><div class="box dushka"><span class="icon">💰</span><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div><div class="box"><span class="icon">🪙</span><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div></div>
-<div id="app"><div id="sidebar"><div id="actions"><div class="action-btn pink" onclick="openCharacters()">SHOP</div><div class="action-btn" onclick="alert('Трейд скоро!')">TRADE</div><div class="action-btn" onclick="alert('Ребирт скоро!')">REBIRTH</div><div class="action-btn" onclick="alert('Дуэль скоро!')">DUEL</div></div></div><div id="game-container">
+<div id="app"><div id="sidebar"><div id="actions">
+<!-- ИЗМЕНИЛ ПОРЯДОК: SHOP, REBIRTH, TRADE, DUEL -->
+<div class="action-btn pink" onclick="openCharacters()">SHOP</div>
+<div class="action-btn" onclick="alert('Ребирт скоро!')">REBIRTH</div>
+<div class="action-btn" onclick="alert('Трейд скоро!')">TRADE</div>
+<div class="action-btn" onclick="alert('Дуэль скоро!')">DUEL</div>
+</div></div><div id="game-container">
 <div class="center-line"><div class="center-cap cap-left"></div><div class="center-cap cap-right"></div></div>
 <div class="base base-top-1"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
 <div class="base base-top-2"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div>
@@ -100,7 +106,19 @@ window.addEventListener('resize', resizeGame);
 // Переменные
 let x=52,y=81,coins=25,dushka=0,currentNickname=null,_spins=0;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
-let otherPlayers={}; // Объект для отображения других игроков
+let otherPlayers={};
+
+// Точки спавна на зелёных пластинах (своя база)
+const baseSpawnPoints = {
+    1: {x: 52, y: 81},   // top-1
+    2: {x: 147, y: 81},  // top-2
+    3: {x: 242, y: 81},  // top-3
+    4: {x: 337, y: 81},  // top-4
+    5: {x: 52, y: 319},  // bottom-1 (пластина сверху)
+    6: {x: 147, y: 319}, // bottom-2
+    7: {x: 242, y: 319}, // bottom-3
+    8: {x: 337, y: 319}  // bottom-4
+};
 
 // Функции Firebase
 async function readUserData(nickname){try{const s=await db.ref('users/'+nickname).once('value');return s.exists()?s.val():null}catch(e){return null}}
@@ -108,8 +126,8 @@ async function writeUserData(nickname,data){try{await db.ref('users/'+nickname).
 async function getFreeBase(){const s=await db.ref('users').once('value');const users=s.val()||{};const occupied=[];for(let key in users){if(users[key].base)occupied.push(users[key].base)}for(let i=1;i<=8;i++){if(!occupied.includes(i))return i}return null}
 
 // Регистрация и вход
-async function handleRegister(){const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();if(!u||!p){alert('Заполните НИК и ПАРОЛЬ!');return}const e=await readUserData(u);if(e){alert('Ник занят!');return}const base=await getFreeBase();if(!base){alert('Все базы заняты!');return}await writeUserData(u,{nickname:u,password:p,coins:25,level:1,last_online:Date.now(),base:base,x:x,y:y});currentNickname=u;startGame()}
-async function handleLogin(){const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();if(!u||!p){alert('Заполните НИК и ПАРОЛЬ!');return}const e=await readUserData(u);if(e){if(e.password===p){currentNickname=u;if(!e.base){const base=await getFreeBase();if(!base){alert('Все базы заняты!');return}e.base=base;e.x=x;e.y=y;await writeUserData(u,e)}startGame()}else alert('Неверный пароль!')}else alert('Ник не найден! Нажми РЕГ.')}
+async function handleRegister(){const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();if(!u||!p){alert('Заполните НИК и ПАРОЛЬ!');return}const e=await readUserData(u);if(e){alert('Ник занят!');return}const base=await getFreeBase();if(!base){alert('Все базы заняты!');return}const spawn=baseSpawnPoints[base];await writeUserData(u,{nickname:u,password:p,coins:25,level:1,last_online:Date.now(),base:base,x:spawn.x,y:spawn.y});currentNickname=u;startGame()}
+async function handleLogin(){const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();if(!u||!p){alert('Заполните НИК и ПАРОЛЬ!');return}const e=await readUserData(u);if(e){if(e.password===p){currentNickname=u;if(!e.base){const base=await getFreeBase();if(!base){alert('Все базы заняты!');return}const spawn=baseSpawnPoints[base];e.base=base;e.x=spawn.x;e.y=spawn.y;await writeUserData(u,e)}startGame()}else alert('Неверный пароль!')}else alert('Ник не найден! Нажми РЕГ.')}
 
 // Загрузка баланса
 async function loadDushkaCoins(){if(currentNickname){const d=await readUserData(currentNickname);if(d){dushka=d.coins||0;document.getElementById('dushka-coins').textContent=dushka}}}
@@ -122,7 +140,14 @@ async function startGame(){
     document.getElementById('balance').style.display='flex';
     loadDushkaCoins();
     const data=await readUserData(currentNickname);
-    if(data&&data.base){let baseNum=data.base;let nickEl=document.querySelector(`.base-top-${baseNum} .nickname`)||document.querySelector(`.base-bottom-${baseNum} .nickname`);if(nickEl)nickEl.textContent="База "+currentNickname; x=data.x||52; y=data.y||81; }
+    if(data&&data.base){
+        let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`);
+        if(nickEl)nickEl.textContent="База "+currentNickname;
+        // Спавн на своей зелёной пластине
+        let spawn = baseSpawnPoints[data.base];
+        if(spawn){ x = spawn.x; y = spawn.y; }
+        else { x = data.x || 52; y = data.y || 81; }
+    }
     initPlayer();
     startOtherPlayersListener();
     update();
@@ -137,9 +162,7 @@ function initPlayer(){let pl=document.getElementById('player');pl.innerHTML='<di
 function startOtherPlayersListener(){
     db.ref('users').on('value',snapshot=>{
         const users=snapshot.val()||{};
-        // Удаляем старых игроков
         for(let key in otherPlayers){if(!users[key]||key===currentNickname){if(otherPlayers[key])otherPlayers[key].remove();delete otherPlayers[key]}}
-        // Добавляем новых
         for(let key in users){
             if(key===currentNickname)continue;
             const data=users[key];
@@ -163,8 +186,8 @@ function startOtherPlayersListener(){
 document.addEventListener('keydown',function(e){const k=String(e.key).toLowerCase();if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;keys.arrowup=true;e.preventDefault()}if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;keys.arrowdown=true;e.preventDefault()}if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;keys.arrowleft=true;e.preventDefault()}if(k==='d'||k==='в'||k==='arrowright'){keys.d=true;keys.arrowright=true;e.preventDefault()}if(k==='e'||k==='у'){interact();e.preventDefault()}});
 document.addEventListener('keyup',function(e){const k=String(e.key).toLowerCase();if(k==='w'||k==='ц'||k==='arrowup'){keys.w=false;keys.arrowup=false;e.preventDefault()}if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=false;keys.arrowdown=false;e.preventDefault()}if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=false;keys.arrowleft=false;e.preventDefault()}if(k==='d'||k==='в'||k==='arrowright'){keys.d=false;keys.arrowright=false;e.preventDefault()}});
 
-// Движение и синхронизация
-const SPEED=0.75,MAX_X=380,MAX_Y=380;
+// Движение и синхронизация (Скорость 1)
+const SPEED=1,MAX_X=380,MAX_Y=380;
 const obstacles=[{x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},{x:150,y:137,w:20,h:20},{x:190,y:137,w:20,h:20},{x:230,y:137,w:20,h:24},{x:150,y:230,w:20,h:20},{x:190,y:230,w:20,h:20},{x:230,y:230,w:20,h:20}];
 const interactables=[{x:190-1.5,y:137-1.5,w:23,h:23,name:'RNG'},{x:150-1.5,y:137-1.5,w:23,h:23,name:'Магазин'},{x:230-1.5,y:137-1.5,w:23,h:27,name:'Пчелы'},{x:150-1.5,y:230-1.5,w:23,h:23,name:'Красный магазин'},{x:190-1.5,y:230-1.5,w:23,h:23,name:'Колесо'},{x:230-1.5,y:230-1.5,w:23,h:23,name:'Белый магазин'}];
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y)}
@@ -181,10 +204,8 @@ function update(time=0){
         let rY={x:x,y:ny,w:10,h:20},bY=false;for(let o of obstacles)if(collide(rY,o)){bY=true;break}if(!bY)y=ny;
         x=Math.max(10,Math.min(MAX_X,x));y=Math.max(10,Math.min(MAX_Y,y));
         document.getElementById('player').style.left=x+'px';document.getElementById('player').style.top=y+'px';
-        // Синхронизируем позицию в Firebase каждые 0.2 сек
         if(Date.now()-lastSync>200){db.ref('users/'+currentNickname).update({x:x,y:y});lastSync=Date.now();}
     }
-    // Появление кнопки E
     let found=false;let playerRect={x:x,y:y,w:10,h:20};
     for(let obj of interactables){if(collide(playerRect,obj)){let btn=document.getElementById('interact');btn.style.display='flex';btn.style.left=(x-7)+'px';btn.style.top=(y-25)+'px';btn.dataset.obj=obj.name;found=true;break}}
     if(!found)document.getElementById('interact').style.display='none';
