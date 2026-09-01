@@ -41,10 +41,10 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 /* СИНИЙ МАГАЗИН */
 #shop-menu{background:#3a6b8c;max-width:700px;max-height:90vh}#shop-menu .header{background:#1a4a6e}#shop-menu .content{background:#2c3e50;padding:15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}.shop-item{display:flex;background:linear-gradient(145deg,#2c2c2c,#1a1a1a);border:2px solid #444;border-radius:12px;padding:10px;align-items:center;gap:12px;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform .2s, box-shadow .2s}.shop-item:hover{transform:translateY(-3px);box-shadow:0 6px 15px rgba(0,0,0,.6)}.shop-item .icon{width:80px;height:80px;background:#3a3a3a;border-radius:12px;display:flex;justify-content:center;align-items:center;border:2px solid #555}.shop-item .icon svg{width:60px;height:60px}.shop-item .info{flex:1}.shop-item .info .name{font-size:18px;font-weight:bold;color:#fff}.shop-item .info .desc{font-size:12px;color:#aaa}.shop-item .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}.shop-item .price-btn{background:#4caf50;color:#fff;padding:8px 15px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center}.shop-item .price-btn.owned{background:#555;cursor:default}.shop-item .auto-buy{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:12px;color:#fff;cursor:pointer}.shop-item .auto-buy input{width:16px;height:16px;cursor:pointer}
 /* ПЧЁЛЫ */
-#bee-menu{background:#e8b425;max-width:700px}#bee-menu .header{background:#e8b425;color:#000}#bee-menu .header .title h2{color:#000}#bee-menu .content{background:#1a1a1a;padding:15px;overflow-y:auto}#bee-menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.bee-card{background:linear-gradient(145deg,#2c2c2c,#1a1a1a);border:2px solid #444;border-radius:12px;padding:15px;display:flex;flex-direction:column;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform .2s, box-shadow .2s;position:relative}.bee-card:hover{transform:translateY(-5px);box-shadow:0 6px 15px rgba(0,0,0,.6)}.bee-card .img-placeholder{width:100px;height:100px;background:#3a3a3a;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:60px;margin-bottom:10px}.bee-card .status{position:absolute;top:10px;right:15px;display:flex;align-items:center;gap:5px;font-weight:bold;font-size:14px;background:rgba(0,0,0,.5);padding:4px 8px;border-radius:6px}.bee-card .mps{color:#4caf50;font-weight:bold;font-size:16px;margin-bottom:2px}.bee-card .name{color:#fff;font-weight:bold;font-size:18px;margin-bottom:10px}.bee-card .buy-row{display:flex;align-items:center;gap:10px;width:100%;margin-top:10px}.bee-card .price-btn{background:#f7b731;border:none;color:#000;font-weight:bold;font-size:14px;padding:8px 15px;border-radius:6px;cursor:pointer;flex:1.5;transition:background .2s}.bee-card .price-btn:hover{background:#f5a623}
+#bee-menu{background:#e8b425;max-width:700px}#bee-menu .header{background:#e8b425;color:#000}#bee-menu .header .title h2{color:#000}#bee-menu .content{background:#1a1a1a;padding:15px;overflow-y:auto}#bee-menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.bee-card{background:linear-gradient(145deg,#2c2c2c,#1a1a1a);border:2px solid #444;border-radius:12px;padding:15px;display:flex;flex-direction:column;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform .2s, box-shadow .2s;position:relative}.bee-card:hover{transform:translateY(-5px);box-shadow:0 6px 15px rgba(0,0,0,.6)}.bee-card .img-placeholder{width:100px;height:100px;background:#3a3a3a;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:60px;margin-bottom:10px}.bee-card .status{position:absolute;top:10px;right:15px;font-weight:bold;font-size:14px;background:rgba(0,0,0,.5);padding:4px 8px;border-radius:6px;color:#fff}.bee-card .mps{color:#4caf50;font-weight:bold;font-size:16px;margin-bottom:2px}.bee-card .name{color:#fff;font-weight:bold;font-size:18px;margin-bottom:10px}.bee-card .buy-row{display:flex;align-items:center;gap:10px;width:100%;margin-top:10px}.bee-card .price-btn{background:#f7b731;border:none;color:#000;font-weight:bold;font-size:14px;padding:8px 15px;border-radius:6px;cursor:pointer;flex:1.5;transition:background .2s}.bee-card .price-btn:hover{background:#f5a623}
 /* BUMBATRON - растянут на 2 колонки */
 #bee-bumbatron{grid-column:span 2}
-/* КРАСНЫЙ МАГАЗИН (без Gift Player) */
+/* КРАСНЫЙ МАГАЗИН */
 #red-shop-menu{background:#8b2c2c;max-width:800px}#red-shop-menu .header{background:#5c1a1a}#red-shop-menu .tabs{display:flex;gap:5px;padding:10px 15px 0;background:#2c2c2c;flex-wrap:wrap}#red-shop-menu .tab{background:#444;padding:8px 15px;border-radius:5px 5px 0 0;cursor:pointer;font-weight:bold;color:#fff;font-size:13px}#red-shop-menu .tab.active{background:#666}#red-shop-menu .content{background:#3e2c2c;padding:15px;overflow-y:auto}.red-shop-item{display:flex;background:#2c2c2c;border:2px solid #444;border-radius:8px;padding:10px;margin-bottom:10px;align-items:center;gap:12px}.red-shop-item .icon{width:80px;height:80px;background:#3a3a3a;border-radius:8px;display:flex;justify-content:center;align-items:center}.red-shop-item .icon svg{width:60px;height:60px}.red-shop-item .info{flex:1}.red-shop-item .info .name{font-size:18px;font-weight:bold;color:#fff}.red-shop-item .info .desc{font-size:12px;color:#aaa}.red-shop-item .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}.red-shop-item .price-btn{background:#c0392b;color:#fff;padding:8px 15px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center}.red-shop-item .price-btn.owned{background:#555;cursor:default}
 /* КОЛЕСО */
 #wheel-menu{background:#1a1a3a;max-width:560px;max-height:90vh}#wheel-menu .content{background:rgba(0,0,0,.3);padding:15px;display:flex;flex-direction:column;align-items:center;gap:15px;overflow-y:auto}.wheel-container{position:relative;width:280px;height:280px;display:flex;justify-content:center;align-items:center;flex-shrink:0}.wheel-container .pin{position:absolute;top:-20px;left:50%;transform:translateX(-50%);z-index:10;font-size:30px;color:#ff3333}.wheel{width:260px;height:260px;border-radius:50%;position:relative;overflow:hidden;border:4px solid #4a90e2;box-shadow:0 0 15px rgba(74,144,226,.5);background:conic-gradient(#2e86de 0deg 60deg,#10ac84 60deg 120deg,#feca57 120deg 180deg,#ff9f43 180deg 240deg,#5f27cd 240deg 300deg,#ff6b6b 300deg 360deg)}.wheel .label{position:absolute;top:50%;left:50%;width:80px;height:50px;margin-left:-40px;margin-top:-25px;text-align:center;color:#fff;font-size:11px;font-weight:bold;text-shadow:1px 1px 2px rgba(0,0,0,.8);pointer-events:none;transform:rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle)));white-space:nowrap}.wheel .label .icon{display:block;font-size:18px;margin-bottom:2px}.wheel .label .chance{font-size:10px;opacity:.8}.secret-panel{background:rgba(0,0,0,.6);border:1px solid #4a90e2;border-radius:8px;padding:10px;width:100%;margin-top:5px}.secret-panel h3{color:#4a90e2;text-align:center;margin:0 0 8px;font-size:16px}.secret-panel .row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:13px}.secret-panel .row:last-child{border-bottom:none}.secret-panel .row .name{color:#ccc}.secret-panel .row .mps{color:#4caf50;font-size:12px;margin-left:auto;margin-right:10px}.secret-panel .row .val{color:#fff;font-weight:bold}.controls{display:flex;flex-direction:column;align-items:center;width:100%;gap:10px}.controls .timer{color:#fff;font-size:14px}.controls .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}.controls .actions .spin-btn{background:#222;color:#fff;border:2px solid #4a90e2;border-radius:6px;padding:8px 20px;font-size:14px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn{background:linear-gradient(135deg,#f7b731,#f5a623);color:#000;border:2px solid #f7b731;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn .price{display:flex;align-items:center;justify-content:center;gap:4px}.controls .actions .buy-btn .sub{font-size:10px;opacity:.8}
@@ -162,20 +162,34 @@ let ownedItems=[],autoBuyShopItems=[];
 
 function getShopIcon(type){ switch(type){ case 'slap':return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="white" stroke-width="6" fill="none"/></svg>`; case 'speed-coil':return `<svg viewBox="0 0 100 100"><path d="M50 15 Q20 30 50 45 Q80 60 50 75 Q20 90 50 95" stroke="#e74c3c" stroke-width="8" fill="none"/></svg>`; case 'trap':return `<svg viewBox="0 0 100 100"><path d="M20 80 Q50 40 80 80 L70 90 L30 90 Z" fill="#777"/><path d="M25 70 L35 55 M45 70 L50 50 M65 70 L60 50" stroke="#555" stroke-width="5"/></svg>`; case 'iron-slap':return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="#aaa" stroke-width="6" fill="none"/></svg>`; case 'gravity-coil':return `<svg viewBox="0 0 100 100"><path d="M50 15 Q20 30 50 45 Q80 60 50 75 Q20 90 50 95" stroke="#3498db" stroke-width="8" fill="none"/></svg>`; case 'bee-launcher':return `<svg viewBox="0 0 100 100"><rect x="30" y="30" width="40" height="40" fill="#f1c40f" rx="10"/><path d="M50 20 L60 40 L40 40 Z" fill="#333"/></svg>`; case 'coil-combo':return `<svg viewBox="0 0 100 100"><path d="M20 20 Q0 40 20 60 Q40 80 20 90" stroke="#e74c3c" stroke-width="6" fill="none"/><path d="M80 20 Q100 40 80 60 Q60 80 80 90" stroke="#3498db" stroke-width="6" fill="none"/></svg>`; case 'rage-table':return `<svg viewBox="0 0 100 100"><rect x="15" y="40" width="70" height="15" fill="#d35400"/><rect x="20" y="55" width="10" height="35" fill="#8e44ad"/><rect x="70" y="55" width="10" height="35" fill="#8e44ad"/></svg>`; case 'diamond-slap':return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="#00FFFF" stroke-width="6" fill="none"/></svg>`; default:return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#fff"/></svg>`; } }
 
-async function loadShopData(){ if(!currentNickname)return; const data=await readUserData(currentNickname); if(data){ownedItems=[];autoBuyShopItems=data.autoBuyShopItems||[];} }
+async function loadShopData(){ if(!currentNickname)return; const data=await readUserData(currentNickname); if(data){ ownedItems=[]; autoBuyShopItems=data.autoBuyShopItems||[]; } }
 
-function openShop(){ loadShopData().then(()=>{ const container=document.getElementById('shop-items'); container.innerHTML=''; shopItems.forEach(item=>{ const isOwned=ownedItems.includes(item.id); const isAuto=autoBuyShopItems.includes(item.id); const div=document.createElement('div'); div.className='shop-item'; div.innerHTML=`<div class="icon">${getShopIcon(item.icon)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned?'owned':''}" onclick="buyShopItem('${item.id}')">${isOwned?'OWNED':'$'+item.price.toLocaleString()}</div><label class="auto-buy"><input type="checkbox" ${isAuto?'checked':''} onchange="toggleAutoBuyShopItem('${item.id}', this.checked)"> Auto Buy</label></div>`; container.appendChild(div); }); document.getElementById('shop-menu').style.display='flex'; }); }
+function openShop(){
+  loadShopData().then(()=>{
+    const container=document.getElementById('shop-items');
+    container.innerHTML='';
+    shopItems.forEach(item=>{
+      const isOwned=ownedItems.includes(item.id);
+      const isAuto=autoBuyShopItems.includes(item.id);
+      const div=document.createElement('div');
+      div.className='shop-item';
+      div.innerHTML=`<div class="icon">${getShopIcon(item.icon)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned?'owned':''}" onclick="buyShopItem('${item.id}')">${isOwned?'OWNED':'$'+item.price.toLocaleString()}</div><label class="auto-buy"><input type="checkbox" ${isAuto?'checked':''} onchange="toggleAutoBuyShopItem('${item.id}', this.checked)"> Auto Buy</label></div>`;
+      container.appendChild(div);
+    });
+    document.getElementById('shop-menu').style.display='flex';
+  });
+}
 function closeShop(){document.getElementById('shop-menu').style.display='none';}
 
-function buyShopItem(id){ const item=shopItems.find(i=>i.id===id); if(!item)return; if(ownedItems.includes(id))return; if(coins>=item.price){ coins-=item.price; ownedItems.push(id); document.getElementById('balance-amount').textContent=formatNumber(coins); db.ref('users/'+currentNickname).update({coins:coins,ownedItems:ownedItems}); openShop(); showModal('Покупка',`Вы купили ${item.name} за $${item.price.toLocaleString()}!`); } else showModal('Ошибка',`Недостаточно монет! Нужно $${item.price.toLocaleString()}`); }
+function buyShopItem(id){ const item=shopItems.find(i=>i.id===id); if(!item)return; if(ownedItems.includes(id))return; if(coins>=item.price){ coins-=item.price; ownedItems.push(id); document.getElementById('balance-amount').textContent=formatNumber(coins); db.ref('users/'+currentNickname).update({coins:coins}); openShop(); showModal('Покупка',`Вы купили ${item.name} за $${item.price.toLocaleString()}!`); } else showModal('Ошибка',`Недостаточно монет! Нужно $${item.price.toLocaleString()}`); }
 
 function toggleAutoBuyShopItem(id,checked){ if(checked){ if(!autoBuyShopItems.includes(id))autoBuyShopItems.push(id); } else autoBuyShopItems=autoBuyShopItems.filter(x=>x!==id); db.ref('users/'+currentNickname).update({autoBuyShopItems:autoBuyShopItems}); if(checked){ const item=shopItems.find(i=>i.id===id); if(item&&!ownedItems.includes(id)&&coins>=item.price)buyShopItem(id); } }
 
-async function autoBuyShopItemsOnLoad(){ if(!currentNickname)return; await loadShopData(); let changed=false; for(let itemId of autoBuyShopItems){ const item=shopItems.find(i=>i.id===itemId); if(item&&!ownedItems.includes(itemId)&&coins>=item.price){ coins-=item.price; ownedItems.push(itemId); changed=true; } } if(changed){ document.getElementById('balance-amount').textContent=formatNumber(coins); db.ref('users/'+currentNickname).update({coins:coins,ownedItems:ownedItems}); } }
+async function autoBuyShopItemsOnLoad(){ if(!currentNickname)return; await loadShopData(); let changed=false; for(let itemId of autoBuyShopItems){ const item=shopItems.find(i=>i.id===itemId); if(item&&!ownedItems.includes(itemId)&&coins>=item.price){ coins-=item.price; ownedItems.push(itemId); changed=true; } } if(changed){ document.getElementById('balance-amount').textContent=formatNumber(coins); db.ref('users/'+currentNickname).update({coins:coins}); } }
 
-// ПЧЁЛЫ (с автопокупкой и обновлением через 90 минут)
+// ПЧЁЛЫ (количество в Firebase, за Dushka Coins)
 const beeItems=[{id:'raccoon',name:'Conetto Morsetto',mps:'$10M/s',count:20,price:499,icon:'🦝'},{id:'bear',name:'Honey Honey Bear',mps:'$32M/s',count:40,price:999,icon:'🐻'},{id:'queen',name:'Queen Bee',mps:'$65M/s',count:100,price:2499,icon:'🐝'},{id:'chocolate',name:"S'more Serat",mps:'$85M/s',count:200,price:4999,icon:'🍫'},{id:'bumbatron',name:'Bumbatron',mps:'$172.5M/s',count:400,price:9999,icon:'🤖'}];
-let beeStock={}; // общее количество
+let beeStock={};
 const BEE_RESTOCK_INTERVAL=5400; // 90 минут
 let lastBeeRestock=localStorage.getItem('lastBeeRestock'); if(!lastBeeRestock){lastBeeRestock=Date.now();localStorage.setItem('lastBeeRestock',lastBeeRestock.toString());}else{lastBeeRestock=parseInt(lastBeeRestock);}
 
@@ -213,21 +227,17 @@ async function openBee(){
 }
 function closeBee(){document.getElementById('bee-menu').style.display='none';}
 
-function getStatusSvg(hasStock, left){
-  if(hasStock){
-    return `<svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" fill="#4caf50"/><text x="12" y="17" font-size="12" fill="white" text-anchor="middle" font-weight="bold">${left}</text></svg>`;
-  } else {
-    return `<svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" fill="#ff4444"/><text x="12" y="17" font-size="10" fill="white" text-anchor="middle" font-weight="bold">X</text></svg>`;
-  }
-}
-
 function updateBeeUI(){
   if(!window.beeStock)return;
   beeItems.forEach(bee=>{
     const statusEl=document.getElementById('status-'+bee.id);
     const btn=document.querySelector(`#bee-${bee.id} .price-btn`);
     const currentStock=window.beeStock[bee.id]||0;
-    if(statusEl){ statusEl.innerHTML=getStatusSvg(currentStock>0, currentStock); }
+    if(statusEl){
+      if(currentStock>0) statusEl.textContent=`Осталось: ${currentStock}`;
+      else statusEl.textContent='SOLD OUT';
+      statusEl.style.color=currentStock>0?'#4caf50':'#ff4444';
+    }
     if(btn){
       if(currentStock<=0){ btn.textContent='SOLD OUT'; btn.style.background='#555'; btn.style.cursor='default'; btn.onclick=null; }
       else { btn.textContent='🪙 '+bee.price.toLocaleString(); btn.style.background='#f7b731'; btn.style.cursor='pointer'; btn.onclick=()=>buyBee(bee.id); }
@@ -270,7 +280,7 @@ setInterval(updateFreeSpinTimer,1000);
 
 // FIREBASE
 async function readUserData(n){try{const s=await db.ref('users/'+n).once('value');return s.exists()?s.val():null}catch(e){return null}}
-async function writeUserData(n,d){try{await db.ref('users/'+n).set(d)}catch(e){}}
+async function writeUserData(n,d){try{await db.ref('users/'+n).set(d)}catch(e){return null}}
 async function getFreeBase(){ const s=await db.ref('users').once('value'); const users=s.val()||{}; const occ=[]; for(let k in users){ if(users[k].base) occ.push(users[k].base); } const free=[]; for(let i=1;i<=8;i++){ if(!occ.includes(i)) free.push(i); } if(free.length===0) return null; return free[Math.floor(Math.random()*free.length)]; }
 
 async function handleRegister(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){showModal('Ошибка','Ник занят!');return} const base=await getFreeBase(); if(!base){showModal('Ошибка','Все базы заняты!');return} const spawn=baseSpawnPoints[base]; await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,level:1,last_online:Date.now(),base:base,x:spawn.x,y:spawn.y,ownedRedItems:[],autoBuyShopItems:[]}); currentNickname=u; startGame(); }
@@ -284,8 +294,8 @@ async function startGame(){
   document.getElementById('auth').style.display='none';
   document.getElementById('app').style.display='flex';
   document.getElementById('balance').style.display='flex';
-  await loadDushkaCoins(); // ЖДЁМ загрузку Dushka Coins
-  await loadCoins(); // ЖДЁМ загрузку монет
+  await loadDushkaCoins();
+  await loadCoins();
   const data=await readUserData(currentNickname);
   if(data&&data.base){ let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`); if(nickEl)nickEl.textContent="База "+currentNickname; let spawn=baseSpawnPoints[data.base]; if(spawn){x=spawn.x;y=spawn.y}else{x=data.x||52;y=data.y||81} }
   initPlayer(); initJoystick(); startOtherPlayersListener(); update(); window.focus(); resizeGame(); updateFreeSpinTimer(); checkBeeRestock(); await loadShopData(); await loadBeeStock(); await loadRedShopData(); await autoBuyShopItemsOnLoad(); updateBeeUI();
