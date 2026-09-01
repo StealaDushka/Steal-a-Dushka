@@ -53,6 +53,8 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 #custom-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #0f1214;border-radius:12px;padding:20px;z-index:9999;max-width:400px;width:90%;box-shadow:0 0 30px rgba(0,0,0,.9);color:#fff;text-align:center}#custom-modal .modal-title{font-size:18px;font-weight:bold;margin-bottom:10px;color:#4a90e2}#custom-modal .modal-text{font-size:14px;margin-bottom:20px}#custom-modal .modal-close{background:#c0392b;border:2px solid #922b21;color:#fff;padding:8px 20px;border-radius:4px;cursor:pointer;font-weight:bold}
 /* ДЖОЙСТИК */
 #joystick-zone{position:fixed;bottom:120px;left:30px;width:120px;height:120px;z-index:100;opacity:0.5;display:none;touch-action:none}
+/* Исправление: чёрный текст таймера */
+#bee-timer{color:#000;font-weight:bold}
 @media(max-width:700px){#game-container{width:300px;height:300px}#game-container .base{width:55px;height:55px}#wheel-menu{max-width:90vw}.wheel-container{width:220px;height:220px}.wheel{width:200px;height:200px}}
 </style>
 </head>
@@ -62,7 +64,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
   <div class="box dushka"><span class="icon"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg></span><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div>
   <div class="box"><span class="icon"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="10" fill="#4caf50"/><circle cx="12" cy="12" r="6" fill="#fff"/></svg></span><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div>
 </div>
-<div id="version">Версия: 0.28</div>
+<div id="version">Версия: 0.29</div>
 <div id="app"><div id="sidebar"><div id="actions">
 <div class="action-btn pink" onclick="openRedShop()">SHOP</div>
 <div class="action-btn" onclick="showModal('Ребирт','Скоро появится!')">REBIRTH</div>
@@ -129,6 +131,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <div id="joystick-zone"></div>
 
 <script>
+let wheelRotation = 0; // Глобальная переменная для колеса
 // ФОРМАТ ЧИСЕЛ
 function formatNumber(num){ if(num >= 1e15) return (num / 1e15).toFixed(2) + 'Qa'; if(num >= 1e12) return (num / 1e12).toFixed(2) + 'T'; if(num >= 1e9) return (num / 1e9).toFixed(2) + 'B'; if(num >= 1e6) return (num / 1e6).toFixed(2) + 'M'; if(num >= 1e3) return (num / 1e3).toFixed(2) + 'K'; return num.toString(); }
 
@@ -209,10 +212,10 @@ function checkBeeRestock(){
 }
 setInterval(checkBeeRestock,1000);
 
-async function openBee(){ const stock=await loadBeeStock(); window.beeStock=stock; updateBeeUI(); document.getElementById('bee-menu').style.display='flex'; }
+async function openBee(){ let stock=await loadBeeStock(); if(!stock || Object.keys(stock).length===0){ stock={}; beeItems.forEach(b=>{stock[b.id]=b.count;}); } window.beeStock=stock; updateBeeUI(); document.getElementById('bee-menu').style.display='flex'; }
 function closeBee(){document.getElementById('bee-menu').style.display='none';}
 
-function updateBeeUI(){ if(!window.beeStock)return; beeItems.forEach(bee=>{ const statusEl=document.getElementById('status-'+bee.id); const btn=document.querySelector(`#bee-${bee.id} .price-btn`); const currentStock=window.beeStock[bee.id]||0; if(statusEl){ if(currentStock>0) statusEl.textContent=`${currentStock} left`; else statusEl.textContent='SOLD OUT'; statusEl.style.color=currentStock>0?'#4caf50':'#ff4444'; } if(btn){ if(currentStock<=0){ btn.textContent='SOLD OUT'; btn.style.background='#555'; btn.style.cursor='default'; btn.onclick=null; } else { btn.innerHTML=`<svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg> ${bee.price.toLocaleString()}`; btn.style.background='#f7b731'; btn.style.cursor='pointer'; btn.onclick=()=>buyBee(bee.id); } } }); }
+function updateBeeUI(){ if(!window.beeStock)return; beeItems.forEach(bee=>{ const statusEl=document.getElementById('status-'+bee.id); const btn=document.querySelector(`#bee-${bee.id} .price-btn`); const currentStock=window.beeStock[bee.id]||0; if(statusEl){ if(currentStock>0) statusEl.textContent=`${currentStock} left`; else statusEl.textContent='SOLD OUT'; statusEl.style.color='#fff'; } if(btn){ if(currentStock<=0){ btn.textContent='SOLD OUT'; btn.style.background='#555'; btn.style.cursor='default'; btn.onclick=null; } else { btn.innerHTML=`<svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg> ${bee.price.toLocaleString()}`; btn.style.background='#f7b731'; btn.style.cursor='pointer'; btn.onclick=()=>buyBee(bee.id); } } }); }
 
 async function buyBee(id){ const bee=beeItems.find(b=>b.id===id); if(!bee)return; if(!window.beeStock)return; const currentStock=window.beeStock[id]||0; if(currentStock<=0)return; if(dushka>=bee.price){ dushka-=bee.price; window.beeStock[id]=currentStock-1; await db.ref('beeStock/'+id).set(window.beeStock[id]); document.getElementById('dushka-coins').textContent=formatNumber(dushka); db.ref('users/'+currentNickname).update({dushka:dushka}); updateBeeUI(); showModal('Покупка',`Вы купили пчелу ${bee.name} за ${bee.price} Dushka Coins! Осталось: ${window.beeStock[id]}`); } else showModal('Ошибка',`Недостаточно Dushka Coins! Нужно ${bee.price}`); }
 
@@ -296,7 +299,7 @@ function openCharacters(){document.getElementById('char-menu').style.display='fl
 
 function buySpin(a){ let c=a===1?49:199; if(dushka>=c){dushka-=c;_spins+=a;document.getElementById('dushka-coins').textContent=formatNumber(dushka);db.ref('users/'+currentNickname).update({dushka:dushka,spins:_spins});updateSpinBtn();showModal('Покупка',`Куплено ${a} спин(ов) за ${c} Dushka Coins!`);} else showModal('Ошибка','Недостаточно Dushka Coins!'); }
 function updateSpinBtn(){document.querySelector('#wheel-menu .spin-btn').textContent=`Spin (${_spins})`;}
-function doSpin(){ if(isSpinning){showModal('Подождите','Колесо ещё крутится!');return;} if(_spins<=0){showModal('Ошибка','Нет спинов!');return} isSpinning=true; _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn(); const wheel=document.getElementById('wheel-spin'); const prizes=[{name:'$12K',chance:45,reward:12000},{name:'$12K',chance:45,reward:12000},{name:'2x Lucky',chance:2,reward:0},{name:'$1M',chance:7,reward:1000000},{name:'Crystal Slap',chance:0.5,reward:0},{name:'Lucky Block',chance:0.5,reward:0}]; let total=prizes.reduce((sum,p)=>sum+p.chance,0); let random=Math.random()*total; let selected=prizes[0]; for(let p of prizes){ if(random<p.chance){selected=p;break;} random-=p.chance; } const currentRotation=parseFloat(getComputedStyle(wheel).transform.split('(')[1])||0; const extraRotations=5*360; const finalAngle=extraRotations+Math.random()*360; wheel.style.transform=`rotate(${currentRotation+finalAngle}deg)`; setTimeout(()=>{ isSpinning=false; if(selected.reward>0){coins+=selected.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});} showModal('Колесо',`Выпало: ${selected.name}!`); },2000); }
+function doSpin(){ if(isSpinning){showModal('Подождите','Колесо ещё крутится!');return;} if(_spins<=0){showModal('Ошибка','Нет спинов!');return} isSpinning=true; _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn(); const wheel=document.getElementById('wheel-spin'); const prizes=[{name:'$12K',chance:45,reward:12000},{name:'$12K',chance:45,reward:12000},{name:'2x Lucky',chance:2,reward:0},{name:'$1M',chance:7,reward:1000000},{name:'Crystal Slap',chance:0.5,reward:0},{name:'Lucky Block',chance:0.5,reward:0}]; let total=prizes.reduce((sum,p)=>sum+p.chance,0); let random=Math.random()*total; let selected=prizes[0]; for(let p of prizes){ if(random<p.chance){selected=p;break;} random-=p.chance; } wheelRotation += 5*360 + Math.random()*360; wheel.style.transform=`rotate(${wheelRotation}deg)`; setTimeout(()=>{ isSpinning=false; if(selected.reward>0){coins+=selected.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});} showModal('Колесо',`Выпало: ${selected.name}!`); },2000); }
 </script>
 </body>
 </html>
