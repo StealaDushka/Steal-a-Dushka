@@ -48,7 +48,9 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .shop-item .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
 .shop-item .price-btn{background:#4caf50;color:#fff;padding:8px 15px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center}
 .shop-item .price-btn.owned{background:#555;cursor:default}
-/* ПЧЁЛЫ */
+.shop-item .auto-buy{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:12px;color:#fff;cursor:pointer}
+.shop-item .auto-buy input{width:16px;height:16px;cursor:pointer}
+/* ПЧЁЛЫ (без Auto Buy) */
 #bee-menu{background:#e8b425;max-width:700px}#bee-menu .header{background:#e8b425;color:#000}#bee-menu .header .title h2{color:#000}#bee-menu .content{background:#1a1a1a;padding:15px;overflow-y:auto}#bee-menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
 .bee-card{background:linear-gradient(145deg,#2c2c2c,#1a1a1a);border:2px solid #444;border-radius:12px;padding:15px;display:flex;flex-direction:column;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform .2s, box-shadow .2s;position:relative}
 .bee-card:hover{transform:translateY(-5px);box-shadow:0 6px 15px rgba(0,0,0,.6)}
@@ -115,7 +117,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <!-- ПЕРСОНАЖИ -->
 <div id="char-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>PERSONAJI</h2><p>Все персонажи!</p></div><div class="close-btn" onclick="closeCharacters()">X</div></div><div class="content"><div class="grid"><div class="char-card"><div class="icon">🟢</div><div class="name">Verde</div></div><div class="char-card"><div class="icon">🔴</div><div class="name">Ross</div></div><div class="char-card"><div class="icon">🟪</div><div class="name">Viola</div></div><div class="char-card"><div class="icon">🟦</div><div class="name">Blu</div></div><div class="char-card"><div class="icon">🟥</div><div class="name">Rosso</div></div><div class="char-card"><div class="icon">🟨</div><div class="name">Giallo</div></div><div class="char-card"><div class="icon">🟩</div><div class="name">Prato</div></div><div class="char-card"><div class="icon">🟫</div><div class="name">Marrone</div></div><div class="char-card"><div class="icon">⬛</div><div class="name">Nero</div></div></div></div></div>
 
-<!-- ПЧЁЛЫ -->
+<!-- ПЧЁЛЫ (БЕЗ AUTO BUY, ПОКУПКА ЗА DUSHKA COINS, КОЛИЧЕСТВО УМЕНЬШАЕТСЯ) -->
 <div id="bee-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Королева Пчёл</h2><p>Обновление через: <span id="bee-timer">90:00</span></p></div><div class="close-btn" onclick="closeBee()">X</div></div><div class="content"><div class="grid">
 <div class="bee-card" id="bee-raccoon"><div class="status">100</div><div class="img-placeholder">🦝</div><div class="mps">$10M/s</div><div class="name">Conetto Morsetto</div><div class="buy-row"><div class="count-box">📦 <span id="stock-raccoon">20</span></div><button class="price-btn" onclick="buyBee('raccoon')">🪙 499</button></div></div>
 <div class="bee-card" id="bee-bear"><div class="status">100</div><div class="img-placeholder">🐻</div><div class="mps">$32M/s</div><div class="name">Honey Honey Bear</div><div class="buy-row"><div class="count-box">📦 <span id="stock-bear">40</span></div><button class="price-btn" onclick="buyBee('bear')">🪙 999</button></div></div>
@@ -124,7 +126,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <div class="bee-card" id="bee-bumbatron"><div class="status">25 left</div><div class="img-placeholder">🤖</div><div class="mps">$172.5M/s</div><div class="name">Bumbatron</div><div class="buy-row"><div class="count-box">📦 <span id="stock-bumbatron">400</span></div><button class="price-btn" onclick="buyBee('bumbatron')">🪙 9,999</button></div></div>
 </div></div></div>
 
-<!-- СИНИЙ МАГАЗИН -->
+<!-- СИНИЙ МАГАЗИН (С AUTO BUY) -->
 <div id="shop-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Shop</h2><p>Buy tools to protect your base and troll others!</p></div><div class="close-btn" onclick="closeShop()">X</div></div><div class="content" id="shop-items"></div></div>
 
 <!-- КРАСНЫЙ МАГАЗИН -->
@@ -210,7 +212,7 @@ let otherPlayers={};
 let typedCode = '';
 const baseSpawnPoints = {1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81},5:{x:52,y:307},6:{x:147,y:307},7:{x:242,y:307},8:{x:337,y:307}};
 
-// ========== СИНИЙ МАГАЗИН (без Auto Buy) ==========
+// ========== СИНИЙ МАГАЗИН (С AUTO BUY) ==========
 const shopItems = [
   {id:'slap', name:'Slap', desc:'An average hand to slap thieves and send them flying!', price:500, icon:'slap'},
   {id:'speed-coil', name:'Speed Coil', desc:'Zoom around the map with additional speed.', price:750, icon:'speed-coil'},
@@ -224,6 +226,7 @@ const shopItems = [
 ];
 
 let ownedItems = [];
+let autoBuyShopItems = [];
 
 function getShopIcon(type){
   switch(type){
@@ -240,7 +243,11 @@ function getShopIcon(type){
   }
 }
 
-async function loadShopData(){ if(!currentNickname) return; const data = await readUserData(currentNickname); if(data) ownedItems = data.ownedItems || []; }
+async function loadShopData(){
+  if(!currentNickname) return;
+  const data = await readUserData(currentNickname);
+  if(data){ ownedItems = []; autoBuyShopItems = data.autoBuyShopItems || []; }
+}
 
 function openShop(){
   loadShopData().then(() => {
@@ -248,9 +255,10 @@ function openShop(){
     container.innerHTML = '';
     shopItems.forEach(item => {
       const isOwned = ownedItems.includes(item.id);
+      const isAuto = autoBuyShopItems.includes(item.id);
       const div = document.createElement('div');
       div.className = 'shop-item';
-      div.innerHTML = `<div class="icon">${getShopIcon(item.icon)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned ? 'owned' : ''}" onclick="buyShopItem('${item.id}')">${isOwned ? 'OWNED' : '$' + item.price.toLocaleString()}</div></div>`;
+      div.innerHTML = `<div class="icon">${getShopIcon(item.icon)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned ? 'owned' : ''}" onclick="buyShopItem('${item.id}')">${isOwned ? 'OWNED' : '$' + item.price.toLocaleString()}</div><label class="auto-buy"><input type="checkbox" ${isAuto ? 'checked' : ''} onchange="toggleAutoBuyShopItem('${item.id}', this.checked)"> Auto Buy</label></div>`;
       container.appendChild(div);
     });
     document.getElementById('shop-menu').style.display = 'flex';
@@ -274,7 +282,40 @@ function buyShopItem(id){
   }
 }
 
-// ========== ПЧЁЛЫ (покупаются за Dushka Coins) ==========
+function toggleAutoBuyShopItem(id, checked){
+  if(checked){
+    if(!autoBuyShopItems.includes(id)) autoBuyShopItems.push(id);
+  } else {
+    autoBuyShopItems = autoBuyShopItems.filter(item => item !== id);
+  }
+  db.ref('users/'+currentNickname).update({autoBuyShopItems:autoBuyShopItems});
+  if(checked){
+    const item = shopItems.find(i => i.id === id);
+    if(item && !ownedItems.includes(id) && coins >= item.price){
+      buyShopItem(id);
+    }
+  }
+}
+
+async function autoBuyShopItemsOnLoad(){
+  if(!currentNickname) return;
+  await loadShopData();
+  let changed = false;
+  for(let itemId of autoBuyShopItems){
+    const item = shopItems.find(i => i.id === itemId);
+    if(item && !ownedItems.includes(itemId) && coins >= item.price){
+      coins -= item.price;
+      ownedItems.push(itemId);
+      changed = true;
+    }
+  }
+  if(changed){
+    document.getElementById('balance-amount').textContent = formatNumber(coins);
+    db.ref('users/'+currentNickname).update({coins:coins, ownedItems:ownedItems});
+  }
+}
+
+// ========== ПЧЁЛЫ (БЕЗ AUTO BUY, ПОКУПКА ЗА DUSHKA COINS) ==========
 const beeItems = [
   {id:'raccoon', name:'Conetto Morsetto', mps:'$10M/s', count:20, price:499, icon:'🦝'},
   {id:'bear', name:'Honey Honey Bear', mps:'$32M/s', count:40, price:999, icon:'🐻'},
@@ -283,7 +324,6 @@ const beeItems = [
   {id:'bumbatron', name:'Bumbatron', mps:'$172.5M/s', count:400, price:9999, icon:'🤖'}
 ];
 
-let ownedBees = [];
 let beeStock = {};
 
 function initBeeStock(){ beeItems.forEach(bee => { beeStock[bee.id] = bee.count; }); }
@@ -310,8 +350,6 @@ setInterval(checkBeeRestock, 1000);
 
 async function loadBeeData(){
   if(!currentNickname) return;
-  const data = await readUserData(currentNickname);
-  if(data) ownedBees = data.ownedBees || [];
   const savedStock = localStorage.getItem('beeStock');
   if(savedStock){ beeStock = JSON.parse(savedStock); } else { initBeeStock(); }
 }
@@ -328,13 +366,6 @@ function updateBeeUI(){
       statusEl.textContent = 'SOLD OUT';
       statusEl.style.color = '#ff4444';
       btn.textContent = 'SOLD OUT';
-      btn.style.background = '#555';
-      btn.style.cursor = 'default';
-      btn.onclick = null;
-    } else if(ownedBees.includes(bee.id)){
-      statusEl.textContent = 'OWNED';
-      statusEl.style.color = '#4caf50';
-      btn.textContent = 'OWNED';
       btn.style.background = '#555';
       btn.style.cursor = 'default';
       btn.onclick = null;
@@ -362,13 +393,11 @@ function buyBee(id){
   const bee = beeItems.find(b => b.id === id);
   if(!bee) return;
   if(beeStock[id] <= 0) return;
-  if(ownedBees.includes(id)) return;
   if(dushka >= bee.price){
-    dushka -= bee.price; // оплата Dushka Coins
-    ownedBees.push(id);
+    dushka -= bee.price;
     beeStock[id] -= 1;
     document.getElementById('dushka-coins').textContent = formatNumber(dushka);
-    db.ref('users/'+currentNickname).update({dushka:dushka, ownedBees:ownedBees});
+    db.ref('users/'+currentNickname).update({dushka:dushka});
     localStorage.setItem('beeStock', JSON.stringify(beeStock));
     updateBeeUI();
     showModal('Покупка', `Вы купили пчелу ${bee.name} за ${bee.price} Dushka Coins! Осталось: ${beeStock[id]}`);
@@ -539,14 +568,14 @@ async function readUserData(n){try{const s=await db.ref('users/'+n).once('value'
 async function writeUserData(n,d){try{await db.ref('users/'+n).set(d)}catch(e){}}
 async function getFreeBase(){ const s=await db.ref('users').once('value'); const users=s.val()||{}; const occ=[]; for(let k in users){ if(users[k].base) occ.push(users[k].base); } const free=[]; for(let i=1;i<=8;i++){ if(!occ.includes(i)) free.push(i); } if(free.length===0) return null; return free[Math.floor(Math.random()*free.length)]; }
 
-async function handleRegister(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){showModal('Ошибка','Ник занят!');return} const base=await getFreeBase(); if(!base){showModal('Ошибка','Все базы заняты!');return} const spawn=baseSpawnPoints[base]; await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,level:1,last_online:Date.now(),base:base,x:spawn.x,y:spawn.y,ownedRedItems:[],ownedBees:[]}); currentNickname=u; startGame(); }
-async function handleLogin(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){ if(e.password===p){ currentNickname=u; if(!e.base){const base=await getFreeBase(); if(!base){showModal('Ошибка','Все базы заняты!');return} const spawn=baseSpawnPoints[base]; e.base=base; e.x=spawn.x; e.y=spawn.y;} if(typeof e.dushka==='undefined'){e.dushka=0;} if(typeof e.spins==='undefined'){e.spins=0;} if(typeof e.ownedRedItems==='undefined'){e.ownedRedItems=[];} if(typeof e.ownedBees==='undefined'){e.ownedBees=[];} await writeUserData(u,e); startGame(); } else showModal('Ошибка','Неверный пароль!'); } else showModal('Ошибка','Ник не найден! Нажми РЕГ.'); }
+async function handleRegister(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){showModal('Ошибка','Ник занят!');return} const base=await getFreeBase(); if(!base){showModal('Ошибка','Все базы заняты!');return} const spawn=baseSpawnPoints[base]; await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,level:1,last_online:Date.now(),base:base,x:spawn.x,y:spawn.y,ownedRedItems:[],autoBuyShopItems:[]}); currentNickname=u; startGame(); }
+async function handleLogin(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){ if(e.password===p){ currentNickname=u; if(!e.base){const base=await getFreeBase(); if(!base){showModal('Ошибка','Все базы заняты!');return} const spawn=baseSpawnPoints[base]; e.base=base; e.x=spawn.x; e.y=spawn.y;} if(typeof e.dushka==='undefined'){e.dushka=0;} if(typeof e.spins==='undefined'){e.spins=0;} if(typeof e.ownedRedItems==='undefined'){e.ownedRedItems=[];} if(typeof e.autoBuyShopItems==='undefined'){e.autoBuyShopItems=[];} await writeUserData(u,e); startGame(); } else showModal('Ошибка','Неверный пароль!'); } else showModal('Ошибка','Ник не найден! Нажми РЕГ.'); }
 
 async function loadDushkaCoins(){ if(currentNickname){ const d=await readUserData(currentNickname); if(d){ dushka = d.dushka || 0; document.getElementById('dushka-coins').textContent = formatNumber(dushka); } } }
 async function loadCoins(){ if(currentNickname){ const d=await readUserData(currentNickname); if(d){ coins = d.coins || 25; document.getElementById('balance-amount').textContent = formatNumber(coins); } } }
 setInterval(loadDushkaCoins,5000); setInterval(loadCoins,5000);
 
-async function startGame(){ document.getElementById('auth').style.display='none'; document.getElementById('app').style.display='flex'; document.getElementById('balance').style.display='flex'; loadDushkaCoins(); loadCoins(); const data=await readUserData(currentNickname); if(data&&data.base){ let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`); if(nickEl)nickEl.textContent="База "+currentNickname; let spawn=baseSpawnPoints[data.base]; if(spawn){x=spawn.x;y=spawn.y}else{x=data.x||52;y=data.y||81} } initPlayer(); initJoystick(); startOtherPlayersListener(); update(); window.focus(); resizeGame(); updateFreeSpinTimer(); checkBeeRestock(); await loadShopData(); await loadBeeData(); await loadRedShopData(); updateBeeUI(); }
+async function startGame(){ document.getElementById('auth').style.display='none'; document.getElementById('app').style.display='flex'; document.getElementById('balance').style.display='flex'; loadDushkaCoins(); loadCoins(); const data=await readUserData(currentNickname); if(data&&data.base){ let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`); if(nickEl)nickEl.textContent="База "+currentNickname; let spawn=baseSpawnPoints[data.base]; if(spawn){x=spawn.x;y=spawn.y}else{x=data.x||52;y=data.y||81} } initPlayer(); initJoystick(); startOtherPlayersListener(); update(); window.focus(); resizeGame(); updateFreeSpinTimer(); checkBeeRestock(); await loadShopData(); await loadBeeData(); await loadRedShopData(); await autoBuyShopItemsOnLoad(); updateBeeUI(); }
 
 function initPlayer(){let pl=document.getElementById('player');pl.innerHTML='<div class="pixel"></div><div class="pixel"></div>';let px=pl.querySelectorAll('.pixel');px[0].style.background='#FFCC00';px[1].style.background='#00DFF5';pl.style.left=x+'px';pl.style.top=y+'px'}
 
