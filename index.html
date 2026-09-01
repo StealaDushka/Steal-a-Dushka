@@ -62,7 +62,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
   <div class="box dushka"><span class="icon"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg></span><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div>
   <div class="box"><span class="icon"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="10" fill="#4caf50"/><circle cx="12" cy="12" r="6" fill="#fff"/></svg></span><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div>
 </div>
-<div id="version">Версия: 0.27</div>
+<div id="version">Версия: 0.28</div>
 <div id="app"><div id="sidebar"><div id="actions">
 <div class="action-btn pink" onclick="openRedShop()">SHOP</div>
 <div class="action-btn" onclick="showModal('Ребирт','Скоро появится!')">REBIRTH</div>
@@ -183,12 +183,15 @@ async function loadBeeStock(){
     const snapshot=await db.ref('beeStock').once('value');
     if(snapshot.exists()) return snapshot.val();
   }catch(e){}
-  // fallback – создаём дефолт
+  // Если нет – создаём и сохраняем
   const stock={};
   beeItems.forEach(b=>{stock[b.id]=b.count;});
+  try{
+    await db.ref('beeStock').set(stock);
+  }catch(e){}
   return stock;
 }
-async function updateBeeStock(stock){ await db.ref('beeStock').set(stock); }
+async function updateBeeStock(stock){ try{ await db.ref('beeStock').set(stock); }catch(e){} }
 function checkBeeRestock(){
   const elapsed=Math.floor((Date.now()-lastBeeRestock)/1000);
   const remaining=BEE_RESTOCK_INTERVAL-elapsed;
