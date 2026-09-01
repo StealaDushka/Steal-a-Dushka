@@ -163,14 +163,32 @@ const beeItems=[
   {id:'bumbatron',name:'Bumbatron',mps:'$172.5M/s',count:25,price:9999,icon:'🤖'}
 ];
 let beeStock={};
+const BEE_STOCK_VERSION='v1'; // Версия начальных значений
 const BEE_RESTOCK_INTERVAL=5400;
 let lastBeeRestock=localStorage.getItem('lastBeeRestock'); if(!lastBeeRestock){lastBeeRestock=Date.now();localStorage.setItem('lastBeeRestock',lastBeeRestock.toString());}else{lastBeeRestock=parseInt(lastBeeRestock);}
 async function loadBeeStock(){
-  try{ const snapshot=await db.ref('beeStock').once('value'); if(snapshot.exists()) return snapshot.val(); }catch(e){}
-  const stock={}; beeItems.forEach(b=>{stock[b.id]=b.count;}); try{ await db.ref('beeStock').set(stock); }catch(e){} return stock;
+  try{
+    const snapshot=await db.ref('beeStock').once('value');
+    if(snapshot.exists()){
+      const data=snapshot.val();
+      // Если версия не совпадает или данных нет – перезаписываем новыми значениями
+      if(data.version!==BEE_STOCK_VERSION){
+        const stock={version:BEE_STOCK_VERSION};
+        beeItems.forEach(b=>{stock[b.id]=b.count;});
+        await db.ref('beeStock').set(stock);
+        return stock;
+      }
+      return data;
+    }
+  }catch(e){}
+  // Если узла нет – создаём
+  const stock={version:BEE_STOCK_VERSION};
+  beeItems.forEach(b=>{stock[b.id]=b.count;});
+  try{ await db.ref('beeStock').set(stock); }catch(e){}
+  return stock;
 }
 async function updateBeeStock(stock){ try{ await db.ref('beeStock').set(stock); }catch(e){} }
-function checkBeeRestock(){ const elapsed=Math.floor((Date.now()-lastBeeRestock)/1000); const remaining=BEE_RESTOCK_INTERVAL-elapsed; if(remaining<=0){ const stock={}; beeItems.forEach(b=>{stock[b.id]=b.count;}); updateBeeStock(stock); lastBeeRestock=Date.now(); localStorage.setItem('lastBeeRestock',lastBeeRestock.toString()); if(window.beeStock){window.beeStock=stock; updateBeeUI();} } const minutes=Math.floor(remaining/60),seconds=remaining%60; const timerEl=document.getElementById('bee-timer'); if(timerEl)timerEl.textContent=`${minutes}:${seconds.toString().padStart(2,'0')}`; }
+function checkBeeRestock(){ const elapsed=Math.floor((Date.now()-lastBeeRestock)/1000); const remaining=BEE_RESTOCK_INTERVAL-elapsed; if(remaining<=0){ const stock={version:BEE_STOCK_VERSION}; beeItems.forEach(b=>{stock[b.id]=b.count;}); updateBeeStock(stock); lastBeeRestock=Date.now(); localStorage.setItem('lastBeeRestock',lastBeeRestock.toString()); if(window.beeStock){window.beeStock=stock; updateBeeUI();} } const minutes=Math.floor(remaining/60),seconds=remaining%60; const timerEl=document.getElementById('bee-timer'); if(timerEl)timerEl.textContent=`${minutes}:${seconds.toString().padStart(2,'0')}`; }
 setInterval(checkBeeRestock,1000);
 async function openBee(){ const stock=await loadBeeStock(); window.beeStock=stock; updateBeeUI(); document.getElementById('bee-menu').style.display='flex'; }
 function closeBee(){document.getElementById('bee-menu').style.display='none';}
