@@ -37,7 +37,6 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 #player,#other-player{position:absolute;width:10px;height:20px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20}#player .pixel,#other-player .pixel{width:100%;height:100%}#other-player .pixel{background:red}
 #interact{position:absolute;display:none;z-index:1000;width:24px;height:24px;background:#777;border:1px solid #444;display:flex;justify-content:center;align-items:center;color:#fff;font-size:18px;cursor:pointer}
 #balance{position:fixed;bottom:20px;left:20px;background:rgba(0,0,0,.8);padding:10px;border:2px solid #444;color:#fff;font-size:14px;display:none;flex-direction:column;gap:5px;border-radius:8px}#balance .box{display:flex;justify-content:space-between;gap:10px}#balance .icon{width:24px;height:24px;display:flex;justify-content:center;align-items:center}#balance .label{color:#aaa}#balance .amount{color:#4caf50}#balance .dushka .amount{color:#00bcd4}
-/* ВЕРСИЯ */
 #version{position:fixed;bottom:20px;right:20px;color:#fff;font-size:12px;font-family:'Courier New',monospace;z-index:9999;background:rgba(0,0,0,.5);padding:4px 8px;border-radius:4px}
 .menu-overlay{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:85%;max-width:900px;max-height:90vh;background:#1e2426;border:2px solid #0f1214;border-radius:8px;z-index:2000;flex-direction:column;box-shadow:0 0 20px rgba(0,0,0,.8);padding:0;overflow:hidden}.menu-overlay .header{display:flex;justify-content:space-between;align-items:flex-start;padding:15px 20px;background:transparent;flex-shrink:0}.menu-overlay .header .title h2{margin:0;color:#fff;font-size:22px;font-weight:bold}.menu-overlay .header .title p{margin:0;color:#ccc;font-size:12px}.menu-overlay .header .close-btn{background:#c0392b;border:2px solid #922b21;color:#fff;font-size:20px;font-weight:bold;width:40px;height:40px;display:flex;justify-content:center;align-items:center;cursor:pointer;border-radius:4px}.menu-overlay .content{padding:0 15px 15px 15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;flex:1}
 /* СИНИЙ МАГАЗИН */
@@ -153,13 +152,13 @@ let touchDX=0,touchDY=0,joystickManager=null;
 function initJoystick(){ const zone=document.getElementById('joystick-zone'); zone.style.display='block'; if(typeof nipplejs==='undefined'){console.warn('NippleJS не загружен');return;} joystickManager=nipplejs.create({zone:zone,mode:'static',position:{left:'50%',top:'50%'},color:'white',size:100,restOpacity:0.5,fadeTime:150}); joystickManager.on('move',(evt,data)=>{const force=Math.min(data.force,1);const angle=data.angle.radian;touchDX=Math.cos(angle)*force;touchDY=-Math.sin(angle)*force;}); joystickManager.on('end',()=>{touchDX=0;touchDY=0;}); }
 
 // ПЕРЕМЕННЫЕ
-let x=52,y=81,coins=25,dushka=0,currentNickname=null,_spins=0;
+let x=52,y=81,coins=25,dushka=0,currentNickname=null,_spins=0,isSpinning=false;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
 let otherPlayers={};
 let typedCode='';
 const baseSpawnPoints={1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81},5:{x:52,y:307},6:{x:147,y:307},7:{x:242,y:307},8:{x:337,y:307}};
 
-// СИНИЙ МАГАЗИН
+// СИНИЙ МАГАЗИН (без сброса ownedItems при открытии)
 const shopItems=[{id:'slap',name:'Slap',desc:'An average hand to slap thieves and send them flying!',price:500,icon:'slap'},{id:'speed-coil',name:'Speed Coil',desc:'Zoom around the map with additional speed.',price:750,icon:'speed-coil'},{id:'trap',name:'Trap',desc:'Place traps that freeze thieves for 10 seconds (5 Max)',price:1000,icon:'trap'},{id:'iron-slap',name:'Iron Slap',desc:'Heavy iron slap that knocks players flying!',price:2500,icon:'iron-slap'},{id:'gravity-coil',name:'Gravity Coil',desc:'Reduced gravity coil lets you jump extra high!',price:3000,icon:'gravity-coil'},{id:'bee-launcher',name:'Bee Launcher',desc:'Release bees to attack your opponent and invert their controls!',price:10000,icon:'bee-launcher'},{id:'coil-combo',name:'Coil Combo',desc:'Combine speed and gravity coils for ultimate mobility!',price:20000,icon:'coil-combo'},{id:'rage-table',name:'Rage Table',desc:'Throw a table to fling players and return your Brainrots.',price:25000,icon:'rage-table'},{id:'diamond-slap',name:'Diamond Slap',desc:'Charge up a diamond slap to knock others away.',price:50000,icon:'diamond-slap'}];
 let ownedItems=[],autoBuyShopItems=[];
 
@@ -168,19 +167,18 @@ function getShopIcon(type){ switch(type){ case 'slap':return `<svg viewBox="0 0 
 async function loadShopData(){ if(!currentNickname)return; const data=await readUserData(currentNickname); if(data){ ownedItems=[]; autoBuyShopItems=data.autoBuyShopItems||[]; } }
 
 function openShop(){
-  loadShopData().then(()=>{
-    const container=document.getElementById('shop-items');
-    container.innerHTML='';
-    shopItems.forEach(item=>{
-      const isOwned=ownedItems.includes(item.id);
-      const isAuto=autoBuyShopItems.includes(item.id);
-      const div=document.createElement('div');
-      div.className='shop-item';
-      div.innerHTML=`<div class="icon">${getShopIcon(item.icon)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned?'owned':''}" onclick="buyShopItem('${item.id}')">${isOwned?'OWNED':'$'+item.price.toLocaleString()}</div><label class="auto-buy"><input type="checkbox" ${isAuto?'checked':''} onchange="toggleAutoBuyShopItem('${item.id}', this.checked)"> Auto Buy</label></div>`;
-      container.appendChild(div);
-    });
-    document.getElementById('shop-menu').style.display='flex';
+  // НЕ вызываем loadShopData() чтобы не сбрасывать ownedItems после автопокупки
+  const container=document.getElementById('shop-items');
+  container.innerHTML='';
+  shopItems.forEach(item=>{
+    const isOwned=ownedItems.includes(item.id);
+    const isAuto=autoBuyShopItems.includes(item.id);
+    const div=document.createElement('div');
+    div.className='shop-item';
+    div.innerHTML=`<div class="icon">${getShopIcon(item.icon)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned?'owned':''}" onclick="buyShopItem('${item.id}')">${isOwned?'OWNED':'$'+item.price.toLocaleString()}</div><label class="auto-buy"><input type="checkbox" ${isAuto?'checked':''} onchange="toggleAutoBuyShopItem('${item.id}', this.checked)"> Auto Buy</label></div>`;
+    container.appendChild(div);
   });
+  document.getElementById('shop-menu').style.display='flex';
 }
 function closeShop(){document.getElementById('shop-menu').style.display='none';}
 
@@ -197,11 +195,13 @@ const BEE_RESTOCK_INTERVAL=5400; // 90 минут
 let lastBeeRestock=localStorage.getItem('lastBeeRestock'); if(!lastBeeRestock){lastBeeRestock=Date.now();localStorage.setItem('lastBeeRestock',lastBeeRestock.toString());}else{lastBeeRestock=parseInt(lastBeeRestock);}
 
 async function loadBeeStock(){
-  const snapshot=await db.ref('beeStock').once('value');
-  if(snapshot.exists()) return snapshot.val();
+  try{
+    const snapshot=await db.ref('beeStock').once('value');
+    if(snapshot.exists()) return snapshot.val();
+  }catch(e){}
+  // fallback
   const stock={};
   beeItems.forEach(b=>{stock[b.id]=b.count;});
-  await db.ref('beeStock').set(stock);
   return stock;
 }
 async function updateBeeStock(stock){ await db.ref('beeStock').set(stock); }
@@ -342,7 +342,7 @@ function openCharacters(){document.getElementById('char-menu').style.display='fl
 
 function buySpin(a){ let c=a===1?49:199; if(dushka>=c){dushka-=c;_spins+=a;document.getElementById('dushka-coins').textContent=formatNumber(dushka);db.ref('users/'+currentNickname).update({dushka:dushka,spins:_spins});updateSpinBtn();showModal('Покупка',`Куплено ${a} спин(ов) за ${c} Dushka Coins!`);} else showModal('Ошибка','Недостаточно Dushka Coins!'); }
 function updateSpinBtn(){document.querySelector('#wheel-menu .spin-btn').textContent=`Spin (${_spins})`;}
-function doSpin(){ if(_spins<=0){showModal('Ошибка','Нет спинов!');return} _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn(); const wheel=document.getElementById('wheel-spin'); wheel.classList.add('spinning'); const prizes=[{name:'$12K',chance:45,reward:12000},{name:'$12K',chance:45,reward:12000},{name:'2x Lucky',chance:2,reward:0},{name:'$1M',chance:7,reward:1000000},{name:'Crystal Slap',chance:0.5,reward:0},{name:'Lucky Block',chance:0.5,reward:0}]; let total=prizes.reduce((sum,p)=>sum+p.chance,0); let random=Math.random()*total; let selected=prizes[0]; for(let p of prizes){ if(random<p.chance){selected=p;break;} random-=p.chance; } setTimeout(()=>{ wheel.classList.remove('spinning'); if(selected.reward>0){coins+=selected.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});} showModal('Колесо',`Выпало: ${selected.name}!`); },2000); }
+function doSpin(){ if(isSpinning){showModal('Подождите','Колесо ещё крутится!');return;} if(_spins<=0){showModal('Ошибка','Нет спинов!');return} isSpinning=true; _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn(); const wheel=document.getElementById('wheel-spin'); wheel.classList.add('spinning'); const prizes=[{name:'$12K',chance:45,reward:12000},{name:'$12K',chance:45,reward:12000},{name:'2x Lucky',chance:2,reward:0},{name:'$1M',chance:7,reward:1000000},{name:'Crystal Slap',chance:0.5,reward:0},{name:'Lucky Block',chance:0.5,reward:0}]; let total=prizes.reduce((sum,p)=>sum+p.chance,0); let random=Math.random()*total; let selected=prizes[0]; for(let p of prizes){ if(random<p.chance){selected=p;break;} random-=p.chance; } setTimeout(()=>{ wheel.classList.remove('spinning'); isSpinning=false; if(selected.reward>0){coins+=selected.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});} showModal('Колесо',`Выпало: ${selected.name}!`); },2000); }
 </script>
 </body>
 </html>
