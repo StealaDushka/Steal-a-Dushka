@@ -63,6 +63,8 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .bee-card .price-btn:hover{background:#388e3c}
 .bee-card .auto-buy{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:12px;color:#fff;cursor:pointer}
 .bee-card .auto-buy input{width:16px;height:16px;cursor:pointer}
+/* BUMBATRON - растянут на 2 колонки */
+#bee-bumbatron{grid-column:span 2}
 /* КРАСНЫЙ МАГАЗИН */
 #red-shop-menu{background:#8b2c2c;max-width:800px}#red-shop-menu .header{background:#5c1a1a}#red-shop-menu .tabs{display:flex;gap:5px;padding:10px 15px 0;background:#2c2c2c;flex-wrap:wrap}#red-shop-menu .tab{background:#444;padding:8px 15px;border-radius:5px 5px 0 0;cursor:pointer;font-weight:bold;color:#fff;font-size:13px}#red-shop-menu .tab.active{background:#666}#red-shop-menu .content{background:#3e2c2c;padding:15px;overflow-y:auto}.red-shop-item{display:flex;background:#2c2c2c;border:2px solid #444;border-radius:8px;padding:10px;margin-bottom:10px;align-items:center;gap:12px}.red-shop-item .icon{width:80px;height:80px;background:#3a3a3a;border-radius:8px;display:flex;justify-content:center;align-items:center}.red-shop-item .icon svg{width:60px;height:60px}.red-shop-item .info{flex:1}.red-shop-item .info .name{font-size:18px;font-weight:bold;color:#fff}.red-shop-item .info .desc{font-size:12px;color:#aaa}.red-shop-item .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}.red-shop-item .price-btn{background:#c0392b;color:#fff;padding:8px 15px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center}.red-shop-item .price-btn.owned{background:#555;cursor:default}.gift-player-btn{background:#f39c12;color:#000;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;text-align:center;margin-top:15px}
 /* КОЛЕСО */
@@ -103,9 +105,9 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <!-- ПЕРСОНАЖИ -->
 <div id="char-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>PERSONAJI</h2><p>Все персонажи!</p></div><div class="close-btn" onclick="closeCharacters()">X</div></div><div class="content"><div class="grid"><div class="char-card"><div class="icon">🟢</div><div class="name">Verde</div></div><div class="char-card"><div class="icon">🔴</div><div class="name">Ross</div></div><div class="char-card"><div class="icon">🟪</div><div class="name">Viola</div></div><div class="char-card"><div class="icon">🟦</div><div class="name">Blu</div></div><div class="char-card"><div class="icon">🟥</div><div class="name">Rosso</div></div><div class="char-card"><div class="icon">🟨</div><div class="name">Giallo</div></div><div class="char-card"><div class="icon">🟩</div><div class="name">Prato</div></div><div class="char-card"><div class="icon">🟫</div><div class="name">Marrone</div></div><div class="char-card"><div class="icon">⬛</div><div class="name">Nero</div></div></div></div></div>
 
-<!-- ПЧЁЛЫ (СТАТИЧНЫЕ КАРТОЧКИ + BUMBATRON) -->
+<!-- ПЧЁЛЫ (БРЭИНРОТЫ) -->
 <div id="bee-menu" class="menu-overlay" style="display:none">
-  <div class="header"><div class="title"><h2>Королева Пчёл</h2><p>Она улетит через 1ч 20м</p></div><div class="close-btn" onclick="closeBee()">X</div></div>
+  <div class="header"><div class="title"><h2>Королева Пчёл</h2><p>Обновление через: <span id="bee-timer">90:00</span></p></div><div class="close-btn" onclick="closeBee()">X</div></div>
   <div class="content">
     <div class="grid">
       <div class="bee-card" id="bee-raccoon">
@@ -113,10 +115,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
         <div class="img-placeholder">🦝</div>
         <div class="mps">$10M/s</div>
         <div class="name">Conetto Morsetto</div>
-        <div class="buy-row">
-          <div class="count-box">📦 20</div>
-          <button class="price-btn" onclick="buyBee('raccoon')">🪙 499</button>
-        </div>
+        <div class="buy-row"><div class="count-box">📦 <span id="stock-raccoon">20</span></div><button class="price-btn" onclick="buyBee('raccoon')">🪙 499</button></div>
         <label class="auto-buy"><input type="checkbox" id="autobuy-raccoon" onchange="toggleAutoBuyBee('raccoon', this.checked)"> Auto Buy</label>
       </div>
       <div class="bee-card" id="bee-bear">
@@ -124,10 +123,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
         <div class="img-placeholder">🐻</div>
         <div class="mps">$32M/s</div>
         <div class="name">Honey Honey Bear</div>
-        <div class="buy-row">
-          <div class="count-box">📦 40</div>
-          <button class="price-btn" onclick="buyBee('bear')">🪙 999</button>
-        </div>
+        <div class="buy-row"><div class="count-box">📦 <span id="stock-bear">40</span></div><button class="price-btn" onclick="buyBee('bear')">🪙 999</button></div>
         <label class="auto-buy"><input type="checkbox" id="autobuy-bear" onchange="toggleAutoBuyBee('bear', this.checked)"> Auto Buy</label>
       </div>
       <div class="bee-card" id="bee-queen">
@@ -135,10 +131,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
         <div class="img-placeholder">🐝</div>
         <div class="mps">$65M/s</div>
         <div class="name">Queen Bee</div>
-        <div class="buy-row">
-          <div class="count-box">📦 100</div>
-          <button class="price-btn" onclick="buyBee('queen')">🪙 2,499</button>
-        </div>
+        <div class="buy-row"><div class="count-box">📦 <span id="stock-queen">100</span></div><button class="price-btn" onclick="buyBee('queen')">🪙 2,499</button></div>
         <label class="auto-buy"><input type="checkbox" id="autobuy-queen" onchange="toggleAutoBuyBee('queen', this.checked)"> Auto Buy</label>
       </div>
       <div class="bee-card" id="bee-chocolate">
@@ -146,10 +139,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
         <div class="img-placeholder">🍫</div>
         <div class="mps">$85M/s</div>
         <div class="name">S'more Serat</div>
-        <div class="buy-row">
-          <div class="count-box">📦 200</div>
-          <button class="price-btn" onclick="buyBee('chocolate')">🪙 4,999</button>
-        </div>
+        <div class="buy-row"><div class="count-box">📦 <span id="stock-chocolate">200</span></div><button class="price-btn" onclick="buyBee('chocolate')">🪙 4,999</button></div>
         <label class="auto-buy"><input type="checkbox" id="autobuy-chocolate" onchange="toggleAutoBuyBee('chocolate', this.checked)"> Auto Buy</label>
       </div>
       <div class="bee-card" id="bee-bumbatron">
@@ -157,10 +147,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
         <div class="img-placeholder">🤖</div>
         <div class="mps">$172.5M/s</div>
         <div class="name">Bumbatron</div>
-        <div class="buy-row">
-          <div class="count-box">📦 400</div>
-          <button class="price-btn" onclick="buyBee('bumbatron')">🪙 9,999</button>
-        </div>
+        <div class="buy-row"><div class="count-box">📦 <span id="stock-bumbatron">400</span></div><button class="price-btn" onclick="buyBee('bumbatron')">🪙 9,999</button></div>
         <label class="auto-buy"><input type="checkbox" id="autobuy-bumbatron" onchange="toggleAutoBuyBee('bumbatron', this.checked)"> Auto Buy</label>
       </div>
     </div>
@@ -215,7 +202,7 @@ let otherPlayers={};
 let typedCode = '';
 const baseSpawnPoints = {1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81},5:{x:52,y:307},6:{x:147,y:307},7:{x:242,y:307},8:{x:337,y:307}};
 
-// ========== СИНИЙ МАГАЗИН (товары за монеты) ==========
+// ========== СИНИЙ МАГАЗИН (сбрасывается при перезаходе, Auto Buy покупает) ==========
 const shopItems = [
   {id:'slap', name:'Slap', desc:'An average hand to slap thieves and send them flying!', price:500, icon:'slap'},
   {id:'speed-coil', name:'Speed Coil', desc:'Zoom around the map with additional speed.', price:750, icon:'speed-coil'},
@@ -228,8 +215,8 @@ const shopItems = [
   {id:'diamond-slap', name:'Diamond Slap', desc:'Charge up a diamond slap to knock others away.', price:50000, icon:'diamond-slap'}
 ];
 
-let ownedItems = [];
-let autoBuyShopItems = [];
+let ownedItems = []; // при перезаходе сбрасывается
+let autoBuyShopItems = []; // сохраняется
 
 function getShopIcon(type){
   switch(type){
@@ -249,7 +236,7 @@ function getShopIcon(type){
 async function loadShopData(){
   if(!currentNickname) return;
   const data = await readUserData(currentNickname);
-  if(data){ ownedItems = data.ownedItems || []; autoBuyShopItems = data.autoBuyShopItems || []; }
+  if(data){ ownedItems = []; autoBuyShopItems = data.autoBuyShopItems || []; } // ownedItems сбрасываем
 }
 
 function openShop(){
@@ -284,7 +271,7 @@ function buyShopItem(id){
     coins -= item.price;
     ownedItems.push(id);
     document.getElementById('balance-amount').textContent = coins;
-    db.ref('users/'+currentNickname).update({coins:coins, ownedItems:ownedItems});
+    db.ref('users/'+currentNickname).update({coins:coins});
     openShop();
     showModal('Покупка', `Вы купили ${item.name} за $${item.price.toLocaleString()}!`);
   } else {
@@ -321,18 +308,68 @@ async function autoBuyShopItemsOnLoad(){
   }
   if(changed){
     document.getElementById('balance-amount').textContent = coins;
-    db.ref('users/'+currentNickname).update({coins:coins, ownedItems:ownedItems});
+    db.ref('users/'+currentNickname).update({coins:coins});
   }
 }
 
-// ========== ПЧЁЛЫ (СТАТИЧНО В HTML) ==========
-let ownedBees = [];
-let autoBuyBees = [];
+// ========== ПЧЁЛЫ (БРЭИНРОТЫ) ==========
+let ownedBees = []; // сбрасывается при перезаходе
+let autoBuyBees = []; // сохраняется
+
+const beeItems = [
+  {id:'raccoon', name:'Conetto Morsetto', mps:'$10M/s', count:20, price:499, icon:'🦝'},
+  {id:'bear', name:'Honey Honey Bear', mps:'$32M/s', count:40, price:999, icon:'🐻'},
+  {id:'queen', name:'Queen Bee', mps:'$65M/s', count:100, price:2499, icon:'🐝'},
+  {id:'chocolate', name:"S'more Serat", mps:'$85M/s', count:200, price:4999, icon:'🍫'},
+  {id:'bumbatron', name:'Bumbatron', mps:'$172.5M/s', count:400, price:9999, icon:'🤖'}
+];
+
+// ========== МАГАЗИН ПЧЁЛ ОБНОВЛЯЕТСЯ КАЖДЫЕ 90 МИНУТ ==========
+const BEE_RESTOCK_INTERVAL = 5400; // 90 минут в секундах
+let lastBeeRestock = localStorage.getItem('lastBeeRestock');
+if(!lastBeeRestock){
+  lastBeeRestock = Date.now();
+  localStorage.setItem('lastBeeRestock', lastBeeRestock.toString());
+} else {
+  lastBeeRestock = parseInt(lastBeeRestock);
+}
+
+let beeStock = {}; // текущее количество для каждой пчелы
+function initBeeStock(){
+  beeItems.forEach(bee => {
+    beeStock[bee.id] = bee.count;
+  });
+}
+
+function checkBeeRestock(){
+  const elapsed = Math.floor((Date.now() - lastBeeRestock) / 1000);
+  const remaining = BEE_RESTOCK_INTERVAL - elapsed;
+  if(remaining <= 0){
+    // Обновляем магазин
+    initBeeStock();
+    lastBeeRestock = Date.now();
+    localStorage.setItem('lastBeeRestock', lastBeeRestock.toString());
+    updateBeeUI();
+  }
+  // Обновляем таймер
+  const minutes = Math.floor(remaining / 60);
+  const seconds = remaining % 60;
+  const timerEl = document.getElementById('bee-timer');
+  if(timerEl) timerEl.textContent = `${minutes}:${seconds.toString().padStart(2,'0')}`;
+}
+setInterval(checkBeeRestock, 1000);
 
 async function loadBeeData(){
   if(!currentNickname) return;
   const data = await readUserData(currentNickname);
-  if(data){ ownedBees = data.ownedBees || []; autoBuyBees = data.autoBuyBees || []; }
+  if(data){ ownedBees = []; autoBuyBees = data.autoBuyBees || []; } // ownedBees сбрасываем
+  // Загружаем количество из localStorage
+  const savedStock = localStorage.getItem('beeStock');
+  if(savedStock){
+    beeStock = JSON.parse(savedStock);
+  } else {
+    initBeeStock();
+  }
 }
 
 function updateBeeUI(){
@@ -342,6 +379,8 @@ function updateBeeUI(){
     const statusEl = card.querySelector('.status');
     const btn = card.querySelector('.price-btn');
     const checkbox = document.getElementById('autobuy-' + bee.id);
+    const stockEl = document.getElementById('stock-' + bee.id);
+    if(stockEl) stockEl.textContent = beeStock[bee.id] || 0;
     if(ownedBees.includes(bee.id)){
       statusEl.textContent = 'OWNED';
       statusEl.style.color = '#4caf50';
@@ -361,14 +400,6 @@ function updateBeeUI(){
   });
 }
 
-const beeItems = [
-  {id:'raccoon', name:'Conetto Morsetto', mps:'$10M/s', count:20, price:499, icon:'🦝'},
-  {id:'bear', name:'Honey Honey Bear', mps:'$32M/s', count:40, price:999, icon:'🐻'},
-  {id:'queen', name:'Queen Bee', mps:'$65M/s', count:100, price:2499, icon:'🐝'},
-  {id:'chocolate', name:"S'more Serat", mps:'$85M/s', count:200, price:4999, icon:'🍫'},
-  {id:'bumbatron', name:'Bumbatron', mps:'$172.5M/s', count:400, price:9999, icon:'🤖'}
-];
-
 function openBee(){
   loadBeeData().then(() => {
     updateBeeUI();
@@ -382,13 +413,16 @@ function buyBee(id){
   const bee = beeItems.find(b => b.id === id);
   if(!bee) return;
   if(ownedBees.includes(id)) return;
+  if(beeStock[id] <= 0) return; // нет в наличии
   if(coins >= bee.price){
     coins -= bee.price;
     ownedBees.push(id);
+    beeStock[id] -= 1; // уменьшаем количество
     document.getElementById('balance-amount').textContent = coins;
-    db.ref('users/'+currentNickname).update({coins:coins, ownedBees:ownedBees});
+    db.ref('users/'+currentNickname).update({coins:coins});
+    localStorage.setItem('beeStock', JSON.stringify(beeStock));
     updateBeeUI();
-    showModal('Покупка', `Вы купили пчелу ${bee.name} за ${bee.price} монет!`);
+    showModal('Покупка', `Вы купили пчелу ${bee.name} за ${bee.price} монет! Осталось: ${beeStock[id]}`);
   } else {
     showModal('Ошибка', `Недостаточно монет! Нужно ${bee.price}`);
   }
@@ -403,7 +437,7 @@ function toggleAutoBuyBee(id, checked){
   db.ref('users/'+currentNickname).update({autoBuyBees:autoBuyBees});
   if(checked){
     const bee = beeItems.find(b => b.id === id);
-    if(bee && !ownedBees.includes(id) && coins >= bee.price){
+    if(bee && !ownedBees.includes(id) && beeStock[id] > 0 && coins >= bee.price){
       buyBee(id);
     }
   }
@@ -415,15 +449,17 @@ async function autoBuyBeesOnLoad(){
   let changed = false;
   for(let beeId of autoBuyBees){
     const bee = beeItems.find(b => b.id === beeId);
-    if(bee && !ownedBees.includes(beeId) && coins >= bee.price){
+    if(bee && !ownedBees.includes(beeId) && beeStock[beeId] > 0 && coins >= bee.price){
       coins -= bee.price;
       ownedBees.push(beeId);
+      beeStock[beeId] -= 1;
       changed = true;
     }
   }
   if(changed){
     document.getElementById('balance-amount').textContent = coins;
-    db.ref('users/'+currentNickname).update({coins:coins, ownedBees:ownedBees});
+    localStorage.setItem('beeStock', JSON.stringify(beeStock));
+    db.ref('users/'+currentNickname).update({coins:coins});
     updateBeeUI();
   }
 }
@@ -459,7 +495,7 @@ const redShopItems = {
   redeem: []
 };
 
-let ownedRedItems = [];
+let ownedRedItems = []; // сохраняется навсегда (премиум)
 let currentRedTab = 'gear';
 
 function getRedIcon(type){
@@ -557,16 +593,25 @@ function giftPlayer(){
   });
 }
 
-// Таймер бесплатного спина
+// ========== КОЛЕСО (обновление каждые 2 часа, время идёт всегда) ==========
 const FREE_SPIN_INTERVAL = 7200;
 let lastFreeSpinTime = localStorage.getItem('lastFreeSpinTime');
-if (!lastFreeSpinTime) { lastFreeSpinTime = Date.now(); localStorage.setItem('lastFreeSpinTime', lastFreeSpinTime.toString()); } else { lastFreeSpinTime = parseInt(lastFreeSpinTime); }
-function updateFreeSpinTimer() {
+if(!lastFreeSpinTime){ lastFreeSpinTime = Date.now(); localStorage.setItem('lastFreeSpinTime', lastFreeSpinTime.toString()); } else { lastFreeSpinTime = parseInt(lastFreeSpinTime); }
+function updateFreeSpinTimer(){
   const elapsed = Math.floor((Date.now() - lastFreeSpinTime) / 1000);
   const remaining = FREE_SPIN_INTERVAL - elapsed;
-  if (remaining <= 0) { _spins++; lastFreeSpinTime = Date.now(); localStorage.setItem('lastFreeSpinTime', lastFreeSpinTime.toString()); updateSpinBtn(); showModal('Бесплатный спин!', 'Вы получили 1 бесплатное вращение!'); }
-  const hours = Math.floor(remaining / 3600); const minutes = Math.floor((remaining % 3600) / 60); const seconds = remaining % 60;
-  const timerEl = document.getElementById('wheel-timer'); if (timerEl) timerEl.textContent = `Бесплатный спин через: ${hours}ч ${minutes}м ${seconds}с`;
+  if(remaining <= 0){
+    _spins++;
+    lastFreeSpinTime = Date.now();
+    localStorage.setItem('lastFreeSpinTime', lastFreeSpinTime.toString());
+    updateSpinBtn();
+    showModal('Бесплатный спин!', 'Вы получили 1 бесплатное вращение!');
+  }
+  const hours = Math.floor(remaining / 3600);
+  const minutes = Math.floor((remaining % 3600) / 60);
+  const seconds = remaining % 60;
+  const timerEl = document.getElementById('wheel-timer');
+  if(timerEl) timerEl.textContent = `Бесплатный спин через: ${hours}ч ${minutes}м ${seconds}с`;
 }
 setInterval(updateFreeSpinTimer, 1000);
 
@@ -575,14 +620,14 @@ async function readUserData(n){try{const s=await db.ref('users/'+n).once('value'
 async function writeUserData(n,d){try{await db.ref('users/'+n).set(d)}catch(e){}}
 async function getFreeBase(){ const s=await db.ref('users').once('value'); const users=s.val()||{}; const occ=[]; for(let k in users){ if(users[k].base) occ.push(users[k].base); } const free=[]; for(let i=1;i<=8;i++){ if(!occ.includes(i)) free.push(i); } if(free.length===0) return null; return free[Math.floor(Math.random()*free.length)]; }
 
-async function handleRegister(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){showModal('Ошибка','Ник занят!');return} const base=await getFreeBase(); if(!base){showModal('Ошибка','Все базы заняты!');return} const spawn=baseSpawnPoints[base]; await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,level:1,last_online:Date.now(),base:base,x:spawn.x,y:spawn.y,ownedItems:[],ownedRedItems:[],ownedBees:[],autoBuyBees:[],autoBuyShopItems:[]}); currentNickname=u; startGame(); }
-async function handleLogin(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){ if(e.password===p){ currentNickname=u; if(!e.base){const base=await getFreeBase(); if(!base){showModal('Ошибка','Все базы заняты!');return} const spawn=baseSpawnPoints[base]; e.base=base; e.x=spawn.x; e.y=spawn.y;} if(typeof e.dushka==='undefined'){e.dushka=0;} if(typeof e.spins==='undefined'){e.spins=0;} if(typeof e.ownedItems==='undefined'){e.ownedItems=[];} if(typeof e.ownedRedItems==='undefined'){e.ownedRedItems=[];} if(typeof e.ownedBees==='undefined'){e.ownedBees=[];} if(typeof e.autoBuyBees==='undefined'){e.autoBuyBees=[];} if(typeof e.autoBuyShopItems==='undefined'){e.autoBuyShopItems=[];} await writeUserData(u,e); startGame(); } else showModal('Ошибка','Неверный пароль!'); } else showModal('Ошибка','Ник не найден! Нажми РЕГ.'); }
+async function handleRegister(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){showModal('Ошибка','Ник занят!');return} const base=await getFreeBase(); if(!base){showModal('Ошибка','Все базы заняты!');return} const spawn=baseSpawnPoints[base]; await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,level:1,last_online:Date.now(),base:base,x:spawn.x,y:spawn.y,ownedRedItems:[],autoBuyBees:[],autoBuyShopItems:[]}); currentNickname=u; startGame(); }
+async function handleLogin(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){ if(e.password===p){ currentNickname=u; if(!e.base){const base=await getFreeBase(); if(!base){showModal('Ошибка','Все базы заняты!');return} const spawn=baseSpawnPoints[base]; e.base=base; e.x=spawn.x; e.y=spawn.y;} if(typeof e.dushka==='undefined'){e.dushka=0;} if(typeof e.spins==='undefined'){e.spins=0;} if(typeof e.ownedRedItems==='undefined'){e.ownedRedItems=[];} if(typeof e.autoBuyBees==='undefined'){e.autoBuyBees=[];} if(typeof e.autoBuyShopItems==='undefined'){e.autoBuyShopItems=[];} await writeUserData(u,e); startGame(); } else showModal('Ошибка','Неверный пароль!'); } else showModal('Ошибка','Ник не найден! Нажми РЕГ.'); }
 
 async function loadDushkaCoins(){ if(currentNickname){ const d=await readUserData(currentNickname); if(d){ dushka = d.dushka || 0; document.getElementById('dushka-coins').textContent = dushka; } } }
 async function loadCoins(){ if(currentNickname){ const d=await readUserData(currentNickname); if(d){ coins = d.coins || 25; document.getElementById('balance-amount').textContent = coins; } } }
 setInterval(loadDushkaCoins,5000); setInterval(loadCoins,5000);
 
-async function startGame(){ document.getElementById('auth').style.display='none'; document.getElementById('app').style.display='flex'; document.getElementById('balance').style.display='flex'; loadDushkaCoins(); loadCoins(); const data=await readUserData(currentNickname); if(data&&data.base){ let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`); if(nickEl)nickEl.textContent="База "+currentNickname; let spawn=baseSpawnPoints[data.base]; if(spawn){x=spawn.x;y=spawn.y}else{x=data.x||52;y=data.y||81} } initPlayer(); startOtherPlayersListener(); update(); window.focus(); resizeGame(); updateFreeSpinTimer(); await loadShopData(); await loadBeeData(); await loadRedShopData(); await autoBuyShopItemsOnLoad(); await autoBuyBeesOnLoad(); updateBeeUI(); }
+async function startGame(){ document.getElementById('auth').style.display='none'; document.getElementById('app').style.display='flex'; document.getElementById('balance').style.display='flex'; loadDushkaCoins(); loadCoins(); const data=await readUserData(currentNickname); if(data&&data.base){ let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`); if(nickEl)nickEl.textContent="База "+currentNickname; let spawn=baseSpawnPoints[data.base]; if(spawn){x=spawn.x;y=spawn.y}else{x=data.x||52;y=data.y||81} } initPlayer(); startOtherPlayersListener(); update(); window.focus(); resizeGame(); updateFreeSpinTimer(); checkBeeRestock(); await loadShopData(); await loadBeeData(); await loadRedShopData(); await autoBuyShopItemsOnLoad(); await autoBuyBeesOnLoad(); updateBeeUI(); }
 
 function initPlayer(){let pl=document.getElementById('player');pl.innerHTML='<div class="pixel"></div><div class="pixel"></div>';let px=pl.querySelectorAll('.pixel');px[0].style.background='#FFCC00';px[1].style.background='#00DFF5';pl.style.left=x+'px';pl.style.top=y+'px'}
 
