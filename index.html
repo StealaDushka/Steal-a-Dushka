@@ -318,13 +318,13 @@ function update(time=0){
     document.getElementById('player').style.left=x+'px'; document.getElementById('player').style.top=y+'px';
     if(Date.now()-lastSync>200){ db.ref('users/'+currentNickname).update({x:x,y:y}); lastSync=Date.now(); }
   }
-  // ========== КНОПКА E (радиус 18) ==========
+  // ========== КНОПКА E (радиус 25) ==========
   let found=false;
   let playerCenter = {x: x+5, y: y+10};
   for(let obj of interactables){
     let objCenter = {x: obj.x+10, y: obj.y+obj.h/2};
     let dist = Math.sqrt(Math.pow(playerCenter.x-objCenter.x,2) + Math.pow(playerCenter.y-objCenter.y,2));
-    if(dist < 18){
+    if(dist < 25){
       let btn=document.getElementById('interact');
       btn.style.display='flex';
       btn.style.left=(x-7)+'px'; btn.style.top=(y-25)+'px';
