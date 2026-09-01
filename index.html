@@ -65,7 +65,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
   <div class="box dushka"><span class="icon"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg></span><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div>
   <div class="box"><span class="icon"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="10" fill="#4caf50"/><circle cx="12" cy="12" r="6" fill="#fff"/></svg></span><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div>
 </div>
-<div id="version">Версия: 0.25</div>
+<div id="version">Версия: 0.26</div>
 <div id="app"><div id="sidebar"><div id="actions">
 <div class="action-btn pink" onclick="openRedShop()">SHOP</div>
 <div class="action-btn" onclick="showModal('Ребирт','Скоро появится!')">REBIRTH</div>
@@ -158,7 +158,7 @@ let otherPlayers={};
 let typedCode='';
 const baseSpawnPoints={1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81},5:{x:52,y:307},6:{x:147,y:307},7:{x:242,y:307},8:{x:337,y:307}};
 
-// СИНИЙ МАГАЗИН (без сброса ownedItems при открытии)
+// СИНИЙ МАГАЗИН
 const shopItems=[{id:'slap',name:'Slap',desc:'An average hand to slap thieves and send them flying!',price:500,icon:'slap'},{id:'speed-coil',name:'Speed Coil',desc:'Zoom around the map with additional speed.',price:750,icon:'speed-coil'},{id:'trap',name:'Trap',desc:'Place traps that freeze thieves for 10 seconds (5 Max)',price:1000,icon:'trap'},{id:'iron-slap',name:'Iron Slap',desc:'Heavy iron slap that knocks players flying!',price:2500,icon:'iron-slap'},{id:'gravity-coil',name:'Gravity Coil',desc:'Reduced gravity coil lets you jump extra high!',price:3000,icon:'gravity-coil'},{id:'bee-launcher',name:'Bee Launcher',desc:'Release bees to attack your opponent and invert their controls!',price:10000,icon:'bee-launcher'},{id:'coil-combo',name:'Coil Combo',desc:'Combine speed and gravity coils for ultimate mobility!',price:20000,icon:'coil-combo'},{id:'rage-table',name:'Rage Table',desc:'Throw a table to fling players and return your Brainrots.',price:25000,icon:'rage-table'},{id:'diamond-slap',name:'Diamond Slap',desc:'Charge up a diamond slap to knock others away.',price:50000,icon:'diamond-slap'}];
 let ownedItems=[],autoBuyShopItems=[];
 
@@ -167,7 +167,6 @@ function getShopIcon(type){ switch(type){ case 'slap':return `<svg viewBox="0 0 
 async function loadShopData(){ if(!currentNickname)return; const data=await readUserData(currentNickname); if(data){ ownedItems=[]; autoBuyShopItems=data.autoBuyShopItems||[]; } }
 
 function openShop(){
-  // НЕ вызываем loadShopData() чтобы не сбрасывать ownedItems после автопокупки
   const container=document.getElementById('shop-items');
   container.innerHTML='';
   shopItems.forEach(item=>{
@@ -199,7 +198,6 @@ async function loadBeeStock(){
     const snapshot=await db.ref('beeStock').once('value');
     if(snapshot.exists()) return snapshot.val();
   }catch(e){}
-  // fallback
   const stock={};
   beeItems.forEach(b=>{stock[b.id]=b.count;});
   return stock;
@@ -237,7 +235,7 @@ function updateBeeUI(){
     const btn=document.querySelector(`#bee-${bee.id} .price-btn`);
     const currentStock=window.beeStock[bee.id]||0;
     if(statusEl){
-      if(currentStock>0) statusEl.textContent=`${currentStock} left`;
+      if(currentStock>0) statusEl.textContent=`Осталось: ${currentStock}`;
       else statusEl.textContent='SOLD OUT';
       statusEl.style.color=currentStock>0?'#4caf50':'#ff4444';
     }
