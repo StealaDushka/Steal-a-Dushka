@@ -294,7 +294,6 @@ document.addEventListener('keyup',function(e){ const k=String(e.key).toLowerCase
 
 const SPEED=1,MAX_X=380,MAX_Y=380;
 const obstacles=[{x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},{x:150,y:137,w:20,h:20},{x:190,y:137,w:20,h:20},{x:230,y:137,w:20,h:24},{x:150,y:230,w:20,h:20},{x:190,y:230,w:20,h:20},{x:230,y:230,w:20,h:20}];
-// ИСПРАВЛЕНО: добавим w,h к interactables
 const interactables=[
   {id:'rng-machine', name:'RNG', x:190, y:137, w:20, h:20},
   {id:'shop-blue', name:'Синий магазин', x:150, y:137, w:20, h:20},
@@ -318,11 +317,11 @@ function update(time=0){
     document.getElementById('player').style.left=x+'px'; document.getElementById('player').style.top=y+'px';
     if(Date.now()-lastSync>200){ db.ref('users/'+currentNickname).update({x:x,y:y}); lastSync=Date.now(); }
   }
-  // ИСПРАВЛЕНО: считаем расстояние между центрами
+  // РАССТОЯНИЕ МЕЖДУ ЦЕНТРАМИ (ИСПРАВЛЕНО)
   let found=false;
   let playerCenter = {x: x+5, y: y+10};
   for(let obj of interactables){
-    let objCenter = {x: obj.x+10, y: obj.y+10}; // центр объекта (объекты 20x20, у пчелы 20x24, но центр примерно (10,12) возьмём 10,10 для простоты)
+    let objCenter = {x: obj.x+10, y: obj.y+10};
     let dist = Math.sqrt(Math.pow(playerCenter.x-objCenter.x,2) + Math.pow(playerCenter.y-objCenter.y,2));
     if(dist < 15){
       let btn=document.getElementById('interact');
