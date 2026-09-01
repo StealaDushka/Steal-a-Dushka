@@ -35,34 +35,12 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 #rng-machine,#shop-blue,#shop-red,#queen-bee,#rng-circle,#shop-white{position:absolute;width:20px;height:20px;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);z-index:15}#queen-bee{height:24px;grid-template-rows:repeat(6,1fr)}#rng-machine{left:190px;top:137px}.c-cyan{background:#00F0FF}.c-gray{background:#808080}.c-empty{background:transparent}#shop-blue{left:150px;top:137px}.s-blue{background:#0000FF}.s-white{background:#FFFFFF}#shop-red{left:150px;top:230px}.r-red{background:#FF0000}.r-white{background:#FFFFFF}#queen-bee{left:230px;top:137px}.q-yellow{background:#FFD966}.q-red{background:#F44336}.q-brown{background:#8B4513}#rng-circle{left:190px;top:230px;background:#A454B4;border-radius:50%}#shop-white{left:230px;top:230px}.w-dark{background:#003366}.w-white{background:#FFFFFF}
 #player,#other-player{position:absolute;width:10px;height:20px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20}#player .pixel,#other-player .pixel{width:100%;height:100%}#other-player .pixel{background:red}
 #interact{position:absolute;display:none;z-index:1000;width:24px;height:24px;background:#777;border:1px solid #444;display:flex;justify-content:center;align-items:center;color:#fff;font-size:18px;cursor:pointer}
-#balance{position:fixed;bottom:20px;right:20px;background:rgba(0,0,0,.8);padding:10px;border:2px solid #444;color:#fff;font-size:14px;display:none;flex-direction:column;gap:5px;border-radius:8px}#balance .box{display:flex;justify-content:space-between;gap:10px}#balance .icon{font-size:16px}#balance .label{color:#aaa}#balance .amount{color:#4caf50}#balance .dushka .amount{color:#ffd700}
+#balance{position:fixed;bottom:20px;left:20px;background:rgba(0,0,0,.8);padding:10px;border:2px solid #444;color:#fff;font-size:14px;display:none;flex-direction:column;gap:5px;border-radius:8px}#balance .box{display:flex;justify-content:space-between;gap:10px}#balance .icon{width:20px;height:20px;display:flex;justify-content:center;align-items:center}#balance .label{color:#aaa}#balance .amount{color:#4caf50}#balance .dushka .amount{color:#ffd700}
 .menu-overlay{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:85%;max-width:900px;max-height:90vh;background:#1e2426;border:2px solid #0f1214;border-radius:8px;z-index:2000;flex-direction:column;box-shadow:0 0 20px rgba(0,0,0,.8);padding:0;overflow:hidden}.menu-overlay .header{display:flex;justify-content:space-between;align-items:flex-start;padding:15px 20px;background:transparent;flex-shrink:0}.menu-overlay .header .title h2{margin:0;color:#fff;font-size:22px;font-weight:bold}.menu-overlay .header .title p{margin:0;color:#ccc;font-size:12px}.menu-overlay .header .close-btn{background:#c0392b;border:2px solid #922b21;color:#fff;font-size:20px;font-weight:bold;width:40px;height:40px;display:flex;justify-content:center;align-items:center;cursor:pointer;border-radius:4px}.menu-overlay .content{padding:0 15px 15px 15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;flex:1}
 /* СИНИЙ МАГАЗИН */
-#shop-menu{background:#3a6b8c;max-width:700px;max-height:90vh}#shop-menu .header{background:#1a4a6e}#shop-menu .content{background:#2c3e50;padding:15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
-.shop-item{display:flex;background:linear-gradient(145deg,#2c2c2c,#1a1a1a);border:2px solid #444;border-radius:12px;padding:10px;align-items:center;gap:12px;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform .2s, box-shadow .2s}
-.shop-item:hover{transform:translateY(-3px);box-shadow:0 6px 15px rgba(0,0,0,.6)}
-.shop-item .icon{width:80px;height:80px;background:#3a3a3a;border-radius:12px;display:flex;justify-content:center;align-items:center;border:2px solid #555}
-.shop-item .icon svg{width:60px;height:60px}
-.shop-item .info{flex:1}.shop-item .info .name{font-size:18px;font-weight:bold;color:#fff}.shop-item .info .desc{font-size:12px;color:#aaa}
-.shop-item .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
-.shop-item .price-btn{background:#4caf50;color:#fff;padding:8px 15px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center}
-.shop-item .price-btn.owned{background:#555;cursor:default}
-.shop-item .auto-buy{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:12px;color:#fff;cursor:pointer}
-.shop-item .auto-buy input{width:16px;height:16px;cursor:pointer}
+#shop-menu{background:#3a6b8c;max-width:700px;max-height:90vh}#shop-menu .header{background:#1a4a6e}#shop-menu .content{background:#2c3e50;padding:15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}.shop-item{display:flex;background:linear-gradient(145deg,#2c2c2c,#1a1a1a);border:2px solid #444;border-radius:12px;padding:10px;align-items:center;gap:12px;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform .2s, box-shadow .2s}.shop-item:hover{transform:translateY(-3px);box-shadow:0 6px 15px rgba(0,0,0,.6)}.shop-item .icon{width:80px;height:80px;background:#3a3a3a;border-radius:12px;display:flex;justify-content:center;align-items:center;border:2px solid #555}.shop-item .icon svg{width:60px;height:60px}.shop-item .info{flex:1}.shop-item .info .name{font-size:18px;font-weight:bold;color:#fff}.shop-item .info .desc{font-size:12px;color:#aaa}.shop-item .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}.shop-item .price-btn{background:#4caf50;color:#fff;padding:8px 15px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center}.shop-item .price-btn.owned{background:#555;cursor:default}.shop-item .auto-buy{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:12px;color:#fff;cursor:pointer}.shop-item .auto-buy input{width:16px;height:16px;cursor:pointer}
 /* ПЧЁЛЫ */
-#bee-menu{background:#e8b425;max-width:700px}#bee-menu .header{background:#e8b425;color:#000}#bee-menu .header .title h2{color:#000}#bee-menu .content{background:#1a1a1a;padding:15px;overflow-y:auto}#bee-menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-.bee-card{background:linear-gradient(145deg,#2c2c2c,#1a1a1a);border:2px solid #444;border-radius:12px;padding:15px;display:flex;flex-direction:column;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform .2s, box-shadow .2s;position:relative}
-.bee-card:hover{transform:translateY(-5px);box-shadow:0 6px 15px rgba(0,0,0,.6)}
-.bee-card .img-placeholder{width:100px;height:100px;background:#3a3a3a;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:60px;margin-bottom:10px}
-.bee-card .status{position:absolute;top:10px;right:15px;color:#ff4444;font-weight:bold;font-size:16px;background:rgba(0,0,0,.5);padding:2px 6px;border-radius:5px}
-.bee-card .mps{color:#4caf50;font-weight:bold;font-size:16px;margin-bottom:2px}
-.bee-card .name{color:#fff;font-weight:bold;font-size:18px;margin-bottom:10px}
-.bee-card .buy-row{display:flex;align-items:center;gap:10px;width:100%;margin-top:10px}
-.bee-card .count-box{background:#ffd700;color:#000;font-weight:bold;font-size:14px;padding:5px 10px;border-radius:6px;flex:1;text-align:center}
-.bee-card .price-btn{background:#4caf50;border:none;color:#fff;font-weight:bold;font-size:14px;padding:8px 15px;border-radius:6px;cursor:pointer;flex:1.5;transition:background .2s}
-.bee-card .price-btn:hover{background:#388e3c}
-.bee-card .auto-buy{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:12px;color:#fff;cursor:pointer}
-.bee-card .auto-buy input{width:16px;height:16px;cursor:pointer}
+#bee-menu{background:#e8b425;max-width:700px}#bee-menu .header{background:#e8b425;color:#000}#bee-menu .header .title h2{color:#000}#bee-menu .content{background:#1a1a1a;padding:15px;overflow-y:auto}#bee-menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.bee-card{background:linear-gradient(145deg,#2c2c2c,#1a1a1a);border:2px solid #444;border-radius:12px;padding:15px;display:flex;flex-direction:column;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform .2s, box-shadow .2s;position:relative}.bee-card:hover{transform:translateY(-5px);box-shadow:0 6px 15px rgba(0,0,0,.6)}.bee-card .img-placeholder{width:100px;height:100px;background:#3a3a3a;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:60px;margin-bottom:10px}.bee-card .status{position:absolute;top:10px;right:15px;color:#ff4444;font-weight:bold;font-size:16px;background:rgba(0,0,0,.5);padding:2px 6px;border-radius:5px}.bee-card .mps{color:#4caf50;font-weight:bold;font-size:16px;margin-bottom:2px}.bee-card .name{color:#fff;font-weight:bold;font-size:18px;margin-bottom:10px}.bee-card .buy-row{display:flex;align-items:center;gap:10px;width:100%;margin-top:10px}.bee-card .count-box{background:#ffd700;color:#000;font-weight:bold;font-size:14px;padding:5px 10px;border-radius:6px;flex:1;text-align:center}.bee-card .price-btn{background:#4caf50;border:none;color:#fff;font-weight:bold;font-size:14px;padding:8px 15px;border-radius:6px;cursor:pointer;flex:1.5;transition:background .2s}.bee-card .price-btn:hover{background:#388e3c}.bee-card .auto-buy{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:12px;color:#fff;cursor:pointer}.bee-card .auto-buy input{width:16px;height:16px;cursor:pointer}
 /* BUMBATRON - растянут на 2 колонки */
 #bee-bumbatron{grid-column:span 2}
 /* КРАСНЫЙ МАГАЗИН */
@@ -76,7 +54,18 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 </head>
 <body>
 <div id="auth"><div id="auth-box"><label class="auth-label">НИК</label><input type="text" id="username" class="auth-input" autocomplete="off"><label class="auth-label">ПАРОЛЬ</label><input type="password" id="password" class="auth-input"><div class="auth-btns"><button class="auth-btn btn-login" onclick="handleLogin()">ВОЙТИ</button><button class="auth-btn btn-reg" onclick="handleRegister()">РЕГ</button></div><div class="hint">Запишите ваш пароль. Спасибо за внимание</div></div></div>
-<div id="balance"><div class="box dushka"><span class="icon">💰</span><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div><div class="box"><span class="icon">🪙</span><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div></div>
+<div id="balance">
+  <div class="box dushka">
+    <span class="icon"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" fill="#f7b731"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg></span>
+    <span class="label">Dushka Coins</span>
+    <span class="amount" id="dushka-coins">0</span>
+  </div>
+  <div class="box">
+    <span class="icon"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" fill="#4caf50"/><circle cx="12" cy="12" r="6" fill="#fff"/></svg></span>
+    <span class="label">Монеты</span>
+    <span class="amount" id="balance-amount">25</span>
+  </div>
+</div>
 <div id="app"><div id="sidebar"><div id="actions">
 <div class="action-btn pink" onclick="openRedShop()">SHOP</div>
 <div class="action-btn" onclick="showModal('Ребирт','Скоро появится!')">REBIRTH</div>
@@ -105,60 +94,17 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <!-- ПЕРСОНАЖИ -->
 <div id="char-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>PERSONAJI</h2><p>Все персонажи!</p></div><div class="close-btn" onclick="closeCharacters()">X</div></div><div class="content"><div class="grid"><div class="char-card"><div class="icon">🟢</div><div class="name">Verde</div></div><div class="char-card"><div class="icon">🔴</div><div class="name">Ross</div></div><div class="char-card"><div class="icon">🟪</div><div class="name">Viola</div></div><div class="char-card"><div class="icon">🟦</div><div class="name">Blu</div></div><div class="char-card"><div class="icon">🟥</div><div class="name">Rosso</div></div><div class="char-card"><div class="icon">🟨</div><div class="name">Giallo</div></div><div class="char-card"><div class="icon">🟩</div><div class="name">Prato</div></div><div class="char-card"><div class="icon">🟫</div><div class="name">Marrone</div></div><div class="char-card"><div class="icon">⬛</div><div class="name">Nero</div></div></div></div></div>
 
-<!-- ПЧЁЛЫ (БРЭИНРОТЫ) -->
-<div id="bee-menu" class="menu-overlay" style="display:none">
-  <div class="header"><div class="title"><h2>Королева Пчёл</h2><p>Обновление через: <span id="bee-timer">90:00</span></p></div><div class="close-btn" onclick="closeBee()">X</div></div>
-  <div class="content">
-    <div class="grid">
-      <div class="bee-card" id="bee-raccoon">
-        <div class="status">100</div>
-        <div class="img-placeholder">🦝</div>
-        <div class="mps">$10M/s</div>
-        <div class="name">Conetto Morsetto</div>
-        <div class="buy-row"><div class="count-box">📦 <span id="stock-raccoon">20</span></div><button class="price-btn" onclick="buyBee('raccoon')">🪙 499</button></div>
-        <label class="auto-buy"><input type="checkbox" id="autobuy-raccoon" onchange="toggleAutoBuyBee('raccoon', this.checked)"> Auto Buy</label>
-      </div>
-      <div class="bee-card" id="bee-bear">
-        <div class="status">100</div>
-        <div class="img-placeholder">🐻</div>
-        <div class="mps">$32M/s</div>
-        <div class="name">Honey Honey Bear</div>
-        <div class="buy-row"><div class="count-box">📦 <span id="stock-bear">40</span></div><button class="price-btn" onclick="buyBee('bear')">🪙 999</button></div>
-        <label class="auto-buy"><input type="checkbox" id="autobuy-bear" onchange="toggleAutoBuyBee('bear', this.checked)"> Auto Buy</label>
-      </div>
-      <div class="bee-card" id="bee-queen">
-        <div class="status">100</div>
-        <div class="img-placeholder">🐝</div>
-        <div class="mps">$65M/s</div>
-        <div class="name">Queen Bee</div>
-        <div class="buy-row"><div class="count-box">📦 <span id="stock-queen">100</span></div><button class="price-btn" onclick="buyBee('queen')">🪙 2,499</button></div>
-        <label class="auto-buy"><input type="checkbox" id="autobuy-queen" onchange="toggleAutoBuyBee('queen', this.checked)"> Auto Buy</label>
-      </div>
-      <div class="bee-card" id="bee-chocolate">
-        <div class="status">100</div>
-        <div class="img-placeholder">🍫</div>
-        <div class="mps">$85M/s</div>
-        <div class="name">S'more Serat</div>
-        <div class="buy-row"><div class="count-box">📦 <span id="stock-chocolate">200</span></div><button class="price-btn" onclick="buyBee('chocolate')">🪙 4,999</button></div>
-        <label class="auto-buy"><input type="checkbox" id="autobuy-chocolate" onchange="toggleAutoBuyBee('chocolate', this.checked)"> Auto Buy</label>
-      </div>
-      <div class="bee-card" id="bee-bumbatron">
-        <div class="status">25 left</div>
-        <div class="img-placeholder">🤖</div>
-        <div class="mps">$172.5M/s</div>
-        <div class="name">Bumbatron</div>
-        <div class="buy-row"><div class="count-box">📦 <span id="stock-bumbatron">400</span></div><button class="price-btn" onclick="buyBee('bumbatron')">🪙 9,999</button></div>
-        <label class="auto-buy"><input type="checkbox" id="autobuy-bumbatron" onchange="toggleAutoBuyBee('bumbatron', this.checked)"> Auto Buy</label>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- ПЧЁЛЫ -->
+<div id="bee-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Королева Пчёл</h2><p>Обновление через: <span id="bee-timer">90:00</span></p></div><div class="close-btn" onclick="closeBee()">X</div></div><div class="content"><div class="grid">
+<div class="bee-card" id="bee-raccoon"><div class="status">100</div><div class="img-placeholder">🦝</div><div class="mps">$10M/s</div><div class="name">Conetto Morsetto</div><div class="buy-row"><div class="count-box">📦 <span id="stock-raccoon">20</span></div><button class="price-btn" onclick="buyBee('raccoon')">🪙 499</button></div><label class="auto-buy"><input type="checkbox" id="autobuy-raccoon" onchange="toggleAutoBuyBee('raccoon', this.checked)"> Auto Buy</label></div>
+<div class="bee-card" id="bee-bear"><div class="status">100</div><div class="img-placeholder">🐻</div><div class="mps">$32M/s</div><div class="name">Honey Honey Bear</div><div class="buy-row"><div class="count-box">📦 <span id="stock-bear">40</span></div><button class="price-btn" onclick="buyBee('bear')">🪙 999</button></div><label class="auto-buy"><input type="checkbox" id="autobuy-bear" onchange="toggleAutoBuyBee('bear', this.checked)"> Auto Buy</label></div>
+<div class="bee-card" id="bee-queen"><div class="status">100</div><div class="img-placeholder">🐝</div><div class="mps">$65M/s</div><div class="name">Queen Bee</div><div class="buy-row"><div class="count-box">📦 <span id="stock-queen">100</span></div><button class="price-btn" onclick="buyBee('queen')">🪙 2,499</button></div><label class="auto-buy"><input type="checkbox" id="autobuy-queen" onchange="toggleAutoBuyBee('queen', this.checked)"> Auto Buy</label></div>
+<div class="bee-card" id="bee-chocolate"><div class="status">100</div><div class="img-placeholder">🍫</div><div class="mps">$85M/s</div><div class="name">S'more Serat</div><div class="buy-row"><div class="count-box">📦 <span id="stock-chocolate">200</span></div><button class="price-btn" onclick="buyBee('chocolate')">🪙 4,999</button></div><label class="auto-buy"><input type="checkbox" id="autobuy-chocolate" onchange="toggleAutoBuyBee('chocolate', this.checked)"> Auto Buy</label></div>
+<div class="bee-card" id="bee-bumbatron"><div class="status">25 left</div><div class="img-placeholder">🤖</div><div class="mps">$172.5M/s</div><div class="name">Bumbatron</div><div class="buy-row"><div class="count-box">📦 <span id="stock-bumbatron">400</span></div><button class="price-btn" onclick="buyBee('bumbatron')">🪙 9,999</button></div><label class="auto-buy"><input type="checkbox" id="autobuy-bumbatron" onchange="toggleAutoBuyBee('bumbatron', this.checked)"> Auto Buy</label></div>
+</div></div></div>
 
 <!-- СИНИЙ МАГАЗИН -->
-<div id="shop-menu" class="menu-overlay" style="display:none">
-  <div class="header"><div class="title"><h2>Shop</h2><p>Buy tools to protect your base and troll others!</p></div><div class="close-btn" onclick="closeShop()">X</div></div>
-  <div class="content" id="shop-items"></div>
-</div>
+<div id="shop-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Shop</h2><p>Buy tools to protect your base and troll others!</p></div><div class="close-btn" onclick="closeShop()">X</div></div><div class="content" id="shop-items"></div></div>
 
 <!-- КРАСНЫЙ МАГАЗИН -->
 <div id="red-shop-menu" class="menu-overlay" style="display:none">
@@ -183,6 +129,16 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <div id="custom-modal"><div class="modal-title" id="modal-title"></div><div class="modal-text" id="modal-text"></div><button class="modal-close" onclick="closeModal()">Закрыть</button></div>
 
 <script>
+// ========== ФОРМАТ ЧИСЕЛ ==========
+function formatNumber(num){
+  if(num >= 1e15) return (num / 1e15).toFixed(2) + 'Qa';
+  if(num >= 1e12) return (num / 1e12).toFixed(2) + 'T';
+  if(num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
+  if(num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+  if(num >= 1e3) return (num / 1e3).toFixed(2) + 'K';
+  return num.toString();
+}
+
 // ЗУМ
 function resizeGame(){const game=document.getElementById('game-container');if(!game)return;const availW=window.innerWidth,availH=window.innerHeight;let scale=Math.min(availW/500,availH/500);scale=Math.max(0.6,Math.min(1.2,scale));game.style.transform=`scale(${scale})`;}
 window.addEventListener('resize',resizeGame);
@@ -215,8 +171,8 @@ const shopItems = [
   {id:'diamond-slap', name:'Diamond Slap', desc:'Charge up a diamond slap to knock others away.', price:50000, icon:'diamond-slap'}
 ];
 
-let ownedItems = []; // при перезаходе сбрасывается
-let autoBuyShopItems = []; // сохраняется
+let ownedItems = [];
+let autoBuyShopItems = [];
 
 function getShopIcon(type){
   switch(type){
@@ -236,7 +192,7 @@ function getShopIcon(type){
 async function loadShopData(){
   if(!currentNickname) return;
   const data = await readUserData(currentNickname);
-  if(data){ ownedItems = []; autoBuyShopItems = data.autoBuyShopItems || []; } // ownedItems сбрасываем
+  if(data){ ownedItems = []; autoBuyShopItems = data.autoBuyShopItems || []; }
 }
 
 function openShop(){
@@ -248,14 +204,7 @@ function openShop(){
       const isAuto = autoBuyShopItems.includes(item.id);
       const div = document.createElement('div');
       div.className = 'shop-item';
-      div.innerHTML = `
-        <div class="icon">${getShopIcon(item.icon)}</div>
-        <div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div>
-        <div class="right">
-          <div class="price-btn ${isOwned ? 'owned' : ''}" onclick="buyShopItem('${item.id}')">${isOwned ? 'OWNED' : '$' + item.price.toLocaleString()}</div>
-          <label class="auto-buy"><input type="checkbox" ${isAuto ? 'checked' : ''} onchange="toggleAutoBuyShopItem('${item.id}', this.checked)"> Auto Buy</label>
-        </div>
-      `;
+      div.innerHTML = `<div class="icon">${getShopIcon(item.icon)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned ? 'owned' : ''}" onclick="buyShopItem('${item.id}')">${isOwned ? 'OWNED' : '$' + item.price.toLocaleString()}</div><label class="auto-buy"><input type="checkbox" ${isAuto ? 'checked' : ''} onchange="toggleAutoBuyShopItem('${item.id}', this.checked)"> Auto Buy</label></div>`;
       container.appendChild(div);
     });
     document.getElementById('shop-menu').style.display = 'flex';
@@ -270,7 +219,7 @@ function buyShopItem(id){
   if(coins >= item.price){
     coins -= item.price;
     ownedItems.push(id);
-    document.getElementById('balance-amount').textContent = coins;
+    document.getElementById('balance-amount').textContent = formatNumber(coins);
     db.ref('users/'+currentNickname).update({coins:coins});
     openShop();
     showModal('Покупка', `Вы купили ${item.name} за $${item.price.toLocaleString()}!`);
@@ -307,15 +256,12 @@ async function autoBuyShopItemsOnLoad(){
     }
   }
   if(changed){
-    document.getElementById('balance-amount').textContent = coins;
+    document.getElementById('balance-amount').textContent = formatNumber(coins);
     db.ref('users/'+currentNickname).update({coins:coins});
   }
 }
 
-// ========== ПЧЁЛЫ (БРЭИНРОТЫ) ==========
-let ownedBees = []; // сбрасывается при перезаходе
-let autoBuyBees = []; // сохраняется
-
+// ========== ПЧЁЛЫ ==========
 const beeItems = [
   {id:'raccoon', name:'Conetto Morsetto', mps:'$10M/s', count:20, price:499, icon:'🦝'},
   {id:'bear', name:'Honey Honey Bear', mps:'$32M/s', count:40, price:999, icon:'🐻'},
@@ -324,34 +270,25 @@ const beeItems = [
   {id:'bumbatron', name:'Bumbatron', mps:'$172.5M/s', count:400, price:9999, icon:'🤖'}
 ];
 
-// ========== МАГАЗИН ПЧЁЛ ОБНОВЛЯЕТСЯ КАЖДЫЕ 90 МИНУТ ==========
-const BEE_RESTOCK_INTERVAL = 5400; // 90 минут в секундах
-let lastBeeRestock = localStorage.getItem('lastBeeRestock');
-if(!lastBeeRestock){
-  lastBeeRestock = Date.now();
-  localStorage.setItem('lastBeeRestock', lastBeeRestock.toString());
-} else {
-  lastBeeRestock = parseInt(lastBeeRestock);
-}
+let ownedBees = [];
+let autoBuyBees = [];
+let beeStock = {};
 
-let beeStock = {}; // текущее количество для каждой пчелы
-function initBeeStock(){
-  beeItems.forEach(bee => {
-    beeStock[bee.id] = bee.count;
-  });
-}
+function initBeeStock(){ beeItems.forEach(bee => { beeStock[bee.id] = bee.count; }); }
+
+const BEE_RESTOCK_INTERVAL = 5400; // 90 минут
+let lastBeeRestock = localStorage.getItem('lastBeeRestock');
+if(!lastBeeRestock){ lastBeeRestock = Date.now(); localStorage.setItem('lastBeeRestock', lastBeeRestock.toString()); } else { lastBeeRestock = parseInt(lastBeeRestock); }
 
 function checkBeeRestock(){
   const elapsed = Math.floor((Date.now() - lastBeeRestock) / 1000);
   const remaining = BEE_RESTOCK_INTERVAL - elapsed;
   if(remaining <= 0){
-    // Обновляем магазин
     initBeeStock();
     lastBeeRestock = Date.now();
     localStorage.setItem('lastBeeRestock', lastBeeRestock.toString());
     updateBeeUI();
   }
-  // Обновляем таймер
   const minutes = Math.floor(remaining / 60);
   const seconds = remaining % 60;
   const timerEl = document.getElementById('bee-timer');
@@ -362,14 +299,9 @@ setInterval(checkBeeRestock, 1000);
 async function loadBeeData(){
   if(!currentNickname) return;
   const data = await readUserData(currentNickname);
-  if(data){ ownedBees = []; autoBuyBees = data.autoBuyBees || []; } // ownedBees сбрасываем
-  // Загружаем количество из localStorage
+  if(data){ ownedBees = []; autoBuyBees = data.autoBuyBees || []; }
   const savedStock = localStorage.getItem('beeStock');
-  if(savedStock){
-    beeStock = JSON.parse(savedStock);
-  } else {
-    initBeeStock();
-  }
+  if(savedStock){ beeStock = JSON.parse(savedStock); } else { initBeeStock(); }
 }
 
 function updateBeeUI(){
@@ -381,7 +313,14 @@ function updateBeeUI(){
     const checkbox = document.getElementById('autobuy-' + bee.id);
     const stockEl = document.getElementById('stock-' + bee.id);
     if(stockEl) stockEl.textContent = beeStock[bee.id] || 0;
-    if(ownedBees.includes(bee.id)){
+    if(beeStock[bee.id] <= 0){
+      statusEl.textContent = 'SOLD OUT';
+      statusEl.style.color = '#ff4444';
+      btn.textContent = 'SOLD OUT';
+      btn.style.background = '#555';
+      btn.style.cursor = 'default';
+      btn.onclick = null;
+    } else if(ownedBees.includes(bee.id)){
       statusEl.textContent = 'OWNED';
       statusEl.style.color = '#4caf50';
       btn.textContent = 'OWNED';
@@ -412,13 +351,13 @@ function closeBee(){document.getElementById('bee-menu').style.display='none';}
 function buyBee(id){
   const bee = beeItems.find(b => b.id === id);
   if(!bee) return;
+  if(beeStock[id] <= 0) return;
   if(ownedBees.includes(id)) return;
-  if(beeStock[id] <= 0) return; // нет в наличии
   if(coins >= bee.price){
     coins -= bee.price;
     ownedBees.push(id);
-    beeStock[id] -= 1; // уменьшаем количество
-    document.getElementById('balance-amount').textContent = coins;
+    beeStock[id] -= 1;
+    document.getElementById('balance-amount').textContent = formatNumber(coins);
     db.ref('users/'+currentNickname).update({coins:coins});
     localStorage.setItem('beeStock', JSON.stringify(beeStock));
     updateBeeUI();
@@ -437,7 +376,7 @@ function toggleAutoBuyBee(id, checked){
   db.ref('users/'+currentNickname).update({autoBuyBees:autoBuyBees});
   if(checked){
     const bee = beeItems.find(b => b.id === id);
-    if(bee && !ownedBees.includes(id) && beeStock[id] > 0 && coins >= bee.price){
+    if(bee && beeStock[id] > 0 && !ownedBees.includes(id) && coins >= bee.price){
       buyBee(id);
     }
   }
@@ -449,7 +388,7 @@ async function autoBuyBeesOnLoad(){
   let changed = false;
   for(let beeId of autoBuyBees){
     const bee = beeItems.find(b => b.id === beeId);
-    if(bee && !ownedBees.includes(beeId) && beeStock[beeId] > 0 && coins >= bee.price){
+    if(bee && beeStock[beeId] > 0 && !ownedBees.includes(beeId) && coins >= bee.price){
       coins -= bee.price;
       ownedBees.push(beeId);
       beeStock[beeId] -= 1;
@@ -457,7 +396,7 @@ async function autoBuyBeesOnLoad(){
     }
   }
   if(changed){
-    document.getElementById('balance-amount').textContent = coins;
+    document.getElementById('balance-amount').textContent = formatNumber(coins);
     localStorage.setItem('beeStock', JSON.stringify(beeStock));
     db.ref('users/'+currentNickname).update({coins:coins});
     updateBeeUI();
@@ -467,15 +406,16 @@ async function autoBuyBeesOnLoad(){
 // ========== КРАСНЫЙ МАГАЗИН ==========
 const redShopItems = {
   gear: [
-    {id:'blackhole-slap', name:'Blackhole Slap', desc:'Pull, hold and push players!', price:199},
-    {id:'ban-hammer', name:'Ban Hammer', desc:'Smash players & traps with admin powers!', price:1125},
-    {id:'laser-gun', name:'Laser Gun', desc:'Fling lasers at players!', price:565},
-    {id:'flying-bee', name:'Flying Bee', desc:'Attack ability with a bee!', price:699}
+    {id:'blackhole-slap', name:'Blackhole Slap', desc:'Pull, hold and push players!', price:199, once:true},
+    {id:'ban-hammer', name:'Ban Hammer', desc:'Smash players & traps with admin powers!', price:1125, once:true},
+    {id:'laser-gun', name:'Laser Gun', desc:'Fling lasers at players!', price:565, once:true},
+    {id:'carpet', name:'Carpet', desc:'A stylish carpet for your base!', price:275, once:true}
+    // Flying Bee удалена
   ],
   gamepasses: [
-    {id:'vip', name:'VIP', desc:'Many benefits including multi!', price:375},
-    {id:'2x-money', name:'2X MONEY', desc:'Earn twice as much money!', price:199},
-    {id:'admin-panel', name:'Admin Panel', desc:'Get Admin Commands!', price:7999}
+    {id:'vip', name:'VIP', desc:'Many benefits including multi!', price:375, once:true},
+    {id:'2x-money', name:'2X MONEY', desc:'Earn twice as much money!', price:199, once:true},
+    {id:'admin-panel', name:'Admin Panel', desc:'Get Admin Commands!', price:7999, once:true}
   ],
   money: [
     {id:'m51k', name:'$51,000', desc:'Money', price:59},
@@ -495,7 +435,7 @@ const redShopItems = {
   redeem: []
 };
 
-let ownedRedItems = []; // сохраняется навсегда (премиум)
+let ownedRedItems = [];
 let currentRedTab = 'gear';
 
 function getRedIcon(type){
@@ -503,7 +443,7 @@ function getRedIcon(type){
     case 'blackhole-slap': return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="25" fill="black"/><path d="M20 50 L80 50 M50 20 L50 80 M30 30 L70 70 M70 30 L30 70" stroke="white" stroke-width="3"/></svg>`;
     case 'ban-hammer': return `<svg viewBox="0 0 100 100"><rect x="20" y="30" width="60" height="15" fill="#7f8c8d"/><rect x="45" y="20" width="10" height="60" fill="#95a5a6"/></svg>`;
     case 'laser-gun': return `<svg viewBox="0 0 100 100"><rect x="10" y="40" width="60" height="15" fill="#2c3e50"/><rect x="20" y="55" width="15" height="15" fill="#34495e"/><path d="M70 45 L90 42" stroke="red" stroke-width="5"/></svg>`;
-    case 'flying-bee': return `<svg viewBox="0 0 100 100"><rect x="20" y="30" width="60" height="40" fill="#f1c40f" rx="20"/><path d="M40 25 L60 15 L60 35 Z" fill="black"/><path d="M40 75 L60 85 L60 65 Z" fill="black"/></svg>`;
+    case 'carpet': return `<svg viewBox="0 0 100 100"><defs><linearGradient id="carpetGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ff00ff"/><stop offset="25%" stop-color="#00ffff"/><stop offset="50%" stop-color="#ffff00"/><stop offset="75%" stop-color="#ff0000"/><stop offset="100%" stop-color="#00ff00"/></linearGradient></defs><rect x="10" y="30" width="80" height="40" fill="url(#carpetGrad)" rx="10"/><path d="M20 70 L30 90 L40 70 Z" fill="url(#carpetGrad)"/><path d="M60 70 L70 90 L80 70 Z" fill="url(#carpetGrad)"/></svg>`;
     case 'vip': return `<svg viewBox="0 0 100 100"><text x="10" y="70" font-size="45" fill="#f1c40f" font-weight="bold">VIP</text></svg>`;
     case '2x-money': return `<svg viewBox="0 0 100 100"><text x="10" y="65" font-size="40" fill="#2ecc71" font-weight="bold">x2</text></svg>`;
     case 'admin-panel': return `<svg viewBox="0 0 100 100"><rect x="10" y="20" width="80" height="60" fill="#34495e"/><text x="25" y="60" fill="white" font-size="25" font-weight="bold">AP</text></svg>`;
@@ -540,7 +480,7 @@ function renderRedShop(){
   }
 
   items.forEach(item => {
-    const isOwned = ownedRedItems.includes(item.id);
+    const isOwned = ownedRedItems.includes(item.id) && item.once;
     const div = document.createElement('div');
     div.className = 'red-shop-item';
     div.innerHTML = `<div class="icon">${getRedIcon(item.id)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned ? 'owned' : ''}" onclick="buyRedShopItem('${item.id}')">${isOwned ? 'OWNED' : '🪙 ' + item.price.toLocaleString()}</div></div>`;
@@ -560,11 +500,11 @@ function closeRedShop(){document.getElementById('red-shop-menu').style.display='
 function buyRedShopItem(id){
   const item = Object.values(redShopItems).flat().find(i => i.id === id);
   if(!item) return;
-  if(ownedRedItems.includes(id)) return;
+  if(item.once && ownedRedItems.includes(id)) return;
   if(dushka >= item.price){
     dushka -= item.price;
-    ownedRedItems.push(id);
-    document.getElementById('dushka-coins').textContent = dushka;
+    if(item.once) ownedRedItems.push(id); // одноразовые добавляем в owned
+    document.getElementById('dushka-coins').textContent = formatNumber(dushka);
     db.ref('users/'+currentNickname).update({dushka:dushka, ownedRedItems:ownedRedItems});
     renderRedShop();
     showModal('Покупка', `Вы купили ${item.name} за ${item.price} Dushka Coins!`);
@@ -584,16 +524,16 @@ function giftPlayer(){
     if(!userData){ alert("Игрок не найден!"); return; }
     if(dushka < item.price){ alert("Недостаточно Dushka Coins!"); return; }
     dushka -= item.price;
-    document.getElementById('dushka-coins').textContent = dushka;
+    document.getElementById('dushka-coins').textContent = formatNumber(dushka);
     const receiverOwned = userData.ownedRedItems || [];
-    if(!receiverOwned.includes(itemId)) receiverOwned.push(itemId);
+    if(item.once && !receiverOwned.includes(itemId)) receiverOwned.push(itemId);
     db.ref('users/'+currentNickname).update({dushka:dushka});
     db.ref('users/'+target).update({ownedRedItems:receiverOwned});
     alert(`Подарок отправлен игроку ${target}!`);
   });
 }
 
-// ========== КОЛЕСО (обновление каждые 2 часа, время идёт всегда) ==========
+// ========== КОЛЕСО (обновление каждые 2 часа) ==========
 const FREE_SPIN_INTERVAL = 7200;
 let lastFreeSpinTime = localStorage.getItem('lastFreeSpinTime');
 if(!lastFreeSpinTime){ lastFreeSpinTime = Date.now(); localStorage.setItem('lastFreeSpinTime', lastFreeSpinTime.toString()); } else { lastFreeSpinTime = parseInt(lastFreeSpinTime); }
@@ -623,8 +563,8 @@ async function getFreeBase(){ const s=await db.ref('users').once('value'); const
 async function handleRegister(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){showModal('Ошибка','Ник занят!');return} const base=await getFreeBase(); if(!base){showModal('Ошибка','Все базы заняты!');return} const spawn=baseSpawnPoints[base]; await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,level:1,last_online:Date.now(),base:base,x:spawn.x,y:spawn.y,ownedRedItems:[],autoBuyBees:[],autoBuyShopItems:[]}); currentNickname=u; startGame(); }
 async function handleLogin(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){ if(e.password===p){ currentNickname=u; if(!e.base){const base=await getFreeBase(); if(!base){showModal('Ошибка','Все базы заняты!');return} const spawn=baseSpawnPoints[base]; e.base=base; e.x=spawn.x; e.y=spawn.y;} if(typeof e.dushka==='undefined'){e.dushka=0;} if(typeof e.spins==='undefined'){e.spins=0;} if(typeof e.ownedRedItems==='undefined'){e.ownedRedItems=[];} if(typeof e.autoBuyBees==='undefined'){e.autoBuyBees=[];} if(typeof e.autoBuyShopItems==='undefined'){e.autoBuyShopItems=[];} await writeUserData(u,e); startGame(); } else showModal('Ошибка','Неверный пароль!'); } else showModal('Ошибка','Ник не найден! Нажми РЕГ.'); }
 
-async function loadDushkaCoins(){ if(currentNickname){ const d=await readUserData(currentNickname); if(d){ dushka = d.dushka || 0; document.getElementById('dushka-coins').textContent = dushka; } } }
-async function loadCoins(){ if(currentNickname){ const d=await readUserData(currentNickname); if(d){ coins = d.coins || 25; document.getElementById('balance-amount').textContent = coins; } } }
+async function loadDushkaCoins(){ if(currentNickname){ const d=await readUserData(currentNickname); if(d){ dushka = d.dushka || 0; document.getElementById('dushka-coins').textContent = formatNumber(dushka); } } }
+async function loadCoins(){ if(currentNickname){ const d=await readUserData(currentNickname); if(d){ coins = d.coins || 25; document.getElementById('balance-amount').textContent = formatNumber(coins); } } }
 setInterval(loadDushkaCoins,5000); setInterval(loadCoins,5000);
 
 async function startGame(){ document.getElementById('auth').style.display='none'; document.getElementById('app').style.display='flex'; document.getElementById('balance').style.display='flex'; loadDushkaCoins(); loadCoins(); const data=await readUserData(currentNickname); if(data&&data.base){ let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`); if(nickEl)nickEl.textContent="База "+currentNickname; let spawn=baseSpawnPoints[data.base]; if(spawn){x=spawn.x;y=spawn.y}else{x=data.x||52;y=data.y||81} } initPlayer(); startOtherPlayersListener(); update(); window.focus(); resizeGame(); updateFreeSpinTimer(); checkBeeRestock(); await loadShopData(); await loadBeeData(); await loadRedShopData(); await autoBuyShopItemsOnLoad(); await autoBuyBeesOnLoad(); updateBeeUI(); }
@@ -692,9 +632,9 @@ function interact(){
 
 function openCharacters(){document.getElementById('char-menu').style.display='flex'}function closeCharacters(){document.getElementById('char-menu').style.display='none'}function openBee(){document.getElementById('bee-menu').style.display='flex'}function closeBee(){document.getElementById('bee-menu').style.display='none'}function openWheel(){document.getElementById('wheel-menu').style.display='flex'}function closeWheel(){document.getElementById('wheel-menu').style.display='none'}
 
-function buySpin(a){ let c=a===1?49:199; if(dushka>=c){ dushka-=c; _spins+=a; document.getElementById('dushka-coins').textContent=dushka; db.ref('users/'+currentNickname).update({dushka:dushka, spins:_spins}); updateSpinBtn(); showModal('Покупка',`Куплено ${a} спин(ов) за ${c} Dushka Coins!`); } else showModal('Ошибка','Недостаточно Dushka Coins!'); }
+function buySpin(a){ let c=a===1?49:199; if(dushka>=c){ dushka-=c; _spins+=a; document.getElementById('dushka-coins').textContent=formatNumber(dushka); db.ref('users/'+currentNickname).update({dushka:dushka, spins:_spins}); updateSpinBtn(); showModal('Покупка',`Куплено ${a} спин(ов) за ${c} Dushka Coins!`); } else showModal('Ошибка','Недостаточно Dushka Coins!'); }
 function updateSpinBtn(){document.querySelector('#wheel-menu .spin-btn').textContent = `Spin (${_spins})`;}
-function doSpin(){ if(_spins<=0){showModal('Ошибка','Нет спинов!');return} _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn(); const prizes=[{name:'$12K',chance:45,reward:12000},{name:'$12K',chance:45,reward:12000},{name:'2x Lucky',chance:2,reward:0},{name:'$1M',chance:7,reward:1000000},{name:'Crystal Slap',chance:0.5,reward:0},{name:'Lucky Block',chance:0.5,reward:0}]; let total=prizes.reduce((sum,p)=>sum+p.chance,0); let random=Math.random()*total; let selected=prizes[0]; for(let p of prizes){ if(random<p.chance){ selected=p; break; } random-=p.chance; } setTimeout(()=>{ if(selected.reward>0){ coins+=selected.reward; document.getElementById('balance-amount').textContent=coins; db.ref('users/'+currentNickname).update({coins:coins}); } showModal('Колесо', `Выпало: ${selected.name}!`); },2000); }
+function doSpin(){ if(_spins<=0){showModal('Ошибка','Нет спинов!');return} _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn(); const prizes=[{name:'$12K',chance:45,reward:12000},{name:'$12K',chance:45,reward:12000},{name:'2x Lucky',chance:2,reward:0},{name:'$1M',chance:7,reward:1000000},{name:'Crystal Slap',chance:0.5,reward:0},{name:'Lucky Block',chance:0.5,reward:0}]; let total=prizes.reduce((sum,p)=>sum+p.chance,0); let random=Math.random()*total; let selected=prizes[0]; for(let p of prizes){ if(random<p.chance){ selected=p; break; } random-=p.chance; } setTimeout(()=>{ if(selected.reward>0){ coins+=selected.reward; document.getElementById('balance-amount').textContent=formatNumber(coins); db.ref('users/'+currentNickname).update({coins:coins}); } showModal('Колесо', `Выпало: ${selected.name}!`); },2000); }
 </script>
 </body>
 </html>
