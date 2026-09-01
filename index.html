@@ -50,7 +50,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .shop-item .auto-buy{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:12px;color:#fff;cursor:pointer}
 .shop-item .auto-buy input{width:16px;height:16px;cursor:pointer}
 /* ПЧЁЛЫ */
-#bee-menu{background:#e8b425;max-width:600px}#bee-menu .header{background:#e8b425;color:#000}#bee-menu .header .title h2{color:#000}#bee-menu .content{background:#1a1a1a;padding:15px;overflow-y:auto}#bee-menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+#bee-menu{background:#e8b425;max-width:700px}#bee-menu .header{background:#e8b425;color:#000}#bee-menu .header .title h2{color:#000}#bee-menu .content{background:#1a1a1a;padding:15px;overflow-y:auto}#bee-menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
 .bee-card{background:linear-gradient(145deg,#2c2c2c,#1a1a1a);border:2px solid #444;border-radius:12px;padding:15px;display:flex;flex-direction:column;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform .2s, box-shadow .2s;position:relative}
 .bee-card:hover{transform:translateY(-5px);box-shadow:0 6px 15px rgba(0,0,0,.6)}
 .bee-card .img-placeholder{width:100px;height:100px;background:#3a3a3a;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:60px;margin-bottom:10px}
@@ -103,7 +103,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <!-- ПЕРСОНАЖИ -->
 <div id="char-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>PERSONAJI</h2><p>Все персонажи!</p></div><div class="close-btn" onclick="closeCharacters()">X</div></div><div class="content"><div class="grid"><div class="char-card"><div class="icon">🟢</div><div class="name">Verde</div></div><div class="char-card"><div class="icon">🔴</div><div class="name">Ross</div></div><div class="char-card"><div class="icon">🟪</div><div class="name">Viola</div></div><div class="char-card"><div class="icon">🟦</div><div class="name">Blu</div></div><div class="char-card"><div class="icon">🟥</div><div class="name">Rosso</div></div><div class="char-card"><div class="icon">🟨</div><div class="name">Giallo</div></div><div class="char-card"><div class="icon">🟩</div><div class="name">Prato</div></div><div class="char-card"><div class="icon">🟫</div><div class="name">Marrone</div></div><div class="char-card"><div class="icon">⬛</div><div class="name">Nero</div></div></div></div></div>
 
-<!-- ПЧЁЛЫ (СТАТИЧНЫЕ КАРТОЧКИ) -->
+<!-- ПЧЁЛЫ (СТАТИЧНЫЕ КАРТОЧКИ + BUMBATRON) -->
 <div id="bee-menu" class="menu-overlay" style="display:none">
   <div class="header"><div class="title"><h2>Королева Пчёл</h2><p>Она улетит через 1ч 20м</p></div><div class="close-btn" onclick="closeBee()">X</div></div>
   <div class="content">
@@ -151,6 +151,17 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
           <button class="price-btn" onclick="buyBee('chocolate')">🪙 4,999</button>
         </div>
         <label class="auto-buy"><input type="checkbox" id="autobuy-chocolate" onchange="toggleAutoBuyBee('chocolate', this.checked)"> Auto Buy</label>
+      </div>
+      <div class="bee-card" id="bee-bumbatron">
+        <div class="status">25 left</div>
+        <div class="img-placeholder">🤖</div>
+        <div class="mps">$172.5M/s</div>
+        <div class="name">Bumbatron</div>
+        <div class="buy-row">
+          <div class="count-box">📦 400</div>
+          <button class="price-btn" onclick="buyBee('bumbatron')">🪙 9,999</button>
+        </div>
+        <label class="auto-buy"><input type="checkbox" id="autobuy-bumbatron" onchange="toggleAutoBuyBee('bumbatron', this.checked)"> Auto Buy</label>
       </div>
     </div>
   </div>
@@ -325,7 +336,6 @@ async function loadBeeData(){
 }
 
 function updateBeeUI(){
-  // Обновляем статус owned и галочки автобая
   beeItems.forEach(bee => {
     const card = document.getElementById('bee-' + bee.id);
     if(!card) return;
@@ -340,9 +350,9 @@ function updateBeeUI(){
       btn.style.cursor = 'default';
       btn.onclick = null;
     } else {
-      statusEl.textContent = '100';
-      statusEl.style.color = '#ff4444';
-      btn.textContent = '🪙 ' + bee.price;
+      statusEl.textContent = bee.id === 'bumbatron' ? '25 left' : '100';
+      statusEl.style.color = bee.id === 'bumbatron' ? '#ffa500' : '#ff4444';
+      btn.textContent = '🪙 ' + bee.price.toLocaleString();
       btn.style.background = '#4caf50';
       btn.style.cursor = 'pointer';
       btn.onclick = () => buyBee(bee.id);
@@ -355,7 +365,8 @@ const beeItems = [
   {id:'raccoon', name:'Conetto Morsetto', mps:'$10M/s', count:20, price:499, icon:'🦝'},
   {id:'bear', name:'Honey Honey Bear', mps:'$32M/s', count:40, price:999, icon:'🐻'},
   {id:'queen', name:'Queen Bee', mps:'$65M/s', count:100, price:2499, icon:'🐝'},
-  {id:'chocolate', name:"S'more Serat", mps:'$85M/s', count:200, price:4999, icon:'🍫'}
+  {id:'chocolate', name:"S'more Serat", mps:'$85M/s', count:200, price:4999, icon:'🍫'},
+  {id:'bumbatron', name:'Bumbatron', mps:'$172.5M/s', count:400, price:9999, icon:'🤖'}
 ];
 
 function openBee(){
