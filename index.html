@@ -37,7 +37,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 #interact{position:absolute;display:none;z-index:1000;width:24px;height:24px;background:#777;border:1px solid #444;display:flex;justify-content:center;align-items:center;color:#fff;font-size:18px;cursor:pointer}
 #balance{position:fixed;bottom:20px;right:20px;background:rgba(0,0,0,.8);padding:10px;border:2px solid #444;color:#fff;font-size:14px;display:none;flex-direction:column;gap:5px;border-radius:8px}#balance .box{display:flex;justify-content:space-between;gap:10px}#balance .icon{font-size:16px}#balance .label{color:#aaa}#balance .amount{color:#4caf50}#balance .dushka .amount{color:#ffd700}
 .menu-overlay{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:85%;max-width:900px;max-height:90vh;background:#1e2426;border:2px solid #0f1214;border-radius:8px;z-index:2000;flex-direction:column;box-shadow:0 0 20px rgba(0,0,0,.8);padding:0;overflow:hidden}.menu-overlay .header{display:flex;justify-content:space-between;align-items:flex-start;padding:15px 20px;background:transparent;flex-shrink:0}.menu-overlay .header .title h2{margin:0;color:#fff;font-size:22px;font-weight:bold}.menu-overlay .header .title p{margin:0;color:#ccc;font-size:12px}.menu-overlay .header .close-btn{background:#c0392b;border:2px solid #922b21;color:#fff;font-size:20px;font-weight:bold;width:40px;height:40px;display:flex;justify-content:center;align-items:center;cursor:pointer;border-radius:4px}.menu-overlay .content{padding:0 15px 15px 15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;flex:1}
-/* СИНИЙ МАГАЗИН (УЛУЧШЕННЫЙ) */
+/* СИНИЙ МАГАЗИН */
 #shop-menu{background:#3a6b8c;max-width:700px;max-height:90vh}#shop-menu .header{background:#1a4a6e}#shop-menu .content{background:#2c3e50;padding:15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
 .shop-item{display:flex;background:linear-gradient(145deg,#2c2c2c,#1a1a1a);border:2px solid #444;border-radius:12px;padding:10px;align-items:center;gap:12px;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform .2s, box-shadow .2s}
 .shop-item:hover{transform:translateY(-3px);box-shadow:0 6px 15px rgba(0,0,0,.6)}
@@ -49,10 +49,22 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .shop-item .price-btn.owned{background:#555;cursor:default}
 .shop-item .auto-buy{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:12px;color:#fff;cursor:pointer}
 .shop-item .auto-buy input{width:16px;height:16px;cursor:pointer}
+/* ПЧЁЛЫ */
+#bee-menu{background:#e8b425;max-width:600px}#bee-menu .header{background:#e8b425;color:#000}#bee-menu .header .title h2{color:#000}#bee-menu .content{background:#1a1a1a;padding:15px;overflow-y:auto}#bee-menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.bee-card{background:linear-gradient(145deg,#2c2c2c,#1a1a1a);border:2px solid #444;border-radius:12px;padding:15px;display:flex;flex-direction:column;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform .2s, box-shadow .2s;position:relative}
+.bee-card:hover{transform:translateY(-5px);box-shadow:0 6px 15px rgba(0,0,0,.6)}
+.bee-card .img-placeholder{width:100px;height:100px;background:#3a3a3a;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:60px;margin-bottom:10px}
+.bee-card .status{position:absolute;top:10px;right:15px;color:#ff4444;font-weight:bold;font-size:16px;background:rgba(0,0,0,.5);padding:2px 6px;border-radius:5px}
+.bee-card .mps{color:#4caf50;font-weight:bold;font-size:16px;margin-bottom:2px}
+.bee-card .name{color:#fff;font-weight:bold;font-size:18px;margin-bottom:10px}
+.bee-card .buy-row{display:flex;align-items:center;gap:10px;width:100%;margin-top:10px}
+.bee-card .count-box{background:#ffd700;color:#000;font-weight:bold;font-size:14px;padding:5px 10px;border-radius:6px;flex:1;text-align:center}
+.bee-card .price-btn{background:#4caf50;border:none;color:#fff;font-weight:bold;font-size:14px;padding:8px 15px;border-radius:6px;cursor:pointer;flex:1.5;transition:background .2s}
+.bee-card .price-btn:hover{background:#388e3c}
+.bee-card .auto-buy{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:12px;color:#fff;cursor:pointer}
+.bee-card .auto-buy input{width:16px;height:16px;cursor:pointer}
 /* КРАСНЫЙ МАГАЗИН */
 #red-shop-menu{background:#8b2c2c;max-width:800px}#red-shop-menu .header{background:#5c1a1a}#red-shop-menu .tabs{display:flex;gap:5px;padding:10px 15px 0;background:#2c2c2c;flex-wrap:wrap}#red-shop-menu .tab{background:#444;padding:8px 15px;border-radius:5px 5px 0 0;cursor:pointer;font-weight:bold;color:#fff;font-size:13px}#red-shop-menu .tab.active{background:#666}#red-shop-menu .content{background:#3e2c2c;padding:15px;overflow-y:auto}.red-shop-item{display:flex;background:#2c2c2c;border:2px solid #444;border-radius:8px;padding:10px;margin-bottom:10px;align-items:center;gap:12px}.red-shop-item .icon{width:80px;height:80px;background:#3a3a3a;border-radius:8px;display:flex;justify-content:center;align-items:center}.red-shop-item .icon svg{width:60px;height:60px}.red-shop-item .info{flex:1}.red-shop-item .info .name{font-size:18px;font-weight:bold;color:#fff}.red-shop-item .info .desc{font-size:12px;color:#aaa}.red-shop-item .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}.red-shop-item .price-btn{background:#c0392b;color:#fff;padding:8px 15px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center}.red-shop-item .price-btn.owned{background:#555;cursor:default}.gift-player-btn{background:#f39c12;color:#000;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;text-align:center;margin-top:15px}
-/* ПЧЁЛЫ */
-#bee-menu{background:#e8b425;max-width:600px}#bee-menu .header{background:#e8b425;color:#000}#bee-menu .header .title h2{color:#000}#bee-menu .content{background:#1a1a1a;padding:15px;overflow-y:auto}#bee-menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}#bee-menu .card{background:linear-gradient(145deg,#2c2c2c,#1a1a1a);border:2px solid #444;border-radius:12px;padding:15px;display:flex;flex-direction:column;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform .2s, box-shadow .2s}#bee-menu .card:hover{transform:translateY(-5px);box-shadow:0 6px 15px rgba(0,0,0,.6)}#bee-menu .card .img-placeholder{width:100px;height:100px;background:#3a3a3a;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:60px;margin-bottom:10px}#bee-menu .card .status{position:absolute;top:10px;right:15px;color:#ff4444;font-weight:bold;font-size:16px;background:rgba(0,0,0,.5);padding:2px 6px;border-radius:5px}#bee-menu .card .mps{color:#4caf50;font-weight:bold;font-size:16px;margin-bottom:2px}#bee-menu .card .name{color:#fff;font-weight:bold;font-size:18px;margin-bottom:10px}#bee-menu .card .buy-row{display:flex;align-items:center;gap:10px;width:100%;margin-top:10px}#bee-menu .card .count-box{background:#ffd700;color:#000;font-weight:bold;font-size:14px;padding:5px 10px;border-radius:6px;flex:1;text-align:center}#bee-menu .card .price-btn{background:#4caf50;border:none;color:#fff;font-weight:bold;font-size:14px;padding:8px 15px;border-radius:6px;cursor:pointer;flex:1.5;transition:background .2s}#bee-menu .card .price-btn:hover{background:#388e3c}#bee-menu .card .auto-buy{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:12px;color:#fff}#bee-menu .card .auto-buy input{width:16px;height:16px;cursor:pointer}
 /* КОЛЕСО */
 #wheel-menu{background:#1a1a3a;max-width:560px;max-height:90vh}#wheel-menu .content{background:rgba(0,0,0,.3);padding:15px;display:flex;flex-direction:column;align-items:center;gap:15px;overflow-y:auto}.wheel-container{position:relative;width:280px;height:280px;display:flex;justify-content:center;align-items:center;flex-shrink:0}.wheel-container .pin{position:absolute;top:-20px;left:50%;transform:translateX(-50%);z-index:10;font-size:30px;color:#ff3333}.wheel{width:260px;height:260px;border-radius:50%;position:relative;overflow:hidden;border:4px solid #4a90e2;box-shadow:0 0 15px rgba(74,144,226,.5);background:conic-gradient(#2e86de 0deg 60deg,#10ac84 60deg 120deg,#feca57 120deg 180deg,#ff9f43 180deg 240deg,#5f27cd 240deg 300deg,#ff6b6b 300deg 360deg)}.wheel .label{position:absolute;top:50%;left:50%;width:80px;height:50px;margin-left:-40px;margin-top:-25px;text-align:center;color:#fff;font-size:11px;font-weight:bold;text-shadow:1px 1px 2px rgba(0,0,0,.8);pointer-events:none;transform:rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle)));white-space:nowrap}.wheel .label .icon{display:block;font-size:18px;margin-bottom:2px}.wheel .label .chance{font-size:10px;opacity:.8}.secret-panel{background:rgba(0,0,0,.6);border:1px solid #4a90e2;border-radius:8px;padding:10px;width:100%;margin-top:5px}.secret-panel h3{color:#4a90e2;text-align:center;margin:0 0 8px;font-size:16px}.secret-panel .row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:13px}.secret-panel .row:last-child{border-bottom:none}.secret-panel .row .name{color:#ccc}.secret-panel .row .mps{color:#4caf50;font-size:12px;margin-left:auto;margin-right:10px}.secret-panel .row .val{color:#fff;font-weight:bold}.controls{display:flex;flex-direction:column;align-items:center;width:100%;gap:10px}.controls .timer{color:#fff;font-size:14px}.controls .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}.controls .actions .spin-btn{background:#222;color:#fff;border:2px solid #4a90e2;border-radius:6px;padding:8px 20px;font-size:14px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn{background:linear-gradient(135deg,#f7b731,#f5a623);color:#000;border:2px solid #f7b731;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn .price{display:flex;align-items:center;justify-content:center;gap:4px}.controls .actions .buy-btn .sub{font-size:10px;opacity:.8}
 #trade-plaza-modal{background:#1a2b3c;max-width:600px}#trade-plaza-modal .header{background:#0f1a2c}#trade-plaza-modal .content{background:#1e3a5f;padding:30px;text-align:center}#trade-plaza-modal .content p{color:#fff;font-size:24px;font-weight:bold}#trade-plaza-modal .content .buttons{display:flex;gap:20px;justify-content:center;margin-top:20px}#trade-plaza-modal .content .buttons button{background:#4caf50;color:#fff;padding:15px 30px;font-size:20px;border:none;border-radius:8px;cursor:pointer}#trade-plaza-modal .content .buttons button.cancel{background:#c0392b}
@@ -91,8 +103,58 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <!-- ПЕРСОНАЖИ -->
 <div id="char-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>PERSONAJI</h2><p>Все персонажи!</p></div><div class="close-btn" onclick="closeCharacters()">X</div></div><div class="content"><div class="grid"><div class="char-card"><div class="icon">🟢</div><div class="name">Verde</div></div><div class="char-card"><div class="icon">🔴</div><div class="name">Ross</div></div><div class="char-card"><div class="icon">🟪</div><div class="name">Viola</div></div><div class="char-card"><div class="icon">🟦</div><div class="name">Blu</div></div><div class="char-card"><div class="icon">🟥</div><div class="name">Rosso</div></div><div class="char-card"><div class="icon">🟨</div><div class="name">Giallo</div></div><div class="char-card"><div class="icon">🟩</div><div class="name">Prato</div></div><div class="char-card"><div class="icon">🟫</div><div class="name">Marrone</div></div><div class="char-card"><div class="icon">⬛</div><div class="name">Nero</div></div></div></div></div>
 
-<!-- ПЧЁЛЫ -->
-<div id="bee-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Королева Пчёл</h2><p>Она улетит через 1ч 20м</p></div><div class="close-btn" onclick="closeBee()">X</div></div><div class="content"><div class="grid" id="bee-items"></div></div></div>
+<!-- ПЧЁЛЫ (СТАТИЧНЫЕ КАРТОЧКИ) -->
+<div id="bee-menu" class="menu-overlay" style="display:none">
+  <div class="header"><div class="title"><h2>Королева Пчёл</h2><p>Она улетит через 1ч 20м</p></div><div class="close-btn" onclick="closeBee()">X</div></div>
+  <div class="content">
+    <div class="grid">
+      <div class="bee-card" id="bee-raccoon">
+        <div class="status">100</div>
+        <div class="img-placeholder">🦝</div>
+        <div class="mps">$10M/s</div>
+        <div class="name">Conetto Morsetto</div>
+        <div class="buy-row">
+          <div class="count-box">📦 20</div>
+          <button class="price-btn" onclick="buyBee('raccoon')">🪙 499</button>
+        </div>
+        <label class="auto-buy"><input type="checkbox" id="autobuy-raccoon" onchange="toggleAutoBuyBee('raccoon', this.checked)"> Auto Buy</label>
+      </div>
+      <div class="bee-card" id="bee-bear">
+        <div class="status">100</div>
+        <div class="img-placeholder">🐻</div>
+        <div class="mps">$32M/s</div>
+        <div class="name">Honey Honey Bear</div>
+        <div class="buy-row">
+          <div class="count-box">📦 40</div>
+          <button class="price-btn" onclick="buyBee('bear')">🪙 999</button>
+        </div>
+        <label class="auto-buy"><input type="checkbox" id="autobuy-bear" onchange="toggleAutoBuyBee('bear', this.checked)"> Auto Buy</label>
+      </div>
+      <div class="bee-card" id="bee-queen">
+        <div class="status">100</div>
+        <div class="img-placeholder">🐝</div>
+        <div class="mps">$65M/s</div>
+        <div class="name">Queen Bee</div>
+        <div class="buy-row">
+          <div class="count-box">📦 100</div>
+          <button class="price-btn" onclick="buyBee('queen')">🪙 2,499</button>
+        </div>
+        <label class="auto-buy"><input type="checkbox" id="autobuy-queen" onchange="toggleAutoBuyBee('queen', this.checked)"> Auto Buy</label>
+      </div>
+      <div class="bee-card" id="bee-chocolate">
+        <div class="status">100</div>
+        <div class="img-placeholder">🍫</div>
+        <div class="mps">$85M/s</div>
+        <div class="name">S'more Serat</div>
+        <div class="buy-row">
+          <div class="count-box">📦 200</div>
+          <button class="price-btn" onclick="buyBee('chocolate')">🪙 4,999</button>
+        </div>
+        <label class="auto-buy"><input type="checkbox" id="autobuy-chocolate" onchange="toggleAutoBuyBee('chocolate', this.checked)"> Auto Buy</label>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- СИНИЙ МАГАЗИН -->
 <div id="shop-menu" class="menu-overlay" style="display:none">
@@ -252,7 +314,43 @@ async function autoBuyShopItemsOnLoad(){
   }
 }
 
-// ========== ПЧЁЛЫ ==========
+// ========== ПЧЁЛЫ (СТАТИЧНО В HTML) ==========
+let ownedBees = [];
+let autoBuyBees = [];
+
+async function loadBeeData(){
+  if(!currentNickname) return;
+  const data = await readUserData(currentNickname);
+  if(data){ ownedBees = data.ownedBees || []; autoBuyBees = data.autoBuyBees || []; }
+}
+
+function updateBeeUI(){
+  // Обновляем статус owned и галочки автобая
+  beeItems.forEach(bee => {
+    const card = document.getElementById('bee-' + bee.id);
+    if(!card) return;
+    const statusEl = card.querySelector('.status');
+    const btn = card.querySelector('.price-btn');
+    const checkbox = document.getElementById('autobuy-' + bee.id);
+    if(ownedBees.includes(bee.id)){
+      statusEl.textContent = 'OWNED';
+      statusEl.style.color = '#4caf50';
+      btn.textContent = 'OWNED';
+      btn.style.background = '#555';
+      btn.style.cursor = 'default';
+      btn.onclick = null;
+    } else {
+      statusEl.textContent = '100';
+      statusEl.style.color = '#ff4444';
+      btn.textContent = '🪙 ' + bee.price;
+      btn.style.background = '#4caf50';
+      btn.style.cursor = 'pointer';
+      btn.onclick = () => buyBee(bee.id);
+    }
+    if(checkbox) checkbox.checked = autoBuyBees.includes(bee.id);
+  });
+}
+
 const beeItems = [
   {id:'raccoon', name:'Conetto Morsetto', mps:'$10M/s', count:20, price:499, icon:'🦝'},
   {id:'bear', name:'Honey Honey Bear', mps:'$32M/s', count:40, price:999, icon:'🐻'},
@@ -260,33 +358,9 @@ const beeItems = [
   {id:'chocolate', name:"S'more Serat", mps:'$85M/s', count:200, price:4999, icon:'🍫'}
 ];
 
-let ownedBees = [];
-let autoBuyBees = [];
-
-async function loadBeeData(){ if(!currentNickname) return; const data = await readUserData(currentNickname); if(data){ ownedBees = data.ownedBees || []; autoBuyBees = data.autoBuyBees || []; } }
-
 function openBee(){
   loadBeeData().then(() => {
-    const container = document.getElementById('bee-items');
-    container.innerHTML = '';
-    beeItems.forEach(bee => {
-      const isOwned = ownedBees.includes(bee.id);
-      const isAuto = autoBuyBees.includes(bee.id);
-      const div = document.createElement('div');
-      div.className = 'card';
-      div.innerHTML = `
-        <div class="status">${isOwned ? 'OWNED' : '100'}</div>
-        <div class="img-placeholder">${bee.icon}</div>
-        <div class="mps">${bee.mps}</div>
-        <div class="name">${bee.name}</div>
-        <div class="buy-row">
-          <div class="count-box">📦 ${bee.count}</div>
-          <button class="price-btn" onclick="buyBee('${bee.id}')">🪙 ${bee.price}</button>
-        </div>
-        <label class="auto-buy"><input type="checkbox" ${isAuto ? 'checked' : ''} onchange="toggleAutoBuyBee('${bee.id}', this.checked)"> Auto Buy</label>
-      `;
-      container.appendChild(div);
-    });
+    updateBeeUI();
     document.getElementById('bee-menu').style.display = 'flex';
   });
 }
@@ -302,7 +376,7 @@ function buyBee(id){
     ownedBees.push(id);
     document.getElementById('balance-amount').textContent = coins;
     db.ref('users/'+currentNickname).update({coins:coins, ownedBees:ownedBees});
-    openBee();
+    updateBeeUI();
     showModal('Покупка', `Вы купили пчелу ${bee.name} за ${bee.price} монет!`);
   } else {
     showModal('Ошибка', `Недостаточно монет! Нужно ${bee.price}`);
@@ -339,6 +413,7 @@ async function autoBuyBeesOnLoad(){
   if(changed){
     document.getElementById('balance-amount').textContent = coins;
     db.ref('users/'+currentNickname).update({coins:coins, ownedBees:ownedBees});
+    updateBeeUI();
   }
 }
 
@@ -496,7 +571,7 @@ async function loadDushkaCoins(){ if(currentNickname){ const d=await readUserDat
 async function loadCoins(){ if(currentNickname){ const d=await readUserData(currentNickname); if(d){ coins = d.coins || 25; document.getElementById('balance-amount').textContent = coins; } } }
 setInterval(loadDushkaCoins,5000); setInterval(loadCoins,5000);
 
-async function startGame(){ document.getElementById('auth').style.display='none'; document.getElementById('app').style.display='flex'; document.getElementById('balance').style.display='flex'; loadDushkaCoins(); loadCoins(); const data=await readUserData(currentNickname); if(data&&data.base){ let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`); if(nickEl)nickEl.textContent="База "+currentNickname; let spawn=baseSpawnPoints[data.base]; if(spawn){x=spawn.x;y=spawn.y}else{x=data.x||52;y=data.y||81} } initPlayer(); startOtherPlayersListener(); update(); window.focus(); resizeGame(); updateFreeSpinTimer(); await loadShopData(); await loadBeeData(); await loadRedShopData(); await autoBuyShopItemsOnLoad(); await autoBuyBeesOnLoad(); }
+async function startGame(){ document.getElementById('auth').style.display='none'; document.getElementById('app').style.display='flex'; document.getElementById('balance').style.display='flex'; loadDushkaCoins(); loadCoins(); const data=await readUserData(currentNickname); if(data&&data.base){ let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`); if(nickEl)nickEl.textContent="База "+currentNickname; let spawn=baseSpawnPoints[data.base]; if(spawn){x=spawn.x;y=spawn.y}else{x=data.x||52;y=data.y||81} } initPlayer(); startOtherPlayersListener(); update(); window.focus(); resizeGame(); updateFreeSpinTimer(); await loadShopData(); await loadBeeData(); await loadRedShopData(); await autoBuyShopItemsOnLoad(); await autoBuyBeesOnLoad(); updateBeeUI(); }
 
 function initPlayer(){let pl=document.getElementById('player');pl.innerHTML='<div class="pixel"></div><div class="pixel"></div>';let px=pl.querySelectorAll('.pixel');px[0].style.background='#FFCC00';px[1].style.background='#00DFF5';pl.style.left=x+'px';pl.style.top=y+'px'}
 
