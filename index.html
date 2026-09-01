@@ -64,7 +64,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
   <div class="box dushka"><span class="icon"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg></span><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div>
   <div class="box"><span class="icon"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="10" fill="#4caf50"/><circle cx="12" cy="12" r="6" fill="#fff"/></svg></span><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div>
 </div>
-<div id="version">Версия: 0.29</div>
+<div id="version">Версия: 0.25</div>
 <div id="app"><div id="sidebar"><div id="actions">
 <div class="action-btn pink" onclick="openRedShop()">SHOP</div>
 <div class="action-btn" onclick="showModal('Ребирт','Скоро появится!')">REBIRTH</div>
@@ -155,15 +155,18 @@ function closeShop(){document.getElementById('shop-menu').style.display='none';}
 function buyShopItem(id){ const item=shopItems.find(i=>i.id===id); if(!item)return; if(ownedItems.includes(id))return; if(coins>=item.price){ coins-=item.price; ownedItems.push(id); document.getElementById('balance-amount').textContent=formatNumber(coins); db.ref('users/'+currentNickname).update({coins:coins}); openShop(); showModal('Покупка',`Вы купили ${item.name} за $${item.price.toLocaleString()}!`); } else showModal('Ошибка',`Недостаточно монет! Нужно $${item.price.toLocaleString()}`); }
 function toggleAutoBuyShopItem(id,checked){ if(checked){ if(!autoBuyShopItems.includes(id))autoBuyShopItems.push(id); } else autoBuyShopItems=autoBuyShopItems.filter(x=>x!==id); db.ref('users/'+currentNickname).update({autoBuyShopItems:autoBuyShopItems}); if(checked){ const item=shopItems.find(i=>i.id===id); if(item&&!ownedItems.includes(id)&&coins>=item.price)buyShopItem(id); } }
 async function autoBuyShopItemsOnLoad(){ if(!currentNickname)return; await loadShopData(); let changed=false; for(let itemId of autoBuyShopItems){ const item=shopItems.find(i=>i.id===itemId); if(item&&!ownedItems.includes(itemId)&&coins>=item.price){ coins-=item.price; ownedItems.push(itemId); changed=true; } } if(changed){ document.getElementById('balance-amount').textContent=formatNumber(coins); db.ref('users/'+currentNickname).update({coins:coins}); } }
-const beeItems=[{id:'raccoon',name:'Conetto Morsetto',mps:'$10M/s',count:20,price:499,icon:'🦝'},{id:'bear',name:'Honey Honey Bear',mps:'$32M/s',count:40,price:999,icon:'🐻'},{id:'queen',name:'Queen Bee',mps:'$65M/s',count:100,price:2499,icon:'🐝'},{id:'chocolate',name:"S'more Serat",mps:'$85M/s',count:200,price:4999,icon:'🍫'},{id:'bumbatron',name:'Bumbatron',mps:'$172.5M/s',count:400,price:9999,icon:'🤖'}];
+const beeItems=[
+  {id:'raccoon',name:'Conetto Morsetto',mps:'$10M/s',count:400,price:499,icon:'🦝'},
+  {id:'bear',name:'Honey Honey Bear',mps:'$32M/s',count:200,price:999,icon:'🐻'},
+  {id:'queen',name:'Queen Bee',mps:'$65M/s',count:100,price:2499,icon:'🐝'},
+  {id:'chocolate',name:"S'more Serat",mps:'$85M/s',count:50,price:4999,icon:'🍫'},
+  {id:'bumbatron',name:'Bumbatron',mps:'$172.5M/s',count:25,price:9999,icon:'🤖'}
+];
 let beeStock={};
 const BEE_RESTOCK_INTERVAL=5400;
 let lastBeeRestock=localStorage.getItem('lastBeeRestock'); if(!lastBeeRestock){lastBeeRestock=Date.now();localStorage.setItem('lastBeeRestock',lastBeeRestock.toString());}else{lastBeeRestock=parseInt(lastBeeRestock);}
 async function loadBeeStock(){
-  try{
-    const snapshot=await db.ref('beeStock').once('value');
-    if(snapshot.exists()) return snapshot.val();
-  }catch(e){}
+  try{ const snapshot=await db.ref('beeStock').once('value'); if(snapshot.exists()) return snapshot.val(); }catch(e){}
   const stock={}; beeItems.forEach(b=>{stock[b.id]=b.count;}); try{ await db.ref('beeStock').set(stock); }catch(e){} return stock;
 }
 async function updateBeeStock(stock){ try{ await db.ref('beeStock').set(stock); }catch(e){} }
@@ -203,7 +206,7 @@ async function startGame(){
   if(data&&data.base){ let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`); if(nickEl)nickEl.textContent="База "+currentNickname; let spawn=baseSpawnPoints[data.base]; if(spawn){x=spawn.x;y=spawn.y}else{x=data.x||52;y=data.y||81} }
   initPlayer(); initJoystick(); startOtherPlayersListener(); update(); window.focus(); resizeGame(); updateFreeSpinTimer(); checkBeeRestock();
   await loadShopData();
-  window.beeStock = await loadBeeStock(); // ← ВАЖНО: присваиваем!
+  window.beeStock = await loadBeeStock(); // ВАЖНО: присваиваем загруженный сток
   await loadRedShopData();
   await autoBuyShopItemsOnLoad();
   updateBeeUI();
@@ -222,7 +225,35 @@ function interact(){ let btn=document.getElementById('interact'); if(btn.style.d
 function openCharacters(){document.getElementById('char-menu').style.display='flex'}function closeCharacters(){document.getElementById('char-menu').style.display='none'}function openBee(){document.getElementById('bee-menu').style.display='flex'}function closeBee(){document.getElementById('bee-menu').style.display='none'}function openWheel(){document.getElementById('wheel-menu').style.display='flex'}function closeWheel(){document.getElementById('wheel-menu').style.display='none'}
 function buySpin(a){ let c=a===1?49:199; if(dushka>=c){dushka-=c;_spins+=a;document.getElementById('dushka-coins').textContent=formatNumber(dushka);db.ref('users/'+currentNickname).update({dushka:dushka,spins:_spins});updateSpinBtn();showModal('Покупка',`Куплено ${a} спин(ов) за ${c} Dushka Coins!`);} else showModal('Ошибка','Недостаточно Dushka Coins!'); }
 function updateSpinBtn(){document.querySelector('#wheel-menu .spin-btn').textContent=`Spin (${_spins})`;}
-function doSpin(){ if(isSpinning){showModal('Подождите','Колесо ещё крутится!');return;} if(_spins<=0){showModal('Ошибка','Нет спинов!');return} isSpinning=true; _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn(); const wheel=document.getElementById('wheel-spin'); const prizes=[{name:'$12K',chance:45,reward:12000},{name:'$12K',chance:45,reward:12000},{name:'2x Lucky',chance:2,reward:0},{name:'$1M',chance:7,reward:1000000},{name:'Crystal Slap',chance:0.5,reward:0},{name:'Lucky Block',chance:0.5,reward:0}]; let total=prizes.reduce((sum,p)=>sum+p.chance,0); let random=Math.random()*total; let selected=prizes[0]; for(let p of prizes){ if(random<p.chance){selected=p;break;} random-=p.chance; } wheelRotation += 5*360 + Math.random()*360; wheel.style.transform=`rotate(${wheelRotation}deg)`; setTimeout(()=>{ isSpinning=false; if(selected.reward>0){coins+=selected.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});} showModal('Колесо',`Выпало: ${selected.name}!`); },2000); }
+function doSpin(){
+  if(isSpinning){showModal('Подождите','Колесо ещё крутится!');return;}
+  if(_spins<=0){showModal('Ошибка','Нет спинов!');return}
+  isSpinning=true; _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn();
+  const wheel=document.getElementById('wheel-spin');
+  const prizes=[{name:'$12K',chance:45,reward:12000},{name:'$12K',chance:45,reward:12000},{name:'2x Lucky',chance:2,reward:0},{name:'$1M',chance:7,reward:1000000},{name:'Crystal Slap',chance:0.5,reward:0},{name:'Lucky Block',chance:0.5,reward:0}];
+  let total=prizes.reduce((sum,p)=>sum+p.chance,0);
+  let random=Math.random()*total;
+  let selectedIndex=0;
+  for(let i=0;i<prizes.length;i++){
+    if(random<prizes[i].chance){selectedIndex=i;break;}
+    random-=prizes[i].chance;
+  }
+  let selected=prizes[selectedIndex];
+  // Вычисляем угол, чтобы указатель попал на выбранный сектор
+  const centerAngle = 30 + selectedIndex*60; // центральный угол сектора
+  const currentMod = ((wheelRotation % 360) + 360) % 360;
+  const desiredMod = (360 - centerAngle) % 360;
+  let deltaMod = (desiredMod - currentMod + 360) % 360;
+  const extraRotations = 5 * 360; // минимум 5 оборотов
+  const delta = deltaMod + extraRotations;
+  wheelRotation += delta;
+  wheel.style.transform = `rotate(${wheelRotation}deg)`;
+  setTimeout(()=>{
+    isSpinning=false;
+    if(selected.reward>0){coins+=selected.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});}
+    showModal('Колесо',`Выпало: ${selected.name}!`);
+  },2000);
+}
 </script>
 </body>
 </html>
