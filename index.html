@@ -48,14 +48,11 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 /* КРАСНЫЙ МАГАЗИН */
 #red-shop-menu{background:#8b2c2c;max-width:800px}#red-shop-menu .header{background:#5c1a1a}#red-shop-menu .tabs{display:flex;gap:5px;padding:10px 15px 0;background:#2c2c2c;flex-wrap:wrap}#red-shop-menu .tab{background:#444;padding:8px 15px;border-radius:5px 5px 0 0;cursor:pointer;font-weight:bold;color:#fff;font-size:13px}#red-shop-menu .tab.active{background:#666}#red-shop-menu .content{background:#3e2c2c;padding:15px;overflow-y:auto}.red-shop-item{display:flex;background:#2c2c2c;border:2px solid #444;border-radius:8px;padding:10px;margin-bottom:10px;align-items:center;gap:12px}.red-shop-item .icon{width:80px;height:80px;background:#3a3a3a;border-radius:8px;display:flex;justify-content:center;align-items:center}.red-shop-item .icon svg{width:60px;height:60px}.red-shop-item .info{flex:1}.red-shop-item .info .name{font-size:18px;font-weight:bold;color:#fff}.red-shop-item .info .desc{font-size:12px;color:#aaa}.red-shop-item .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}.red-shop-item .price-btn{background:#c0392b;color:#fff;padding:8px 15px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center}.red-shop-item .price-btn.owned{background:#555;cursor:default}
 /* КОЛЕСО */
-#wheel-menu{background:#1a1a3a;max-width:560px;max-height:90vh}#wheel-menu .content{background:rgba(0,0,0,.3);padding:15px;display:flex;flex-direction:column;align-items:center;gap:15px;overflow-y:auto}.wheel-container{position:relative;width:280px;height:280px;display:flex;justify-content:center;align-items:center;flex-shrink:0}.wheel-container .pin{position:absolute;top:-20px;left:50%;transform:translateX(-50%);z-index:10;font-size:30px;color:#ff3333}.wheel{width:260px;height:260px;border-radius:50%;position:relative;overflow:hidden;border:4px solid #4a90e2;box-shadow:0 0 15px rgba(74,144,226,.5);background:conic-gradient(#2e86de 0deg 60deg,#10ac84 60deg 120deg,#feca57 120deg 180deg,#ff9f43 180deg 240deg,#5f27cd 240deg 300deg,#ff6b6b 300deg 360deg)}.wheel .label{position:absolute;top:50%;left:50%;width:80px;height:50px;margin-left:-40px;margin-top:-25px;text-align:center;color:#fff;font-size:11px;font-weight:bold;text-shadow:1px 1px 2px rgba(0,0,0,.8);pointer-events:none;transform:rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle)));white-space:nowrap}.wheel .label .icon{display:block;font-size:18px;margin-bottom:2px}.wheel .label .chance{font-size:10px;opacity:.8}.secret-panel{background:rgba(0,0,0,.6);border:1px solid #4a90e2;border-radius:8px;padding:10px;width:100%;margin-top:5px}.secret-panel h3{color:#4a90e2;text-align:center;margin:0 0 8px;font-size:16px}.secret-panel .row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:13px}.secret-panel .row:last-child{border-bottom:none}.secret-panel .row .name{color:#ccc}.secret-panel .row .mps{color:#4caf50;font-size:12px;margin-left:auto;margin-right:10px}.secret-panel .row .val{color:#fff;font-weight:bold}.controls{display:flex;flex-direction:column;align-items:center;width:100%;gap:10px}.controls .timer{color:#fff;font-size:14px}.controls .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}.controls .actions .spin-btn{background:#222;color:#fff;border:2px solid #4a90e2;border-radius:6px;padding:8px 20px;font-size:14px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn{background:linear-gradient(135deg,#f7b731,#f5a623);color:#000;border:2px solid #f7b731;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn .price{display:flex;align-items:center;justify-content:center;gap:4px}.controls .actions .buy-btn .sub{font-size:10px;opacity:.8}
+#wheel-menu{background:#1a1a3a;max-width:560px;max-height:90vh}#wheel-menu .content{background:rgba(0,0,0,.3);padding:15px;display:flex;flex-direction:column;align-items:center;gap:15px;overflow-y:auto}.wheel-container{position:relative;width:280px;height:280px;display:flex;justify-content:center;align-items:center;flex-shrink:0}.wheel-container .pin{position:absolute;top:-20px;left:50%;transform:translateX(-50%);z-index:10;font-size:30px;color:#ff3333}.wheel{width:260px;height:260px;border-radius:50%;position:relative;overflow:hidden;border:4px solid #4a90e2;box-shadow:0 0 15px rgba(74,144,226,.5);background:conic-gradient(#2e86de 0deg 60deg,#10ac84 60deg 120deg,#feca57 120deg 180deg,#ff9f43 180deg 240deg,#5f27cd 240deg 300deg,#ff6b6b 300deg 360deg);transition:transform 2s cubic-bezier(0.2,0.8,0.2,1)}.wheel .label{position:absolute;top:50%;left:50%;width:80px;height:50px;margin-left:-40px;margin-top:-25px;text-align:center;color:#fff;font-size:11px;font-weight:bold;text-shadow:1px 1px 2px rgba(0,0,0,.8);pointer-events:none;transform:rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle)));white-space:nowrap}.wheel .label .icon{display:block;font-size:18px;margin-bottom:2px}.wheel .label .chance{font-size:10px;opacity:.8}.secret-panel{background:rgba(0,0,0,.6);border:1px solid #4a90e2;border-radius:8px;padding:10px;width:100%;margin-top:5px}.secret-panel h3{color:#4a90e2;text-align:center;margin:0 0 8px;font-size:16px}.secret-panel .row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:13px}.secret-panel .row:last-child{border-bottom:none}.secret-panel .row .name{color:#ccc}.secret-panel .row .mps{color:#4caf50;font-size:12px;margin-left:auto;margin-right:10px}.secret-panel .row .val{color:#fff;font-weight:bold}.controls{display:flex;flex-direction:column;align-items:center;width:100%;gap:10px}.controls .timer{color:#fff;font-size:14px}.controls .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}.controls .actions .spin-btn{background:#222;color:#fff;border:2px solid #4a90e2;border-radius:6px;padding:8px 20px;font-size:14px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn{background:linear-gradient(135deg,#f7b731,#f5a623);color:#000;border:2px solid #f7b731;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn .price{display:flex;align-items:center;justify-content:center;gap:4px}.controls .actions .buy-btn .sub{font-size:10px;opacity:.8}
 #trade-plaza-modal{background:#1a2b3c;max-width:600px}#trade-plaza-modal .header{background:#0f1a2c}#trade-plaza-modal .content{background:#1e3a5f;padding:30px;text-align:center}#trade-plaza-modal .content p{color:#fff;font-size:24px;font-weight:bold}#trade-plaza-modal .content .buttons{display:flex;gap:20px;justify-content:center;margin-top:20px}#trade-plaza-modal .content .buttons button{background:#4caf50;color:#fff;padding:15px 30px;font-size:20px;border:none;border-radius:8px;cursor:pointer}#trade-plaza-modal .content .buttons button.cancel{background:#c0392b}
 #custom-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #0f1214;border-radius:12px;padding:20px;z-index:9999;max-width:400px;width:90%;box-shadow:0 0 30px rgba(0,0,0,.9);color:#fff;text-align:center}#custom-modal .modal-title{font-size:18px;font-weight:bold;margin-bottom:10px;color:#4a90e2}#custom-modal .modal-text{font-size:14px;margin-bottom:20px}#custom-modal .modal-close{background:#c0392b;border:2px solid #922b21;color:#fff;padding:8px 20px;border-radius:4px;cursor:pointer;font-weight:bold}
 /* ДЖОЙСТИК */
 #joystick-zone{position:fixed;bottom:120px;left:30px;width:120px;height:120px;z-index:100;opacity:0.5;display:none;touch-action:none}
-/* АНИМАЦИЯ ВРАЩЕНИЯ КОЛЕСА */
-.spinning{animation:wheelSpin 2s linear infinite}
-@keyframes wheelSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 @media(max-width:700px){#game-container{width:300px;height:300px}#game-container .base{width:55px;height:55px}#wheel-menu{max-width:90vw}.wheel-container{width:220px;height:220px}.wheel{width:200px;height:200px}}
 </style>
 </head>
@@ -65,7 +62,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
   <div class="box dushka"><span class="icon"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg></span><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div>
   <div class="box"><span class="icon"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="10" fill="#4caf50"/><circle cx="12" cy="12" r="6" fill="#fff"/></svg></span><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div>
 </div>
-<div id="version">Версия: 0.26</div>
+<div id="version">Версия: 0.27</div>
 <div id="app"><div id="sidebar"><div id="actions">
 <div class="action-btn pink" onclick="openRedShop()">SHOP</div>
 <div class="action-btn" onclick="showModal('Ребирт','Скоро появится!')">REBIRTH</div>
@@ -164,21 +161,9 @@ let ownedItems=[],autoBuyShopItems=[];
 
 function getShopIcon(type){ switch(type){ case 'slap':return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="white" stroke-width="6" fill="none"/></svg>`; case 'speed-coil':return `<svg viewBox="0 0 100 100"><path d="M50 15 Q20 30 50 45 Q80 60 50 75 Q20 90 50 95" stroke="#e74c3c" stroke-width="8" fill="none"/></svg>`; case 'trap':return `<svg viewBox="0 0 100 100"><path d="M20 80 Q50 40 80 80 L70 90 L30 90 Z" fill="#777"/><path d="M25 70 L35 55 M45 70 L50 50 M65 70 L60 50" stroke="#555" stroke-width="5"/></svg>`; case 'iron-slap':return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="#aaa" stroke-width="6" fill="none"/></svg>`; case 'gravity-coil':return `<svg viewBox="0 0 100 100"><path d="M50 15 Q20 30 50 45 Q80 60 50 75 Q20 90 50 95" stroke="#3498db" stroke-width="8" fill="none"/></svg>`; case 'bee-launcher':return `<svg viewBox="0 0 100 100"><rect x="30" y="30" width="40" height="40" fill="#f1c40f" rx="10"/><path d="M50 20 L60 40 L40 40 Z" fill="#333"/></svg>`; case 'coil-combo':return `<svg viewBox="0 0 100 100"><path d="M20 20 Q0 40 20 60 Q40 80 20 90" stroke="#e74c3c" stroke-width="6" fill="none"/><path d="M80 20 Q100 40 80 60 Q60 80 80 90" stroke="#3498db" stroke-width="6" fill="none"/></svg>`; case 'rage-table':return `<svg viewBox="0 0 100 100"><rect x="15" y="40" width="70" height="15" fill="#d35400"/><rect x="20" y="55" width="10" height="35" fill="#8e44ad"/><rect x="70" y="55" width="10" height="35" fill="#8e44ad"/></svg>`; case 'diamond-slap':return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="#00FFFF" stroke-width="6" fill="none"/></svg>`; default:return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#fff"/></svg>`; } }
 
-async function loadShopData(){ if(!currentNickname)return; const data=await readUserData(currentNickname); if(data){ ownedItems=[]; autoBuyShopItems=data.autoBuyShopItems||[]; } }
+async function loadShopData(){ if(!currentNickname)return; const data=await readUserData(currentNickname); if(data){ autoBuyShopItems=data.autoBuyShopItems||[]; } } // НЕ сбрасываем ownedItems
 
-function openShop(){
-  const container=document.getElementById('shop-items');
-  container.innerHTML='';
-  shopItems.forEach(item=>{
-    const isOwned=ownedItems.includes(item.id);
-    const isAuto=autoBuyShopItems.includes(item.id);
-    const div=document.createElement('div');
-    div.className='shop-item';
-    div.innerHTML=`<div class="icon">${getShopIcon(item.icon)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned?'owned':''}" onclick="buyShopItem('${item.id}')">${isOwned?'OWNED':'$'+item.price.toLocaleString()}</div><label class="auto-buy"><input type="checkbox" ${isAuto?'checked':''} onchange="toggleAutoBuyShopItem('${item.id}', this.checked)"> Auto Buy</label></div>`;
-    container.appendChild(div);
-  });
-  document.getElementById('shop-menu').style.display='flex';
-}
+function openShop(){ const container=document.getElementById('shop-items'); container.innerHTML=''; shopItems.forEach(item=>{ const isOwned=ownedItems.includes(item.id); const isAuto=autoBuyShopItems.includes(item.id); const div=document.createElement('div'); div.className='shop-item'; div.innerHTML=`<div class="icon">${getShopIcon(item.icon)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned?'owned':''}" onclick="buyShopItem('${item.id}')">${isOwned?'OWNED':'$'+item.price.toLocaleString()}</div><label class="auto-buy"><input type="checkbox" ${isAuto?'checked':''} onchange="toggleAutoBuyShopItem('${item.id}', this.checked)"> Auto Buy</label></div>`; container.appendChild(div); }); document.getElementById('shop-menu').style.display='flex'; }
 function closeShop(){document.getElementById('shop-menu').style.display='none';}
 
 function buyShopItem(id){ const item=shopItems.find(i=>i.id===id); if(!item)return; if(ownedItems.includes(id))return; if(coins>=item.price){ coins-=item.price; ownedItems.push(id); document.getElementById('balance-amount').textContent=formatNumber(coins); db.ref('users/'+currentNickname).update({coins:coins}); openShop(); showModal('Покупка',`Вы купили ${item.name} за $${item.price.toLocaleString()}!`); } else showModal('Ошибка',`Недостаточно монет! Нужно $${item.price.toLocaleString()}`); }
@@ -198,6 +183,7 @@ async function loadBeeStock(){
     const snapshot=await db.ref('beeStock').once('value');
     if(snapshot.exists()) return snapshot.val();
   }catch(e){}
+  // fallback – создаём дефолт
   const stock={};
   beeItems.forEach(b=>{stock[b.id]=b.count;});
   return stock;
@@ -220,45 +206,12 @@ function checkBeeRestock(){
 }
 setInterval(checkBeeRestock,1000);
 
-async function openBee(){
-  const stock=await loadBeeStock();
-  window.beeStock=stock;
-  updateBeeUI();
-  document.getElementById('bee-menu').style.display='flex';
-}
+async function openBee(){ const stock=await loadBeeStock(); window.beeStock=stock; updateBeeUI(); document.getElementById('bee-menu').style.display='flex'; }
 function closeBee(){document.getElementById('bee-menu').style.display='none';}
 
-function updateBeeUI(){
-  if(!window.beeStock)return;
-  beeItems.forEach(bee=>{
-    const statusEl=document.getElementById('status-'+bee.id);
-    const btn=document.querySelector(`#bee-${bee.id} .price-btn`);
-    const currentStock=window.beeStock[bee.id]||0;
-    if(statusEl){
-      if(currentStock>0) statusEl.textContent=`Осталось: ${currentStock}`;
-      else statusEl.textContent='SOLD OUT';
-      statusEl.style.color=currentStock>0?'#4caf50':'#ff4444';
-    }
-    if(btn){
-      if(currentStock<=0){ btn.textContent='SOLD OUT'; btn.style.background='#555'; btn.style.cursor='default'; btn.onclick=null; }
-      else { btn.innerHTML=`<svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg> ${bee.price.toLocaleString()}`; btn.style.background='#f7b731'; btn.style.cursor='pointer'; btn.onclick=()=>buyBee(bee.id); }
-    }
-  });
-}
+function updateBeeUI(){ if(!window.beeStock)return; beeItems.forEach(bee=>{ const statusEl=document.getElementById('status-'+bee.id); const btn=document.querySelector(`#bee-${bee.id} .price-btn`); const currentStock=window.beeStock[bee.id]||0; if(statusEl){ if(currentStock>0) statusEl.textContent=`${currentStock} left`; else statusEl.textContent='SOLD OUT'; statusEl.style.color=currentStock>0?'#4caf50':'#ff4444'; } if(btn){ if(currentStock<=0){ btn.textContent='SOLD OUT'; btn.style.background='#555'; btn.style.cursor='default'; btn.onclick=null; } else { btn.innerHTML=`<svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg> ${bee.price.toLocaleString()}`; btn.style.background='#f7b731'; btn.style.cursor='pointer'; btn.onclick=()=>buyBee(bee.id); } } }); }
 
-async function buyBee(id){
-  const bee=beeItems.find(b=>b.id===id); if(!bee)return; if(!window.beeStock)return;
-  const currentStock=window.beeStock[id]||0; if(currentStock<=0)return;
-  if(dushka>=bee.price){
-    dushka-=bee.price;
-    window.beeStock[id]=currentStock-1;
-    await db.ref('beeStock/'+id).set(window.beeStock[id]);
-    document.getElementById('dushka-coins').textContent=formatNumber(dushka);
-    db.ref('users/'+currentNickname).update({dushka:dushka});
-    updateBeeUI();
-    showModal('Покупка',`Вы купили пчелу ${bee.name} за ${bee.price} Dushka Coins! Осталось: ${window.beeStock[id]}`);
-  } else showModal('Ошибка',`Недостаточно Dushka Coins! Нужно ${bee.price}`);
-}
+async function buyBee(id){ const bee=beeItems.find(b=>b.id===id); if(!bee)return; if(!window.beeStock)return; const currentStock=window.beeStock[id]||0; if(currentStock<=0)return; if(dushka>=bee.price){ dushka-=bee.price; window.beeStock[id]=currentStock-1; await db.ref('beeStock/'+id).set(window.beeStock[id]); document.getElementById('dushka-coins').textContent=formatNumber(dushka); db.ref('users/'+currentNickname).update({dushka:dushka}); updateBeeUI(); showModal('Покупка',`Вы купили пчелу ${bee.name} за ${bee.price} Dushka Coins! Осталось: ${window.beeStock[id]}`); } else showModal('Ошибка',`Недостаточно Dushka Coins! Нужно ${bee.price}`); }
 
 // КРАСНЫЙ МАГАЗИН
 const redShopItems={gear:[{id:'blackhole-slap',name:'Blackhole Slap',desc:'Pull, hold and push players!',price:199,once:true},{id:'ban-hammer',name:'Ban Hammer',desc:'Smash players & traps with admin powers!',price:1125,once:true},{id:'laser-gun',name:'Laser Gun',desc:'Fling lasers at players!',price:565,once:true},{id:'carpet',name:'Carpet',desc:'A stylish carpet for your base!',price:275,once:true}],gamepasses:[{id:'vip',name:'VIP',desc:'Many benefits including multi!',price:375,once:true},{id:'2x-money',name:'2X MONEY',desc:'Earn twice as much money!',price:199,once:true},{id:'admin-panel',name:'Admin Panel',desc:'Get Admin Commands!',price:7999,once:true}],money:[{id:'m51k',name:'$51,000',desc:'Money',price:59,reward:51000},{id:'m425k',name:'$425,000',desc:'Money',price:379,reward:425000},{id:'m1700k',name:'$1,700,000',desc:'Money',price:659,reward:1700000},{id:'m8500k',name:'$8,500,000',desc:'Money',price:1249,reward:8500000},{id:'m17m',name:'$17,000,000',desc:'Money',price:2499,reward:17000000}],lucky:[{id:'mythic',name:'Mythic',desc:'Lucky Block',price:175},{id:'brainrot-god',name:'Brainrot God',desc:'Lucky Block',price:399},{id:'secret',name:'Secret',desc:'Lucky Block',price:1499}],server:[{id:'server-luck',name:'Server Luck',desc:'1x > 2x',price:249}],redeem:[]};
@@ -340,7 +293,7 @@ function openCharacters(){document.getElementById('char-menu').style.display='fl
 
 function buySpin(a){ let c=a===1?49:199; if(dushka>=c){dushka-=c;_spins+=a;document.getElementById('dushka-coins').textContent=formatNumber(dushka);db.ref('users/'+currentNickname).update({dushka:dushka,spins:_spins});updateSpinBtn();showModal('Покупка',`Куплено ${a} спин(ов) за ${c} Dushka Coins!`);} else showModal('Ошибка','Недостаточно Dushka Coins!'); }
 function updateSpinBtn(){document.querySelector('#wheel-menu .spin-btn').textContent=`Spin (${_spins})`;}
-function doSpin(){ if(isSpinning){showModal('Подождите','Колесо ещё крутится!');return;} if(_spins<=0){showModal('Ошибка','Нет спинов!');return} isSpinning=true; _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn(); const wheel=document.getElementById('wheel-spin'); wheel.classList.add('spinning'); const prizes=[{name:'$12K',chance:45,reward:12000},{name:'$12K',chance:45,reward:12000},{name:'2x Lucky',chance:2,reward:0},{name:'$1M',chance:7,reward:1000000},{name:'Crystal Slap',chance:0.5,reward:0},{name:'Lucky Block',chance:0.5,reward:0}]; let total=prizes.reduce((sum,p)=>sum+p.chance,0); let random=Math.random()*total; let selected=prizes[0]; for(let p of prizes){ if(random<p.chance){selected=p;break;} random-=p.chance; } setTimeout(()=>{ wheel.classList.remove('spinning'); isSpinning=false; if(selected.reward>0){coins+=selected.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});} showModal('Колесо',`Выпало: ${selected.name}!`); },2000); }
+function doSpin(){ if(isSpinning){showModal('Подождите','Колесо ещё крутится!');return;} if(_spins<=0){showModal('Ошибка','Нет спинов!');return} isSpinning=true; _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn(); const wheel=document.getElementById('wheel-spin'); const prizes=[{name:'$12K',chance:45,reward:12000},{name:'$12K',chance:45,reward:12000},{name:'2x Lucky',chance:2,reward:0},{name:'$1M',chance:7,reward:1000000},{name:'Crystal Slap',chance:0.5,reward:0},{name:'Lucky Block',chance:0.5,reward:0}]; let total=prizes.reduce((sum,p)=>sum+p.chance,0); let random=Math.random()*total; let selected=prizes[0]; for(let p of prizes){ if(random<p.chance){selected=p;break;} random-=p.chance; } const currentRotation=parseFloat(getComputedStyle(wheel).transform.split('(')[1])||0; const extraRotations=5*360; const finalAngle=extraRotations+Math.random()*360; wheel.style.transform=`rotate(${currentRotation+finalAngle}deg)`; setTimeout(()=>{ isSpinning=false; if(selected.reward>0){coins+=selected.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});} showModal('Колесо',`Выпало: ${selected.name}!`); },2000); }
 </script>
 </body>
 </html>
