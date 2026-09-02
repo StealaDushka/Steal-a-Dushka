@@ -228,22 +228,23 @@ function toggleSelectedPlayers(){ const access=document.getElementById('server-a
 function addSelectedPlayer(){ const input=document.getElementById('selected-player-input'); const nick=input.value.trim(); if(!nick)return; const listDiv=document.getElementById('selected-list'); const span=document.createElement('span'); span.textContent=nick; span.style.marginRight='5px'; const removeBtn=document.createElement('button'); removeBtn.textContent='X'; removeBtn.style.background='#f44'; removeBtn.style.border='none'; removeBtn.style.cursor='pointer'; removeBtn.onclick=()=>span.remove(); span.appendChild(removeBtn); listDiv.appendChild(span); input.value=''; }
 async function createServer(){ const name=document.getElementById('server-name').value.trim(); const access=document.getElementById('server-access').value; if(!name){showModal('Ошибка','Введите название сервера');return} const data=await readUserData(currentNickname); if(!data || data.dushka<100){showModal('Ошибка','Недостаточно Dushka Coins!');return} await db.ref('users/'+currentNickname).update({dushka:data.dushka-100}); const newRef=db.ref('servers').push(); const id=newRef.key; let selectedPlayers=[]; if(access==='selected'){ const listDiv=document.getElementById('selected-list'); selectedPlayers=Array.from(listDiv.children).map(child=>child.firstChild.textContent); } await newRef.set({name:name, access:access, playersCount:0, selectedPlayers:selectedPlayers, owner:currentNickname}); closeCreateServer(); openServers(); }
 
-// ========== ОЧИСТКА ВСЕХ СЕРВЕРОВ ==========
 async function clearAllServers(){
     if(!confirm('Удалить ВСЕ серверы? Это действие необратимо.')) return;
-    // Удаляем все серверы
     const snap = await db.ref('servers').once('value');
     const servers = snap.val() || {};
     for(let id in servers){
         await db.ref('servers/'+id).remove();
     }
-    // Убираем у игроков ссылки на серверы
     const usersSnap = await db.ref('users').once('value');
     const users = usersSnap.val() || {};
     for(let nick in users){
         if(users[nick].serverId){
             await db.ref('users/'+nick+'/serverId').remove();
         }
+    }
+    // Если текущий игрок был в игре – выходим в меню
+    if(currentServerId){
+        await exitToMenu();
     }
     await loadServers();
     showModal('Готово','Все серверы удалены!');
@@ -257,12 +258,10 @@ async function loadFriendRequests(){ const data=await readUserData(currentNickna
 async function acceptFriend(nick){ const data=await readUserData(currentNickname); let friends=data.friends||[]; if(!friends.includes(nick)) friends.push(nick); await db.ref('users/'+currentNickname).update({friends:friends}); let requests=data.friendRequests||[]; requests=requests.filter(r=>r!==nick); await db.ref('users/'+currentNickname).update({friendRequests:requests}); const other=await readUserData(nick); let otherFriends=other.friends||[]; if(!otherFriends.includes(currentNickname)) otherFriends.push(currentNickname); await db.ref('users/'+nick).update({friends:otherFriends}); await loadFriendRequests(); await loadFriends(); }
 async function loadFriends(){ const data=await readUserData(currentNickname); const friends=(data&&data.friends)||[]; const container=document.getElementById('friends-list'); container.innerHTML=''; if(friends.length===0){ container.innerHTML='<div style="color:#aaa">Пока нет друзей</div>'; return; } friends.forEach(friend=>{ const div=document.createElement('div'); div.className='friend-item'; div.innerHTML='<div class="nick">'+friend+'</div><div><button onclick="showFriendProfile(\''+friend+'\')" style="background:#0f3460;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer;margin-right:5px">Профиль</button><button onclick="removeFriend(\''+friend+'\')" style="background:#ff5555;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Удалить</button></div>'; container.appendChild(div); }); }
 async function removeFriend(nick){
-    // Удаляем из списка друзей у себя
     const me = await readUserData(currentNickname);
     let myFriends = me.friends || [];
     myFriends = myFriends.filter(f => f !== nick);
     await db.ref('users/'+currentNickname).update({friends:myFriends});
-    // Удаляем из списка друзей у другого
     const other = await readUserData(nick);
     if(other){
         let otherFriends = other.friends || [];
@@ -349,7 +348,7 @@ function startOtherPlayersListener(){
     db.ref('users').on('value',snapshot=>{
         const users=snapshot.val()||{};
         for(let key in otherPlayers){
-            if(!users[key]||key===currentNickname){
+            if(!users[key] || key===currentNickname || !users[key].serverId || users[key].serverId !== currentServerId){
                 if(otherPlayers[key]) otherPlayers[key].remove();
                 delete otherPlayers[key];
             }
@@ -357,7 +356,7 @@ function startOtherPlayersListener(){
         for(let key in users){
             if(key===currentNickname) continue;
             const data=users[key];
-            if(data&&data.x!==undefined&&data.y!==undefined){
+            if(data && data.serverId === currentServerId && data.x!==undefined && data.y!==undefined){
                 if(!otherPlayers[key]){
                     let div=document.createElement('div');
                     div.id='other-'+key;
