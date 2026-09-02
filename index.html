@@ -55,7 +55,7 @@ input[type="file"]{color:#fff}
 .base{position:absolute;width:75px;height:75px;background:#869292}.base .brown{position:absolute;width:calc(100% - 8px);left:4px;height:14px;background:#bf5b1a;bottom:4px}.base .green{position:absolute;width:34px;height:14px;background:#22e54c;left:50%;transform:translateX(-50%);bottom:-14px}.base .nickname{position:absolute;bottom:4px;left:0;width:100%;height:14px;line-height:14px;text-align:center;color:#fff;font-size:7px;font-weight:bold;text-shadow:1px 1px 1px #000;z-index:5;pointer-events:none;overflow:hidden;white-space:nowrap}
 .base-top-1{top:20px;left:20px}.base-top-2{top:20px;left:115px}.base-top-3{top:20px;left:210px}.base-top-4{top:20px;left:305px}.base-bottom-1{bottom:20px;left:20px}.base-bottom-2{bottom:20px;left:115px}.base-bottom-3{bottom:20px;left:210px}.base-bottom-4{bottom:20px;left:305px}.base-bottom .brown{top:4px;bottom:auto}.base-bottom .green{top:-14px;bottom:auto}.base-bottom .nickname{top:4px;bottom:auto}
 #rng-machine,#shop-blue,#shop-red,#queen-bee,#rng-circle,#shop-white{position:absolute;width:20px;height:20px;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);z-index:15}#queen-bee{height:24px;grid-template-rows:repeat(6,1fr)}#rng-machine{left:190px;top:137px}.c-cyan{background:#00F0FF}.c-gray{background:#808080}.c-empty{background:transparent}#shop-blue{left:150px;top:137px}.s-blue{background:#0000FF}.s-white{background:#FFFFFF}#shop-red{left:150px;top:230px}.r-red{background:#FF0000}.r-white{background:#FFFFFF}#queen-bee{left:230px;top:137px}.q-yellow{background:#FFD966}.q-red{background:#F44336}.q-brown{background:#8B4513}#rng-circle{left:190px;top:230px;background:#A454B4;border-radius:50%}#shop-white{left:230px;top:230px}.w-dark{background:#003366}.w-white{background:#FFFFFF}
-#player,#other-player{position:absolute;width:10px;height:20px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20}#player .pixel,#other-player .pixel{width:100%;height:100%}#other-player .pixel{background:red}
+#player,#other-player{position:absolute;width:12px;height:24px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20}#player .pixel,#other-player .pixel{width:100%;height:100%}
 #interact{position:absolute;display:none;z-index:1000;width:24px;height:24px;background:#777;border:1px solid #444;display:flex;justify-content:center;align-items:center;color:#fff;font-size:18px;cursor:pointer}
 #balance{position:fixed;bottom:20px;left:20px;background:rgba(0,0,0,.8);padding:10px;border:2px solid #444;color:#fff;font-size:14px;display:none;flex-direction:column;gap:5px;border-radius:8px;z-index:1000}
 #balance .box{display:flex;justify-content:space-between;gap:10px}
@@ -71,7 +71,7 @@ input[type="file"]{color:#fff}
 #bee-menu{background:#e8b425;max-width:700px}#bee-menu .header{background:#e8b425;color:#000}#bee-menu .content{background:#1a1a1a;padding:15px;overflow-y:auto}#bee-menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.bee-card{background:linear-gradient(145deg,#2c2c2c,#1a1a1a);border:2px solid #444;border-radius:12px;padding:15px;display:flex;flex-direction:column;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform .2s, box-shadow .2s;position:relative}.bee-card:hover{transform:translateY(-5px);box-shadow:0 6px 15px rgba(0,0,0,.6)}.bee-card .img-placeholder{width:100px;height:100px;background:#3a3a3a;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:60px;margin-bottom:10px}.bee-card .status{position:absolute;top:10px;right:15px;font-weight:bold;font-size:14px;background:rgba(0,0,0,.5);padding:4px 8px;border-radius:6px;color:#fff}.bee-card .mps{color:#4caf50;font-weight:bold;font-size:16px;margin-bottom:2px}.bee-card .name{color:#fff;font-weight:bold;font-size:18px;margin-bottom:10px}.bee-card .buy-row{display:flex;align-items:center;gap:10px;width:100%;margin-top:10px}.bee-card .price-btn{background:#f7b731;border:none;color:#000;font-weight:bold;font-size:14px;padding:8px 15px;border-radius:6px;cursor:pointer;flex:1.5;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:4px}.bee-card .price-btn:hover{background:#f5a623}
 #bee-bumbatron{grid-column:span 2}
 #red-shop-menu{background:#8b2c2c;max-width:800px}#red-shop-menu .header{background:#5c1a1a}#red-shop-menu .tabs{display:flex;gap:5px;padding:10px 15px 0;background:#2c2c2c;flex-wrap:wrap}#red-shop-menu .tab{background:#444;padding:8px 15px;border-radius:5px 5px 0 0;cursor:pointer;font-weight:bold;color:#fff;font-size:13px}#red-shop-menu .tab.active{background:#666}#red-shop-menu .content{background:#3e2c2c;padding:15px;overflow-y:auto}.red-shop-item{display:flex;background:#2c2c2c;border:2px solid #444;border-radius:8px;padding:10px;margin-bottom:10px;align-items:center;gap:12px}.red-shop-item .icon{width:80px;height:80px;background:#3a3a3a;border-radius:8px;display:flex;justify-content:center;align-items:center}.red-shop-item .icon svg{width:60px;height:60px}.red-shop-item .info{flex:1}.red-shop-item .info .name{font-size:18px;font-weight:bold;color:#fff}.red-shop-item .info .desc{font-size:12px;color:#aaa}.red-shop-item .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}.red-shop-item .price-btn{background:#c0392b;color:#fff;padding:8px 15px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center}.red-shop-item .price-btn.owned{background:#555;cursor:default}
-#wheel-menu{background:#1a1a3a;max-width:560px;max-height:90vh}#wheel-menu .content{background:rgba(0,0,0,.3);padding:15px;display:flex;flex-direction:column;align-items:center;gap:15px;overflow-y:auto}.wheel-container{position:relative;width:280px;height:280px;display:flex;justify-content:center;align-items:center;flex-shrink:0}.wheel-container .pin{position:absolute;top:-20px;left:50%;transform:translateX(-50%);z-index:10;font-size:30px;color:#ff3333}.wheel{width:260px;height:260px;border-radius:50%;position:relative;overflow:hidden;border:4px solid #4a90e2;box-shadow:0 0 15px rgba(74,144,226,.5);background:conic-gradient(#2e86de 0deg 60deg,#10ac84 60deg 120deg,#feca57 120deg 180deg,#ff9f43 180deg 240deg,#5f27cd 240deg 300deg,#ff6b6b 300deg 360deg)}.wheel .label{position:absolute;top:50%;left:50%;width:80px;height:50px;margin-left:-40px;margin-top:-25px;text-align:center;color:#fff;font-size:11px;font-weight:bold;text-shadow:1px 1px 2px rgba(0,0,0,.8);pointer-events:none;transform:rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle)));white-space:nowrap}.wheel .label .icon{display:block;font-size:18px;margin-bottom:2px}.wheel .label .chance{font-size:10px;opacity:.8}.secret-panel{background:rgba(0,0,0,.6);border:1px solid #4a90e2;border-radius:8px;padding:10px;width:100%;margin-top:5px}.secret-panel h3{color:#4a90e2;text-align:center;margin:0 0 8px;font-size:16px}.secret-panel .row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:13px}.secret-panel .row:last-child{border-bottom:none}.secret-panel .row .name{color:#ccc}.secret-panel .row .mps{color:#4caf50;font-size:12px;margin-left:auto;margin-right:10px}.secret-panel .row .val{color:#fff;font-weight:bold}.controls{display:flex;flex-direction:column;align-items:center;width:100%;gap:10px}.controls .timer{color:#fff;font-size:14px}.controls .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}.controls .actions .spin-btn{background:#222;color:#fff;border:2px solid #4a90e2;border-radius:6px;padding:8px 20px;font-size:14px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn{background:linear-gradient(135deg,#f7b731,#f5a623);color:#000;border:2px solid #f7b731;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn .price{display:flex;align-items:center;justify-content:center;gap:4px}.controls .actions .buy-btn .sub{font-size:10px;opacity:.8}
+#wheel-menu{background:#1a1a3a;max-width:560px;max-height:90vh}#wheel-menu .content{background:rgba(0,0,0,.3);padding:15px;display:flex;flex-direction:column;align-items:center;gap:15px;overflow-y:auto}.wheel-container{position:relative;width:280px;height:280px;display:flex;justify-content:center;align-items:center;flex-shrink:0}.wheel-container .pin{position:absolute;top:-20px;left:50%;transform:translateX(-50%);z-index:10;font-size:30px;color:#ff3333}.wheel{width:260px;height:260px;border-radius:50%;position:relative;overflow:hidden;border:4px solid #4a90e2;box-shadow:0 0 15px rgba(74,144,226,.5);background:conic-gradient(#2e86de 0deg 60deg,#10ac84 60deg 120deg,#feca57 120deg 180deg,#ff9f43 180deg 240deg,#5f27cd 240deg 300deg,#ff6b6b 300deg 360deg);transition:transform 2s cubic-bezier(0.2,0.8,0.2,1)}.wheel .label{position:absolute;top:50%;left:50%;width:80px;height:50px;margin-left:-40px;margin-top:-25px;text-align:center;color:#fff;font-size:11px;font-weight:bold;text-shadow:1px 1px 2px rgba(0,0,0,.8);pointer-events:none;transform:rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle)));white-space:nowrap}.wheel .label .icon{display:block;font-size:18px;margin-bottom:2px}.wheel .label .chance{font-size:10px;opacity:.8}.secret-panel{background:rgba(0,0,0,.6);border:1px solid #4a90e2;border-radius:8px;padding:10px;width:100%;margin-top:5px}.secret-panel h3{color:#4a90e2;text-align:center;margin:0 0 8px;font-size:16px}.secret-panel .row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:13px}.secret-panel .row:last-child{border-bottom:none}.secret-panel .row .name{color:#ccc}.secret-panel .row .mps{color:#4caf50;font-size:12px;margin-left:auto;margin-right:10px}.secret-panel .row .val{color:#fff;font-weight:bold}.controls{display:flex;flex-direction:column;align-items:center;width:100%;gap:10px}.controls .timer{color:#fff;font-size:14px}.controls .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}.controls .actions .spin-btn{background:#222;color:#fff;border:2px solid #4a90e2;border-radius:6px;padding:8px 20px;font-size:14px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn{background:linear-gradient(135deg,#f7b731,#f5a623);color:#000;border:2px solid #f7b731;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:bold;cursor:pointer}.controls .actions .buy-btn .price{display:flex;align-items:center;justify-content:center;gap:4px}.controls .actions .buy-btn .sub{font-size:10px;opacity:.8}
 #trade-plaza-modal{background:#1a2b3c;max-width:600px}#trade-plaza-modal .header{background:#0f1a2c}#trade-plaza-modal .content{background:#1e3a5f;padding:30px;text-align:center}#trade-plaza-modal .content p{color:#fff;font-size:24px;font-weight:bold}#trade-plaza-modal .content .buttons{display:flex;gap:20px;justify-content:center;margin-top:20px}#trade-plaza-modal .content .buttons button{background:#4caf50;color:#fff;padding:15px 30px;font-size:20px;border:none;border-radius:8px;cursor:pointer}#trade-plaza-modal .content .buttons button.cancel{background:#c0392b}
 #custom-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #0f1214;border-radius:12px;padding:20px;z-index:9999;max-width:400px;width:90%;box-shadow:0 0 30px rgba(0,0,0,.9);color:#fff;text-align:center}#custom-modal .modal-title{font-size:18px;font-weight:bold;margin-bottom:10px;color:#4a90e2}#custom-modal .modal-text{font-size:14px;margin-bottom:20px}#custom-modal .modal-close{background:#c0392b;border:2px solid #922b21;color:#fff;padding:8px 20px;border-radius:4px;cursor:pointer;font-weight:bold}
 #joystick-zone{position:fixed;bottom:120px;left:30px;width:120px;height:120px;z-index:100;opacity:0.5;display:none;touch-action:none}
@@ -125,32 +125,18 @@ input[type="file"]{color:#fff}
 <div id="joystick-zone"></div>
 
 <script>
-// ========== СКИН ИГРОКА (9 цветов) ==========
-const skinColors = [
-    ['#FFCC00', '#00DFF5'], // жёлтый/голубой
-    ['#FF0000', '#FFFFFF'], // красный/белый
-    ['#00FF00', '#000000'], // зелёный/чёрный
-    ['#FF00FF', '#FFFF00'], // розовый/жёлтый
-    ['#0000FF', '#FFFFFF'], // синий/белый
-    ['#FFA500', '#000000'], // оранжевый/чёрный
-    ['#800080', '#00FFFF'], // фиолетовый/циан
-    ['#FF4500', '#00FF7F'], // оранжевый/зелёный
-    ['#FFFFFF', '#FF0000']  // белый/красный
-];
-
-// ========== ФОРМАТ ЧИСЕЛ ==========
+// ========== СКИН ИГРОКА (9 случайных цветов) ==========
+const skinColors = ['#FFCC00', '#FF0000', '#00FF00', '#FF00FF', '#0000FF', '#FFA500', '#800080', '#FF4500', '#FFFFFF'];
+let wheelRotation=0;
 function formatNumber(num){ if(num >= 1e15) return (num / 1e15).toFixed(2) + 'Qa'; if(num >= 1e12) return (num / 1e12).toFixed(2) + 'T'; if(num >= 1e9) return (num / 1e9).toFixed(2) + 'B'; if(num >= 1e6) return (num / 1e6).toFixed(2) + 'M'; if(num >= 1e3) return (num / 1e3).toFixed(2) + 'K'; return num.toString(); }
-
 function resizeGame(){const game=document.getElementById('game-container');if(!game)return;const availW=window.innerWidth,availH=window.innerHeight;let scale=Math.min(availW/500,availH/500);scale=Math.max(0.6,Math.min(1.2,scale));game.style.transform=`scale(${scale})`;}
 window.addEventListener('resize',resizeGame);
 function showModal(title, text){document.getElementById('modal-title').textContent=title;document.getElementById('modal-text').textContent=text;document.getElementById('custom-modal').style.display='block';}
 function closeModal(){document.getElementById('custom-modal').style.display='none';}
 function openTradePlaza() { document.getElementById('trade-plaza-modal').style.display = 'flex'; }
 function closeTradePlaza() { document.getElementById('trade-plaza-modal').style.display = 'none'; }
-
 let touchDX=0,touchDY=0,joystickManager=null;
 function initJoystick(){ const zone=document.getElementById('joystick-zone'); zone.style.display='block'; if(typeof nipplejs==='undefined'){console.warn('NippleJS не загружен');return;} joystickManager=nipplejs.create({zone:zone,mode:'static',position:{left:'50%',top:'50%'},color:'white',size:100,restOpacity:0.5,fadeTime:150}); joystickManager.on('move',(evt,data)=>{const force=Math.min(data.force,1);const angle=data.angle.radian;touchDX=Math.cos(angle)*force;touchDY=-Math.sin(angle)*force;}); joystickManager.on('end',()=>{touchDX=0;touchDY=0;}); }
-
 let x=52,y=81,coins=25,dushka=0,currentNickname=null,_spins=0,isSpinning=false,currentServerId=null,currentBase=null;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
 let otherPlayers={};
@@ -163,9 +149,6 @@ async function exitToMenu(){
         await db.ref('servers/'+currentServerId+'/bases/'+currentNickname).remove();
         await db.ref('servers/'+currentServerId+'/playersCount').transaction(c=> (c||0)-1);
         await db.ref('users/'+currentNickname+'/serverId').remove();
-        // Убираем никнейм с базы
-        const allBases = document.querySelectorAll('.base .nickname');
-        allBases.forEach(el=>el.textContent='');
     }
     currentServerId=null; currentBase=null;
     document.getElementById('app').style.display='none';
@@ -223,13 +206,44 @@ function openRedShop(){ loadRedShopData().then(()=>{ switchRedTab('gear'); docum
 function closeRedShop(){document.getElementById('red-shop-menu').style.display='none';}
 function buyRedShopItem(id){ const item=Object.values(redShopItems).flat().find(i=>i.id===id); if(!item)return; if(item.once&&ownedRedItems.includes(id))return; if(dushka>=item.price){ dushka-=item.price; if(item.once)ownedRedItems.push(id); if(item.reward){ coins+=item.reward; document.getElementById('balance-amount').textContent=formatNumber(coins); db.ref('users/'+currentNickname).update({coins:coins,dushka:dushka,ownedRedItems:ownedRedItems}); } else { db.ref('users/'+currentNickname).update({dushka:dushka,ownedRedItems:ownedRedItems}); } document.getElementById('dushka-coins').textContent=formatNumber(dushka); renderRedShop(); showModal('Покупка',`Вы купили ${item.name} за ${item.price} Dushka Coins!`); } else showModal('Ошибка',`Недостаточно Dushka Coins! Нужно ${item.price}`); }
 
-// КОЛЕСО
+// КОЛЕСО (исправленная анимация)
 const FREE_SPIN_INTERVAL=7200; let lastFreeSpinTime=localStorage.getItem('lastFreeSpinTime'); if(!lastFreeSpinTime){lastFreeSpinTime=Date.now();localStorage.setItem('lastFreeSpinTime',lastFreeSpinTime.toString());}else{lastFreeSpinTime=parseInt(lastFreeSpinTime);}
 function updateFreeSpinTimer(){ const elapsed=Math.floor((Date.now()-lastFreeSpinTime)/1000); const remaining=FREE_SPIN_INTERVAL-elapsed; if(remaining<=0){_spins++;lastFreeSpinTime=Date.now();localStorage.setItem('lastFreeSpinTime',lastFreeSpinTime.toString());updateSpinBtn();showModal('Бесплатный спин!','Вы получили 1 бесплатное вращение!');} const hours=Math.floor(remaining/3600),minutes=Math.floor((remaining%3600)/60),seconds=remaining%60; const timerEl=document.getElementById('wheel-timer'); if(timerEl)timerEl.textContent=`Бесплатный спин через: ${hours}ч ${minutes}м ${seconds}с`; }
 setInterval(updateFreeSpinTimer,1000);
 function buySpin(a){ let c=a===1?49:199; if(dushka>=c){dushka-=c;_spins+=a;document.getElementById('dushka-coins').textContent=formatNumber(dushka);db.ref('users/'+currentNickname).update({dushka:dushka,spins:_spins});updateSpinBtn();showModal('Покупка',`Куплено ${a} спин(ов) за ${c} Dushka Coins!`);} else showModal('Ошибка','Недостаточно Dushka Coins!'); }
 function updateSpinBtn(){document.querySelector('#wheel-menu .spin-btn').textContent=`Spin (${_spins})`;}
-function doSpin(){ if(isSpinning){showModal('Подождите','Колесо ещё крутится!');return;} if(_spins<=0){showModal('Ошибка','Нет спинов!');return} isSpinning=true; _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn(); const wheel=document.getElementById('wheel-spin'); const prizes=[{name:'$12K',chance:45,reward:12000},{name:'$12K',chance:45,reward:12000},{name:'2x Lucky',chance:2,reward:0},{name:'$1M',chance:7,reward:1000000},{name:'Crystal Slap',chance:0.5,reward:0},{name:'Lucky Block',chance:0.5,reward:0}]; let total=prizes.reduce((sum,p)=>sum+p.chance,0); let random=Math.random()*total; let selectedIndex=0; for(let i=0;i<prizes.length;i++){ if(random<prizes[i].chance){selectedIndex=i;break;} random-=prizes[i].chance; } let selected=prizes[selectedIndex]; const centerAngle=30+selectedIndex*60; const currentMod=((wheelRotation%360)+360)%360; const desiredMod=(360-centerAngle)%360; let deltaMod=(desiredMod-currentMod+360)%360; const extraRotations=5*360; const delta=deltaMod+extraRotations; wheelRotation+=delta; wheel.style.transform=`rotate(${wheelRotation}deg)`; setTimeout(()=>{ isSpinning=false; if(selected.reward>0){coins+=selected.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});} showModal('Колесо',`Выпало: ${selected.name}!`); },2000); }
+function doSpin(){
+    if(isSpinning){showModal('Подождите','Колесо ещё крутится!');return;}
+    if(_spins<=0){showModal('Ошибка','Нет спинов!');return}
+    isSpinning=true; _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn();
+    const wheel=document.getElementById('wheel-spin');
+    const prizes=[{name:'$12K',chance:45,reward:12000},{name:'$12K',chance:45,reward:12000},{name:'2x Lucky',chance:2,reward:0},{name:'$1M',chance:7,reward:1000000},{name:'Crystal Slap',chance:0.5,reward:0},{name:'Lucky Block',chance:0.5,reward:0}];
+    let total=prizes.reduce((sum,p)=>sum+p.chance,0);
+    let random=Math.random()*total;
+    let selectedIndex=0;
+    for(let i=0;i<prizes.length;i++){ if(random<prizes[i].chance){selectedIndex=i;break;} random-=prizes[i].chance; }
+    let selected=prizes[selectedIndex];
+    // Вычисляем угол, чтобы указатель попал на центр выбранного сектора
+    const centerAngle = 30 + selectedIndex*60;
+    const currentMod = ((wheelRotation%360)+360)%360;
+    const desiredMod = (360 - centerAngle) % 360;
+    let deltaMod = (desiredMod - currentMod + 360) % 360;
+    const extraRotations = 5*360;
+    const delta = deltaMod + extraRotations;
+    wheelRotation += delta;
+    // Сбрасываем transition, чтобы избежать конфликтов
+    wheel.style.transition = 'none';
+    wheel.style.transform = `rotate(${wheelRotation}deg)`;
+    // Принудительно обновляем стиль
+    void wheel.offsetWidth;
+    wheel.style.transition = 'transform 2s cubic-bezier(0.2,0.8,0.2,1)';
+    wheel.style.transform = `rotate(${wheelRotation}deg)`;
+    setTimeout(()=>{
+        isSpinning=false;
+        if(selected.reward>0){coins+=selected.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});}
+        showModal('Колесо',`Выпало: ${selected.name}!`);
+    },2000);
+}
 
 // FIREBASE
 async function readUserData(n){try{const s=await db.ref('users/'+n).once('value');return s.exists()?s.val():null}catch(e){return null}}
@@ -282,8 +296,6 @@ window.addEventListener('resize',resizeGame);
 
 // ОБНОВЛЕНИЕ НИКНЕЙМОВ БАЗ
 function updateBaseNicknames(bases){
-    const baseNickEls = document.querySelectorAll('.base .nickname');
-    // базы: 1-8, слева направо в двух рядах. Порядок: top-1, top-2, top-3, top-4, bottom-1, bottom-2, bottom-3, bottom-4
     const order = ['.base-top-1 .nickname','.base-top-2 .nickname','.base-top-3 .nickname','.base-top-4 .nickname','.base-bottom-1 .nickname','.base-bottom-2 .nickname','.base-bottom-3 .nickname','.base-bottom-4 .nickname'];
     for(let i=0;i<8;i++){
         const el = document.querySelector(order[i]);
@@ -335,9 +347,11 @@ function initPlayer(){
     let pl=document.getElementById('player');
     pl.innerHTML='<div class="pixel"></div><div class="pixel"></div>';
     let px=pl.querySelectorAll('.pixel');
-    let skin = skinColors[Math.floor(Math.random()*skinColors.length)];
-    px[0].style.background = skin[0];
-    px[1].style.background = skin[1];
+    // Выбираем два случайных цвета из 9
+    let color1 = skinColors[Math.floor(Math.random()*skinColors.length)];
+    let color2 = skinColors[Math.floor(Math.random()*skinColors.length)];
+    px[0].style.background = color1;
+    px[1].style.background = color2;
     pl.style.left=x+'px'; pl.style.top=y+'px';
 }
 function startOtherPlayersListener(){
