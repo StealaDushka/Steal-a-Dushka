@@ -125,7 +125,20 @@ input[type="file"]{color:#fff}
 <div id="joystick-zone"></div>
 
 <script>
-// ФОРМАТ ЧИСЕЛ
+// ========== СКИН ИГРОКА (9 цветов) ==========
+const skinColors = [
+    ['#FFCC00', '#00DFF5'], // жёлтый/голубой
+    ['#FF0000', '#FFFFFF'], // красный/белый
+    ['#00FF00', '#000000'], // зелёный/чёрный
+    ['#FF00FF', '#FFFF00'], // розовый/жёлтый
+    ['#0000FF', '#FFFFFF'], // синий/белый
+    ['#FFA500', '#000000'], // оранжевый/чёрный
+    ['#800080', '#00FFFF'], // фиолетовый/циан
+    ['#FF4500', '#00FF7F'], // оранжевый/зелёный
+    ['#FFFFFF', '#FF0000']  // белый/красный
+];
+
+// ========== ФОРМАТ ЧИСЕЛ ==========
 function formatNumber(num){ if(num >= 1e15) return (num / 1e15).toFixed(2) + 'Qa'; if(num >= 1e12) return (num / 1e12).toFixed(2) + 'T'; if(num >= 1e9) return (num / 1e9).toFixed(2) + 'B'; if(num >= 1e6) return (num / 1e6).toFixed(2) + 'M'; if(num >= 1e3) return (num / 1e3).toFixed(2) + 'K'; return num.toString(); }
 
 function resizeGame(){const game=document.getElementById('game-container');if(!game)return;const availW=window.innerWidth,availH=window.innerHeight;let scale=Math.min(availW/500,availH/500);scale=Math.max(0.6,Math.min(1.2,scale));game.style.transform=`scale(${scale})`;}
@@ -150,6 +163,9 @@ async function exitToMenu(){
         await db.ref('servers/'+currentServerId+'/bases/'+currentNickname).remove();
         await db.ref('servers/'+currentServerId+'/playersCount').transaction(c=> (c||0)-1);
         await db.ref('users/'+currentNickname+'/serverId').remove();
+        // Убираем никнейм с базы
+        const allBases = document.querySelectorAll('.base .nickname');
+        allBases.forEach(el=>el.textContent='');
     }
     currentServerId=null; currentBase=null;
     document.getElementById('app').style.display='none';
@@ -263,7 +279,23 @@ function closeProfile(){ document.getElementById('profile-menu').style.display='
 // ИГРОВЫЕ ФУНКЦИИ
 function resizeGame(){const game=document.getElementById('game-container');if(!game)return;const availW=window.innerWidth,availH=window.innerHeight;let scale=Math.min(availW/500,availH/500);scale=Math.max(0.6,Math.min(1.2,scale));game.style.transform=`scale(${scale})`;}
 window.addEventListener('resize',resizeGame);
-async function startGame(){ 
+
+// ОБНОВЛЕНИЕ НИКНЕЙМОВ БАЗ
+function updateBaseNicknames(bases){
+    const baseNickEls = document.querySelectorAll('.base .nickname');
+    // базы: 1-8, слева направо в двух рядах. Порядок: top-1, top-2, top-3, top-4, bottom-1, bottom-2, bottom-3, bottom-4
+    const order = ['.base-top-1 .nickname','.base-top-2 .nickname','.base-top-3 .nickname','.base-top-4 .nickname','.base-bottom-1 .nickname','.base-bottom-2 .nickname','.base-bottom-3 .nickname','.base-bottom-4 .nickname'];
+    for(let i=0;i<8;i++){
+        const el = document.querySelector(order[i]);
+        if(el){
+            let nick = null;
+            for(let player in bases){ if(bases[player]===i+1){ nick = player; break; } }
+            el.textContent = nick ? nick : '';
+        }
+    }
+}
+
+async function startGame(){
     document.getElementById('main-menu').style.display='none';
     document.getElementById('server-menu').style.display='none';
     document.getElementById('friends-menu').style.display='none';
@@ -279,6 +311,11 @@ async function startGame(){
     const spawn = baseSpawnPoints[currentBase];
     x = spawn.x; y = spawn.y;
     db.ref('users/'+currentNickname).update({x:x, y:y, base:currentBase});
+    // Слушатель базы
+    db.ref('servers/'+currentServerId+'/bases').on('value', snap=>{
+        const bases = snap.val() || {};
+        updateBaseNicknames(bases);
+    });
     initPlayer();
     initJoystick();
     startOtherPlayersListener();
@@ -293,8 +330,43 @@ async function startGame(){
     await autoBuyShopItemsOnLoad();
     updateBeeUI();
 }
-function initPlayer(){let pl=document.getElementById('player');pl.innerHTML='<div class="pixel"></div><div class="pixel"></div>';let px=pl.querySelectorAll('.pixel');px[0].style.background='#FFCC00';px[1].style.background='#00DFF5';pl.style.left=x+'px';pl.style.top=y+'px'}
-function startOtherPlayersListener(){ db.ref('users').on('value',snapshot=>{ const users=snapshot.val()||{}; for(let key in otherPlayers){ if(!users[key]||key===currentNickname){ if(otherPlayers[key]) otherPlayers[key].remove(); delete otherPlayers[key]; } } for(let key in users){ if(key===currentNickname) continue; const data=users[key]; if(data&&data.x!==undefined&&data.y!==undefined){ if(!otherPlayers[key]){ let div=document.createElement('div'); div.id='other-'+key; div.className='other-player'; div.innerHTML='<div class="pixel"></div><div class="pixel"></div>'; document.getElementById('game-container').appendChild(div); otherPlayers[key]=div; } otherPlayers[key].style.left=data.x+'px'; otherPlayers[key].style.top=data.y+'px'; } } }); }
+
+function initPlayer(){
+    let pl=document.getElementById('player');
+    pl.innerHTML='<div class="pixel"></div><div class="pixel"></div>';
+    let px=pl.querySelectorAll('.pixel');
+    let skin = skinColors[Math.floor(Math.random()*skinColors.length)];
+    px[0].style.background = skin[0];
+    px[1].style.background = skin[1];
+    pl.style.left=x+'px'; pl.style.top=y+'px';
+}
+function startOtherPlayersListener(){
+    db.ref('users').on('value',snapshot=>{
+        const users=snapshot.val()||{};
+        for(let key in otherPlayers){
+            if(!users[key]||key===currentNickname){
+                if(otherPlayers[key]) otherPlayers[key].remove();
+                delete otherPlayers[key];
+            }
+        }
+        for(let key in users){
+            if(key===currentNickname) continue;
+            const data=users[key];
+            if(data&&data.x!==undefined&&data.y!==undefined){
+                if(!otherPlayers[key]){
+                    let div=document.createElement('div');
+                    div.id='other-'+key;
+                    div.className='other-player';
+                    div.innerHTML='<div class="pixel"></div><div class="pixel"></div>';
+                    document.getElementById('game-container').appendChild(div);
+                    otherPlayers[key]=div;
+                }
+                otherPlayers[key].style.left=data.x+'px';
+                otherPlayers[key].style.top=data.y+'px';
+            }
+        }
+    });
+}
 document.addEventListener('keydown',function(e){ const k=String(e.key).toLowerCase(); if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return; typedCode+=k; typedCode=typedCode.slice(-17); if(typedCode==='ядушкамистердушка'&&currentNickname==='MrDushka'){showModal('Админ-панель','Заглушка');typedCode='';} if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;keys.arrowup=true;e.preventDefault()} if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;keys.arrowdown=true;e.preventDefault()} if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;keys.arrowleft=true;e.preventDefault()} if(k==='d'||k==='в'||k==='arrowright'){keys.d=true;keys.arrowright=true;e.preventDefault()} if(k==='e'||k==='у'){interact();e.preventDefault()} });
 document.addEventListener('keyup',function(e){ const k=String(e.key).toLowerCase(); if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return; if(k==='w'||k==='ц'||k==='arrowup'){keys.w=false;keys.arrowup=false;e.preventDefault()} if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=false;keys.arrowdown=false;e.preventDefault()} if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=false;keys.arrowleft=false;e.preventDefault()} if(k==='d'||k==='в'||k==='arrowright'){keys.d=false;keys.arrowright=false;e.preventDefault()} });
 const SPEED=1,MAX_X=380,MAX_Y=380;
