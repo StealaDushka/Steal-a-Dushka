@@ -79,8 +79,20 @@ input[type="file"]{color:#fff}
 </style>
 </head>
 <body>
-<!-- АВТОРИЗАЦИЯ -->
+<!-- ЭКРАН ВХОДА -->
 <div id="auth"><div id="auth-box"><label class="auth-label">НИК</label><input type="text" id="username" class="auth-input" autocomplete="off"><label class="auth-label">ПАРОЛЬ</label><input type="password" id="password" class="auth-input"><div class="auth-btns"><button class="auth-btn btn-login" onclick="handleLogin()">ВОЙТИ</button><button class="auth-btn btn-reg" onclick="handleRegister()">РЕГ</button></div><div class="hint">Запишите ваш пароль. Спасибо за внимание</div></div></div>
+
+<!-- БАЛАНС -->
+<div id="balance">
+  <div class="box dushka"><span class="icon"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg></span><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div>
+  <div class="box"><span class="icon"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" fill="#4caf50"/><circle cx="12" cy="12" r="6" fill="#fff"/></svg></span><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div>
+</div>
+
+<!-- ВЕРСИЯ -->
+<div id="version">Версия: 0.26</div>
+
+<!-- КНОПКА ВЫХОДА -->
+<div id="exit-btn" onclick="exitToMenu()">Выйти</div>
 
 <!-- ГЛАВНОЕ МЕНЮ -->
 <div id="main-menu"><h1>Steal A Dushka</h1><button class="menu-btn green" onclick="playRandom()">Играть</button><button class="menu-btn blue" onclick="openServers()">Серверы</button><button class="menu-btn purple" onclick="openFriends()">Друзья</button><button class="menu-btn" onclick="openProfile()">Профиль</button></div>
@@ -102,7 +114,6 @@ input[type="file"]{color:#fff}
 
 <!-- ИГРА -->
 <div id="app"><div id="sidebar"><div id="actions"><div class="action-btn pink" onclick="openRedShop()">SHOP</div><div class="action-btn" onclick="showModal('Ребирт','Скоро появится!')">REBIRTH</div><div class="action-btn" onclick="showModal('Трейд','Скоро появится!')">TRADE</div><div class="action-btn" onclick="showModal('INDEX','Твой индекс: ' + (currentNickname ? 'База ' + currentNickname : 'Неизвестно'))">INDEX</div></div></div><div id="game-wrapper"><div id="game-container"><div class="center-line"><div class="center-cap cap-left"></div><div class="center-cap cap-right"></div></div><div class="base base-top-1"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-top-2"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-top-3"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-top-4"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-1"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-2"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-3"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-4"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div id="rng-machine"><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div></div><div id="shop-blue"><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div></div><div id="shop-red"><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div></div><div id="queen-bee"><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-yellow"></div></div><div id="rng-circle"></div><div id="shop-white"><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div></div><div id="interact" onclick="interact()">E</div><div id="player"></div></div></div></div>
-<div id="exit-btn" onclick="exitToMenu()">Выйти</div>
 
 <!-- МАГАЗИНЫ -->
 <div id="shop-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Shop</h2><p>Buy tools to protect your base and troll others!</p></div><div class="close-btn" onclick="closeShop()">X</div></div><div class="content" id="shop-items"></div></div>
@@ -114,16 +125,19 @@ input[type="file"]{color:#fff}
 <div id="joystick-zone"></div>
 
 <script>
-let wheelRotation=0;
+// ФОРМАТ ЧИСЕЛ
 function formatNumber(num){ if(num >= 1e15) return (num / 1e15).toFixed(2) + 'Qa'; if(num >= 1e12) return (num / 1e12).toFixed(2) + 'T'; if(num >= 1e9) return (num / 1e9).toFixed(2) + 'B'; if(num >= 1e6) return (num / 1e6).toFixed(2) + 'M'; if(num >= 1e3) return (num / 1e3).toFixed(2) + 'K'; return num.toString(); }
+
 function resizeGame(){const game=document.getElementById('game-container');if(!game)return;const availW=window.innerWidth,availH=window.innerHeight;let scale=Math.min(availW/500,availH/500);scale=Math.max(0.6,Math.min(1.2,scale));game.style.transform=`scale(${scale})`;}
 window.addEventListener('resize',resizeGame);
 function showModal(title, text){document.getElementById('modal-title').textContent=title;document.getElementById('modal-text').textContent=text;document.getElementById('custom-modal').style.display='block';}
 function closeModal(){document.getElementById('custom-modal').style.display='none';}
 function openTradePlaza() { document.getElementById('trade-plaza-modal').style.display = 'flex'; }
 function closeTradePlaza() { document.getElementById('trade-plaza-modal').style.display = 'none'; }
+
 let touchDX=0,touchDY=0,joystickManager=null;
 function initJoystick(){ const zone=document.getElementById('joystick-zone'); zone.style.display='block'; if(typeof nipplejs==='undefined'){console.warn('NippleJS не загружен');return;} joystickManager=nipplejs.create({zone:zone,mode:'static',position:{left:'50%',top:'50%'},color:'white',size:100,restOpacity:0.5,fadeTime:150}); joystickManager.on('move',(evt,data)=>{const force=Math.min(data.force,1);const angle=data.angle.radian;touchDX=Math.cos(angle)*force;touchDY=-Math.sin(angle)*force;}); joystickManager.on('end',()=>{touchDX=0;touchDY=0;}); }
+
 let x=52,y=81,coins=25,dushka=0,currentNickname=null,_spins=0,isSpinning=false,currentServerId=null,currentBase=null;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
 let otherPlayers={};
@@ -133,13 +147,11 @@ const baseSpawnPoints={1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81
 // ФУНКЦИЯ ВЫХОДА
 async function exitToMenu(){
     if(currentServerId && currentNickname){
-        // Удаляем базу и уменьшаем счетчик
         await db.ref('servers/'+currentServerId+'/bases/'+currentNickname).remove();
         await db.ref('servers/'+currentServerId+'/playersCount').transaction(c=> (c||0)-1);
         await db.ref('users/'+currentNickname+'/serverId').remove();
     }
-    currentServerId=null;
-    currentBase=null;
+    currentServerId=null; currentBase=null;
     document.getElementById('app').style.display='none';
     document.getElementById('exit-btn').style.display='none';
     document.getElementById('balance').style.display='none';
@@ -152,18 +164,12 @@ async function assignBase(serverId, playerName){
     const basesRef = db.ref('servers/'+serverId+'/bases');
     const snap = await basesRef.once('value');
     const bases = snap.val() || {};
-    // Проверяем, какая база свободна
     for(let i=1;i<=8;i++){
         let taken = false;
-        for(let nick in bases){
-            if(bases[nick] === i){ taken = true; break; }
-        }
-        if(!taken){
-            await basesRef.child(playerName).set(i);
-            return i;
-        }
+        for(let nick in bases){ if(bases[nick] === i){ taken = true; break; } }
+        if(!taken){ await basesRef.child(playerName).set(i); return i; }
     }
-    return null; // все базы заняты
+    return null;
 }
 
 // СИНИЙ МАГАЗИН
@@ -213,7 +219,7 @@ function doSpin(){ if(isSpinning){showModal('Подождите','Колесо �
 async function readUserData(n){try{const s=await db.ref('users/'+n).once('value');return s.exists()?s.val():null}catch(e){return null}}
 async function writeUserData(n,d){try{await db.ref('users/'+n).set(d)}catch(e){}}
 
-// РЕГИСТРАЦИЯ / ВХОД (БЕЗ БАЗЫ)
+// РЕГИСТРАЦИЯ / ВХОД
 async function handleRegister(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){showModal('Ошибка','Ник занят!');return} await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,level:1,last_online:Date.now(),ownedRedItems:[],autoBuyShopItems:[],avatar:'',background:'',friends:[],friendRequests:[],serverId:null}); currentNickname=u; showMainMenu(); }
 async function handleLogin(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){ if(e.password===p){ currentNickname=u; if(typeof e.dushka==='undefined')e.dushka=0; if(typeof e.spins==='undefined')e.spins=0; if(typeof e.ownedRedItems==='undefined')e.ownedRedItems=[]; if(typeof e.autoBuyShopItems==='undefined')e.autoBuyShopItems=[]; if(typeof e.avatar==='undefined')e.avatar=''; if(typeof e.background==='undefined')e.background=''; if(typeof e.friends==='undefined')e.friends=[]; if(typeof e.friendRequests==='undefined')e.friendRequests=[]; await writeUserData(u,e); showMainMenu(); } else showModal('Ошибка','Неверный пароль!'); } else showModal('Ошибка','Ник не найден! Нажми РЕГ.'); }
 
@@ -266,23 +272,13 @@ async function startGame(){
     document.getElementById('exit-btn').style.display='block';
     document.getElementById('balance').style.display='flex';
     document.getElementById('version').style.display='block';
-    
-    // Загружаем монеты и Dushka
     await loadDushkaCoins();
     await loadCoins();
-    
-    // Выбираем случайную свободную базу
     currentBase = await assignBase(currentServerId, currentNickname);
-    if(currentBase === null){
-        showModal('Ошибка','Сервер заполнен!');
-        await exitToMenu();
-        return;
-    }
-    // Спавн на базе
+    if(currentBase === null){ showModal('Ошибка','Сервер заполнен!'); await exitToMenu(); return; }
     const spawn = baseSpawnPoints[currentBase];
     x = spawn.x; y = spawn.y;
     db.ref('users/'+currentNickname).update({x:x, y:y, base:currentBase});
-    
     initPlayer();
     initJoystick();
     startOtherPlayersListener();
