@@ -121,7 +121,7 @@ input[type="file"]{color:#fff}
     <h3 style="color:#fff">Создать сервер</h3>
     <input type="text" id="server-name" placeholder="Название сервера" style="width:100%;padding:8px;border-radius:6px;border:none;margin-bottom:10px">
     <label style="color:#fff">Доступ:</label>
-    <select id="server-access" style="width:100%;padding:8px;border-radius:6px;border:none;margin-bottom:10px">
+    <select id="server-access" onchange="toggleSelectedPlayers()" style="width:100%;padding:8px;border-radius:6px;border:none;margin-bottom:10px">
         <option value="all">Все могут зайти</option>
         <option value="friends">Только друзья</option>
         <option value="selected">Выборочные игроки</option>
@@ -192,23 +192,17 @@ input[type="file"]{color:#fff}
 <div id="joystick-zone"></div>
 
 <script>
-// ФОРМАТ ЧИСЕЛ
+let wheelRotation=0;
 function formatNumber(num){ if(num >= 1e15) return (num / 1e15).toFixed(2) + 'Qa'; if(num >= 1e12) return (num / 1e12).toFixed(2) + 'T'; if(num >= 1e9) return (num / 1e9).toFixed(2) + 'B'; if(num >= 1e6) return (num / 1e6).toFixed(2) + 'M'; if(num >= 1e3) return (num / 1e3).toFixed(2) + 'K'; return num.toString(); }
-
-// МОДАЛКА
+function resizeGame(){const game=document.getElementById('game-container');if(!game)return;const availW=window.innerWidth,availH=window.innerHeight;let scale=Math.min(availW/500,availH/500);scale=Math.max(0.6,Math.min(1.2,scale));game.style.transform=`scale(${scale})`;}
+window.addEventListener('resize',resizeGame);
 function showModal(title, text){document.getElementById('modal-title').textContent=title;document.getElementById('modal-text').textContent=text;document.getElementById('custom-modal').style.display='block';}
 function closeModal(){document.getElementById('custom-modal').style.display='none';}
-
-// TRADE PLAZA
 function openTradePlaza() { document.getElementById('trade-plaza-modal').style.display = 'flex'; }
 function closeTradePlaza() { document.getElementById('trade-plaza-modal').style.display = 'none'; }
-
-// ДЖОЙСТИК
 let touchDX=0,touchDY=0,joystickManager=null;
 function initJoystick(){ const zone=document.getElementById('joystick-zone'); zone.style.display='block'; if(typeof nipplejs==='undefined'){console.warn('NippleJS не загружен');return;} joystickManager=nipplejs.create({zone:zone,mode:'static',position:{left:'50%',top:'50%'},color:'white',size:100,restOpacity:0.5,fadeTime:150}); joystickManager.on('move',(evt,data)=>{const force=Math.min(data.force,1);const angle=data.angle.radian;touchDX=Math.cos(angle)*force;touchDY=-Math.sin(angle)*force;}); joystickManager.on('end',()=>{touchDX=0;touchDY=0;}); }
-
-// ПЕРЕМЕННЫЕ
-let x=52,y=81,coins=25,dushka=0,currentNickname=null,_spins=0,isSpinning=false, wheelRotation=0;
+let x=52,y=81,coins=25,dushka=0,currentNickname=null,_spins=0,isSpinning=false;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
 let otherPlayers={};
 let typedCode='';
@@ -279,6 +273,7 @@ async function joinServer(id){ await db.ref('users/'+currentNickname).update({se
 function closeServers(){ document.getElementById('server-menu').style.display='none'; showMainMenu(); }
 function openCreateServer(){ document.getElementById('create-server-modal').style.display='block'; }
 function closeCreateServer(){ document.getElementById('create-server-modal').style.display='none'; }
+function toggleSelectedPlayers(){ const access=document.getElementById('server-access').value; document.getElementById('selected-players').style.display=access==='selected'?'block':'none'; }
 function addSelectedPlayer(){ const input=document.getElementById('selected-player-input'); const nick=input.value.trim(); if(!nick)return; const listDiv=document.getElementById('selected-list'); const span=document.createElement('span'); span.textContent=nick; span.style.marginRight='5px'; const removeBtn=document.createElement('button'); removeBtn.textContent='X'; removeBtn.style.background='#f44'; removeBtn.style.border='none'; removeBtn.style.cursor='pointer'; removeBtn.onclick=()=>span.remove(); span.appendChild(removeBtn); listDiv.appendChild(span); input.value=''; }
 async function createServer(){ const name=document.getElementById('server-name').value.trim(); const access=document.getElementById('server-access').value; if(!name){showModal('Ошибка','Введите название сервера');return} const data=await readUserData(currentNickname); if(!data || data.dushka<100){showModal('Ошибка','Недостаточно Dushka Coins!');return} await db.ref('users/'+currentNickname).update({dushka:data.dushka-100}); const newRef=db.ref('servers').push(); const id=newRef.key; let selectedPlayers=[]; if(access==='selected'){ const listDiv=document.getElementById('selected-list'); selectedPlayers=Array.from(listDiv.children).map(child=>child.firstChild.textContent); } await newRef.set({name:name, access:access, playersCount:0, selectedPlayers:selectedPlayers, owner:currentNickname}); closeCreateServer(); openServers(); }
 
@@ -301,14 +296,34 @@ document.getElementById('bg-input').addEventListener('change', function(e){ cons
 async function saveProfile(){ let avatar=window._avatarData||''; let background=window._bgData||''; await db.ref('users/'+currentNickname).update({avatar:avatar, background:background}); showModal('Успех','Профиль сохранён'); }
 function closeProfile(){ document.getElementById('profile-menu').style.display='none'; showMainMenu(); }
 
-// ИГРОВЫЕ ФУНКЦИИ
+// ИГРОВЫЕ ФУНКЦИИ (с исправлением ввода в текстовых полях)
 function resizeGame(){const game=document.getElementById('game-container');if(!game)return;const availW=window.innerWidth,availH=window.innerHeight;let scale=Math.min(availW/500,availH/500);scale=Math.max(0.6,Math.min(1.2,scale));game.style.transform=`scale(${scale})`;}
 window.addEventListener('resize',resizeGame);
 async function startGame(){ document.getElementById('main-menu').style.display='none'; document.getElementById('server-menu').style.display='none'; document.getElementById('friends-menu').style.display='none'; document.getElementById('profile-menu').style.display='none'; document.getElementById('app').style.display='flex'; const data=await readUserData(currentNickname); if(data&&data.base){ let nickEl=document.querySelector(`.base-top-${data.base} .nickname`)||document.querySelector(`.base-bottom-${data.base} .nickname`); if(nickEl)nickEl.textContent="База "+currentNickname; let spawn=baseSpawnPoints[data.base]; if(spawn){x=spawn.x;y=spawn.y}else{x=data.x||52;y=data.y||81} } initPlayer(); initJoystick(); startOtherPlayersListener(); update(); window.focus(); resizeGame(); updateFreeSpinTimer(); checkBeeRestock(); await loadShopData(); window.beeStock=await loadBeeStock(); await loadRedShopData(); await autoBuyShopItemsOnLoad(); updateBeeUI(); }
 function initPlayer(){let pl=document.getElementById('player');pl.innerHTML='<div class="pixel"></div><div class="pixel"></div>';let px=pl.querySelectorAll('.pixel');px[0].style.background='#FFCC00';px[1].style.background='#00DFF5';pl.style.left=x+'px';pl.style.top=y+'px'}
 function startOtherPlayersListener(){ db.ref('users').on('value',snapshot=>{ const users=snapshot.val()||{}; for(let key in otherPlayers){ if(!users[key]||key===currentNickname){ if(otherPlayers[key]) otherPlayers[key].remove(); delete otherPlayers[key]; } } for(let key in users){ if(key===currentNickname) continue; const data=users[key]; if(data&&data.x!==undefined&&data.y!==undefined){ if(!otherPlayers[key]){ let div=document.createElement('div'); div.id='other-'+key; div.className='other-player'; div.innerHTML='<div class="pixel"></div><div class="pixel"></div>'; document.getElementById('game-container').appendChild(div); otherPlayers[key]=div; } otherPlayers[key].style.left=data.x+'px'; otherPlayers[key].style.top=data.y+'px'; } } }); }
-document.addEventListener('keydown',function(e){ const k=String(e.key).toLowerCase(); typedCode+=k; typedCode=typedCode.slice(-17); if(typedCode==='ядушкамистердушка'&&currentNickname==='MrDushka'){showModal('Админ-панель','Заглушка');typedCode='';} if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;keys.arrowup=true;e.preventDefault()} if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;keys.arrowdown=true;e.preventDefault()} if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;keys.arrowleft=true;e.preventDefault()} if(k==='d'||k==='в'||k==='arrowright'){keys.d=true;keys.arrowright=true;e.preventDefault()} if(k==='e'||k==='у'){interact();e.preventDefault()} });
-document.addEventListener('keyup',function(e){ const k=String(e.key).toLowerCase(); if(k==='w'||k==='ц'||k==='arrowup'){keys.w=false;keys.arrowup=false;e.preventDefault()} if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=false;keys.arrowdown=false;e.preventDefault()} if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=false;keys.arrowleft=false;e.preventDefault()} if(k==='d'||k==='в'||k==='arrowright'){keys.d=false;keys.arrowright=false;e.preventDefault()} });
+// Исправленные обработчики клавиш – не перехватываем при вводе в input/textarea
+document.addEventListener('keydown',function(e){
+    const targetTag = e.target.tagName;
+    if(targetTag === 'INPUT' || targetTag === 'TEXTAREA') return; // не мешаем печатать
+    const k=String(e.key).toLowerCase();
+    typedCode+=k; typedCode=typedCode.slice(-17);
+    if(typedCode==='ядушкамистердушка'&&currentNickname==='MrDushka'){showModal('Админ-панель','Заглушка');typedCode='';}
+    if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;keys.arrowup=true;e.preventDefault()}
+    if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;keys.arrowdown=true;e.preventDefault()}
+    if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;keys.arrowleft=true;e.preventDefault()}
+    if(k==='d'||k==='в'||k==='arrowright'){keys.d=true;keys.arrowright=true;e.preventDefault()}
+    if(k==='e'||k==='у'){interact();e.preventDefault()}
+});
+document.addEventListener('keyup',function(e){
+    const targetTag = e.target.tagName;
+    if(targetTag === 'INPUT' || targetTag === 'TEXTAREA') return;
+    const k=String(e.key).toLowerCase();
+    if(k==='w'||k==='ц'||k==='arrowup'){keys.w=false;keys.arrowup=false;e.preventDefault()}
+    if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=false;keys.arrowdown=false;e.preventDefault()}
+    if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=false;keys.arrowleft=false;e.preventDefault()}
+    if(k==='d'||k==='в'||k==='arrowright'){keys.d=false;keys.arrowright=false;e.preventDefault()}
+});
 const SPEED=1,MAX_X=380,MAX_Y=380;
 const obstacles=[{x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},{x:150,y:137,w:20,h:20},{x:190,y:137,w:20,h:20},{x:230,y:137,w:20,h:24},{x:150,y:230,w:20,h:20},{x:190,y:230,w:20,h:20},{x:230,y:230,w:20,h:20}];
 const interactables=[{id:'rng-machine',x:190,y:137,h:20},{id:'shop-blue',x:150,y:137,h:20},{id:'queen-bee',x:230,y:137,h:24},{id:'shop-red',x:150,y:230,h:20},{id:'rng-circle',x:190,y:230,h:20},{id:'shop-white',x:230,y:230,h:20}];
@@ -317,6 +332,9 @@ let lastTime=0,lastSync=0;
 function update(time=0){ requestAnimationFrame(update); const dt=Math.min((time-lastTime)/1000,0.1); lastTime=time; let dx=0,dy=0; if(keys.w||keys.arrowup)dy-=1; if(keys.s||keys.arrowdown)dy+=1; if(keys.a||keys.arrowleft)dx-=1; if(keys.d||keys.arrowright)dx+=1; if(Math.abs(touchDX)>0.05||Math.abs(touchDY)>0.05){ dx+=touchDX; dy+=touchDY; } if(dx!==0||dy!==0){ const len=Math.sqrt(dx*dx+dy*dy); let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60; let rX={x:nx,y:y,w:10,h:20},bX=false; for(let o of obstacles)if(collide(rX,o)){bX=true;break} if(!bX)x=nx; let rY={x:x,y:ny,w:10,h:20},bY=false; for(let o of obstacles)if(collide(rY,o)){bY=true;break} if(!bY)y=ny; x=Math.max(10,Math.min(MAX_X,x)); y=Math.max(10,Math.min(MAX_Y,y)); document.getElementById('player').style.left=x+'px'; document.getElementById('player').style.top=y+'px'; if(Date.now()-lastSync>200){ db.ref('users/'+currentNickname).update({x:x,y:y}); lastSync=Date.now(); } } let found=false; let playerCenter={x:x+5,y:y+10}; for(let obj of interactables){ let objCenter={x:obj.x+10,y:obj.y+obj.h/2}; let dist=Math.sqrt(Math.pow(playerCenter.x-objCenter.x,2)+Math.pow(playerCenter.y-objCenter.y,2)); if(dist<25){ let btn=document.getElementById('interact'); btn.style.display='flex'; btn.style.left=(x-7)+'px'; btn.style.top=(y-25)+'px'; btn.dataset.obj=obj.id; found=true; break; } } if(!found)document.getElementById('interact').style.display='none'; }
 function interact(){ let btn=document.getElementById('interact'); if(btn.style.display==='none')return; let obj=btn.dataset.obj; if(obj==='shop-blue'){openShop();} else if(obj==='shop-red'){openRedShop();} else if(obj==='shop-white'){openTradePlaza();} else if(obj==='queen-bee'){openBee();} else if(obj==='rng-circle'){openWheel();} else if(obj==='rng-machine'){showModal('RNG Машина','Здесь будет случайный приз!');} else showModal('Взаимодействие','Объект: '+obj); }
 function openCharacters(){document.getElementById('char-menu').style.display='flex'}function closeCharacters(){document.getElementById('char-menu').style.display='none'}function openBee(){document.getElementById('bee-menu').style.display='flex'}function closeBee(){document.getElementById('bee-menu').style.display='none'}function openWheel(){document.getElementById('wheel-menu').style.display='flex'}function closeWheel(){document.getElementById('wheel-menu').style.display='none'}
+
+// Инициализация при загрузке
+window.addEventListener('load', ()=>{ resizeGame(); });
 </script>
 </body>
 </html>
