@@ -221,10 +221,9 @@ function doSpin(){
     const currentMod = ((wheelRotation%360)+360)%360;
     const desiredMod = (360 - centerAngle) % 360;
     let deltaMod = (desiredMod - currentMod + 360) % 360;
-    const extraRotations = 10*360; // 10 полных оборотов
+    const extraRotations = 10*360;
     const delta = deltaMod + extraRotations;
     wheelRotation += delta;
-    // Плавная анимация
     wheel.style.transition = 'none';
     wheel.style.transform = `rotate(${wheelRotation}deg)`;
     void wheel.offsetWidth;
@@ -249,7 +248,6 @@ function showMainMenu(){ document.getElementById('auth').style.display='none'; d
 
 async function playRandom(){ const snapshot=await db.ref('servers').once('value'); const servers=snapshot.val()||{}; let chosen=null; for(let id in servers){ const count = await getServerCount(id); if(count < 8){chosen=id;break;} } if(!chosen){ const newRef=db.ref('servers').push(); const id=newRef.key; await newRef.set({name:'Сервер '+(Object.keys(servers).length+1), access:'all'}); chosen=id; } await db.ref('users/'+currentNickname).update({serverId:chosen}); currentServerId=chosen; startGame(); }
 
-// Получение реального количества игроков на сервере
 async function getServerCount(serverId){ const snap = await db.ref('users').once('value'); const users = snap.val()||{}; let count=0; for(let nick in users){ if(users[nick].serverId === serverId) count++; } return count; }
 
 async function openServers(){ document.getElementById('main-menu').style.display='none'; document.getElementById('server-menu').style.display='block'; await loadServers(); }
@@ -327,12 +325,10 @@ async function startGame(){
     if(currentBase === null){ showModal('Ошибка','Сервер заполнен!'); await exitToMenu(); return; }
     const spawn = baseSpawnPoints[currentBase];
     x = spawn.x; y = spawn.y;
-    db.ref('users/'+currentNickname).update({x:x, y:y, base:currentBase});
-    // onDisconnect – если игрок закроет вкладку или перезагрузит страницу, его serverId и база удалятся
+    db.ref('users/'+currentNickname).update({x:x, y:y, base:currentBase, serverId:currentServerId});
     db.ref('users/'+currentNickname+'/serverId').onDisconnect().remove();
     db.ref('users/'+currentNickname+'/base').onDisconnect().remove();
     db.ref('servers/'+currentServerId+'/bases/'+currentNickname).onDisconnect().remove();
-    // Слушатель базы
     db.ref('servers/'+currentServerId+'/bases').on('value', snap=>{
         const bases = snap.val() || {};
         updateBaseNicknames(bases);
