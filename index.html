@@ -146,7 +146,6 @@ const baseSpawnPoints={1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81
 async function exitToMenu(){
     if(currentServerId && currentNickname){
         await db.ref('servers/'+currentServerId+'/bases/'+currentNickname).remove();
-        await db.ref('servers/'+currentServerId+'/playersCount').transaction(c=> (c||0)-1);
         await db.ref('users/'+currentNickname+'/serverId').remove();
     }
     currentServerId=null; currentBase=null;
@@ -201,7 +200,7 @@ function openRedShop(){ loadRedShopData().then(()=>{ switchRedTab('gear'); docum
 function closeRedShop(){document.getElementById('red-shop-menu').style.display='none';}
 function buyRedShopItem(id){ const item=Object.values(redShopItems).flat().find(i=>i.id===id); if(!item)return; if(item.once&&ownedRedItems.includes(id))return; if(dushka>=item.price){ dushka-=item.price; if(item.once)ownedRedItems.push(id); if(item.reward){ coins+=item.reward; document.getElementById('balance-amount').textContent=formatNumber(coins); db.ref('users/'+currentNickname).update({coins:coins,dushka:dushka,ownedRedItems:ownedRedItems}); } else { db.ref('users/'+currentNickname).update({dushka:dushka,ownedRedItems:ownedRedItems}); } document.getElementById('dushka-coins').textContent=formatNumber(dushka); renderRedShop(); showModal('Покупка',`Вы купили ${item.name} за ${item.price} Dushka Coins!`); } else showModal('Ошибка',`Недостаточно Dushka Coins! Нужно ${item.price}`); }
 
-// КОЛЕСО (реалистичное вращение)
+// КОЛЕСО (реалистичное)
 const FREE_SPIN_INTERVAL=7200; let lastFreeSpinTime=localStorage.getItem('lastFreeSpinTime'); if(!lastFreeSpinTime){lastFreeSpinTime=Date.now();localStorage.setItem('lastFreeSpinTime',lastFreeSpinTime.toString());}else{lastFreeSpinTime=parseInt(lastFreeSpinTime);}
 function updateFreeSpinTimer(){ const elapsed=Math.floor((Date.now()-lastFreeSpinTime)/1000); const remaining=FREE_SPIN_INTERVAL-elapsed; if(remaining<=0){_spins++;lastFreeSpinTime=Date.now();localStorage.setItem('lastFreeSpinTime',lastFreeSpinTime.toString());updateSpinBtn();showModal('Бесплатный спин!','Вы получили 1 бесплатное вращение!');} const hours=Math.floor(remaining/3600),minutes=Math.floor((remaining%3600)/60),seconds=remaining%60; const timerEl=document.getElementById('wheel-timer'); if(timerEl)timerEl.textContent=`Бесплатный спин через: ${hours}ч ${minutes}м ${seconds}с`; }
 setInterval(updateFreeSpinTimer,1000);
@@ -225,14 +224,14 @@ function doSpin(){
     const extraRotations = 10*360; // 10 полных оборотов
     const delta = deltaMod + extraRotations;
     wheelRotation += delta;
-    // Плавная анимация: сбрасываем transition, ставим начальное положение, затем запускаем transition с задержкой
+    // Плавная анимация
     wheel.style.transition = 'none';
     wheel.style.transform = `rotate(${wheelRotation}deg)`;
-    void wheel.offsetWidth; // перерисовка
+    void wheel.offsetWidth;
     setTimeout(()=>{
         wheel.style.transition = 'transform 3s cubic-bezier(0.15,0.9,0.25,1)';
         wheel.style.transform = `rotate(${wheelRotation}deg)`;
-    }, 20); // маленькая задержка для плавного старта
+    }, 20);
     setTimeout(()=>{
         isSpinning=false;
         if(selected.reward>0){coins+=selected.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});}
@@ -248,18 +247,21 @@ async function handleLogin(){ const u=document.getElementById('username').value.
 
 function showMainMenu(){ document.getElementById('auth').style.display='none'; document.getElementById('app').style.display='none'; document.getElementById('exit-btn').style.display='none'; document.getElementById('balance').style.display='none'; document.getElementById('version').style.display='none'; document.getElementById('main-menu').style.display='flex'; }
 
-async function playRandom(){ const snapshot=await db.ref('servers').once('value'); const servers=snapshot.val()||{}; let chosen=null; for(let id in servers){ if(servers[id].playersCount<8){chosen=id;break;} } if(!chosen){ const newRef=db.ref('servers').push(); const id=newRef.key; await newRef.set({name:'Сервер '+(Object.keys(servers).length+1), playersCount:0, access:'all'}); chosen=id; } await db.ref('users/'+currentNickname).update({serverId:chosen}); await db.ref('servers/'+chosen+'/playersCount').transaction(c=> (c||0)+1); currentServerId=chosen; startGame(); }
+async function playRandom(){ const snapshot=await db.ref('servers').once('value'); const servers=snapshot.val()||{}; let chosen=null; for(let id in servers){ const count = await getServerCount(id); if(count < 8){chosen=id;break;} } if(!chosen){ const newRef=db.ref('servers').push(); const id=newRef.key; await newRef.set({name:'Сервер '+(Object.keys(servers).length+1), access:'all'}); chosen=id; } await db.ref('users/'+currentNickname).update({serverId:chosen}); currentServerId=chosen; startGame(); }
+
+// Получение реального количества игроков на сервере
+async function getServerCount(serverId){ const snap = await db.ref('users').once('value'); const users = snap.val()||{}; let count=0; for(let nick in users){ if(users[nick].serverId === serverId) count++; } return count; }
 
 async function openServers(){ document.getElementById('main-menu').style.display='none'; document.getElementById('server-menu').style.display='block'; await loadServers(); }
-async function loadServers(){ const container=document.getElementById('server-list'); container.innerHTML=''; const snapshot=await db.ref('servers').once('value'); const servers=snapshot.val()||{}; const me=await readUserData(currentNickname); const myFriends=me.friends||[]; for(let id in servers){ const s=servers[id]; let canSee=false; if(s.access==='all') canSee=true; else if(s.access==='friends'){ if(s.owner===currentNickname || myFriends.includes(s.owner)) canSee=true; } else if(s.access==='selected'){ if(s.owner===currentNickname || (s.selectedPlayers||[]).includes(currentNickname)) canSee=true; } if(!canSee) continue; const playersCount=s.playersCount||0; const full=playersCount>=8; const div=document.createElement('div'); div.className='server-item'; let deleteBtn=''; if(s.owner===currentNickname){ deleteBtn='<button style="background:#ff5555;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer;margin-left:5px" onclick="deleteServer(\''+id+'\')">Удалить</button>'; } div.innerHTML=`<div class="name">${s.name}</div><div class="players">${playersCount}/8</div>${full?'<span class="full">Полный</span>':'<button class="join-btn" onclick="joinServer(\''+id+'\')">Join</button>'}${deleteBtn}`; container.appendChild(div); } }
+async function loadServers(){ const container=document.getElementById('server-list'); container.innerHTML=''; const snapshot=await db.ref('servers').once('value'); const servers=snapshot.val()||{}; const me=await readUserData(currentNickname); const myFriends=me.friends||[]; for(let id in servers){ const s=servers[id]; let canSee=false; if(s.access==='all') canSee=true; else if(s.access==='friends'){ if(s.owner===currentNickname || myFriends.includes(s.owner)) canSee=true; } else if(s.access==='selected'){ if(s.owner===currentNickname || (s.selectedPlayers||[]).includes(currentNickname)) canSee=true; } if(!canSee) continue; const playersCount = await getServerCount(id); const full=playersCount>=8; const div=document.createElement('div'); div.className='server-item'; let deleteBtn=''; if(s.owner===currentNickname){ deleteBtn='<button style="background:#ff5555;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer;margin-left:5px" onclick="deleteServer(\''+id+'\')">Удалить</button>'; } div.innerHTML=`<div class="name">${s.name}</div><div class="players">${playersCount}/8</div>${full?'<span class="full">Полный</span>':'<button class="join-btn" onclick="joinServer(\''+id+'\')">Join</button>'}${deleteBtn}`; container.appendChild(div); } }
 async function deleteServer(id){ if(!confirm('Удалить сервер?')) return; await db.ref('servers/'+id).remove(); const usersSnap=await db.ref('users').once('value'); const users=usersSnap.val()||{}; for(let nick in users){ if(users[nick].serverId===id){ await db.ref('users/'+nick+'/serverId').remove(); } } await loadServers(); }
-async function joinServer(id){ await db.ref('users/'+currentNickname).update({serverId:id}); await db.ref('servers/'+id+'/playersCount').transaction(c=> (c||0)+1); currentServerId=id; closeServers(); startGame(); }
+async function joinServer(id){ await db.ref('users/'+currentNickname).update({serverId:id}); currentServerId=id; closeServers(); startGame(); }
 function closeServers(){ document.getElementById('server-menu').style.display='none'; showMainMenu(); }
 function openCreateServer(){ document.getElementById('create-server-modal').style.display='block'; }
 function closeCreateServer(){ document.getElementById('create-server-modal').style.display='none'; }
 function toggleSelectedPlayers(){ const access=document.getElementById('server-access').value; document.getElementById('selected-players').style.display=access==='selected'?'block':'none'; }
 function addSelectedPlayer(){ const input=document.getElementById('selected-player-input'); const nick=input.value.trim(); if(!nick)return; const listDiv=document.getElementById('selected-list'); const span=document.createElement('span'); span.textContent=nick; span.style.marginRight='5px'; const removeBtn=document.createElement('button'); removeBtn.textContent='X'; removeBtn.style.background='#f44'; removeBtn.style.border='none'; removeBtn.style.cursor='pointer'; removeBtn.onclick=()=>span.remove(); span.appendChild(removeBtn); listDiv.appendChild(span); input.value=''; }
-async function createServer(){ const name=document.getElementById('server-name').value.trim(); const access=document.getElementById('server-access').value; if(!name){showModal('Ошибка','Введите название сервера');return} const data=await readUserData(currentNickname); if(!data || data.dushka<100){showModal('Ошибка','Недостаточно Dushka Coins!');return} await db.ref('users/'+currentNickname).update({dushka:data.dushka-100}); const newRef=db.ref('servers').push(); const id=newRef.key; let selectedPlayers=[]; if(access==='selected'){ const listDiv=document.getElementById('selected-list'); selectedPlayers=Array.from(listDiv.children).map(child=>child.firstChild.textContent); } await newRef.set({name:name, access:access, playersCount:0, selectedPlayers:selectedPlayers, owner:currentNickname}); closeCreateServer(); openServers(); }
+async function createServer(){ const name=document.getElementById('server-name').value.trim(); const access=document.getElementById('server-access').value; if(!name){showModal('Ошибка','Введите название сервера');return} const data=await readUserData(currentNickname); if(!data || data.dushka<100){showModal('Ошибка','Недостаточно Dushka Coins!');return} await db.ref('users/'+currentNickname).update({dushka:data.dushka-100}); const newRef=db.ref('servers').push(); const id=newRef.key; let selectedPlayers=[]; if(access==='selected'){ const listDiv=document.getElementById('selected-list'); selectedPlayers=Array.from(listDiv.children).map(child=>child.firstChild.textContent); } await newRef.set({name:name, access:access, selectedPlayers:selectedPlayers, owner:currentNickname}); closeCreateServer(); openServers(); }
 
 async function clearAllServers(){
     if(!confirm('Удалить ВСЕ серверы? Это действие необратимо.')) return;
@@ -281,16 +283,7 @@ async function sendFriendRequest(nick){ const data=await readUserData(nick); if(
 async function loadFriendRequests(){ const data=await readUserData(currentNickname); const requests=(data&&data.friendRequests)||[]; const container=document.getElementById('friend-requests'); container.innerHTML=''; if(requests.length===0){ container.innerHTML='<div style="color:#aaa">Нет запросов</div>'; return; } requests.forEach(req=>{ const div=document.createElement('div'); div.className='friend-item'; div.innerHTML='<div class="nick">'+req+'</div><button onclick="acceptFriend(\''+req+'\')" style="background:#4caf50;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Принять</button>'; container.appendChild(div); }); }
 async function acceptFriend(nick){ const data=await readUserData(currentNickname); let friends=data.friends||[]; if(!friends.includes(nick)) friends.push(nick); await db.ref('users/'+currentNickname).update({friends:friends}); let requests=data.friendRequests||[]; requests=requests.filter(r=>r!==nick); await db.ref('users/'+currentNickname).update({friendRequests:requests}); const other=await readUserData(nick); let otherFriends=other.friends||[]; if(!otherFriends.includes(currentNickname)) otherFriends.push(currentNickname); await db.ref('users/'+nick).update({friends:otherFriends}); await loadFriendRequests(); await loadFriends(); }
 async function loadFriends(){ const data=await readUserData(currentNickname); const friends=(data&&data.friends)||[]; const container=document.getElementById('friends-list'); container.innerHTML=''; if(friends.length===0){ container.innerHTML='<div style="color:#aaa">Пока нет друзей</div>'; return; } friends.forEach(friend=>{ const div=document.createElement('div'); div.className='friend-item'; div.innerHTML='<div class="nick">'+friend+'</div><div><button onclick="showFriendProfile(\''+friend+'\')" style="background:#0f3460;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer;margin-right:5px">Профиль</button><button onclick="removeFriend(\''+friend+'\')" style="background:#ff5555;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Удалить</button></div>'; container.appendChild(div); }); }
-async function removeFriend(nick){
-    const me = await readUserData(currentNickname);
-    let myFriends = me.friends || [];
-    myFriends = myFriends.filter(f => f !== nick);
-    await db.ref('users/'+currentNickname).update({friends:myFriends});
-    const other = await readUserData(nick);
-    if(other){ let otherFriends = other.friends || []; otherFriends = otherFriends.filter(f => f !== currentNickname); await db.ref('users/'+nick).update({friends:otherFriends}); }
-    await loadFriends();
-    showModal('Готово','Друг удалён');
-}
+async function removeFriend(nick){ const me = await readUserData(currentNickname); let myFriends = me.friends || []; myFriends = myFriends.filter(f => f !== nick); await db.ref('users/'+currentNickname).update({friends:myFriends}); const other = await readUserData(nick); if(other){ let otherFriends = other.friends || []; otherFriends = otherFriends.filter(f => f !== currentNickname); await db.ref('users/'+nick).update({friends:otherFriends}); } await loadFriends(); showModal('Готово','Друг удалён'); }
 async function showFriendProfile(friend){ const data=await readUserData(friend); if(!data){showModal('Ошибка','Игрок не найден');return} document.getElementById('friend-profile-name').textContent=friend; document.getElementById('friend-avatar-preview').style.backgroundImage=data.avatar?'url('+data.avatar+')':'none'; document.getElementById('friend-profile').style.display='block'; document.getElementById('friend-profile').dataset.nick=friend; }
 function cancelFriendJoin(){ document.getElementById('friend-profile').style.display='none'; }
 function joinFriendGame(){ const nick=document.getElementById('friend-profile').dataset.nick; readUserData(nick).then(data=>{ if(data&&data.serverId){ joinServer(data.serverId); } else { showModal('Инфо','Друг сейчас не играет'); } cancelFriendJoin(); }); }
@@ -335,6 +328,11 @@ async function startGame(){
     const spawn = baseSpawnPoints[currentBase];
     x = spawn.x; y = spawn.y;
     db.ref('users/'+currentNickname).update({x:x, y:y, base:currentBase});
+    // onDisconnect – если игрок закроет вкладку или перезагрузит страницу, его serverId и база удалятся
+    db.ref('users/'+currentNickname+'/serverId').onDisconnect().remove();
+    db.ref('users/'+currentNickname+'/base').onDisconnect().remove();
+    db.ref('servers/'+currentServerId+'/bases/'+currentNickname).onDisconnect().remove();
+    // Слушатель базы
     db.ref('servers/'+currentServerId+'/bases').on('value', snap=>{
         const bases = snap.val() || {};
         updateBaseNicknames(bases);
@@ -358,8 +356,8 @@ function initPlayer(){
     let pl=document.getElementById('player');
     pl.innerHTML='<div class="pixel"></div><div class="pixel"></div>';
     let px=pl.querySelectorAll('.pixel');
-    px[0].style.background = '#FFCC00'; // верх всегда жёлтый
-    px[1].style.background = skinColors[Math.floor(Math.random()*skinColors.length)]; // низ случайный
+    px[0].style.background = '#FFCC00';
+    px[1].style.background = skinColors[Math.floor(Math.random()*skinColors.length)];
     pl.style.left=x+'px'; pl.style.top=y+'px';
 }
 function startOtherPlayersListener(){
