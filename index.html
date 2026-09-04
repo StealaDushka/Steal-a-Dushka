@@ -326,6 +326,7 @@ async function startGame(){
     if(currentBase === null){ showModal('Ошибка','Сервер заполнен!'); await exitToMenu(); return; }
     const spawn = baseSpawnPoints[currentBase];
     x = spawn.x; y = spawn.y;
+    // ВАЖНО: сразу записываем координаты на базу
     db.ref('users/'+currentNickname).update({x:x, y:y, base:currentBase, serverId:currentServerId});
     db.ref('users/'+currentNickname+'/serverId').onDisconnect().remove();
     db.ref('users/'+currentNickname+'/base').onDisconnect().remove();
