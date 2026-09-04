@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Steal A Dushka</title>
+<link rel="icon" href="data:,">
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.10.1/nipplejs.min.js"></script>
@@ -211,7 +212,6 @@ function doSpin(){
     if(_spins<=0){showModal('Ошибка','Нет спинов!');return}
     isSpinning=true; _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn();
     const wheel=document.getElementById('wheel-spin');
-    // Новые призы: $12K 60%, $1M 30%, 2x Lucky 2%, $12K 4%, Crystal Slap 3%, Lucky Block 1%
     const prizes=[{name:'$12K',chance:60,reward:12000},{name:'$1M',chance:30,reward:1000000},{name:'2x Lucky',chance:2,reward:0},{name:'$12K',chance:4,reward:12000},{name:'Crystal Slap',chance:3,reward:0},{name:'Lucky Block',chance:1,reward:0}];
     let total=prizes.reduce((sum,p)=>sum+p.chance,0);
     let random=Math.random()*total;
@@ -391,7 +391,52 @@ const obstacles=[{x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},{x:150,y:137,w:20
 const interactables=[{id:'rng-machine',x:190,y:137,h:20},{id:'shop-blue',x:150,y:137,h:20},{id:'queen-bee',x:230,y:137,h:24},{id:'shop-red',x:150,y:230,h:20},{id:'rng-circle',x:190,y:230,h:20},{id:'shop-white',x:230,y:230,h:20}];
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y)}
 let lastTime=0,lastSync=0;
-function update(time=0){ requestAnimationFrame(update); const dt=Math.min((time-lastTime)/1000,0.1); lastTime=time; let dx=0,dy=0; if(keys.w||keys.arrowup)dy-=1; if(keys.s||keys.arrowdown)dy+=1; if(keys.a||keys.arrowleft)dx-=1; if(keys.d||keys.arrowright)dx+=1; if(Math.abs(touchDX)>0.05||Math.abs(touchDY)>0.05){ dx+=touchDX; dy+=touchDY; } if(dx!==0||dy!==0){ const len=Math.sqrt(dx*dx+dy*dy); let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60; let rX={x:nx,y:y,w:10,h:20},bX=false; for(let o of obstacles)if(collide(rX,o)){bX=true;break} if(!bX)x=nx; let rY={x:x,y:ny,w:10,h:20},bY=false; for(let o of obstacles)if(collide(rY,o)){bY=true;break} if(!bY)y=ny; x=Math.max(10,Math.min(MAX_X,x)); y=Math.max(10,Math.min(MAX_Y,y)); document.getElementById('player').style.left=x+'px'; document.getElementById('player').style.top=y+'px'; if(Date.now()-lastSync>100){ db.ref('users/'+currentNickname).update({x:x,y:y}); lastSync=Date.now(); } } let found=false; let playerCenter={x:x+5,y:y+10}; for(let obj of interactables){ let objCenter={x:obj.x+10,y:obj.y+obj.h/2}; let dist=Math.sqrt(Math.pow(playerCenter.x-objCenter.x,2)+Math.pow(playerCenter.y-objCenter.y,2)); if(dist<25){ let btn=document.getElementById('interact'); btn.style.display='flex'; btn.style.left=(x-7)+'px'; btn.style.top=(y-25)+'px'; btn.dataset.obj=obj.id; found=true; break; } } if(!found)document.getElementById('interact').style.display='none'; }
+function update(time=0){
+    requestAnimationFrame(update);
+    const dt=Math.min((time-lastTime)/1000,0.1);
+    lastTime=time;
+    let dx=0,dy=0;
+    if(keys.w||keys.arrowup)dy-=1;
+    if(keys.s||keys.arrowdown)dy+=1;
+    if(keys.a||keys.arrowleft)dx-=1;
+    if(keys.d||keys.arrowright)dx+=1;
+    if(Math.abs(touchDX)>0.05||Math.abs(touchDY)>0.05){ dx+=touchDX; dy+=touchDY; }
+    if(dx!==0||dy!==0){
+        const len=Math.sqrt(dx*dx+dy*dy);
+        let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60;
+        let rX={x:nx,y:y,w:10,h:20},bX=false;
+        for(let o of obstacles)if(collide(rX,o)){bX=true;break}
+        if(!bX)x=nx;
+        let rY={x:x,y:ny,w:10,h:20},bY=false;
+        for(let o of obstacles)if(collide(rY,o)){bY=true;break}
+        if(!bY)y=ny;
+        x=Math.max(10,Math.min(MAX_X,x));
+        y=Math.max(10,Math.min(MAX_Y,y));
+        document.getElementById('player').style.left=x+'px';
+        document.getElementById('player').style.top=y+'px';
+    }
+    // ВАЖНО: обновляем координаты каждые 100мс даже без движения
+    if(Date.now()-lastSync>100){
+        db.ref('users/'+currentNickname).update({x:x,y:y});
+        lastSync=Date.now();
+    }
+    let found=false;
+    let playerCenter={x:x+5,y:y+10};
+    for(let obj of interactables){
+        let objCenter={x:obj.x+10,y:obj.y+obj.h/2};
+        let dist=Math.sqrt(Math.pow(playerCenter.x-objCenter.x,2)+Math.pow(playerCenter.y-objCenter.y,2));
+        if(dist<25){
+            let btn=document.getElementById('interact');
+            btn.style.display='flex';
+            btn.style.left=(x-7)+'px';
+            btn.style.top=(y-25)+'px';
+            btn.dataset.obj=obj.id;
+            found=true;
+            break;
+        }
+    }
+    if(!found)document.getElementById('interact').style.display='none';
+}
 function interact(){ let btn=document.getElementById('interact'); if(btn.style.display==='none')return; let obj=btn.dataset.obj; if(obj==='shop-blue'){openShop();} else if(obj==='shop-red'){openRedShop();} else if(obj==='shop-white'){openTradePlaza();} else if(obj==='queen-bee'){openBee();} else if(obj==='rng-circle'){openWheel();} else if(obj==='rng-machine'){showModal('RNG Машина','Здесь будет случайный приз!');} else showModal('Взаимодействие','Объект: '+obj); }
 function openCharacters(){document.getElementById('char-menu').style.display='flex'}function closeCharacters(){document.getElementById('char-menu').style.display='none'}function openBee(){document.getElementById('bee-menu').style.display='flex'}function closeBee(){document.getElementById('bee-menu').style.display='none'}function openWheel(){document.getElementById('wheel-menu').style.display='flex'}function closeWheel(){document.getElementById('wheel-menu').style.display='none'}
 
