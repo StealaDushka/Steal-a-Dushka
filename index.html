@@ -56,8 +56,8 @@ input[type="file"]{color:#fff}
 .base{position:absolute;width:75px;height:75px;background:#869292}.base .brown{position:absolute;width:calc(100% - 8px);left:4px;height:14px;background:#bf5b1a;bottom:4px}.base .green{position:absolute;width:34px;height:14px;background:#22e54c;left:50%;transform:translateX(-50%);bottom:-14px}.base .nickname{position:absolute;bottom:4px;left:0;width:100%;height:14px;line-height:14px;text-align:center;color:#fff;font-size:7px;font-weight:bold;text-shadow:1px 1px 1px #000;z-index:5;pointer-events:none;overflow:hidden;white-space:nowrap}
 .base-top-1{top:20px;left:20px}.base-top-2{top:20px;left:115px}.base-top-3{top:20px;left:210px}.base-top-4{top:20px;left:305px}.base-bottom-1{bottom:20px;left:20px}.base-bottom-2{bottom:20px;left:115px}.base-bottom-3{bottom:20px;left:210px}.base-bottom-4{bottom:20px;left:305px}.base-bottom .brown{top:4px;bottom:auto}.base-bottom .green{top:-14px;bottom:auto}.base-bottom .nickname{top:4px;bottom:auto}
 #rng-machine,#shop-blue,#shop-red,#queen-bee,#rng-circle,#shop-white{position:absolute;width:20px;height:20px;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);z-index:15}#queen-bee{height:24px;grid-template-rows:repeat(6,1fr)}#rng-machine{left:190px;top:137px}.c-cyan{background:#00F0FF}.c-gray{background:#808080}.c-empty{background:transparent}#shop-blue{left:150px;top:137px}.s-blue{background:#0000FF}.s-white{background:#FFFFFF}#shop-red{left:150px;top:230px}.r-red{background:#FF0000}.r-white{background:#FFFFFF}#queen-bee{left:230px;top:137px}.q-yellow{background:#FFD966}.q-red{background:#F44336}.q-brown{background:#8B4513}#rng-circle{left:190px;top:230px;background:#A454B4;border-radius:50%}#shop-white{left:230px;top:230px}.w-dark{background:#003366}.w-white{background:#FFFFFF}
-#player,#other-player{position:absolute;width:16px;height:32px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20}#player .pixel,#other-player .pixel{width:100%;height:100%}
-#player-name,#other-player-name{position:absolute;left:50%;transform:translateX(-50%);top:-20px;color:#fff;font-size:8px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
+#player,#other-player{position:absolute;width:14px;height:28px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20}#player .pixel,#other-player .pixel{width:100%;height:100%}
+#player-name,#other-player-name{position:absolute;left:50%;transform:translateX(-50%);top:-18px;color:#fff;font-size:7px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
 #interact{position:absolute;display:none;z-index:1000;width:24px;height:24px;background:#777;border:1px solid #444;display:flex;justify-content:center;align-items:center;color:#fff;font-size:18px;cursor:pointer}
 #balance{position:fixed;bottom:20px;left:20px;background:rgba(0,0,0,.8);padding:10px;border:2px solid #444;color:#fff;font-size:14px;display:none;flex-direction:column;gap:5px;border-radius:8px;z-index:1000}
 #balance .box{display:flex;justify-content:space-between;gap:10px}
@@ -147,6 +147,7 @@ const baseSpawnPoints={1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81
 
 async function exitToMenu(){
     if(currentServerId && currentNickname){
+        await db.ref('servers/'+currentServerId+'/players/'+currentNickname).remove();
         await db.ref('servers/'+currentServerId+'/bases/'+currentNickname).remove();
         await db.ref('users/'+currentNickname+'/serverId').remove();
     }
@@ -250,7 +251,7 @@ function showMainMenu(){ document.getElementById('auth').style.display='none'; d
 
 async function playRandom(){ const snapshot=await db.ref('servers').once('value'); const servers=snapshot.val()||{}; let chosen=null; let minCount=8; for(let id in servers){ const count = await getServerCount(id); if(count < minCount){ minCount=count; chosen=id; } } if(!chosen){ const newRef=db.ref('servers').push(); const id=newRef.key; await newRef.set({name:'Сервер '+(Object.keys(servers).length+1), access:'all'}); chosen=id; } await db.ref('users/'+currentNickname).update({serverId:chosen}); currentServerId=chosen; startGame(); }
 
-async function getServerCount(serverId){ const snap = await db.ref('users').once('value'); const users = snap.val()||{}; let count=0; for(let nick in users){ if(users[nick].serverId === serverId) count++; } return count; }
+async function getServerCount(serverId){ const snap = await db.ref('servers/'+serverId+'/players').once('value'); const players = snap.val()||{}; return Object.keys(players).length; }
 
 async function openServers(){ document.getElementById('main-menu').style.display='none'; document.getElementById('server-menu').style.display='block'; await loadServers(); }
 async function loadServers(){ const container=document.getElementById('server-list'); container.innerHTML=''; const snapshot=await db.ref('servers').once('value'); const servers=snapshot.val()||{}; const me=await readUserData(currentNickname); const myFriends=me.friends||[]; for(let id in servers){ const s=servers[id]; let canSee=false; if(s.access==='all') canSee=true; else if(s.access==='friends'){ if(s.owner===currentNickname || myFriends.includes(s.owner)) canSee=true; } else if(s.access==='selected'){ if(s.owner===currentNickname || (s.selectedPlayers||[]).includes(currentNickname)) canSee=true; } if(!canSee) continue; const playersCount = await getServerCount(id); const full=playersCount>=8; const div=document.createElement('div'); div.className='server-item'; let deleteBtn=''; if(s.owner===currentNickname){ deleteBtn='<button style="background:#ff5555;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer;margin-left:5px" onclick="deleteServer(\''+id+'\')">Удалить</button>'; } div.innerHTML=`<div class="name">${s.name}</div><div class="players">${playersCount}/8</div>${full?'<span class="full">Полный</span>':'<button class="join-btn" onclick="joinServer(\''+id+'\')">Join</button>'}${deleteBtn}`; container.appendChild(div); } }
@@ -327,11 +328,12 @@ async function startGame(){
     if(currentBase === null){ showModal('Ошибка','Сервер заполнен!'); await exitToMenu(); return; }
     const spawn = baseSpawnPoints[currentBase];
     x = spawn.x; y = spawn.y;
-    // Записываем позицию в общий узел users
+    // Записываем позицию в серверный узел players
+    db.ref('servers/'+currentServerId+'/players/'+currentNickname).set({x:x, y:y, base:currentBase});
+    db.ref('servers/'+currentServerId+'/players/'+currentNickname).onDisconnect().remove();
+    db.ref('servers/'+currentServerId+'/bases/'+currentNickname).onDisconnect().remove();
     db.ref('users/'+currentNickname).update({x:x, y:y, base:currentBase, serverId:currentServerId});
     db.ref('users/'+currentNickname+'/serverId').onDisconnect().remove();
-    db.ref('users/'+currentNickname+'/base').onDisconnect().remove();
-    db.ref('servers/'+currentServerId+'/bases/'+currentNickname).onDisconnect().remove();
     db.ref('servers/'+currentServerId+'/bases').on('value', snap=>{
         const bases = snap.val() || {};
         updateBaseNicknames(bases);
@@ -360,19 +362,19 @@ function initPlayer(){
     pl.style.left=x+'px'; pl.style.top=y+'px';
 }
 function startOtherPlayersListener(){
-    // Слушаем всех пользователей, фильтруем по serverId
-    db.ref('users').on('value',snapshot=>{
-        const users=snapshot.val()||{};
+    // Слушаем только игроков нашего сервера
+    db.ref('servers/'+currentServerId+'/players').on('value',snapshot=>{
+        const players=snapshot.val()||{};
         for(let key in otherPlayers){
-            if(!users[key] || key===currentNickname || !users[key].serverId || users[key].serverId !== currentServerId){
+            if(!players[key] || key===currentNickname){
                 if(otherPlayers[key]) otherPlayers[key].remove();
                 delete otherPlayers[key];
             }
         }
-        for(let key in users){
+        for(let key in players){
             if(key===currentNickname) continue;
-            const data=users[key];
-            if(data && data.serverId === currentServerId && data.x!==undefined && data.y!==undefined){
+            const data=players[key];
+            if(data && data.x!==undefined && data.y!==undefined){
                 if(!otherPlayers[key]){
                     let div=document.createElement('div');
                     div.id='other-'+key;
@@ -418,9 +420,9 @@ function update(time=0){
         document.getElementById('player').style.left=x+'px';
         document.getElementById('player').style.top=y+'px';
     }
-    // Обновляем позицию в общем узле users каждые 100мс
+    // Обновляем позицию на сервере каждые 100мс
     if(Date.now()-lastSync>100){
-        db.ref('users/'+currentNickname).update({x:x,y:y});
+        db.ref('servers/'+currentServerId+'/players/'+currentNickname).update({x:x,y:y});
         lastSync=Date.now();
     }
     let found=false;
