@@ -329,8 +329,9 @@ async function startGame(){
     if(currentBase === null){ showModal('Ошибка','Сервер заполнен!'); await exitToMenu(); return; }
     const spawn = baseSpawnPoints[currentBase];
     x = spawn.x; y = spawn.y;
-    // Записываем позицию в серверный узел players
-    db.ref('servers/'+currentServerId+'/players/'+currentNickname).set({x:x, y:y, base:currentBase});
+    // Записываем позицию И ЦВЕТ в серверный узел players
+    const playerColor = skinColors[Math.floor(Math.random()*skinColors.length)];
+    db.ref('servers/'+currentServerId+'/players/'+currentNickname).set({x:x, y:y, base:currentBase, color:playerColor});
     db.ref('servers/'+currentServerId+'/players/'+currentNickname).onDisconnect().remove();
     db.ref('servers/'+currentServerId+'/bases/'+currentNickname).onDisconnect().remove();
     db.ref('users/'+currentNickname).update({x:x, y:y, base:currentBase, serverId:currentServerId});
@@ -388,7 +389,8 @@ function startOtherPlayersListener(){
                 let div=document.createElement('div');
                 div.id='other-'+key;
                 div.className='other-player';
-                div.innerHTML='<div class="pixel"></div><div class="pixel"></div><div class="player-name">'+key+'</div>';
+                const color = data.color || '#FFCC00';
+                div.innerHTML='<div class="pixel" style="background:#FFCC00"></div><div class="pixel" style="background:'+color+'"></div><div class="player-name">'+key+'</div>';
                 document.getElementById('game-container').appendChild(div);
                 otherPlayers[key]=div;
             }
@@ -415,7 +417,8 @@ function startOtherPlayersListener(){
                     let div=document.createElement('div');
                     div.id='other-'+key;
                     div.className='other-player';
-                    div.innerHTML='<div class="pixel"></div><div class="pixel"></div><div class="player-name">'+key+'</div>';
+                    const color = data.color || '#FFCC00';
+                    div.innerHTML='<div class="pixel" style="background:#FFCC00"></div><div class="pixel" style="background:'+color+'"></div><div class="player-name">'+key+'</div>';
                     document.getElementById('game-container').appendChild(div);
                     otherPlayers[key]=div;
                 }
