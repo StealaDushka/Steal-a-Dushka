@@ -147,7 +147,6 @@ const baseSpawnPoints={1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81
 async function exitToMenu(){
     if(currentServerId && currentNickname){
         await db.ref('servers/'+currentServerId+'/bases/'+currentNickname).remove();
-        await db.ref('servers/'+currentServerId+'/players/'+currentNickname).remove();
         await db.ref('users/'+currentNickname+'/serverId').remove();
     }
     currentServerId=null; currentBase=null;
@@ -248,9 +247,9 @@ async function handleLogin(){ const u=document.getElementById('username').value.
 
 function showMainMenu(){ document.getElementById('auth').style.display='none'; document.getElementById('app').style.display='none'; document.getElementById('exit-btn').style.display='none'; document.getElementById('balance').style.display='none'; document.getElementById('version').style.display='none'; document.getElementById('main-menu').style.display='flex'; }
 
-async function playRandom(){ const snapshot=await db.ref('servers').once('value'); const servers=snapshot.val()||{}; let chosen=null; for(let id in servers){ const count = await getServerCount(id); if(count < 8){chosen=id;break;} } if(!chosen){ const newRef=db.ref('servers').push(); const id=newRef.key; await newRef.set({name:'Сервер '+(Object.keys(servers).length+1), access:'all'}); chosen=id; } await db.ref('users/'+currentNickname).update({serverId:chosen}); currentServerId=chosen; startGame(); }
+async function playRandom(){ const snapshot=await db.ref('servers').once('value'); const servers=snapshot.val()||{}; let chosen=null; let minCount=8; for(let id in servers){ const count = await getServerCount(id); if(count < minCount){ minCount=count; chosen=id; } } if(!chosen){ const newRef=db.ref('servers').push(); const id=newRef.key; await newRef.set({name:'Сервер '+(Object.keys(servers).length+1), access:'all'}); chosen=id; } await db.ref('users/'+currentNickname).update({serverId:chosen}); currentServerId=chosen; startGame(); }
 
-async function getServerCount(serverId){ const snap = await db.ref('servers/'+serverId+'/players').once('value'); const players = snap.val()||{}; return Object.keys(players).length; }
+async function getServerCount(serverId){ const snap = await db.ref('users').once('value'); const users = snap.val()||{}; let count=0; for(let nick in users){ if(users[nick].serverId === serverId) count++; } return count; }
 
 async function openServers(){ document.getElementById('main-menu').style.display='none'; document.getElementById('server-menu').style.display='block'; await loadServers(); }
 async function loadServers(){ const container=document.getElementById('server-list'); container.innerHTML=''; const snapshot=await db.ref('servers').once('value'); const servers=snapshot.val()||{}; const me=await readUserData(currentNickname); const myFriends=me.friends||[]; for(let id in servers){ const s=servers[id]; let canSee=false; if(s.access==='all') canSee=true; else if(s.access==='friends'){ if(s.owner===currentNickname || myFriends.includes(s.owner)) canSee=true; } else if(s.access==='selected'){ if(s.owner===currentNickname || (s.selectedPlayers||[]).includes(currentNickname)) canSee=true; } if(!canSee) continue; const playersCount = await getServerCount(id); const full=playersCount>=8; const div=document.createElement('div'); div.className='server-item'; let deleteBtn=''; if(s.owner===currentNickname){ deleteBtn='<button style="background:#ff5555;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer;margin-left:5px" onclick="deleteServer(\''+id+'\')">Удалить</button>'; } div.innerHTML=`<div class="name">${s.name}</div><div class="players">${playersCount}/8</div>${full?'<span class="full">Полный</span>':'<button class="join-btn" onclick="joinServer(\''+id+'\')">Join</button>'}${deleteBtn}`; container.appendChild(div); } }
@@ -327,10 +326,8 @@ async function startGame(){
     if(currentBase === null){ showModal('Ошибка','Сервер заполнен!'); await exitToMenu(); return; }
     const spawn = baseSpawnPoints[currentBase];
     x = spawn.x; y = spawn.y;
-    // Записываем позицию в серверный узел
-    db.ref('servers/'+currentServerId+'/players/'+currentNickname).set({x:x, y:y, base:currentBase});
+    // Записываем позицию в общий узел users
     db.ref('users/'+currentNickname).update({x:x, y:y, base:currentBase, serverId:currentServerId});
-    db.ref('servers/'+currentServerId+'/players/'+currentNickname).onDisconnect().remove();
     db.ref('users/'+currentNickname+'/serverId').onDisconnect().remove();
     db.ref('users/'+currentNickname+'/base').onDisconnect().remove();
     db.ref('servers/'+currentServerId+'/bases/'+currentNickname).onDisconnect().remove();
@@ -362,19 +359,19 @@ function initPlayer(){
     pl.style.left=x+'px'; pl.style.top=y+'px';
 }
 function startOtherPlayersListener(){
-    // Слушаем только игроков на нашем сервере
-    db.ref('servers/'+currentServerId+'/players').on('value',snapshot=>{
-        const players=snapshot.val()||{};
+    // Слушаем всех пользователей, фильтруем по serverId
+    db.ref('users').on('value',snapshot=>{
+        const users=snapshot.val()||{};
         for(let key in otherPlayers){
-            if(!players[key] || key===currentNickname){
+            if(!users[key] || key===currentNickname || !users[key].serverId || users[key].serverId !== currentServerId){
                 if(otherPlayers[key]) otherPlayers[key].remove();
                 delete otherPlayers[key];
             }
         }
-        for(let key in players){
+        for(let key in users){
             if(key===currentNickname) continue;
-            const data=players[key];
-            if(data && data.x!==undefined && data.y!==undefined){
+            const data=users[key];
+            if(data && data.serverId === currentServerId && data.x!==undefined && data.y!==undefined){
                 if(!otherPlayers[key]){
                     let div=document.createElement('div');
                     div.id='other-'+key;
@@ -420,9 +417,9 @@ function update(time=0){
         document.getElementById('player').style.left=x+'px';
         document.getElementById('player').style.top=y+'px';
     }
-    // Обновляем позицию на сервере каждые 100мс
+    // Обновляем позицию в общем узле users каждые 100мс
     if(Date.now()-lastSync>100){
-        db.ref('servers/'+currentServerId+'/players/'+currentNickname).update({x:x, y:y});
+        db.ref('users/'+currentNickname).update({x:x,y:y});
         lastSync=Date.now();
     }
     let found=false;
