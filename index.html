@@ -56,7 +56,6 @@ input[type="file"]{color:#fff}
 .base{position:absolute;width:75px;height:75px;background:#869292}.base .brown{position:absolute;width:calc(100% - 8px);left:4px;height:14px;background:#bf5b1a;bottom:4px}.base .green{position:absolute;width:34px;height:14px;background:#22e54c;left:50%;transform:translateX(-50%);bottom:-14px}.base .nickname{position:absolute;bottom:4px;left:0;width:100%;height:14px;line-height:14px;text-align:center;color:#fff;font-size:7px;font-weight:bold;text-shadow:1px 1px 1px #000;z-index:5;pointer-events:none;overflow:hidden;white-space:nowrap}
 .base-top-1{top:20px;left:20px}.base-top-2{top:20px;left:115px}.base-top-3{top:20px;left:210px}.base-top-4{top:20px;left:305px}.base-bottom-1{bottom:20px;left:20px}.base-bottom-2{bottom:20px;left:115px}.base-bottom-3{bottom:20px;left:210px}.base-bottom-4{bottom:20px;left:305px}.base-bottom .brown{top:4px;bottom:auto}.base-bottom .green{top:-14px;bottom:auto}.base-bottom .nickname{top:4px;bottom:auto}
 #rng-machine,#shop-blue,#shop-red,#queen-bee,#rng-circle,#shop-white{position:absolute;width:20px;height:20px;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);z-index:15}#queen-bee{height:24px;grid-template-rows:repeat(6,1fr)}#rng-machine{left:190px;top:137px}.c-cyan{background:#00F0FF}.c-gray{background:#808080}.c-empty{background:transparent}#shop-blue{left:150px;top:137px}.s-blue{background:#0000FF}.s-white{background:#FFFFFF}#shop-red{left:150px;top:230px}.r-red{background:#FF0000}.r-white{background:#FFFFFF}#queen-bee{left:230px;top:137px}.q-yellow{background:#FFD966}.q-red{background:#F44336}.q-brown{background:#8B4513}#rng-circle{left:190px;top:230px;background:#A454B4;border-radius:50%}#shop-white{left:230px;top:230px}.w-dark{background:#003366}.w-white{background:#FFFFFF}
-/* ИГРОК УМЕНЬШЕН: 8x16 */
 #player,.other-player{position:absolute;width:8px;height:16px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20;border:1px solid rgba(0,0,0,.5)}
 #player .pixel,.other-player .pixel{width:100%;height:100%}
 #player-name,.player-name{position:absolute;left:50%;transform:translateX(-50%);top:-12px;color:#fff;font-size:5px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
@@ -91,7 +90,7 @@ input[type="file"]{color:#fff}
 <div id="version">Версия: 0.28</div>
 <div id="exit-btn" onclick="exitToMenu()">Выйти</div>
 <div id="main-menu"><h1>Steal A Dushka</h1><button class="menu-btn green" onclick="playRandom()">Играть</button><button class="menu-btn blue" onclick="openServers()">Серверы</button><button class="menu-btn purple" onclick="openFriends()">Друзья</button><button class="menu-btn" onclick="openProfile()">Профиль</button></div>
-<div id="server-menu"><div class="header"><h2>Серверы</h2><button class="close-btn" onclick="closeServers()">X</button></div><div id="server-list"></div><button style="width:100%;padding:12px;background:#ffd700;color:#000;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px" onclick="openCreateServer()">Создать сервер (100 Dushka Coins)</button><button style="width:100%;padding:10px;background:#e74c3c;color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px" onclick="clearAllServers()">Очистить все серверы</button></div>
+<div id="server-menu"><div class="header"><h2>Серверы</h2><button class="close-btn" onclick="closeServers()">X</button></div><div id="server-list"></div><button style="width:100%;padding:12px;background:#ffd700;color:#000;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px" onclick="openCreateServer()">Создать сервер (100 Dushka Coins)</button></div>
 <div id="friends-menu"><div class="header"><h2>Друзья</h2><button class="close-btn" onclick="closeFriends()">X</button></div><div style="margin-bottom:10px"><input type="text" id="friend-search" placeholder="Введите ник друга" style="width:70%;padding:8px;border-radius:6px;border:none"><button style="padding:8px 15px;border:none;border-radius:6px;background:#4caf50;color:#fff;cursor:pointer" onclick="searchFriend()">Найти</button></div><div id="friend-result"></div><div style="color:#aaa;margin:10px 0 5px">Запросы</div><div id="friend-requests"></div><div style="color:#aaa;margin:10px 0 5px">Друзья</div><div id="friends-list"></div></div>
 <div id="profile-menu"><div class="header"><h2>Профиль</h2><button class="close-btn" onclick="closeProfile()">X</button></div><div class="profile-preview" id="avatar-preview"></div><label style="color:#fff;display:block;margin:10px 0">Аватарка</label><input type="file" id="avatar-input" accept="image/*"><div class="profile-bg-preview" id="bg-preview"></div><label style="color:#fff;display:block;margin:10px 0">Фон профиля</label><input type="file" id="bg-input" accept="image/*"><button class="save-btn" onclick="saveProfile()">Сохранить</button></div>
 <div id="create-server-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #444;border-radius:12px;padding:20px;width:90%;max-width:400px;z-index:960"><h3 style="color:#fff">Создать сервер</h3><input type="text" id="server-name" placeholder="Название сервера" style="width:100%;padding:8px;border-radius:6px;border:none;margin-bottom:10px"><label style="color:#fff">Доступ:</label><select id="server-access" onchange="toggleSelectedPlayers()" style="width:100%;padding:8px;border-radius:6px;border:none;margin-bottom:10px"><option value="all">Все могут зайти</option><option value="friends">Только друзья</option><option value="selected">Выборочные игроки</option></select><div id="selected-players" style="display:none;margin-bottom:10px"><input type="text" id="selected-player-input" placeholder="Ник игрока" style="width:70%;padding:8px;border-radius:6px;border:none"><button style="padding:8px;border:none;border-radius:6px;background:#4caf50;color:#fff;cursor:pointer" onclick="addSelectedPlayer()">Добавить</button><div id="selected-list" style="color:#fff;margin-top:5px"></div></div><button style="width:100%;padding:10px;border:none;border-radius:8px;background:#ffd700;color:#000;font-weight:bold;cursor:pointer" onclick="createServer()">Создать (100 Dushka Coins)</button><button style="width:100%;padding:8px;border:none;border-radius:8px;background:#666;color:#fff;margin-top:5px;cursor:pointer" onclick="closeCreateServer()">Отмена</button></div>
@@ -106,7 +105,6 @@ input[type="file"]{color:#fff}
 <div id="joystick-zone"></div>
 
 <script>
-// ========== СКИН ==========
 const skinColors = ['#FFCC00', '#FF0000', '#00FF00', '#FF00FF', '#0000FF', '#FFA500', '#800080', '#FF4500', '#FFFFFF'];
 let wheelRotation=0;
 function formatNumber(num){ if(num >= 1e15) return (num / 1e15).toFixed(2) + 'Qa'; if(num >= 1e12) return (num / 1e12).toFixed(2) + 'T'; if(num >= 1e9) return (num / 1e9).toFixed(2) + 'B'; if(num >= 1e6) return (num / 1e6).toFixed(2) + 'M'; if(num >= 1e3) return (num / 1e3).toFixed(2) + 'K'; return num.toString(); }
@@ -138,6 +136,9 @@ async function exitToMenu(){
             if(otherPlayers[key]) otherPlayers[key].remove();
             delete otherPlayers[key];
         }
+        // Убираем свой спрайт с экрана (на всякий случай)
+        const myPlayer = document.getElementById('player');
+        if(myPlayer) myPlayer.style.display = 'none';
     }
     currentServerId=null; currentBase=null;
     document.getElementById('app').style.display='none';
@@ -286,18 +287,7 @@ function toggleSelectedPlayers(){ const access=document.getElementById('server-a
 function addSelectedPlayer(){ const input=document.getElementById('selected-player-input'); const nick=input.value.trim(); if(!nick)return; const listDiv=document.getElementById('selected-list'); const span=document.createElement('span'); span.textContent=nick; span.style.marginRight='5px'; const removeBtn=document.createElement('button'); removeBtn.textContent='X'; removeBtn.style.background='#f44'; removeBtn.style.border='none'; removeBtn.style.cursor='pointer'; removeBtn.onclick=()=>span.remove(); span.appendChild(removeBtn); listDiv.appendChild(span); input.value=''; }
 async function createServer(){ const name=document.getElementById('server-name').value.trim(); const access=document.getElementById('server-access').value; if(!name){showModal('Ошибка','Введите название сервера');return} const data=await readUserData(currentNickname); if(!data || data.dushka<100){showModal('Ошибка','Недостаточно Dushka Coins!');return} await db.ref('users/'+currentNickname).update({dushka:data.dushka-100}); const newRef=db.ref('servers').push(); const id=newRef.key; let selectedPlayers=[]; if(access==='selected'){ const listDiv=document.getElementById('selected-list'); selectedPlayers=Array.from(listDiv.children).map(child=>child.firstChild.textContent); } await newRef.set({name:name, access:access, selectedPlayers:selectedPlayers, owner:currentNickname}); closeCreateServer(); openServers(); }
 
-async function clearAllServers(){
-    if(!confirm('Удалить ВСЕ серверы? Это действие необратимо.')) return;
-    const snap = await db.ref('servers').once('value');
-    const servers = snap.val() || {};
-    for(let id in servers){ await db.ref('servers/'+id).remove(); }
-    const usersSnap = await db.ref('users').once('value');
-    const users = usersSnap.val() || {};
-    for(let nick in users){ if(users[nick].serverId){ await db.ref('users/'+nick+'/serverId').remove(); } }
-    if(currentServerId){ await exitToMenu(); }
-    await loadServers();
-    showModal('Готово','Все серверы удалены!');
-}
+// ========== ФУНКЦИЯ clearAllServers УДАЛЕНА ==========
 
 async function openFriends(){ document.getElementById('main-menu').style.display='none'; document.getElementById('friends-menu').style.display='block'; await loadFriendRequests(); await loadFriends(); }
 async function searchFriend(){ const nick=document.getElementById('friend-search').value.trim(); if(!nick){showModal('Ошибка','Введите ник');return} const user=await readUserData(nick); const resultDiv=document.getElementById('friend-result'); if(!user){ resultDiv.innerHTML='<div style="color:#f44">Игрок не найден</div>'; return; } resultDiv.innerHTML='<div class="friend-item"><div class="nick">'+nick+'</div><button onclick="sendFriendRequest(\''+nick+'\')" style="background:#4caf50;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Отправить запрос</button></div>'; }
@@ -330,7 +320,6 @@ function updateBaseNicknames(bases){
 }
 
 async function startGame(){
-    // ЧИСТИМ СТАРЫЕ ЗАПИСИ ИГРОКА СО ВСЕХ СЕРВЕРОВ
     const serversSnap = await db.ref('servers').once('value');
     const servers = serversSnap.val() || {};
     for (let sid in servers) {
@@ -351,6 +340,9 @@ async function startGame(){
     document.getElementById('exit-btn').style.display='block';
     document.getElementById('balance').style.display='flex';
     document.getElementById('version').style.display='block';
+    // Показываем персонажа (если был скрыт)
+    const myPlayer = document.getElementById('player');
+    if(myPlayer) myPlayer.style.display = 'grid';
     await loadDushkaCoins();
     await loadCoins();
     currentBase = await assignBase(currentServerId, currentNickname);
@@ -395,12 +387,12 @@ function initPlayer(topColor, bottomColor){
     px[0].style.background = topColor;
     px[1].style.background = bottomColor;
     pl.style.left=x+'px'; pl.style.top=y+'px';
+    pl.style.display='grid';
 }
 
 function startOtherPlayersListener(){
     db.ref('servers/'+currentServerId+'/players').on('value',snapshot=>{
         const players=snapshot.val()||{};
-        // Удаляем тех, кого больше нет
         for(let key in otherPlayers){
             if(!players[key] || key===currentNickname){
                 if(otherPlayers[key]) otherPlayers[key].remove();
@@ -441,7 +433,6 @@ const SPEED=1,MAX_X=380,MAX_Y=380;
 const obstacles=[{x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},{x:150,y:137,w:20,h:20},{x:190,y:137,w:20,h:20},{x:230,y:137,w:20,h:24},{x:150,y:230,w:20,h:20},{x:190,y:230,w:20,h:20},{x:230,y:230,w:20,h:20}];
 const interactables=[{id:'rng-machine',x:190,y:137,h:20},{id:'shop-blue',x:150,y:137,h:20},{id:'queen-bee',x:230,y:137,h:24},{id:'shop-red',x:150,y:230,h:20},{id:'rng-circle',x:190,y:230,h:20},{id:'shop-white',x:230,y:230,h:20}];
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y)}
-
 let lastTime=0,lastSync=0;
 function update(time=0){
     requestAnimationFrame(update);
@@ -456,8 +447,6 @@ function update(time=0){
     if(dx!==0||dy!==0){
         const len=Math.sqrt(dx*dx+dy*dy);
         let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60;
-        
-        // Функция проверки коллизии со стенами И другими игроками
         function checkCollision(cx, cy){
             const rect = {x:cx, y:cy, w:8, h:16};
             for(let o of obstacles) if(collide(rect, o)) return true;
@@ -470,18 +459,15 @@ function update(time=0){
             }
             return false;
         }
-        
         let bX = checkCollision(nx, y);
         if(!bX) x = nx;
         let bY = checkCollision(x, ny);
         if(!bY) y = ny;
-        
         x = Math.max(10, Math.min(MAX_X, x));
         y = Math.max(10, Math.min(MAX_Y, y));
         document.getElementById('player').style.left = x + 'px';
         document.getElementById('player').style.top = y + 'px';
     }
-    // Обновляем позицию на сервере каждые 100мс
     if(Date.now()-lastSync>100){
         db.ref('servers/'+currentServerId+'/players/'+currentNickname).update({x:x,y:y});
         lastSync=Date.now();
@@ -491,7 +477,8 @@ function update(time=0){
     for(let obj of interactables){
         let objCenter={x:obj.x+10,y:obj.y+obj.h/2};
         let dist=Math.sqrt(Math.pow(playerCenter.x-objCenter.x,2)+Math.pow(playerCenter.y-objCenter.y,2));
-        if(dist<15){
+        // ⬇️ DISTANCE УВЕЛИЧЕНА В 2 РАЗА (15 → 30)
+        if(dist<30){
             let btn=document.getElementById('interact');
             btn.style.display='flex';
             btn.style.left=(x-5)+'px';
