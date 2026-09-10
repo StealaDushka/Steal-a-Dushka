@@ -56,8 +56,8 @@ input[type="file"]{color:#fff}
 .base{position:absolute;width:75px;height:75px;background:#869292}.base .brown{position:absolute;width:calc(100% - 8px);left:4px;height:14px;background:#bf5b1a;bottom:4px}.base .green{position:absolute;width:34px;height:14px;background:#22e54c;left:50%;transform:translateX(-50%);bottom:-14px}.base .nickname{position:absolute;bottom:4px;left:0;width:100%;height:14px;line-height:14px;text-align:center;color:#fff;font-size:7px;font-weight:bold;text-shadow:1px 1px 1px #000;z-index:5;pointer-events:none;overflow:hidden;white-space:nowrap}
 .base-top-1{top:20px;left:20px}.base-top-2{top:20px;left:115px}.base-top-3{top:20px;left:210px}.base-top-4{top:20px;left:305px}.base-bottom-1{bottom:20px;left:20px}.base-bottom-2{bottom:20px;left:115px}.base-bottom-3{bottom:20px;left:210px}.base-bottom-4{bottom:20px;left:305px}.base-bottom .brown{top:4px;bottom:auto}.base-bottom .green{top:-14px;bottom:auto}.base-bottom .nickname{top:4px;bottom:auto}
 #rng-machine,#shop-blue,#shop-red,#queen-bee,#rng-circle,#shop-white{position:absolute;width:20px;height:20px;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);z-index:15}#queen-bee{height:24px;grid-template-rows:repeat(6,1fr)}#rng-machine{left:190px;top:137px}.c-cyan{background:#00F0FF}.c-gray{background:#808080}.c-empty{background:transparent}#shop-blue{left:150px;top:137px}.s-blue{background:#0000FF}.s-white{background:#FFFFFF}#shop-red{left:150px;top:230px}.r-red{background:#FF0000}.r-white{background:#FFFFFF}#queen-bee{left:230px;top:137px}.q-yellow{background:#FFD966}.q-red{background:#F44336}.q-brown{background:#8B4513}#rng-circle{left:190px;top:230px;background:#A454B4;border-radius:50%}#shop-white{left:230px;top:230px}.w-dark{background:#003366}.w-white{background:#FFFFFF}
-/* ИГРОК УВЕЛИЧЕН В 1.5 РАЗА: 12x24 вместо 8x16 */
-#player,.other-player{position:absolute;width:12px;height:24px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20;border:1px solid rgba(0,0,0,.5)}
+/* ИГРОК УМЕНЬШЕН: 8x16 */
+#player,.other-player{position:absolute;width:8px;height:16px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20;border:1px solid rgba(0,0,0,.5)}
 #player .pixel,.other-player .pixel{width:100%;height:100%}
 #player-name,.player-name{position:absolute;left:50%;transform:translateX(-50%);top:-12px;color:#fff;font-size:5px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
 #interact{position:absolute;display:none;z-index:1000;width:18px;height:18px;background:#777;border:1px solid #444;display:flex;justify-content:center;align-items:center;color:#fff;font-size:14px;cursor:pointer}
@@ -83,43 +83,20 @@ input[type="file"]{color:#fff}
 </style>
 </head>
 <body>
-<!-- ЭКРАН ВХОДА -->
 <div id="auth"><div id="auth-box"><label class="auth-label">НИК</label><input type="text" id="username" class="auth-input" autocomplete="off"><label class="auth-label">ПАРОЛЬ</label><input type="password" id="password" class="auth-input"><div class="auth-btns"><button class="auth-btn btn-login" onclick="handleLogin()">ВОЙТИ</button><button class="auth-btn btn-reg" onclick="handleRegister()">РЕГ</button></div><div class="hint">Запишите ваш пароль. Спасибо за внимание</div></div></div>
-
-<!-- БАЛАНС -->
 <div id="balance">
   <div class="box dushka"><span class="icon"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg></span><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div>
   <div class="box"><span class="icon"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" fill="#4caf50"/><circle cx="12" cy="12" r="6" fill="#fff"/></svg></span><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div>
 </div>
-
-<!-- ВЕРСИЯ -->
 <div id="version">Версия: 0.28</div>
-
-<!-- КНОПКА ВЫХОДА -->
 <div id="exit-btn" onclick="exitToMenu()">Выйти</div>
-
-<!-- ГЛАВНОЕ МЕНЮ -->
 <div id="main-menu"><h1>Steal A Dushka</h1><button class="menu-btn green" onclick="playRandom()">Играть</button><button class="menu-btn blue" onclick="openServers()">Серверы</button><button class="menu-btn purple" onclick="openFriends()">Друзья</button><button class="menu-btn" onclick="openProfile()">Профиль</button></div>
-
-<!-- СЕРВЕРЫ -->
 <div id="server-menu"><div class="header"><h2>Серверы</h2><button class="close-btn" onclick="closeServers()">X</button></div><div id="server-list"></div><button style="width:100%;padding:12px;background:#ffd700;color:#000;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px" onclick="openCreateServer()">Создать сервер (100 Dushka Coins)</button><button style="width:100%;padding:10px;background:#e74c3c;color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px" onclick="clearAllServers()">Очистить все серверы</button></div>
-
-<!-- ДРУЗЬЯ -->
 <div id="friends-menu"><div class="header"><h2>Друзья</h2><button class="close-btn" onclick="closeFriends()">X</button></div><div style="margin-bottom:10px"><input type="text" id="friend-search" placeholder="Введите ник друга" style="width:70%;padding:8px;border-radius:6px;border:none"><button style="padding:8px 15px;border:none;border-radius:6px;background:#4caf50;color:#fff;cursor:pointer" onclick="searchFriend()">Найти</button></div><div id="friend-result"></div><div style="color:#aaa;margin:10px 0 5px">Запросы</div><div id="friend-requests"></div><div style="color:#aaa;margin:10px 0 5px">Друзья</div><div id="friends-list"></div></div>
-
-<!-- ПРОФИЛЬ -->
 <div id="profile-menu"><div class="header"><h2>Профиль</h2><button class="close-btn" onclick="closeProfile()">X</button></div><div class="profile-preview" id="avatar-preview"></div><label style="color:#fff;display:block;margin:10px 0">Аватарка</label><input type="file" id="avatar-input" accept="image/*"><div class="profile-bg-preview" id="bg-preview"></div><label style="color:#fff;display:block;margin:10px 0">Фон профиля</label><input type="file" id="bg-input" accept="image/*"><button class="save-btn" onclick="saveProfile()">Сохранить</button></div>
-
-<!-- СОЗДАНИЕ СЕРВЕРА -->
 <div id="create-server-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #444;border-radius:12px;padding:20px;width:90%;max-width:400px;z-index:960"><h3 style="color:#fff">Создать сервер</h3><input type="text" id="server-name" placeholder="Название сервера" style="width:100%;padding:8px;border-radius:6px;border:none;margin-bottom:10px"><label style="color:#fff">Доступ:</label><select id="server-access" onchange="toggleSelectedPlayers()" style="width:100%;padding:8px;border-radius:6px;border:none;margin-bottom:10px"><option value="all">Все могут зайти</option><option value="friends">Только друзья</option><option value="selected">Выборочные игроки</option></select><div id="selected-players" style="display:none;margin-bottom:10px"><input type="text" id="selected-player-input" placeholder="Ник игрока" style="width:70%;padding:8px;border-radius:6px;border:none"><button style="padding:8px;border:none;border-radius:6px;background:#4caf50;color:#fff;cursor:pointer" onclick="addSelectedPlayer()">Добавить</button><div id="selected-list" style="color:#fff;margin-top:5px"></div></div><button style="width:100%;padding:10px;border:none;border-radius:8px;background:#ffd700;color:#000;font-weight:bold;cursor:pointer" onclick="createServer()">Создать (100 Dushka Coins)</button><button style="width:100%;padding:8px;border:none;border-radius:8px;background:#666;color:#fff;margin-top:5px;cursor:pointer" onclick="closeCreateServer()">Отмена</button></div>
-
-<!-- ПРОФИЛЬ ДРУГА -->
 <div id="friend-profile" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #444;border-radius:12px;padding:20px;width:90%;max-width:300px;z-index:960;text-align:center"><div class="profile-preview" id="friend-avatar-preview" style="margin:0 auto 10px"></div><div style="color:#fff;font-size:18px;font-weight:bold" id="friend-profile-name"></div><button style="padding:10px 20px;border:none;border-radius:8px;background:#4caf50;color:#fff;font-weight:bold;cursor:pointer;margin-top:10px" onclick="joinFriendGame()">Join</button><button style="padding:8px 20px;border:none;border-radius:8px;background:#666;color:#fff;margin-top:5px;cursor:pointer" onclick="cancelFriendJoin()">Cancel</button></div>
-
-<!-- ИГРА -->
 <div id="app"><div id="sidebar"><div id="actions"><div class="action-btn pink" onclick="openRedShop()">SHOP</div><div class="action-btn" onclick="showModal('Ребирт','Скоро появится!')">REBIRTH</div><div class="action-btn" onclick="showModal('Трейд','Скоро появится!')">TRADE</div><div class="action-btn" onclick="showModal('INDEX','Твой индекс: ' + (currentNickname ? 'База ' + currentNickname : 'Неизвестно'))">INDEX</div></div></div><div id="game-wrapper"><div id="game-container"><div class="center-line"><div class="center-cap cap-left"></div><div class="center-cap cap-right"></div></div><div class="base base-top-1"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-top-2"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-top-3"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-top-4"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-1"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-2"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-3"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-4"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div id="rng-machine"><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div></div><div id="shop-blue"><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div></div><div id="shop-red"><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div></div><div id="queen-bee"><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-yellow"></div></div><div id="rng-circle"></div><div id="shop-white"><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div></div><div id="interact" onclick="interact()">E</div><div id="player"></div></div></div></div>
-
-<!-- МАГАЗИНЫ -->
 <div id="shop-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Shop</h2><p>Buy tools to protect your base and troll others!</p></div><div class="close-btn" onclick="closeShop()">X</div></div><div class="content" id="shop-items"></div></div>
 <div id="bee-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Королева Пчёл</h2><p>Обновление через: <span id="bee-timer">90:00</span></p></div><div class="close-btn" onclick="closeBee()">X</div></div><div class="content"><div class="grid"><div class="bee-card" id="bee-raccoon"><div class="status" id="status-raccoon"></div><div class="img-placeholder">🦝</div><div class="mps">$10M/s</div><div class="name">Conetto Morsetto</div><button class="price-btn" onclick="buyBee('raccoon')"><svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg> 499</button></div><div class="bee-card" id="bee-bear"><div class="status" id="status-bear"></div><div class="img-placeholder">🐻</div><div class="mps">$32M/s</div><div class="name">Honey Honey Bear</div><button class="price-btn" onclick="buyBee('bear')"><svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg> 999</button></div><div class="bee-card" id="bee-queen"><div class="status" id="status-queen"></div><div class="img-placeholder">🐝</div><div class="mps">$65M/s</div><div class="name">Queen Bee</div><button class="price-btn" onclick="buyBee('queen')"><svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg> 2,499</button></div><div class="bee-card" id="bee-chocolate"><div class="status" id="status-chocolate"></div><div class="img-placeholder">🍫</div><div class="mps">$85M/s</div><div class="name">S'more Serat</div><button class="price-btn" onclick="buyBee('chocolate')"><svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg> 4,999</button></div><div class="bee-card" id="bee-bumbatron"><div class="status" id="status-bumbatron"></div><div class="img-placeholder">🤖</div><div class="mps">$172.5M/s</div><div class="name">Bumbatron</div><button class="price-btn" onclick="buyBee('bumbatron')"><svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg> 9,999</button></div></div></div></div>
 <div id="red-shop-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Premium Shop</h2><p>Buy exclusive items with Dushka Coins!</p></div><div class="close-btn" onclick="closeRedShop()">X</div></div><div class="tabs"><div class="tab active" data-tab="gear" onclick="switchRedTab('gear')">GEAR</div><div class="tab" data-tab="gamepasses" onclick="switchRedTab('gamepasses')">GAMEPASSES</div><div class="tab" data-tab="money" onclick="switchRedTab('money')">MONEY</div><div class="tab" data-tab="lucky" onclick="switchRedTab('lucky')">LUCKY BLOCKS</div><div class="tab" data-tab="server" onclick="switchRedTab('server')">SERVER LUCK</div><div class="tab" data-tab="redeem" onclick="switchRedTab('redeem')">REDEEM CODES</div></div><div class="content" id="red-shop-items"></div></div>
@@ -129,7 +106,7 @@ input[type="file"]{color:#fff}
 <div id="joystick-zone"></div>
 
 <script>
-// ========== СКИН (полностью рандомный верх и низ) ==========
+// ========== СКИН ==========
 const skinColors = ['#FFCC00', '#FF0000', '#00FF00', '#FF00FF', '#0000FF', '#FFA500', '#800080', '#FF4500', '#FFFFFF'];
 let wheelRotation=0;
 function formatNumber(num){ if(num >= 1e15) return (num / 1e15).toFixed(2) + 'Qa'; if(num >= 1e12) return (num / 1e12).toFixed(2) + 'T'; if(num >= 1e9) return (num / 1e9).toFixed(2) + 'B'; if(num >= 1e6) return (num / 1e6).toFixed(2) + 'M'; if(num >= 1e3) return (num / 1e3).toFixed(2) + 'K'; return num.toString(); }
@@ -147,14 +124,16 @@ let otherPlayers={};
 let typedCode='';
 const baseSpawnPoints={1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81},5:{x:52,y:307},6:{x:147,y:307},7:{x:242,y:307},8:{x:337,y:307}};
 
-// ========== ФИКС: УДАЛЕНИЕ ПЕРСОНАЖА ПРИ ВЫХОДЕ ==========
+// ========== ВЫХОД — УДАЛЯЕМ БАЗУ И СКИН ==========
 async function exitToMenu(){
     if(currentServerId && currentNickname){
         console.log('Выхожу с сервера:', currentServerId, 'база:', currentBase);
-        await db.ref('servers/'+currentServerId+'/players/'+currentNickname).remove();
-        await db.ref('servers/'+currentServerId+'/bases/'+currentNickname).remove();
-        await db.ref('users/'+currentNickname+'/serverId').remove();
-        // Убираем спрайты других игроков с экрана
+        try {
+            await db.ref('servers/'+currentServerId+'/players/'+currentNickname).remove();
+            await db.ref('servers/'+currentServerId+'/bases/'+currentNickname).remove();
+            await db.ref('users/'+currentNickname+'/serverId').remove();
+        } catch(e) { console.warn('Ошибка при выходе:', e); }
+        // Убираем спрайты других игроков
         for(let key in otherPlayers){
             if(otherPlayers[key]) otherPlayers[key].remove();
             delete otherPlayers[key];
@@ -168,7 +147,7 @@ async function exitToMenu(){
     document.getElementById('main-menu').style.display='flex';
 }
 
-// ФИКС: Если игрок закрыл вкладку — удаляем его
+// УДАЛЕНИЕ ПРИ ЗАКРЫТИИ ВКЛАДКИ
 window.addEventListener('beforeunload', () => {
     if (currentServerId && currentNickname) {
         db.ref('servers/'+currentServerId+'/players/'+currentNickname).remove();
@@ -179,43 +158,41 @@ window.addEventListener('beforeunload', () => {
 // ========== ИСПРАВЛЕННАЯ ЛОГИКА БАЗ ==========
 async function assignBase(serverId, playerName){
     const basesRef = db.ref('servers/'+serverId+'/bases');
-    const playersRef = db.ref('servers/'+serverId+'/players');
     
-    // Шаг 1: Удаляем СВОЮ старую базу (если была) — чтобы не блокировать себя
+    // Удаляем СВОЮ старую базу
     await basesRef.child(playerName).remove();
+    await new Promise(r => setTimeout(r, 100));
     
-    // Шаг 2: Чистим призрачные базы
+    // Читаем базы и игроков
     const basesSnap = await basesRef.once('value');
-    const playersSnap = await playersRef.once('value');
     const bases = basesSnap.val() || {};
+    const playersSnap = await db.ref('servers/'+serverId+'/players').once('value');
     const players = playersSnap.val() || {};
     
+    // Чистим призрачные базы
     for(let nick in bases){
         if(!players[nick]){
-            console.log('Освобождаю призрачную базу игрока:', nick);
+            console.log('🧹 Чищу призрачную базу:', nick);
             await basesRef.child(nick).remove();
         }
     }
     
-    // Шаг 3: Ищем первую свободную базу (1 → 8)
+    // Ищем свободную базу
     const cleanSnap = await basesRef.once('value');
     const cleanBases = cleanSnap.val() || {};
+    const taken = new Set();
+    for(let nick in cleanBases){ taken.add(cleanBases[nick]); }
     
-    for(let i=1;i<=8;i++){
-        let taken = false;
-        for(let nick in cleanBases){
-            if(cleanBases[nick] === i){ taken = true; break; }
-        }
-        if(!taken){
+    for(let i=1; i<=8; i++){
+        if(!taken.has(i)){
             await basesRef.child(playerName).set(i);
-            console.log('Выдана база:', i, 'игроку:', playerName);
+            console.log('✅ Выдана база:', i, 'игроку:', playerName);
             return i;
         }
     }
-    console.log('Свободных баз нет!');
+    console.log('❌ Свободных баз нет!');
     return null;
 }
-// ========== КОНЕЦ ЛОГИКИ ==========
 
 const shopItems=[{id:'slap',name:'Slap',desc:'An average hand to slap thieves and send them flying!',price:500,icon:'slap'},{id:'speed-coil',name:'Speed Coil',desc:'Zoom around the map with additional speed.',price:750,icon:'speed-coil'},{id:'trap',name:'Trap',desc:'Place traps that freeze thieves for 10 seconds (5 Max)',price:1000,icon:'trap'},{id:'iron-slap',name:'Iron Slap',desc:'Heavy iron slap that knocks players flying!',price:2500,icon:'iron-slap'},{id:'gravity-coil',name:'Gravity Coil',desc:'Reduced gravity coil lets you jump extra high!',price:3000,icon:'gravity-coil'},{id:'bee-launcher',name:'Bee Launcher',desc:'Release bees to attack your opponent and invert their controls!',price:10000,icon:'bee-launcher'},{id:'coil-combo',name:'Coil Combo',desc:'Combine speed and gravity coils for ultimate mobility!',price:20000,icon:'coil-combo'},{id:'rage-table',name:'Rage Table',desc:'Throw a table to fling players and return your Brainrots.',price:25000,icon:'rage-table'},{id:'diamond-slap',name:'Diamond Slap',desc:'Charge up a diamond slap to knock others away.',price:50000,icon:'diamond-slap'}];
 let ownedItems=[],autoBuyShopItems=[];
@@ -249,7 +226,6 @@ function openRedShop(){ loadRedShopData().then(()=>{ switchRedTab('gear'); docum
 function closeRedShop(){document.getElementById('red-shop-menu').style.display='none';}
 function buyRedShopItem(id){ const item=Object.values(redShopItems).flat().find(i=>i.id===id); if(!item)return; if(item.once&&ownedRedItems.includes(id))return; if(dushka>=item.price){ dushka-=item.price; if(item.once)ownedRedItems.push(id); if(item.reward){ coins+=item.reward; document.getElementById('balance-amount').textContent=formatNumber(coins); db.ref('users/'+currentNickname).update({coins:coins,dushka:dushka,ownedRedItems:ownedRedItems}); } else { db.ref('users/'+currentNickname).update({dushka:dushka,ownedRedItems:ownedRedItems}); } document.getElementById('dushka-coins').textContent=formatNumber(dushka); renderRedShop(); showModal('Покупка',`Вы купили ${item.name} за ${item.price} Dushka Coins!`); } else showModal('Ошибка',`Недостаточно Dushka Coins! Нужно ${item.price}`); }
 
-// КОЛЕСО (реалистичное)
 const FREE_SPIN_INTERVAL=7200; let lastFreeSpinTime=localStorage.getItem('lastFreeSpinTime'); if(!lastFreeSpinTime){lastFreeSpinTime=Date.now();localStorage.setItem('lastFreeSpinTime',lastFreeSpinTime.toString());}else{lastFreeSpinTime=parseInt(lastFreeSpinTime);}
 function updateFreeSpinTimer(){ const elapsed=Math.floor((Date.now()-lastFreeSpinTime)/1000); const remaining=FREE_SPIN_INTERVAL-elapsed; if(remaining<=0){_spins++;lastFreeSpinTime=Date.now();localStorage.setItem('lastFreeSpinTime',lastFreeSpinTime.toString());updateSpinBtn();showModal('Бесплатный спин!','Вы получили 1 бесплатное вращение!');} const hours=Math.floor(remaining/3600),minutes=Math.floor((remaining%3600)/60),seconds=remaining%60; const timerEl=document.getElementById('wheel-timer'); if(timerEl)timerEl.textContent=`Бесплатный спин через: ${hours}ч ${minutes}м ${seconds}с`; }
 setInterval(updateFreeSpinTimer,1000);
@@ -288,7 +264,7 @@ function doSpin(){
 }
 
 async function readUserData(n){try{const s=await db.ref('users/'+n).once('value');return s.exists()?s.val():null}catch(e){return null}}
-async function writeUserData(n,d){try{await db.ref('users/'+n).set(d)}catch(e){}}
+async function writeUserData(n,d){try{await db.ref('users/'+n).update(d)}catch(e){}}
 
 async function handleRegister(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){showModal('Ошибка','Ник занят!');return} await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,level:1,last_online:Date.now(),ownedRedItems:[],autoBuyShopItems:[],avatar:'',background:'',friends:[],friendRequests:[],serverId:null}); currentNickname=u; showMainMenu(); }
 async function handleLogin(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){ if(e.password===p){ currentNickname=u; if(typeof e.dushka==='undefined')e.dushka=0; if(typeof e.spins==='undefined')e.spins=0; if(typeof e.ownedRedItems==='undefined')e.ownedRedItems=[]; if(typeof e.autoBuyShopItems==='undefined')e.autoBuyShopItems=[]; if(typeof e.avatar==='undefined')e.avatar=''; if(typeof e.background==='undefined')e.background=''; if(typeof e.friends==='undefined')e.friends=[]; if(typeof e.friendRequests==='undefined')e.friendRequests=[]; await writeUserData(u,e); showMainMenu(); } else showModal('Ошибка','Неверный пароль!'); } else showModal('Ошибка','Ник не найден! Нажми РЕГ.'); }
@@ -323,7 +299,6 @@ async function clearAllServers(){
     showModal('Готово','Все серверы удалены!');
 }
 
-// ДРУЗЬЯ
 async function openFriends(){ document.getElementById('main-menu').style.display='none'; document.getElementById('friends-menu').style.display='block'; await loadFriendRequests(); await loadFriends(); }
 async function searchFriend(){ const nick=document.getElementById('friend-search').value.trim(); if(!nick){showModal('Ошибка','Введите ник');return} const user=await readUserData(nick); const resultDiv=document.getElementById('friend-result'); if(!user){ resultDiv.innerHTML='<div style="color:#f44">Игрок не найден</div>'; return; } resultDiv.innerHTML='<div class="friend-item"><div class="nick">'+nick+'</div><button onclick="sendFriendRequest(\''+nick+'\')" style="background:#4caf50;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Отправить запрос</button></div>'; }
 async function sendFriendRequest(nick){ const data=await readUserData(nick); if(!data){showModal('Ошибка','Игрок не найден');return} let requests=data.friendRequests||[]; if(requests.includes(currentNickname)){showModal('Инфо','Запрос уже отправлен');return} requests.push(currentNickname); await db.ref('users/'+nick).update({friendRequests:requests}); showModal('Успех','Запрос отправлен'); }
@@ -336,14 +311,12 @@ function cancelFriendJoin(){ document.getElementById('friend-profile').style.dis
 function joinFriendGame(){ const nick=document.getElementById('friend-profile').dataset.nick; readUserData(nick).then(data=>{ if(data&&data.serverId){ joinServer(data.serverId); } else { showModal('Инфо','Друг сейчас не играет'); } cancelFriendJoin(); }); }
 function closeFriends(){ document.getElementById('friends-menu').style.display='none'; showMainMenu(); }
 
-// ПРОФИЛЬ
 function openProfile(){ document.getElementById('main-menu').style.display='none'; document.getElementById('profile-menu').style.display='block'; readUserData(currentNickname).then(data=>{ if(data){ document.getElementById('avatar-preview').style.backgroundImage=data.avatar?'url('+data.avatar+')':'none'; document.getElementById('bg-preview').style.backgroundImage=data.background?'url('+data.background+')':'none'; } }); }
 document.getElementById('avatar-input').addEventListener('change', function(e){ const file=e.target.files[0]; if(!file)return; const reader=new FileReader(); reader.onload=function(ev){ document.getElementById('avatar-preview').style.backgroundImage='url('+ev.target.result+')'; window._avatarData=ev.target.result; }; reader.readAsDataURL(file); });
 document.getElementById('bg-input').addEventListener('change', function(e){ const file=e.target.files[0]; if(!file)return; const reader=new FileReader(); reader.onload=function(ev){ document.getElementById('bg-preview').style.backgroundImage='url('+ev.target.result+')'; window._bgData=ev.target.result; }; reader.readAsDataURL(file); });
 async function saveProfile(){ let avatar=window._avatarData||''; let background=window._bgData||''; await db.ref('users/'+currentNickname).update({avatar:avatar, background:background}); showModal('Успех','Профиль сохранён'); }
 function closeProfile(){ document.getElementById('profile-menu').style.display='none'; showMainMenu(); }
 
-// ИГРОВЫЕ ФУНКЦИИ
 function updateBaseNicknames(bases){
     const order = ['.base-top-1 .nickname','.base-top-2 .nickname','.base-top-3 .nickname','.base-top-4 .nickname','.base-bottom-1 .nickname','.base-bottom-2 .nickname','.base-bottom-3 .nickname','.base-bottom-4 .nickname'];
     for(let i=0;i<8;i++){
@@ -357,7 +330,7 @@ function updateBaseNicknames(bases){
 }
 
 async function startGame(){
-    // ФИКС: ЧИСТИМ СТАРЫЕ ЗАПИСИ ИГРОКА СО ВСЕХ СЕРВЕРОВ
+    // ЧИСТИМ СТАРЫЕ ЗАПИСИ ИГРОКА СО ВСЕХ СЕРВЕРОВ
     const serversSnap = await db.ref('servers').once('value');
     const servers = serversSnap.val() || {};
     for (let sid in servers) {
@@ -384,7 +357,6 @@ async function startGame(){
     if(currentBase === null){ showModal('Ошибка','Сервер заполнен!'); await exitToMenu(); return; }
     const spawn = baseSpawnPoints[currentBase];
     x = spawn.x; y = spawn.y;
-    // Генерируем случайные цвета (только если ещё нет сохранённых)
     let topColor='#FFCC00', bottomColor=skinColors[Math.floor(Math.random()*skinColors.length)];
     const existingSnap = await db.ref('servers/'+currentServerId+'/players/'+currentNickname).once('value');
     if(existingSnap.exists()){
@@ -392,7 +364,6 @@ async function startGame(){
         if(existing.topColor) topColor = existing.topColor;
         if(existing.bottomColor) bottomColor = existing.bottomColor;
     }
-    // Записываем позицию и цвета в серверный узел players
     db.ref('servers/'+currentServerId+'/players/'+currentNickname).set({x:x, y:y, base:currentBase, topColor:topColor, bottomColor:bottomColor});
     db.ref('servers/'+currentServerId+'/players/'+currentNickname).onDisconnect().remove();
     db.ref('servers/'+currentServerId+'/bases/'+currentNickname).onDisconnect().remove();
@@ -425,10 +396,11 @@ function initPlayer(topColor, bottomColor){
     px[1].style.background = bottomColor;
     pl.style.left=x+'px'; pl.style.top=y+'px';
 }
+
 function startOtherPlayersListener(){
-    // Слушаем только игроков нашего сервера
     db.ref('servers/'+currentServerId+'/players').on('value',snapshot=>{
         const players=snapshot.val()||{};
+        // Удаляем тех, кого больше нет
         for(let key in otherPlayers){
             if(!players[key] || key===currentNickname){
                 if(otherPlayers[key]) otherPlayers[key].remove();
@@ -439,7 +411,6 @@ function startOtherPlayersListener(){
             if(key===currentNickname) continue;
             const data=players[key];
             if(!data) continue;
-            // Если нет координат – принудительно ставим на базу
             let px=data.x, py=data.y;
             if(px===undefined || py===undefined){
                 const baseNum=data.base || 1;
@@ -461,43 +432,16 @@ function startOtherPlayersListener(){
             otherPlayers[key].style.top=py+'px';
         }
     });
-    // Принудительное обновление каждые 500мс (чтобы точно работало)
-    setInterval(()=>{
-        db.ref('servers/'+currentServerId+'/players').once('value').then(snap=>{
-            const players=snap.val()||{};
-            for(let key in players){
-                if(key===currentNickname) continue;
-                const data=players[key];
-                if(!data) continue;
-                let px=data.x, py=data.y;
-                if(px===undefined || py===undefined){
-                    const baseNum=data.base || 1;
-                    const spawn=baseSpawnPoints[baseNum] || {x:52,y:81};
-                    px=spawn.x; py=spawn.y;
-                    db.ref('servers/'+currentServerId+'/players/'+key).update({x:px,y:py});
-                }
-                if(!otherPlayers[key]){
-                    let div=document.createElement('div');
-                    div.id='other-'+key;
-                    div.className='other-player';
-                    const topColor = data.topColor || '#FFCC00';
-                    const bottomColor = data.bottomColor || '#FFCC00';
-                    div.innerHTML='<div class="pixel" style="background:'+topColor+'"></div><div class="pixel" style="background:'+bottomColor+'"></div><div class="player-name">'+key+'</div>';
-                    document.getElementById('game-container').appendChild(div);
-                    otherPlayers[key]=div;
-                }
-                otherPlayers[key].style.left=px+'px';
-                otherPlayers[key].style.top=py+'px';
-            }
-        });
-    },500);
 }
+
 document.addEventListener('keydown',function(e){ const k=String(e.key).toLowerCase(); if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return; typedCode+=k; typedCode=typedCode.slice(-17); if(typedCode==='ядушкамистердушка'&&currentNickname==='MrDushka'){showModal('Админ-панель','Заглушка');typedCode='';} if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;keys.arrowup=true;e.preventDefault()} if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;keys.arrowdown=true;e.preventDefault()} if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;keys.arrowleft=true;e.preventDefault()} if(k==='d'||k==='в'||k==='arrowright'){keys.d=true;keys.arrowright=true;e.preventDefault()} if(k==='e'||k==='у'){interact();e.preventDefault()} });
 document.addEventListener('keyup',function(e){ const k=String(e.key).toLowerCase(); if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return; if(k==='w'||k==='ц'||k==='arrowup'){keys.w=false;keys.arrowup=false;e.preventDefault()} if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=false;keys.arrowdown=false;e.preventDefault()} if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=false;keys.arrowleft=false;e.preventDefault()} if(k==='d'||k==='в'||k==='arrowright'){keys.d=false;keys.arrowright=false;e.preventDefault()} });
+
 const SPEED=1,MAX_X=380,MAX_Y=380;
 const obstacles=[{x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},{x:150,y:137,w:20,h:20},{x:190,y:137,w:20,h:20},{x:230,y:137,w:20,h:24},{x:150,y:230,w:20,h:20},{x:190,y:230,w:20,h:20},{x:230,y:230,w:20,h:20}];
 const interactables=[{id:'rng-machine',x:190,y:137,h:20},{id:'shop-blue',x:150,y:137,h:20},{id:'queen-bee',x:230,y:137,h:24},{id:'shop-red',x:150,y:230,h:20},{id:'rng-circle',x:190,y:230,h:20},{id:'shop-white',x:230,y:230,h:20}];
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y)}
+
 let lastTime=0,lastSync=0;
 function update(time=0){
     requestAnimationFrame(update);
@@ -512,16 +456,30 @@ function update(time=0){
     if(dx!==0||dy!==0){
         const len=Math.sqrt(dx*dx+dy*dy);
         let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60;
-        let rX={x:nx,y:y,w:12,h:24},bX=false;
-        for(let o of obstacles)if(collide(rX,o)){bX=true;break}
-        if(!bX)x=nx;
-        let rY={x:x,y:ny,w:12,h:24},bY=false;
-        for(let o of obstacles)if(collide(rY,o)){bY=true;break}
-        if(!bY)y=ny;
-        x=Math.max(10,Math.min(MAX_X,x));
-        y=Math.max(10,Math.min(MAX_Y,y));
-        document.getElementById('player').style.left=x+'px';
-        document.getElementById('player').style.top=y+'px';
+        
+        // Функция проверки коллизии со стенами И другими игроками
+        function checkCollision(cx, cy){
+            const rect = {x:cx, y:cy, w:8, h:16};
+            for(let o of obstacles) if(collide(rect, o)) return true;
+            for(let key in otherPlayers){
+                const el = otherPlayers[key];
+                if(!el) continue;
+                const ox = parseFloat(el.style.left) || 0;
+                const oy = parseFloat(el.style.top) || 0;
+                if(collide(rect, {x:ox, y:oy, w:8, h:16})) return true;
+            }
+            return false;
+        }
+        
+        let bX = checkCollision(nx, y);
+        if(!bX) x = nx;
+        let bY = checkCollision(x, ny);
+        if(!bY) y = ny;
+        
+        x = Math.max(10, Math.min(MAX_X, x));
+        y = Math.max(10, Math.min(MAX_Y, y));
+        document.getElementById('player').style.left = x + 'px';
+        document.getElementById('player').style.top = y + 'px';
     }
     // Обновляем позицию на сервере каждые 100мс
     if(Date.now()-lastSync>100){
@@ -529,15 +487,15 @@ function update(time=0){
         lastSync=Date.now();
     }
     let found=false;
-    let playerCenter={x:x+6,y:y+12};
+    let playerCenter={x:x+4,y:y+8};
     for(let obj of interactables){
         let objCenter={x:obj.x+10,y:obj.y+obj.h/2};
         let dist=Math.sqrt(Math.pow(playerCenter.x-objCenter.x,2)+Math.pow(playerCenter.y-objCenter.y,2));
-        if(dist<12.5){
+        if(dist<15){
             let btn=document.getElementById('interact');
             btn.style.display='flex';
-            btn.style.left=(x-3)+'px';
-            btn.style.top=(y-26)+'px';
+            btn.style.left=(x-5)+'px';
+            btn.style.top=(y-22)+'px';
             btn.dataset.obj=obj.id;
             found=true;
             break;
