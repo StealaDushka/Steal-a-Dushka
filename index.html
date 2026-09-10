@@ -92,7 +92,7 @@ input[type="file"]{color:#fff}
 </div>
 
 <!-- ВЕРСИЯ -->
-<div id="version">Версия: 0.26</div>
+<div id="version">Версия: 0.27</div>
 
 <!-- КНОПКА ВЫХОДА -->
 <div id="exit-btn" onclick="exitToMenu()">Выйти</div>
@@ -148,6 +148,7 @@ const baseSpawnPoints={1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81
 
 async function exitToMenu(){
     if(currentServerId && currentNickname){
+        console.log('Выхожу с сервера:', currentServerId, 'база:', currentBase);
         await db.ref('servers/'+currentServerId+'/players/'+currentNickname).remove();
         await db.ref('servers/'+currentServerId+'/bases/'+currentNickname).remove();
         await db.ref('users/'+currentNickname+'/serverId').remove();
@@ -160,17 +161,45 @@ async function exitToMenu(){
     document.getElementById('main-menu').style.display='flex';
 }
 
+// ========== ОБНОВЛЁННАЯ ЛОГИКА БАЗ ==========
+// 1. Чистит "призрачные" базы (игрок вышел, но база осталась)
+// 2. Выдаёт ПЕРВУЮ СВОБОДНУЮ базу (1 → 2 → 3 → ... → 8)
 async function assignBase(serverId, playerName){
     const basesRef = db.ref('servers/'+serverId+'/bases');
-    const snap = await basesRef.once('value');
-    const bases = snap.val() || {};
+    const playersRef = db.ref('servers/'+serverId+'/players');
+    
+    // Шаг 1: Чистим призрачные базы
+    const basesSnap = await basesRef.once('value');
+    const playersSnap = await playersRef.once('value');
+    const bases = basesSnap.val() || {};
+    const players = playersSnap.val() || {};
+    
+    for(let nick in bases){
+        if(!players[nick]){
+            // Игрока нет в players, но база занята — освобождаем
+            console.log('Освобождаю призрачную базу игрока:', nick);
+            await basesRef.child(nick).remove();
+        }
+    }
+    
+    // Шаг 2: Ищем первую свободную базу (1 → 8)
+    const cleanSnap = await basesRef.once('value');
+    const cleanBases = cleanSnap.val() || {};
+    
     for(let i=1;i<=8;i++){
         let taken = false;
-        for(let nick in bases){ if(bases[nick] === i){ taken = true; break; } }
-        if(!taken){ await basesRef.child(playerName).set(i); return i; }
+        for(let nick in cleanBases){
+            if(cleanBases[nick] === i){ taken = true; break; }
+        }
+        if(!taken){
+            await basesRef.child(playerName).set(i);
+            console.log('Выдана база:', i, 'игроку:', playerName);
+            return i;
+        }
     }
     return null;
 }
+// ========== КОНЕЦ ОБНОВЛЁННОЙ ЛОГИКИ ==========
 
 const shopItems=[{id:'slap',name:'Slap',desc:'An average hand to slap thieves and send them flying!',price:500,icon:'slap'},{id:'speed-coil',name:'Speed Coil',desc:'Zoom around the map with additional speed.',price:750,icon:'speed-coil'},{id:'trap',name:'Trap',desc:'Place traps that freeze thieves for 10 seconds (5 Max)',price:1000,icon:'trap'},{id:'iron-slap',name:'Iron Slap',desc:'Heavy iron slap that knocks players flying!',price:2500,icon:'iron-slap'},{id:'gravity-coil',name:'Gravity Coil',desc:'Reduced gravity coil lets you jump extra high!',price:3000,icon:'gravity-coil'},{id:'bee-launcher',name:'Bee Launcher',desc:'Release bees to attack your opponent and invert their controls!',price:10000,icon:'bee-launcher'},{id:'coil-combo',name:'Coil Combo',desc:'Combine speed and gravity coils for ultimate mobility!',price:20000,icon:'coil-combo'},{id:'rage-table',name:'Rage Table',desc:'Throw a table to fling players and return your Brainrots.',price:25000,icon:'rage-table'},{id:'diamond-slap',name:'Diamond Slap',desc:'Charge up a diamond slap to knock others away.',price:50000,icon:'diamond-slap'}];
 let ownedItems=[],autoBuyShopItems=[];
@@ -491,7 +520,7 @@ function update(time=0){
     if(!found)document.getElementById('interact').style.display='none';
 }
 function interact(){ let btn=document.getElementById('interact'); if(btn.style.display==='none')return; let obj=btn.dataset.obj; if(obj==='shop-blue'){openShop();} else if(obj==='shop-red'){openRedShop();} else if(obj==='shop-white'){openTradePlaza();} else if(obj==='queen-bee'){openBee();} else if(obj==='rng-circle'){openWheel();} else if(obj==='rng-machine'){showModal('RNG Машина','Здесь будет случайный приз!');} else showModal('Взаимодействие','Объект: '+obj); }
-function openCharacters(){document.getElementById('char-menu').style.display='flex'}function closeCharacters(){document.getElementById('char-menu').style.display='none'}function openBee(){document.getElementById('bee-menu').style.display='flex'}function closeBee(){document.getElementById('bee-menu').style.display='none'}function openWheel(){document.getElementById('wheel-menu').style.display='flex'}function closeWheel(){document.getElementById('wheel-menu').style.display='none'}
+function openWheel(){document.getElementById('wheel-menu').style.display='flex'}function closeWheel(){document.getElementById('wheel-menu').style.display='none'}
 
 async function loadDushkaCoins(){ if(currentNickname){ const d=await readUserData(currentNickname); if(d){ dushka=d.dushka||0; document.getElementById('dushka-coins').textContent=formatNumber(dushka); } } }
 async function loadCoins(){ if(currentNickname){ const d=await readUserData(currentNickname); if(d){ coins=d.coins||25; document.getElementById('balance-amount').textContent=formatNumber(coins); } } }
