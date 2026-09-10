@@ -105,9 +105,8 @@ input[type="file"]{color:#fff}
 <div id="joystick-zone"></div>
 
 <script>
-// ========== РАНДОМНЫЕ ЦВЕТА С ВЕСАМИ (жёлтый в 2 раза реже) ==========
+// ========== ЦВЕТА ДЛЯ НИЖНЕЙ ЧАСТИ (без жёлтого, чтобы не сливался с верхом) ==========
 const skinColorsWeighted = [
-    {color:'#FFCC00', weight:0.5},  // жёлтый — в 2 раза реже
     {color:'#FF0000', weight:1},
     {color:'#00FF00', weight:1},
     {color:'#FF00FF', weight:1},
@@ -356,10 +355,9 @@ async function startGame(){
     const spawn = baseSpawnPoints[currentBase];
     x = spawn.x; y = spawn.y;
     
-    // РАНДОМНЫЕ ЦВЕТА — жёлтый в 2 раза реже
-    let topColor = pickRandomColor();
+    // ВЕРХ ВСЕГДА ЖЁЛТЫЙ, НИЗ СЛУЧАЙНЫЙ
+    let topColor = '#FFCC00';
     let bottomColor = pickRandomColor();
-    // Если игрок уже был с цветами — сохраняем их
     const existingSnap = await db.ref('servers/'+currentServerId+'/players/'+currentNickname).once('value');
     if(existingSnap.exists()){
         const existing = existingSnap.val();
@@ -505,7 +503,6 @@ function update(time=0){
     for(let obj of interactables){
         let objCenter={x:obj.x+10,y:obj.y+obj.h/2};
         let dist=Math.sqrt(Math.pow(playerCenter.x-objCenter.x,2)+Math.pow(playerCenter.y-objCenter.y,2));
-        // DISTANCE 25 (вместо 30)
         if(dist<25){
             let btn=document.getElementById('interact');
             btn.style.display='flex';
