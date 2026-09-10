@@ -56,10 +56,11 @@ input[type="file"]{color:#fff}
 .base{position:absolute;width:75px;height:75px;background:#869292}.base .brown{position:absolute;width:calc(100% - 8px);left:4px;height:14px;background:#bf5b1a;bottom:4px}.base .green{position:absolute;width:34px;height:14px;background:#22e54c;left:50%;transform:translateX(-50%);bottom:-14px}.base .nickname{position:absolute;bottom:4px;left:0;width:100%;height:14px;line-height:14px;text-align:center;color:#fff;font-size:7px;font-weight:bold;text-shadow:1px 1px 1px #000;z-index:5;pointer-events:none;overflow:hidden;white-space:nowrap}
 .base-top-1{top:20px;left:20px}.base-top-2{top:20px;left:115px}.base-top-3{top:20px;left:210px}.base-top-4{top:20px;left:305px}.base-bottom-1{bottom:20px;left:20px}.base-bottom-2{bottom:20px;left:115px}.base-bottom-3{bottom:20px;left:210px}.base-bottom-4{bottom:20px;left:305px}.base-bottom .brown{top:4px;bottom:auto}.base-bottom .green{top:-14px;bottom:auto}.base-bottom .nickname{top:4px;bottom:auto}
 #rng-machine,#shop-blue,#shop-red,#queen-bee,#rng-circle,#shop-white{position:absolute;width:20px;height:20px;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);z-index:15}#queen-bee{height:24px;grid-template-rows:repeat(6,1fr)}#rng-machine{left:190px;top:137px}.c-cyan{background:#00F0FF}.c-gray{background:#808080}.c-empty{background:transparent}#shop-blue{left:150px;top:137px}.s-blue{background:#0000FF}.s-white{background:#FFFFFF}#shop-red{left:150px;top:230px}.r-red{background:#FF0000}.r-white{background:#FFFFFF}#queen-bee{left:230px;top:137px}.q-yellow{background:#FFD966}.q-red{background:#F44336}.q-brown{background:#8B4513}#rng-circle{left:190px;top:230px;background:#A454B4;border-radius:50%}#shop-white{left:230px;top:230px}.w-dark{background:#003366}.w-white{background:#FFFFFF}
-#player,.other-player{position:absolute;width:12px;height:24px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20;border:1px solid rgba(0,0,0,.5)}
+/* ИГРОК УМЕНЬШЕН: 8x16 вместо 12x24 */
+#player,.other-player{position:absolute;width:8px;height:16px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20;border:1px solid rgba(0,0,0,.5)}
 #player .pixel,.other-player .pixel{width:100%;height:100%}
-#player-name,.player-name{position:absolute;left:50%;transform:translateX(-50%);top:-14px;color:#fff;font-size:6px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
-#interact{position:absolute;display:none;z-index:1000;width:24px;height:24px;background:#777;border:1px solid #444;display:flex;justify-content:center;align-items:center;color:#fff;font-size:18px;cursor:pointer}
+#player-name,.player-name{position:absolute;left:50%;transform:translateX(-50%);top:-12px;color:#fff;font-size:5px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
+#interact{position:absolute;display:none;z-index:1000;width:18px;height:18px;background:#777;border:1px solid #444;display:flex;justify-content:center;align-items:center;color:#fff;font-size:14px;cursor:pointer}
 #balance{position:fixed;bottom:20px;left:20px;background:rgba(0,0,0,.8);padding:10px;border:2px solid #444;color:#fff;font-size:14px;display:none;flex-direction:column;gap:5px;border-radius:8px;z-index:1000}
 #balance .box{display:flex;justify-content:space-between;gap:10px}
 #balance .icon{width:20px;height:20px;display:flex;justify-content:center;align-items:center}
@@ -92,7 +93,7 @@ input[type="file"]{color:#fff}
 </div>
 
 <!-- ВЕРСИЯ -->
-<div id="version">Версия: 0.27</div>
+<div id="version">Версия: 0.28</div>
 
 <!-- КНОПКА ВЫХОДА -->
 <div id="exit-btn" onclick="exitToMenu()">Выйти</div>
@@ -161,14 +162,15 @@ async function exitToMenu(){
     document.getElementById('main-menu').style.display='flex';
 }
 
-// ========== ОБНОВЛЁННАЯ ЛОГИКА БАЗ ==========
-// 1. Чистит "призрачные" базы (игрок вышел, но база осталась)
-// 2. Выдаёт ПЕРВУЮ СВОБОДНУЮ базу (1 → 2 → 3 → ... → 8)
+// ========== ИСПРАВЛЕННАЯ ЛОГИКА БАЗ ==========
 async function assignBase(serverId, playerName){
     const basesRef = db.ref('servers/'+serverId+'/bases');
     const playersRef = db.ref('servers/'+serverId+'/players');
     
-    // Шаг 1: Чистим призрачные базы
+    // Шаг 1: Удаляем СВОЮ старую базу (если была) — чтобы не блокировать себя
+    await basesRef.child(playerName).remove();
+    
+    // Шаг 2: Чистим призрачные базы
     const basesSnap = await basesRef.once('value');
     const playersSnap = await playersRef.once('value');
     const bases = basesSnap.val() || {};
@@ -176,13 +178,12 @@ async function assignBase(serverId, playerName){
     
     for(let nick in bases){
         if(!players[nick]){
-            // Игрока нет в players, но база занята — освобождаем
             console.log('Освобождаю призрачную базу игрока:', nick);
             await basesRef.child(nick).remove();
         }
     }
     
-    // Шаг 2: Ищем первую свободную базу (1 → 8)
+    // Шаг 3: Ищем первую свободную базу (1 → 8)
     const cleanSnap = await basesRef.once('value');
     const cleanBases = cleanSnap.val() || {};
     
@@ -197,9 +198,10 @@ async function assignBase(serverId, playerName){
             return i;
         }
     }
+    console.log('Свободных баз нет!');
     return null;
 }
-// ========== КОНЕЦ ОБНОВЛЁННОЙ ЛОГИКИ ==========
+// ========== КОНЕЦ ЛОГИКИ ==========
 
 const shopItems=[{id:'slap',name:'Slap',desc:'An average hand to slap thieves and send them flying!',price:500,icon:'slap'},{id:'speed-coil',name:'Speed Coil',desc:'Zoom around the map with additional speed.',price:750,icon:'speed-coil'},{id:'trap',name:'Trap',desc:'Place traps that freeze thieves for 10 seconds (5 Max)',price:1000,icon:'trap'},{id:'iron-slap',name:'Iron Slap',desc:'Heavy iron slap that knocks players flying!',price:2500,icon:'iron-slap'},{id:'gravity-coil',name:'Gravity Coil',desc:'Reduced gravity coil lets you jump extra high!',price:3000,icon:'gravity-coil'},{id:'bee-launcher',name:'Bee Launcher',desc:'Release bees to attack your opponent and invert their controls!',price:10000,icon:'bee-launcher'},{id:'coil-combo',name:'Coil Combo',desc:'Combine speed and gravity coils for ultimate mobility!',price:20000,icon:'coil-combo'},{id:'rage-table',name:'Rage Table',desc:'Throw a table to fling players and return your Brainrots.',price:25000,icon:'rage-table'},{id:'diamond-slap',name:'Diamond Slap',desc:'Charge up a diamond slap to knock others away.',price:50000,icon:'diamond-slap'}];
 let ownedItems=[],autoBuyShopItems=[];
@@ -486,10 +488,10 @@ function update(time=0){
     if(dx!==0||dy!==0){
         const len=Math.sqrt(dx*dx+dy*dy);
         let nx=x+(dx/len)*SPEED*dt*60,ny=y+(dy/len)*SPEED*dt*60;
-        let rX={x:nx,y:y,w:10,h:20},bX=false;
+        let rX={x:nx,y:y,w:8,h:16},bX=false;
         for(let o of obstacles)if(collide(rX,o)){bX=true;break}
         if(!bX)x=nx;
-        let rY={x:x,y:ny,w:10,h:20},bY=false;
+        let rY={x:x,y:ny,w:8,h:16},bY=false;
         for(let o of obstacles)if(collide(rY,o)){bY=true;break}
         if(!bY)y=ny;
         x=Math.max(10,Math.min(MAX_X,x));
@@ -511,7 +513,7 @@ function update(time=0){
             let btn=document.getElementById('interact');
             btn.style.display='flex';
             btn.style.left=(x-7)+'px';
-            btn.style.top=(y-25)+'px';
+            btn.style.top=(y-22)+'px';
             btn.dataset.obj=obj.id;
             found=true;
             break;
