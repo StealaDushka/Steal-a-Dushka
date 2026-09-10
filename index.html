@@ -105,7 +105,28 @@ input[type="file"]{color:#fff}
 <div id="joystick-zone"></div>
 
 <script>
-const skinColors = ['#FFCC00', '#FF0000', '#00FF00', '#FF00FF', '#0000FF', '#FFA500', '#800080', '#FF4500', '#FFFFFF'];
+// ========== РАНДОМНЫЕ ЦВЕТА С ВЕСАМИ (жёлтый в 2 раза реже) ==========
+const skinColorsWeighted = [
+    {color:'#FFCC00', weight:0.5},  // жёлтый — в 2 раза реже
+    {color:'#FF0000', weight:1},
+    {color:'#00FF00', weight:1},
+    {color:'#FF00FF', weight:1},
+    {color:'#0000FF', weight:1},
+    {color:'#FFA500', weight:1},
+    {color:'#800080', weight:1},
+    {color:'#FF4500', weight:1},
+    {color:'#FFFFFF', weight:1}
+];
+const totalWeight = skinColorsWeighted.reduce((s,c)=>s+c.weight, 0);
+function pickRandomColor(){
+    let r = Math.random() * totalWeight;
+    for(let c of skinColorsWeighted){
+        if(r < c.weight) return c.color;
+        r -= c.weight;
+    }
+    return '#FF0000';
+}
+
 let wheelRotation=0;
 function formatNumber(num){ if(num >= 1e15) return (num / 1e15).toFixed(2) + 'Qa'; if(num >= 1e12) return (num / 1e12).toFixed(2) + 'T'; if(num >= 1e9) return (num / 1e9).toFixed(2) + 'B'; if(num >= 1e6) return (num / 1e6).toFixed(2) + 'M'; if(num >= 1e3) return (num / 1e3).toFixed(2) + 'K'; return num.toString(); }
 function resizeGame(){const game=document.getElementById('game-container');if(!game)return;const availW=window.innerWidth,availH=window.innerHeight;let scale=Math.min(availW/500,availH/500);scale=Math.max(0.6,Math.min(1.2,scale));game.style.transform=`scale(${scale})`;}
@@ -131,12 +152,10 @@ async function exitToMenu(){
             await db.ref('servers/'+currentServerId+'/bases/'+currentNickname).remove();
             await db.ref('users/'+currentNickname+'/serverId').remove();
         } catch(e) { console.warn('Ошибка при выходе:', e); }
-        // Убираем спрайты других игроков
         for(let key in otherPlayers){
             if(otherPlayers[key]) otherPlayers[key].remove();
             delete otherPlayers[key];
         }
-        // Убираем свой спрайт с экрана (на всякий случай)
         const myPlayer = document.getElementById('player');
         if(myPlayer) myPlayer.style.display = 'none';
     }
@@ -148,7 +167,6 @@ async function exitToMenu(){
     document.getElementById('main-menu').style.display='flex';
 }
 
-// УДАЛЕНИЕ ПРИ ЗАКРЫТИИ ВКЛАДКИ
 window.addEventListener('beforeunload', () => {
     if (currentServerId && currentNickname) {
         db.ref('servers/'+currentServerId+'/players/'+currentNickname).remove();
@@ -159,31 +177,22 @@ window.addEventListener('beforeunload', () => {
 // ========== ИСПРАВЛЕННАЯ ЛОГИКА БАЗ ==========
 async function assignBase(serverId, playerName){
     const basesRef = db.ref('servers/'+serverId+'/bases');
-    
-    // Удаляем СВОЮ старую базу
     await basesRef.child(playerName).remove();
     await new Promise(r => setTimeout(r, 100));
-    
-    // Читаем базы и игроков
     const basesSnap = await basesRef.once('value');
     const bases = basesSnap.val() || {};
     const playersSnap = await db.ref('servers/'+serverId+'/players').once('value');
     const players = playersSnap.val() || {};
-    
-    // Чистим призрачные базы
     for(let nick in bases){
         if(!players[nick]){
             console.log('🧹 Чищу призрачную базу:', nick);
             await basesRef.child(nick).remove();
         }
     }
-    
-    // Ищем свободную базу
     const cleanSnap = await basesRef.once('value');
     const cleanBases = cleanSnap.val() || {};
     const taken = new Set();
     for(let nick in cleanBases){ taken.add(cleanBases[nick]); }
-    
     for(let i=1; i<=8; i++){
         if(!taken.has(i)){
             await basesRef.child(playerName).set(i);
@@ -287,8 +296,6 @@ function toggleSelectedPlayers(){ const access=document.getElementById('server-a
 function addSelectedPlayer(){ const input=document.getElementById('selected-player-input'); const nick=input.value.trim(); if(!nick)return; const listDiv=document.getElementById('selected-list'); const span=document.createElement('span'); span.textContent=nick; span.style.marginRight='5px'; const removeBtn=document.createElement('button'); removeBtn.textContent='X'; removeBtn.style.background='#f44'; removeBtn.style.border='none'; removeBtn.style.cursor='pointer'; removeBtn.onclick=()=>span.remove(); span.appendChild(removeBtn); listDiv.appendChild(span); input.value=''; }
 async function createServer(){ const name=document.getElementById('server-name').value.trim(); const access=document.getElementById('server-access').value; if(!name){showModal('Ошибка','Введите название сервера');return} const data=await readUserData(currentNickname); if(!data || data.dushka<100){showModal('Ошибка','Недостаточно Dushka Coins!');return} await db.ref('users/'+currentNickname).update({dushka:data.dushka-100}); const newRef=db.ref('servers').push(); const id=newRef.key; let selectedPlayers=[]; if(access==='selected'){ const listDiv=document.getElementById('selected-list'); selectedPlayers=Array.from(listDiv.children).map(child=>child.firstChild.textContent); } await newRef.set({name:name, access:access, selectedPlayers:selectedPlayers, owner:currentNickname}); closeCreateServer(); openServers(); }
 
-// ========== ФУНКЦИЯ clearAllServers УДАЛЕНА ==========
-
 async function openFriends(){ document.getElementById('main-menu').style.display='none'; document.getElementById('friends-menu').style.display='block'; await loadFriendRequests(); await loadFriends(); }
 async function searchFriend(){ const nick=document.getElementById('friend-search').value.trim(); if(!nick){showModal('Ошибка','Введите ник');return} const user=await readUserData(nick); const resultDiv=document.getElementById('friend-result'); if(!user){ resultDiv.innerHTML='<div style="color:#f44">Игрок не найден</div>'; return; } resultDiv.innerHTML='<div class="friend-item"><div class="nick">'+nick+'</div><button onclick="sendFriendRequest(\''+nick+'\')" style="background:#4caf50;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Отправить запрос</button></div>'; }
 async function sendFriendRequest(nick){ const data=await readUserData(nick); if(!data){showModal('Ошибка','Игрок не найден');return} let requests=data.friendRequests||[]; if(requests.includes(currentNickname)){showModal('Инфо','Запрос уже отправлен');return} requests.push(currentNickname); await db.ref('users/'+nick).update({friendRequests:requests}); showModal('Успех','Запрос отправлен'); }
@@ -340,7 +347,6 @@ async function startGame(){
     document.getElementById('exit-btn').style.display='block';
     document.getElementById('balance').style.display='flex';
     document.getElementById('version').style.display='block';
-    // Показываем персонажа (если был скрыт)
     const myPlayer = document.getElementById('player');
     if(myPlayer) myPlayer.style.display = 'grid';
     await loadDushkaCoins();
@@ -349,14 +355,19 @@ async function startGame(){
     if(currentBase === null){ showModal('Ошибка','Сервер заполнен!'); await exitToMenu(); return; }
     const spawn = baseSpawnPoints[currentBase];
     x = spawn.x; y = spawn.y;
-    let topColor='#FFCC00', bottomColor=skinColors[Math.floor(Math.random()*skinColors.length)];
+    
+    // РАНДОМНЫЕ ЦВЕТА — жёлтый в 2 раза реже
+    let topColor = pickRandomColor();
+    let bottomColor = pickRandomColor();
+    // Если игрок уже был с цветами — сохраняем их
     const existingSnap = await db.ref('servers/'+currentServerId+'/players/'+currentNickname).once('value');
     if(existingSnap.exists()){
         const existing = existingSnap.val();
         if(existing.topColor) topColor = existing.topColor;
         if(existing.bottomColor) bottomColor = existing.bottomColor;
     }
-    db.ref('servers/'+currentServerId+'/players/'+currentNickname).set({x:x, y:y, base:currentBase, topColor:topColor, bottomColor:bottomColor});
+    
+    await db.ref('servers/'+currentServerId+'/players/'+currentNickname).set({x:x, y:y, base:currentBase, topColor:topColor, bottomColor:bottomColor});
     db.ref('servers/'+currentServerId+'/players/'+currentNickname).onDisconnect().remove();
     db.ref('servers/'+currentServerId+'/bases/'+currentNickname).onDisconnect().remove();
     db.ref('users/'+currentNickname).update({x:x, y:y, base:currentBase, serverId:currentServerId});
@@ -393,6 +404,23 @@ function initPlayer(topColor, bottomColor){
 function startOtherPlayersListener(){
     db.ref('servers/'+currentServerId+'/players').on('value',snapshot=>{
         const players=snapshot.val()||{};
+        
+        // СИНХРОНИЗАЦИЯ: если база без игрока — удаляем; если игрок без базы — удаляем
+        db.ref('servers/'+currentServerId+'/bases').once('value').then(basesSnap=>{
+            const bases = basesSnap.val() || {};
+            for(let nick in bases){
+                if(!players[nick]){
+                    db.ref('servers/'+currentServerId+'/bases/'+nick).remove();
+                }
+            }
+            for(let nick in players){
+                if(nick === currentNickname) continue;
+                if(!bases[nick]){
+                    db.ref('servers/'+currentServerId+'/players/'+nick).remove();
+                }
+            }
+        });
+        
         for(let key in otherPlayers){
             if(!players[key] || key===currentNickname){
                 if(otherPlayers[key]) otherPlayers[key].remove();
@@ -477,8 +505,8 @@ function update(time=0){
     for(let obj of interactables){
         let objCenter={x:obj.x+10,y:obj.y+obj.h/2};
         let dist=Math.sqrt(Math.pow(playerCenter.x-objCenter.x,2)+Math.pow(playerCenter.y-objCenter.y,2));
-        // ⬇️ DISTANCE УВЕЛИЧЕНА В 2 РАЗА (15 → 30)
-        if(dist<30){
+        // DISTANCE 25 (вместо 30)
+        if(dist<25){
             let btn=document.getElementById('interact');
             btn.style.display='flex';
             btn.style.left=(x-5)+'px';
