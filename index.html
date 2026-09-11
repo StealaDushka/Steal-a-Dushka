@@ -49,6 +49,7 @@ input[type="file"]{color:#fff}
 .action-btn{width:60px;height:60px;display:flex;justify-content:center;align-items:center;background:#666;border:4px solid #000;color:#fff;font-weight:bold;font-size:12px;cursor:pointer;transition:transform .1s,filter .1s}
 .action-btn:active{transform:scale(.95);filter:brightness(.8)}
 .action-btn.pink{background:#E54B8C}
+.action-btn.blue{background:#4a90e2}
 #game-wrapper{flex:1;height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden}
 #game-container{width:400px;height:400px;background:#20b94d;border:4px solid black;position:relative;overflow:hidden;transform-origin:left center}
 .center-line{position:absolute;top:180px;left:0;width:100%;height:40px;background:#e83e32;z-index:5}
@@ -60,6 +61,27 @@ input[type="file"]{color:#fff}
 #player .pixel,.other-player .pixel{width:100%;height:100%}
 #player-name,.player-name{position:absolute;left:50%;transform:translateX(-50%);top:-12px;color:#fff;font-size:5px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
 #interact{position:absolute;display:none;z-index:1000;width:18px;height:18px;background:#777;border:1px solid #444;display:flex;justify-content:center;align-items:center;color:#fff;font-size:14px;cursor:pointer}
+/* БРЭИНРОТЫ НА ДОРОЖКЕ */
+.brainrot-conveyor{position:absolute;width:14px;height:14px;z-index:18;border:1px solid rgba(0,0,0,.6);background-size:cover;background-position:center;border-radius:3px;pointer-events:none}
+.brainrot-conveyor.common{border-color:#aaa}
+.brainrot-conveyor.horror{border-color:#555}
+.brainrot-conveyor.epic{border-color:#9b59b6}
+.brainrot-conveyor.legendary{border-color:#f1c40f;box-shadow:0 0 6px #f1c40f}
+.brainrot-conveyor.mythic{border-color:#e74c3c;box-shadow:0 0 6px #e74c3c}
+.brainrot-conveyor.god{border-color:#e67e22;box-shadow:0 0 8px #e67e22}
+.brainrot-conveyor.secret{border-color:#00bcd4;box-shadow:0 0 10px #00bcd4}
+.brainrot-conveyor.og{border-color:#ffd700;box-shadow:0 0 12px #ffd700,0 0 20px #ff00ff}
+/* БРЭИНРОТЫ НА БАЗЕ */
+.brainrot-base{position:absolute;width:10px;height:10px;z-index:15;background-size:cover;background-position:center;border-radius:2px;border:1px solid rgba(0,0,0,.5)}
+.brainrot-base.common{border-color:#aaa}
+.brainrot-base.horror{border-color:#555}
+.brainrot-base.epic{border-color:#9b59b6}
+.brainrot-base.legendary{border-color:#f1c40f}
+.brainrot-base.mythic{border-color:#e74c3c}
+.brainrot-base.god{border-color:#e67e22}
+.brainrot-base.secret{border-color:#00bcd4}
+.brainrot-base.og{border-color:#ffd700;box-shadow:0 0 6px #ffd700}
+#base-info{position:fixed;bottom:80px;left:20px;background:rgba(0,0,0,.8);padding:8px 12px;border:2px solid #444;color:#fff;font-size:12px;display:none;border-radius:8px;z-index:1000}
 #balance{position:fixed;bottom:20px;left:20px;background:rgba(0,0,0,.8);padding:10px;border:2px solid #444;color:#fff;font-size:14px;display:none;flex-direction:column;gap:5px;border-radius:8px;z-index:1000}
 #balance .box{display:flex;justify-content:space-between;gap:10px}
 #balance .icon{width:20px;height:20px;display:flex;justify-content:center;align-items:center}
@@ -87,7 +109,8 @@ input[type="file"]{color:#fff}
   <div class="box dushka"><span class="icon"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg></span><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div>
   <div class="box"><span class="icon"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" fill="#4caf50"/><circle cx="12" cy="12" r="6" fill="#fff"/></svg></span><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div>
 </div>
-<div id="version">Версия: 0.28</div>
+<div id="base-info">Брэинротов: <span id="base-count">0</span>/10</div>
+<div id="version">Версия: 0.29</div>
 <div id="exit-btn" onclick="exitToMenu()">Выйти</div>
 <div id="main-menu"><h1>Steal A Dushka</h1><button class="menu-btn green" onclick="playRandom()">Играть</button><button class="menu-btn blue" onclick="openServers()">Серверы</button><button class="menu-btn purple" onclick="openFriends()">Друзья</button><button class="menu-btn" onclick="openProfile()">Профиль</button></div>
 <div id="server-menu"><div class="header"><h2>Серверы</h2><button class="close-btn" onclick="closeServers()">X</button></div><div id="server-list"></div><button style="width:100%;padding:12px;background:#ffd700;color:#000;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px" onclick="openCreateServer()">Создать сервер (100 Dushka Coins)</button></div>
@@ -95,7 +118,7 @@ input[type="file"]{color:#fff}
 <div id="profile-menu"><div class="header"><h2>Профиль</h2><button class="close-btn" onclick="closeProfile()">X</button></div><div class="profile-preview" id="avatar-preview"></div><label style="color:#fff;display:block;margin:10px 0">Аватарка</label><input type="file" id="avatar-input" accept="image/*"><div class="profile-bg-preview" id="bg-preview"></div><label style="color:#fff;display:block;margin:10px 0">Фон профиля</label><input type="file" id="bg-input" accept="image/*"><button class="save-btn" onclick="saveProfile()">Сохранить</button></div>
 <div id="create-server-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #444;border-radius:12px;padding:20px;width:90%;max-width:400px;z-index:960"><h3 style="color:#fff">Создать сервер</h3><input type="text" id="server-name" placeholder="Название сервера" style="width:100%;padding:8px;border-radius:6px;border:none;margin-bottom:10px"><label style="color:#fff">Доступ:</label><select id="server-access" onchange="toggleSelectedPlayers()" style="width:100%;padding:8px;border-radius:6px;border:none;margin-bottom:10px"><option value="all">Все могут зайти</option><option value="friends">Только друзья</option><option value="selected">Выборочные игроки</option></select><div id="selected-players" style="display:none;margin-bottom:10px"><input type="text" id="selected-player-input" placeholder="Ник игрока" style="width:70%;padding:8px;border-radius:6px;border:none"><button style="padding:8px;border:none;border-radius:6px;background:#4caf50;color:#fff;cursor:pointer" onclick="addSelectedPlayer()">Добавить</button><div id="selected-list" style="color:#fff;margin-top:5px"></div></div><button style="width:100%;padding:10px;border:none;border-radius:8px;background:#ffd700;color:#000;font-weight:bold;cursor:pointer" onclick="createServer()">Создать (100 Dushka Coins)</button><button style="width:100%;padding:8px;border:none;border-radius:8px;background:#666;color:#fff;margin-top:5px;cursor:pointer" onclick="closeCreateServer()">Отмена</button></div>
 <div id="friend-profile" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #444;border-radius:12px;padding:20px;width:90%;max-width:300px;z-index:960;text-align:center"><div class="profile-preview" id="friend-avatar-preview" style="margin:0 auto 10px"></div><div style="color:#fff;font-size:18px;font-weight:bold" id="friend-profile-name"></div><button style="padding:10px 20px;border:none;border-radius:8px;background:#4caf50;color:#fff;font-weight:bold;cursor:pointer;margin-top:10px" onclick="joinFriendGame()">Join</button><button style="padding:8px 20px;border:none;border-radius:8px;background:#666;color:#fff;margin-top:5px;cursor:pointer" onclick="cancelFriendJoin()">Cancel</button></div>
-<div id="app"><div id="sidebar"><div id="actions"><div class="action-btn pink" onclick="openRedShop()">SHOP</div><div class="action-btn" onclick="showModal('Ребирт','Скоро появится!')">REBIRTH</div><div class="action-btn" onclick="showModal('Трейд','Скоро появится!')">TRADE</div><div class="action-btn" onclick="showModal('INDEX','Твой индекс: ' + (currentNickname ? 'База ' + currentNickname : 'Неизвестно'))">INDEX</div></div></div><div id="game-wrapper"><div id="game-container"><div class="center-line"><div class="center-cap cap-left"></div><div class="center-cap cap-right"></div></div><div class="base base-top-1"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-top-2"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-top-3"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-top-4"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-1"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-2"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-3"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-4"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div id="rng-machine"><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div></div><div id="shop-blue"><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div></div><div id="shop-red"><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div></div><div id="queen-bee"><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-yellow"></div></div><div id="rng-circle"></div><div id="shop-white"><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div></div><div id="interact" onclick="interact()">E</div><div id="player"></div></div></div></div>
+<div id="app"><div id="sidebar"><div id="actions"><div class="action-btn pink" onclick="openRedShop()">SHOP</div><div class="action-btn" onclick="showModal('Ребирт','Скоро появится!')">REBIRTH</div><div class="action-btn" onclick="showModal('Трейд','Скоро появится!')">TRADE</div><div class="action-btn blue" onclick="showBaseInfo()">БАЗА</div></div></div><div id="game-wrapper"><div id="game-container"><div class="center-line"><div class="center-cap cap-left"></div><div class="center-cap cap-right"></div></div><div class="base base-top-1"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-top-2"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-top-3"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-top-4"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-1"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-2"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-3"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div class="base base-bottom base-bottom-4"><div class="brown"></div><div class="green"></div><div class="nickname"></div></div><div id="rng-machine"><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div></div><div id="shop-blue"><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div></div><div id="shop-red"><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div></div><div id="queen-bee"><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-yellow"></div></div><div id="rng-circle"></div><div id="shop-white"><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div></div><div id="interact" onclick="interact()">E</div><div id="player"></div></div></div></div>
 <div id="shop-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Shop</h2><p>Buy tools to protect your base and troll others!</p></div><div class="close-btn" onclick="closeShop()">X</div></div><div class="content" id="shop-items"></div></div>
 <div id="bee-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Королева Пчёл</h2><p>Обновление через: <span id="bee-timer">90:00</span></p></div><div class="close-btn" onclick="closeBee()">X</div></div><div class="content"><div class="grid"><div class="bee-card" id="bee-raccoon"><div class="status" id="status-raccoon"></div><div class="img-placeholder">🦝</div><div class="mps">$10M/s</div><div class="name">Conetto Morsetto</div><button class="price-btn" onclick="buyBee('raccoon')"><svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg> 499</button></div><div class="bee-card" id="bee-bear"><div class="status" id="status-bear"></div><div class="img-placeholder">🐻</div><div class="mps">$32M/s</div><div class="name">Honey Honey Bear</div><button class="price-btn" onclick="buyBee('bear')"><svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg> 999</button></div><div class="bee-card" id="bee-queen"><div class="status" id="status-queen"></div><div class="img-placeholder">🐝</div><div class="mps">$65M/s</div><div class="name">Queen Bee</div><button class="price-btn" onclick="buyBee('queen')"><svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg> 2,499</button></div><div class="bee-card" id="bee-chocolate"><div class="status" id="status-chocolate"></div><div class="img-placeholder">🍫</div><div class="mps">$85M/s</div><div class="name">S'more Serat</div><button class="price-btn" onclick="buyBee('chocolate')"><svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg> 4,999</button></div><div class="bee-card" id="bee-bumbatron"><div class="status" id="status-bumbatron"></div><div class="img-placeholder">🤖</div><div class="mps">$172.5M/s</div><div class="name">Bumbatron</div><button class="price-btn" onclick="buyBee('bumbatron')"><svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg> 9,999</button></div></div></div></div>
 <div id="red-shop-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Premium Shop</h2><p>Buy exclusive items with Dushka Coins!</p></div><div class="close-btn" onclick="closeRedShop()">X</div></div><div class="tabs"><div class="tab active" data-tab="gear" onclick="switchRedTab('gear')">GEAR</div><div class="tab" data-tab="gamepasses" onclick="switchRedTab('gamepasses')">GAMEPASSES</div><div class="tab" data-tab="money" onclick="switchRedTab('money')">MONEY</div><div class="tab" data-tab="lucky" onclick="switchRedTab('lucky')">LUCKY BLOCKS</div><div class="tab" data-tab="server" onclick="switchRedTab('server')">SERVER LUCK</div><div class="tab" data-tab="redeem" onclick="switchRedTab('redeem')">REDEEM CODES</div></div><div class="content" id="red-shop-items"></div></div>
@@ -105,29 +128,58 @@ input[type="file"]{color:#fff}
 <div id="joystick-zone"></div>
 
 <script>
-// ========== ЦВЕТА ДЛЯ НИЖНЕЙ ЧАСТИ (без жёлтого, чтобы не сливался с верхом) ==========
-const skinColorsWeighted = [
-    {color:'#FF0000', weight:1},
-    {color:'#00FF00', weight:1},
-    {color:'#FF00FF', weight:1},
-    {color:'#0000FF', weight:1},
-    {color:'#FFA500', weight:1},
-    {color:'#800080', weight:1},
-    {color:'#FF4500', weight:1},
-    {color:'#FFFFFF', weight:1}
+// ========== ДАННЫЕ БРЭИНРОТОВ ==========
+const BRAINROTS_LIST = [
+    {file:'meme8.jpg', name:'200', rarity:'common', income:2},
+    {file:'meme9.jpg', name:'Нубини Пицанини', rarity:'common', income:1},
+    {file:'meme10.jpg', name:'Капибара', rarity:'common', income:3},
+    {file:'meme11.jpg', name:'Диманини Нубанини', rarity:'common', income:5},
+    {file:'meme22.jpg', name:'Гига Чат', rarity:'common', income:10},
+    {file:'meme28.jpg', name:'Математика', rarity:'horror', income:6.7},
+    {file:'meme3.jpg', name:'Биология', rarity:'horror', income:10},
+    {file:'meme17.jpg', name:'История', rarity:'horror', income:20},
+    {file:'meme4.jpg', name:'Воздуханы', rarity:'horror', income:25},
+    {file:'meme23.jpg', name:'Тони Кросс', rarity:'epic', income:45},
+    {file:'meme7.jpg', name:'Кар-Карыч', rarity:'epic', income:50},
+    {file:'meme13.jpg', name:'Spider Man', rarity:'epic', income:100},
+    {file:'meme24.jpg', name:'Сквидвард', rarity:'epic', income:100},
+    {file:'meme27.jpg', name:'Омайгат', rarity:'epic', income:100},
+    {file:'meme2.jpg', name:'Кросс', rarity:'legendary', income:200},
+    {file:'meme6.jpg', name:'Противостояние', rarity:'legendary', income:350},
+    {file:'meme5.jpg', name:'Роналду', rarity:'legendary', income:400},
+    {file:'meme12.jpg', name:'Spider Pig', rarity:'mythic', income:500},
+    {file:'meme18.jpg', name:'Меси Сиси', rarity:'mythic', income:525},
+    {file:'meme25.jpg', name:'Неймар', rarity:'mythic', income:560},
+    {file:'meme21.jpg', name:'67', rarity:'god', income:670},
+    {file:'meme29.jpg', name:'52', rarity:'god', income:850},
+    {file:'meme26.jpg', name:'Копатыч', rarity:'god', income:900},
+    {file:'meme19.jpg', name:'Килиан Диктатор', rarity:'god', income:1000},
+    {file:'meme20.jpg', name:'Гарама', rarity:'secret', income:2500},
+    {file:'meme15.jpg', name:'Драгон Канелони', rarity:'secret', income:5000},
+    {file:'meme14.jpg', name:'Краснодар', rarity:'secret', income:6700},
+    {file:'meme16.jpg', name:'MrDushka OG', rarity:'og', income:100000}
 ];
-const totalWeight = skinColorsWeighted.reduce((s,c)=>s+c.weight, 0);
-function pickRandomColor(){
-    let r = Math.random() * totalWeight;
-    for(let c of skinColorsWeighted){
-        if(r < c.weight) return c.color;
-        r -= c.weight;
+const RARITY_WEIGHTS = {common:50, horror:25, epic:12, legendary:7, mythic:3, god:2, secret:0.9, og:0.1};
+const TOTAL_WEIGHT = Object.values(RARITY_WEIGHTS).reduce((s,w)=>s+w,0);
+
+function pickRarity(){
+    let r = Math.random()*TOTAL_WEIGHT;
+    for(let rar in RARITY_WEIGHTS){
+        if(r < RARITY_WEIGHTS[rar]) return rar;
+        r -= RARITY_WEIGHTS[rar];
     }
-    return '#FF0000';
+    return 'common';
+}
+function pickBrainrot(){
+    const rar = pickRarity();
+    const pool = BRAINROTS_LIST.filter(b=>b.rarity===rar);
+    return pool[Math.floor(Math.random()*pool.length)];
 }
 
+// ========== ОСНОВНОЙ КОД ==========
+const skinColors = ['#FFCC00', '#FF0000', '#00FF00', '#FF00FF', '#0000FF', '#FFA500', '#800080', '#FF4500', '#FFFFFF'];
 let wheelRotation=0;
-function formatNumber(num){ if(num >= 1e15) return (num / 1e15).toFixed(2) + 'Qa'; if(num >= 1e12) return (num / 1e12).toFixed(2) + 'T'; if(num >= 1e9) return (num / 1e9).toFixed(2) + 'B'; if(num >= 1e6) return (num / 1e6).toFixed(2) + 'M'; if(num >= 1e3) return (num / 1e3).toFixed(2) + 'K'; return num.toString(); }
+function formatNumber(num){ if(num>=1e15) return (num/1e15).toFixed(2)+'Qa'; if(num>=1e12) return (num/1e12).toFixed(2)+'T'; if(num>=1e9) return (num/1e9).toFixed(2)+'B'; if(num>=1e6) return (num/1e6).toFixed(2)+'M'; if(num>=1e3) return (num/1e3).toFixed(2)+'K'; return num.toString(); }
 function resizeGame(){const game=document.getElementById('game-container');if(!game)return;const availW=window.innerWidth,availH=window.innerHeight;let scale=Math.min(availW/500,availH/500);scale=Math.max(0.6,Math.min(1.2,scale));game.style.transform=`scale(${scale})`;}
 window.addEventListener('resize',resizeGame);
 function showModal(title, text){document.getElementById('modal-title').textContent=title;document.getElementById('modal-text').textContent=text;document.getElementById('custom-modal').style.display='block';}
@@ -135,37 +187,126 @@ function closeModal(){document.getElementById('custom-modal').style.display='non
 function openTradePlaza() { document.getElementById('trade-plaza-modal').style.display = 'flex'; }
 function closeTradePlaza() { document.getElementById('trade-plaza-modal').style.display = 'none'; }
 let touchDX=0,touchDY=0,joystickManager=null;
-function initJoystick(){ const zone=document.getElementById('joystick-zone'); zone.style.display='block'; if(typeof nipplejs==='undefined'){console.warn('NippleJS не загружен');return;} joystickManager=nipplejs.create({zone:zone,mode:'static',position:{left:'50%',top:'50%'},color:'white',size:100,restOpacity:0.5,fadeTime:150}); joystickManager.on('move',(evt,data)=>{const force=Math.min(data.force,1);const angle=data.angle.radian;touchDX=Math.cos(angle)*force;touchDY=-Math.sin(angle)*force;}); joystickManager.on('end',()=>{touchDX=0;touchDY=0;}); }
+function initJoystick(){ const zone=document.getElementById('joystick-zone'); zone.style.display='block'; if(typeof nipplejs==='undefined')return; joystickManager=nipplejs.create({zone:zone,mode:'static',position:{left:'50%',top:'50%'},color:'white',size:100,restOpacity:0.5,fadeTime:150}); joystickManager.on('move',(evt,data)=>{const force=Math.min(data.force,1);const angle=data.angle.radian;touchDX=Math.cos(angle)*force;touchDY=-Math.sin(angle)*force;}); joystickManager.on('end',()=>{touchDX=0;touchDY=0;}); }
 let x=52,y=81,coins=25,dushka=0,currentNickname=null,_spins=0,isSpinning=false,currentServerId=null,currentBase=null;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
 let otherPlayers={};
 let typedCode='';
 const baseSpawnPoints={1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81},5:{x:52,y:307},6:{x:147,y:307},7:{x:242,y:307},8:{x:337,y:307}};
 
-// ========== ВЫХОД — УДАЛЯЕМ БАЗУ И СКИН ==========
+// ========== СИСТЕМА БРЭИНРОТОВ ==========
+let conveyorBrainrots = []; // {id, brainrot, x, y, dom}
+let baseBrainrots = [];     // {id, brainrot, dom}
+let conveyorSpawnTimer = 0;
+let lastConveyorSpawn = 0;
+const CONVEYOR_MAX = 12;
+const BASE_MAX = 10;
+const SPAWN_INTERVAL = 2000; // 2 сек
+const CONVEYOR_SPEED = 0.4;  // px за кадр
+
+function spawnConveyorBrainrot(){
+    if(conveyorBrainrots.length >= CONVEYOR_MAX) return;
+    const br = pickBrainrot();
+    const id = 'br_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+    const dom = document.createElement('div');
+    dom.className = 'brainrot-conveyor '+br.rarity;
+    dom.style.backgroundImage = 'url(Картинки/'+br.file+')';
+    dom.style.left = '20px';
+    dom.style.top = (192) + 'px'; // на дорожке (top:180 + 12)
+    document.getElementById('game-container').appendChild(dom);
+    conveyorBrainrots.push({id, brainrot:br, x:20, y:192, dom, locked:false});
+}
+
+function updateConveyor(dt){
+    const now = Date.now();
+    if(now - lastConveyorSpawn > SPAWN_INTERVAL){
+        lastConveyorSpawn = now;
+        spawnConveyorBrainrot();
+    }
+    for(let i = conveyorBrainrots.length-1; i>=0; i--){
+        const b = conveyorBrainrots[i];
+        if(b.locked) continue;
+        b.x += CONVEYOR_SPEED * (dt*60);
+        b.dom.style.left = b.x + 'px';
+        // Дошёл до правого чёрного — исчез
+        if(b.x >= 384){
+            b.dom.remove();
+            conveyorBrainrots.splice(i,1);
+        }
+    }
+}
+
+function catchBrainrot(b){
+    if(baseBrainrots.length >= BASE_MAX){
+        showModal('База полна','Максимум 10 брэинротов на базе!');
+        return;
+    }
+    // Ставим на базу
+    const baseX = baseSpawnPoints[currentBase].x;
+    const baseY = baseSpawnPoints[currentBase].y;
+    b.locked = true;
+    b.dom.remove();
+    const idx = conveyorBrainrots.indexOf(b);
+    if(idx>-1) conveyorBrainrots.splice(idx,1);
+    
+    const dom = document.createElement('div');
+    dom.className = 'brainrot-base '+b.brainrot.rarity;
+    dom.style.backgroundImage = 'url(Картинки/'+b.brainrot.file+')';
+    // Раскидываем на базе
+    const angle = (baseBrainrots.length / BASE_MAX) * Math.PI * 2;
+    const radius = 20;
+    dom.style.left = (baseX + 4 + Math.cos(angle)*radius) + 'px';
+    dom.style.top = (baseY + 4 + Math.sin(angle)*radius) + 'px';
+    document.getElementById('game-container').appendChild(dom);
+    baseBrainrots.push({id:b.id, brainrot:b.brainrot, dom});
+    updateBaseInfo();
+    showModal(b.brainrot.name, 'Пойман! +$'+b.brainrot.income+'/сек');
+}
+
+function updateBaseInfo(){
+    document.getElementById('base-count').textContent = baseBrainrots.length;
+}
+
+function collectBaseMoney(){
+    if(baseBrainrots.length === 0){
+        showModal('База пуста','Сначала поймай брэинротов!');
+        return;
+    }
+    let total = 0;
+    baseBrainrots.forEach(b => total += b.brainrot.income);
+    // Даём денег за 10 секунд
+    const earned = total * 10;
+    coins += earned;
+    document.getElementById('balance-amount').textContent = formatNumber(coins);
+    db.ref('users/'+currentNickname).update({coins:coins});
+    showModal('Доход с базы', 'Получено: $' + formatNumber(earned));
+}
+
+// ========== ВЫХОД ==========
 async function exitToMenu(){
     if(currentServerId && currentNickname){
-        console.log('Выхожу с сервера:', currentServerId, 'база:', currentBase);
         try {
             await db.ref('servers/'+currentServerId+'/players/'+currentNickname).remove();
             await db.ref('servers/'+currentServerId+'/bases/'+currentNickname).remove();
             await db.ref('users/'+currentNickname+'/serverId').remove();
-        } catch(e) { console.warn('Ошибка при выходе:', e); }
-        for(let key in otherPlayers){
-            if(otherPlayers[key]) otherPlayers[key].remove();
-            delete otherPlayers[key];
-        }
+        } catch(e) {}
+        for(let key in otherPlayers){ if(otherPlayers[key]) otherPlayers[key].remove(); delete otherPlayers[key]; }
         const myPlayer = document.getElementById('player');
         if(myPlayer) myPlayer.style.display = 'none';
+        // Убираем брэинротов с экрана
+        conveyorBrainrots.forEach(b => b.dom.remove());
+        conveyorBrainrots = [];
+        baseBrainrots.forEach(b => b.dom.remove());
+        baseBrainrots = [];
     }
     currentServerId=null; currentBase=null;
     document.getElementById('app').style.display='none';
     document.getElementById('exit-btn').style.display='none';
     document.getElementById('balance').style.display='none';
     document.getElementById('version').style.display='none';
+    document.getElementById('base-info').style.display='none';
     document.getElementById('main-menu').style.display='flex';
 }
-
 window.addEventListener('beforeunload', () => {
     if (currentServerId && currentNickname) {
         db.ref('servers/'+currentServerId+'/players/'+currentNickname).remove();
@@ -173,7 +314,7 @@ window.addEventListener('beforeunload', () => {
     }
 });
 
-// ========== ИСПРАВЛЕННАЯ ЛОГИКА БАЗ ==========
+// ========== БАЗЫ ==========
 async function assignBase(serverId, playerName){
     const basesRef = db.ref('servers/'+serverId+'/bases');
     await basesRef.child(playerName).remove();
@@ -183,10 +324,7 @@ async function assignBase(serverId, playerName){
     const playersSnap = await db.ref('servers/'+serverId+'/players').once('value');
     const players = playersSnap.val() || {};
     for(let nick in bases){
-        if(!players[nick]){
-            console.log('🧹 Чищу призрачную базу:', nick);
-            await basesRef.child(nick).remove();
-        }
+        if(!players[nick]){ await basesRef.child(nick).remove(); }
     }
     const cleanSnap = await basesRef.once('value');
     const cleanBases = cleanSnap.val() || {};
@@ -195,23 +333,21 @@ async function assignBase(serverId, playerName){
     for(let i=1; i<=8; i++){
         if(!taken.has(i)){
             await basesRef.child(playerName).set(i);
-            console.log('✅ Выдана база:', i, 'игроку:', playerName);
             return i;
         }
     }
-    console.log('❌ Свободных баз нет!');
     return null;
 }
 
-const shopItems=[{id:'slap',name:'Slap',desc:'An average hand to slap thieves and send them flying!',price:500,icon:'slap'},{id:'speed-coil',name:'Speed Coil',desc:'Zoom around the map with additional speed.',price:750,icon:'speed-coil'},{id:'trap',name:'Trap',desc:'Place traps that freeze thieves for 10 seconds (5 Max)',price:1000,icon:'trap'},{id:'iron-slap',name:'Iron Slap',desc:'Heavy iron slap that knocks players flying!',price:2500,icon:'iron-slap'},{id:'gravity-coil',name:'Gravity Coil',desc:'Reduced gravity coil lets you jump extra high!',price:3000,icon:'gravity-coil'},{id:'bee-launcher',name:'Bee Launcher',desc:'Release bees to attack your opponent and invert their controls!',price:10000,icon:'bee-launcher'},{id:'coil-combo',name:'Coil Combo',desc:'Combine speed and gravity coils for ultimate mobility!',price:20000,icon:'coil-combo'},{id:'rage-table',name:'Rage Table',desc:'Throw a table to fling players and return your Brainrots.',price:25000,icon:'rage-table'},{id:'diamond-slap',name:'Diamond Slap',desc:'Charge up a diamond slap to knock others away.',price:50000,icon:'diamond-slap'}];
+const shopItems=[{id:'slap',name:'Slap',desc:'Slap thieves!',price:500,icon:'slap'},{id:'speed-coil',name:'Speed Coil',desc:'Zoom around!',price:750,icon:'speed-coil'},{id:'trap',name:'Trap',desc:'Freeze thieves 10 sec',price:1000,icon:'trap'},{id:'iron-slap',name:'Iron Slap',desc:'Heavy slap!',price:2500,icon:'iron-slap'},{id:'gravity-coil',name:'Gravity Coil',desc:'Jump extra high!',price:3000,icon:'gravity-coil'},{id:'bee-launcher',name:'Bee Launcher',desc:'Release bees!',price:10000,icon:'bee-launcher'},{id:'coil-combo',name:'Coil Combo',desc:'Ultimate mobility!',price:20000,icon:'coil-combo'},{id:'rage-table',name:'Rage Table',desc:'Throw a table!',price:25000,icon:'rage-table'},{id:'diamond-slap',name:'Diamond Slap',desc:'Knock others away!',price:50000,icon:'diamond-slap'}];
 let ownedItems=[],autoBuyShopItems=[];
-function getShopIcon(type){ switch(type){ case 'slap':return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="white" stroke-width="6" fill="none"/></svg>`; case 'speed-coil':return `<svg viewBox="0 0 100 100"><path d="M50 15 Q20 30 50 45 Q80 60 50 75 Q20 90 50 95" stroke="#e74c3c" stroke-width="8" fill="none"/></svg>`; case 'trap':return `<svg viewBox="0 0 100 100"><path d="M20 80 Q50 40 80 80 L70 90 L30 90 Z" fill="#777"/><path d="M25 70 L35 55 M45 70 L50 50 M65 70 L60 50" stroke="#555" stroke-width="5"/></svg>`; case 'iron-slap':return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="#aaa" stroke-width="6" fill="none"/></svg>`; case 'gravity-coil':return `<svg viewBox="0 0 100 100"><path d="M50 15 Q20 30 50 45 Q80 60 50 75 Q20 90 50 95" stroke="#3498db" stroke-width="8" fill="none"/></svg>`; case 'bee-launcher':return `<svg viewBox="0 0 100 100"><rect x="30" y="30" width="40" height="40" fill="#f1c40f" rx="10"/><path d="M50 20 L60 40 L40 40 Z" fill="#333"/></svg>`; case 'coil-combo':return `<svg viewBox="0 0 100 100"><path d="M20 20 Q0 40 20 60 Q40 80 20 90" stroke="#e74c3c" stroke-width="6" fill="none"/><path d="M80 20 Q100 40 80 60 Q60 80 80 90" stroke="#3498db" stroke-width="6" fill="none"/></svg>`; case 'rage-table':return `<svg viewBox="0 0 100 100"><rect x="15" y="40" width="70" height="15" fill="#d35400"/><rect x="20" y="55" width="10" height="35" fill="#8e44ad"/><rect x="70" y="55" width="10" height="35" fill="#8e44ad"/></svg>`; case 'diamond-slap':return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="#00FFFF" stroke-width="6" fill="none"/></svg>`; default:return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#fff"/></svg>`; } }
+function getShopIcon(type){ switch(type){ case 'slap':return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="white" stroke-width="6" fill="none"/></svg>`; case 'speed-coil':return `<svg viewBox="0 0 100 100"><path d="M50 15 Q20 30 50 45 Q80 60 50 75 Q20 90 50 95" stroke="#e74c3c" stroke-width="8" fill="none"/></svg>`; case 'trap':return `<svg viewBox="0 0 100 100"><path d="M20 80 Q50 40 80 80 L70 90 L30 90 Z" fill="#777"/></svg>`; case 'iron-slap':return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="#aaa" stroke-width="6" fill="none"/></svg>`; case 'gravity-coil':return `<svg viewBox="0 0 100 100"><path d="M50 15 Q20 30 50 45 Q80 60 50 75 Q20 90 50 95" stroke="#3498db" stroke-width="8" fill="none"/></svg>`; case 'bee-launcher':return `<svg viewBox="0 0 100 100"><rect x="30" y="30" width="40" height="40" fill="#f1c40f" rx="10"/></svg>`; case 'coil-combo':return `<svg viewBox="0 0 100 100"><path d="M20 20 Q0 40 20 60 Q40 80 20 90" stroke="#e74c3c" stroke-width="6" fill="none"/></svg>`; case 'rage-table':return `<svg viewBox="0 0 100 100"><rect x="15" y="40" width="70" height="15" fill="#d35400"/></svg>`; case 'diamond-slap':return `<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30" stroke="#00FFFF" stroke-width="6" fill="none"/></svg>`; default:return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#fff"/></svg>`; } }
 async function loadShopData(){ if(!currentNickname)return; const data=await readUserData(currentNickname); if(data){ autoBuyShopItems=data.autoBuyShopItems||[]; } }
-function openShop(){ const container=document.getElementById('shop-items'); container.innerHTML=''; shopItems.forEach(item=>{ const isOwned=ownedItems.includes(item.id); const isAuto=autoBuyShopItems.includes(item.id); const div=document.createElement('div'); div.className='shop-item'; div.innerHTML=`<div class="icon">${getShopIcon(item.icon)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned?'owned':''}" onclick="buyShopItem('${item.id}')">${isOwned?'OWNED':'$'+item.price.toLocaleString()}</div><label class="auto-buy"><input type="checkbox" ${isAuto?'checked':''} onchange="toggleAutoBuyShopItem('${item.id}', this.checked)"> Auto Buy</label></div>`; container.appendChild(div); }); document.getElementById('shop-menu').style.display='flex'; }
+function openShop(){ const container=document.getElementById('shop-items'); container.innerHTML=''; shopItems.forEach(item=>{ const isOwned=ownedItems.includes(item.id); const isAuto=autoBuyShopItems.includes(item.id); const div=document.createElement('div'); div.className='shop-item'; div.innerHTML=`<div class="icon">${getShopIcon(item.icon)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned?'owned':''}" onclick="buyShopItem('${item.id}')">${isOwned?'OWNED':'$'+item.price.toLocaleString()}</div></div>`; container.appendChild(div); }); document.getElementById('shop-menu').style.display='flex'; }
 function closeShop(){document.getElementById('shop-menu').style.display='none';}
-function buyShopItem(id){ const item=shopItems.find(i=>i.id===id); if(!item)return; if(ownedItems.includes(id))return; if(coins>=item.price){ coins-=item.price; ownedItems.push(id); document.getElementById('balance-amount').textContent=formatNumber(coins); db.ref('users/'+currentNickname).update({coins:coins}); openShop(); showModal('Покупка',`Вы купили ${item.name} за $${item.price.toLocaleString()}!`); } else showModal('Ошибка',`Недостаточно монет! Нужно $${item.price.toLocaleString()}`); }
-function toggleAutoBuyShopItem(id,checked){ if(checked){ if(!autoBuyShopItems.includes(id))autoBuyShopItems.push(id); } else autoBuyShopItems=autoBuyShopItems.filter(x=>x!==id); db.ref('users/'+currentNickname).update({autoBuyShopItems:autoBuyShopItems}); if(checked){ const item=shopItems.find(i=>i.id===id); if(item&&!ownedItems.includes(id)&&coins>=item.price)buyShopItem(id); } }
-async function autoBuyShopItemsOnLoad(){ if(!currentNickname)return; await loadShopData(); let changed=false; for(let itemId of autoBuyShopItems){ const item=shopItems.find(i=>i.id===itemId); if(item&&!ownedItems.includes(itemId)&&coins>=item.price){ coins-=item.price; ownedItems.push(itemId); changed=true; } } if(changed){ document.getElementById('balance-amount').textContent=formatNumber(coins); db.ref('users/'+currentNickname).update({coins:coins}); } }
+function buyShopItem(id){ const item=shopItems.find(i=>i.id===id); if(!item)return; if(ownedItems.includes(id))return; if(coins>=item.price){ coins-=item.price; ownedItems.push(id); document.getElementById('balance-amount').textContent=formatNumber(coins); db.ref('users/'+currentNickname).update({coins:coins}); openShop(); showModal('Покупка',`Куплено ${item.name}!`); } else showModal('Ошибка',`Нужно $${item.price.toLocaleString()}`); }
+function toggleAutoBuyShopItem(id,checked){ if(checked){ if(!autoBuyShopItems.includes(id))autoBuyShopItems.push(id); } else autoBuyShopItems=autoBuyShopItems.filter(x=>x!==id); }
+async function autoBuyShopItemsOnLoad(){ }
 
 const beeItems=[{id:'raccoon',name:'Conetto Morsetto',mps:'$10M/s',count:400,price:499,icon:'🦝'},{id:'bear',name:'Honey Honey Bear',mps:'$32M/s',count:200,price:999,icon:'🐻'},{id:'queen',name:'Queen Bee',mps:'$65M/s',count:100,price:2499,icon:'🐝'},{id:'chocolate',name:"S'more Serat",mps:'$85M/s',count:50,price:4999,icon:'🍫'},{id:'bumbatron',name:'Bumbatron',mps:'$172.5M/s',count:25,price:9999,icon:'🤖'}];
 let beeStock={};
@@ -222,89 +358,55 @@ function checkBeeRestock(){ const elapsed=Math.floor((Date.now()-lastBeeRestock)
 setInterval(checkBeeRestock,1000);
 async function openBee(){ const stock=await loadBeeStock(); window.beeStock=stock; updateBeeUI(); document.getElementById('bee-menu').style.display='flex'; }
 function closeBee(){document.getElementById('bee-menu').style.display='none';}
-function updateBeeUI(){ if(!window.beeStock)return; beeItems.forEach(bee=>{ const statusEl=document.getElementById('status-'+bee.id); const btn=document.querySelector(`#bee-${bee.id} .price-btn`); const currentStock=window.beeStock[bee.id] ?? bee.count; if(statusEl){ if(currentStock>0) statusEl.textContent=`${currentStock} left`; else statusEl.textContent='SOLD OUT'; statusEl.style.color='#fff'; } if(btn){ if(currentStock<=0){ btn.textContent='SOLD OUT'; btn.style.background='#555'; btn.style.cursor='default'; btn.onclick=null; } else { btn.innerHTML=`<svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#00bcd4"/><text x="12" y="17" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">D</text></svg> ${bee.price.toLocaleString()}`; btn.style.background='#f7b731'; btn.style.cursor='pointer'; btn.onclick=()=>buyBee(bee.id); } } }); }
-async function buyBee(id){ const bee=beeItems.find(b=>b.id===id); if(!bee)return; if(!window.beeStock)return; const currentStock=window.beeStock[id] ?? bee.count; if(currentStock<=0)return; if(dushka>=bee.price){ dushka-=bee.price; window.beeStock[id]=currentStock-1; await db.ref('beeStock/'+id).set(window.beeStock[id]); document.getElementById('dushka-coins').textContent=formatNumber(dushka); db.ref('users/'+currentNickname).update({dushka:dushka}); updateBeeUI(); showModal('Покупка',`Вы купили пчелу ${bee.name} за ${bee.price} Dushka Coins! Осталось: ${window.beeStock[id]}`); } else showModal('Ошибка',`Недостаточно Dushka Coins! Нужно ${bee.price}`); }
+function updateBeeUI(){ if(!window.beeStock)return; beeItems.forEach(bee=>{ const statusEl=document.getElementById('status-'+bee.id); const btn=document.querySelector(`#bee-${bee.id} .price-btn`); const currentStock=window.beeStock[bee.id] ?? bee.count; if(statusEl){ if(currentStock>0) statusEl.textContent=`${currentStock} left`; else statusEl.textContent='SOLD OUT'; } if(btn){ if(currentStock<=0){ btn.textContent='SOLD OUT'; btn.style.background='#555'; btn.onclick=null; } else { btn.innerHTML=`D ${bee.price.toLocaleString()}`; btn.style.background='#f7b731'; btn.onclick=()=>buyBee(bee.id); } } }); }
+async function buyBee(id){ const bee=beeItems.find(b=>b.id===id); if(!bee)return; if(!window.beeStock)return; const currentStock=window.beeStock[id] ?? bee.count; if(currentStock<=0)return; if(dushka>=bee.price){ dushka-=bee.price; window.beeStock[id]=currentStock-1; await db.ref('beeStock/'+id).set(window.beeStock[id]); document.getElementById('dushka-coins').textContent=formatNumber(dushka); db.ref('users/'+currentNickname).update({dushka:dushka}); updateBeeUI(); showModal('Покупка',`Куплено ${bee.name}!`); } else showModal('Ошибка',`Нужно ${bee.price} Dushka Coins`); }
 
-const redShopItems={gear:[{id:'blackhole-slap',name:'Blackhole Slap',desc:'Pull, hold and push players!',price:199,once:true},{id:'ban-hammer',name:'Ban Hammer',desc:'Smash players & traps with admin powers!',price:1125,once:true},{id:'laser-gun',name:'Laser Gun',desc:'Fling lasers at players!',price:565,once:true},{id:'carpet',name:'Carpet',desc:'A stylish carpet for your base!',price:275,once:true}],gamepasses:[{id:'vip',name:'VIP',desc:'Many benefits including multi!',price:375,once:true},{id:'2x-money',name:'2X MONEY',desc:'Earn twice as much money!',price:199,once:true},{id:'admin-panel',name:'Admin Panel',desc:'Get Admin Commands!',price:7999,once:true}],money:[{id:'m51k',name:'$51,000',desc:'Money',price:59,reward:51000},{id:'m425k',name:'$425,000',desc:'Money',price:379,reward:425000},{id:'m1700k',name:'$1,700,000',desc:'Money',price:659,reward:1700000},{id:'m8500k',name:'$8,500,000',desc:'Money',price:1249,reward:8500000},{id:'m17m',name:'$17,000,000',desc:'Money',price:2499,reward:17000000}],lucky:[{id:'mythic',name:'Mythic',desc:'Lucky Block',price:175},{id:'brainrot-god',name:'Brainrot God',desc:'Lucky Block',price:399},{id:'secret',name:'Secret',desc:'Lucky Block',price:1499}],server:[{id:'server-luck',name:'Server Luck',desc:'1x > 2x',price:249}],redeem:[]};
+const redShopItems={gear:[{id:'blackhole-slap',name:'Blackhole Slap',desc:'Pull, hold and push!',price:199,once:true},{id:'ban-hammer',name:'Ban Hammer',desc:'Smash players!',price:1125,once:true},{id:'laser-gun',name:'Laser Gun',desc:'Fling lasers!',price:565,once:true},{id:'carpet',name:'Carpet',desc:'Stylish carpet!',price:275,once:true}],gamepasses:[{id:'vip',name:'VIP',desc:'Many benefits!',price:375,once:true},{id:'2x-money',name:'2X MONEY',desc:'Earn twice!',price:199,once:true},{id:'admin-panel',name:'Admin Panel',desc:'Admin Commands!',price:7999,once:true}],money:[{id:'m51k',name:'$51,000',desc:'Money',price:59,reward:51000},{id:'m425k',name:'$425,000',desc:'Money',price:379,reward:425000},{id:'m1700k',name:'$1,700,000',desc:'Money',price:659,reward:1700000},{id:'m8500k',name:'$8,500,000',desc:'Money',price:1249,reward:8500000},{id:'m17m',name:'$17,000,000',desc:'Money',price:2499,reward:17000000}],lucky:[{id:'mythic',name:'Mythic',desc:'Lucky Block',price:175},{id:'brainrot-god',name:'Brainrot God',desc:'Lucky Block',price:399},{id:'secret',name:'Secret',desc:'Lucky Block',price:1499}],server:[{id:'server-luck',name:'Server Luck',desc:'1x > 2x',price:249}],redeem:[]};
 let ownedRedItems=[],currentRedTab='gear';
-function getRedIcon(type){ switch(type){ case 'blackhole-slap':return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="25" fill="black"/><path d="M20 50 L80 50 M50 20 L50 80 M30 30 L70 70 M70 30 L30 70" stroke="white" stroke-width="3"/></svg>`; case 'ban-hammer':return `<svg viewBox="0 0 100 100"><rect x="20" y="30" width="60" height="15" fill="#7f8c8d"/><rect x="45" y="20" width="10" height="60" fill="#95a5a6"/></svg>`; case 'laser-gun':return `<svg viewBox="0 0 100 100"><rect x="10" y="40" width="60" height="15" fill="#2c3e50"/><rect x="20" y="55" width="15" height="15" fill="#34495e"/><path d="M70 45 L90 42" stroke="red" stroke-width="5"/></svg>`; case 'carpet':return `<svg viewBox="0 0 100 100"><defs><linearGradient id="carpetGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ff00ff"/><stop offset="25%" stop-color="#00ffff"/><stop offset="50%" stop-color="#ffff00"/><stop offset="75%" stop-color="#ff0000"/><stop offset="100%" stop-color="#00ff00"/></linearGradient></defs><rect x="10" y="30" width="80" height="40" fill="url(#carpetGrad)" rx="10"/><path d="M20 70 L30 90 L40 70 Z" fill="url(#carpetGrad)"/><path d="M60 70 L70 90 L80 70 Z" fill="url(#carpetGrad)"/></svg>`; case 'vip':return `<svg viewBox="0 0 100 100"><text x="10" y="70" font-size="45" fill="#f1c40f" font-weight="bold">VIP</text></svg>`; case '2x-money':return `<svg viewBox="0 0 100 100"><text x="10" y="65" font-size="40" fill="#2ecc71" font-weight="bold">x2</text></svg>`; case 'admin-panel':return `<svg viewBox="0 0 100 100"><rect x="10" y="20" width="80" height="60" fill="#34495e"/><text x="25" y="60" fill="white" font-size="25" font-weight="bold">AP</text></svg>`; case 'm51k':return `<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#27ae60" rx="5"/><text x="20" y="58" fill="white" font-size="18" font-weight="bold">$</text></svg>`; case 'm425k':return `<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#2ecc71" rx="5"/><text x="20" y="58" fill="white" font-size="18" font-weight="bold">$</text></svg>`; case 'm1700k':return `<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#27ae60" rx="5"/><rect x="20" y="30" width="25" height="40" fill="#1e8449"/></svg>`; case 'm8500k':return `<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#2ecc71" rx="5"/><rect x="30" y="30" width="30" height="40" fill="#229954"/></svg>`; case 'm17m':return `<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#27ae60" rx="5"/><rect x="40" y="30" width="40" height="40" fill="#1e8449"/></svg>`; case 'mythic':return `<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="#8e44ad" rx="5"/><text x="30" y="60" fill="white" font-size="20" font-weight="bold">M</text></svg>`; case 'brainrot-god':return `<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="#3498db" rx="5"/><text x="25" y="60" fill="white" font-size="15" font-weight="bold">BR</text></svg>`; case 'secret':return `<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="#2c3e50" rx="5"/><text x="25" y="60" fill="white" font-size="20" font-weight="bold">S</text></svg>`; case 'server-luck':return `<svg viewBox="0 0 100 100"><text x="10" y="70" font-size="40" fill="#2ecc71" font-weight="bold">2x</text></svg>`; default:return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#fff"/></svg>`; } }
+function getRedIcon(type){ return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="25" fill="#4a90e2"/></svg>`; }
 async function loadRedShopData(){ if(!currentNickname)return; const data=await readUserData(currentNickname); if(data)ownedRedItems=data.ownedRedItems||[]; }
 function switchRedTab(tab){ currentRedTab=tab; document.querySelectorAll('#red-shop-menu .tab').forEach(t=>t.classList.remove('active')); document.querySelector(`#red-shop-menu .tab[data-tab="${tab}"]`).classList.add('active'); renderRedShop(); }
-function renderRedShop(){ const container=document.getElementById('red-shop-items'); container.innerHTML=''; let items=redShopItems[currentRedTab]||[]; if(currentRedTab==='redeem'){ container.innerHTML='<div style="text-align:center;color:#fff;font-size:16px;padding:20px;">Введите код ниже:</div><input type="text" placeholder="Code Here..." style="width:100%;padding:10px;font-size:16px;border-radius:8px;border:none;margin-top:10px;">'; return; } items.forEach(item=>{ const isOwned=ownedRedItems.includes(item.id)&&item.once; const div=document.createElement('div'); div.className='red-shop-item'; div.innerHTML=`<div class="icon">${getRedIcon(item.id)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned?'owned':''}" onclick="buyRedShopItem('${item.id}')">${isOwned?'OWNED':'🪙 '+item.price.toLocaleString()}</div></div>`; container.appendChild(div); }); }
+function renderRedShop(){ const container=document.getElementById('red-shop-items'); container.innerHTML=''; let items=redShopItems[currentRedTab]||[]; if(currentRedTab==='redeem'){ container.innerHTML='<div style="text-align:center;color:#fff;padding:20px;">Введите код:</div><input type="text" placeholder="Code..." style="width:100%;padding:10px;border-radius:8px;border:none;">'; return; } items.forEach(item=>{ const isOwned=ownedRedItems.includes(item.id)&&item.once; const div=document.createElement('div'); div.className='red-shop-item'; div.innerHTML=`<div class="icon">${getRedIcon(item.id)}</div><div class="info"><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div><div class="right"><div class="price-btn ${isOwned?'owned':''}" onclick="buyRedShopItem('${item.id}')">${isOwned?'OWNED':'🪙 '+item.price.toLocaleString()}</div></div>`; container.appendChild(div); }); }
 function openRedShop(){ loadRedShopData().then(()=>{ switchRedTab('gear'); document.getElementById('red-shop-menu').style.display='flex'; }); }
 function closeRedShop(){document.getElementById('red-shop-menu').style.display='none';}
-function buyRedShopItem(id){ const item=Object.values(redShopItems).flat().find(i=>i.id===id); if(!item)return; if(item.once&&ownedRedItems.includes(id))return; if(dushka>=item.price){ dushka-=item.price; if(item.once)ownedRedItems.push(id); if(item.reward){ coins+=item.reward; document.getElementById('balance-amount').textContent=formatNumber(coins); db.ref('users/'+currentNickname).update({coins:coins,dushka:dushka,ownedRedItems:ownedRedItems}); } else { db.ref('users/'+currentNickname).update({dushka:dushka,ownedRedItems:ownedRedItems}); } document.getElementById('dushka-coins').textContent=formatNumber(dushka); renderRedShop(); showModal('Покупка',`Вы купили ${item.name} за ${item.price} Dushka Coins!`); } else showModal('Ошибка',`Недостаточно Dushka Coins! Нужно ${item.price}`); }
+function buyRedShopItem(id){ const item=Object.values(redShopItems).flat().find(i=>i.id===id); if(!item)return; if(item.once&&ownedRedItems.includes(id))return; if(dushka>=item.price){ dushka-=item.price; if(item.once)ownedRedItems.push(id); if(item.reward){ coins+=item.reward; document.getElementById('balance-amount').textContent=formatNumber(coins); } db.ref('users/'+currentNickname).update({coins:coins,dushka:dushka,ownedRedItems:ownedRedItems}); document.getElementById('dushka-coins').textContent=formatNumber(dushka); renderRedShop(); showModal('Покупка',`Куплено ${item.name}!`); } else showModal('Ошибка',`Нужно ${item.price} Dushka Coins`); }
 
 const FREE_SPIN_INTERVAL=7200; let lastFreeSpinTime=localStorage.getItem('lastFreeSpinTime'); if(!lastFreeSpinTime){lastFreeSpinTime=Date.now();localStorage.setItem('lastFreeSpinTime',lastFreeSpinTime.toString());}else{lastFreeSpinTime=parseInt(lastFreeSpinTime);}
-function updateFreeSpinTimer(){ const elapsed=Math.floor((Date.now()-lastFreeSpinTime)/1000); const remaining=FREE_SPIN_INTERVAL-elapsed; if(remaining<=0){_spins++;lastFreeSpinTime=Date.now();localStorage.setItem('lastFreeSpinTime',lastFreeSpinTime.toString());updateSpinBtn();showModal('Бесплатный спин!','Вы получили 1 бесплатное вращение!');} const hours=Math.floor(remaining/3600),minutes=Math.floor((remaining%3600)/60),seconds=remaining%60; const timerEl=document.getElementById('wheel-timer'); if(timerEl)timerEl.textContent=`Бесплатный спин через: ${hours}ч ${minutes}м ${seconds}с`; }
+function updateFreeSpinTimer(){ const elapsed=Math.floor((Date.now()-lastFreeSpinTime)/1000); const remaining=FREE_SPIN_INTERVAL-elapsed; if(remaining<=0){_spins++;lastFreeSpinTime=Date.now();localStorage.setItem('lastFreeSpinTime',lastFreeSpinTime.toString());updateSpinBtn();} const hours=Math.floor(remaining/3600),minutes=Math.floor((remaining%3600)/60),seconds=remaining%60; const timerEl=document.getElementById('wheel-timer'); if(timerEl)timerEl.textContent=`Бесплатный спин: ${hours}ч ${minutes}м ${seconds}с`; }
 setInterval(updateFreeSpinTimer,1000);
-function buySpin(a){ let c=a===1?49:199; if(dushka>=c){dushka-=c;_spins+=a;document.getElementById('dushka-coins').textContent=formatNumber(dushka);db.ref('users/'+currentNickname).update({dushka:dushka,spins:_spins});updateSpinBtn();showModal('Покупка',`Куплено ${a} спин(ов) за ${c} Dushka Coins!`);} else showModal('Ошибка','Недостаточно Dushka Coins!'); }
+function buySpin(a){ let c=a===1?49:199; if(dushka>=c){dushka-=c;_spins+=a;document.getElementById('dushka-coins').textContent=formatNumber(dushka);db.ref('users/'+currentNickname).update({dushka:dushka,spins:_spins});updateSpinBtn();} else showModal('Ошибка','Нужно Dushka Coins!'); }
 function updateSpinBtn(){document.querySelector('#wheel-menu .spin-btn').textContent=`Spin (${_spins})`;}
-function doSpin(){
-    if(isSpinning){showModal('Подождите','Колесо ещё крутится!');return;}
-    if(_spins<=0){showModal('Ошибка','Нет спинов!');return}
-    isSpinning=true; _spins--; db.ref('users/'+currentNickname).update({spins:_spins}); updateSpinBtn();
-    const wheel=document.getElementById('wheel-spin');
-    const prizes=[{name:'$12K',chance:60,reward:12000},{name:'$1M',chance:30,reward:1000000},{name:'2x Lucky',chance:2,reward:0},{name:'$12K',chance:4,reward:12000},{name:'Crystal Slap',chance:3,reward:0},{name:'Lucky Block',chance:1,reward:0}];
-    let total=prizes.reduce((sum,p)=>sum+p.chance,0);
-    let random=Math.random()*total;
-    let selectedIndex=0;
-    for(let i=0;i<prizes.length;i++){ if(random<prizes[i].chance){selectedIndex=i;break;} random-=prizes[i].chance; }
-    let selected=prizes[selectedIndex];
-    const centerAngle = 30 + selectedIndex*60;
-    const currentMod = ((wheelRotation%360)+360)%360;
-    const desiredMod = (360 - centerAngle) % 360;
-    let deltaMod = (desiredMod - currentMod + 360) % 360;
-    const extraRotations = 10*360;
-    const delta = deltaMod + extraRotations;
-    wheelRotation += delta;
-    wheel.style.transition = 'none';
-    wheel.style.transform = `rotate(${wheelRotation}deg)`;
-    void wheel.offsetWidth;
-    setTimeout(()=>{
-        wheel.style.transition = 'transform 3s cubic-bezier(0.15,0.9,0.25,1)';
-        wheel.style.transform = `rotate(${wheelRotation}deg)`;
-    }, 20);
-    setTimeout(()=>{
-        isSpinning=false;
-        if(selected.reward>0){coins+=selected.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});}
-        showModal('Колесо',`Выпало: ${selected.name}!`);
-    }, 3000);
-}
+function doSpin(){ if(isSpinning)return; if(_spins<=0){showModal('Ошибка','Нет спинов!');return;} isSpinning=true; _spins--; updateSpinBtn(); const wheel=document.getElementById('wheel-spin'); const prizes=[{name:'$12K',chance:60,reward:12000},{name:'$1M',chance:30,reward:1000000},{name:'2x Lucky',chance:2,reward:0},{name:'$12K',chance:4,reward:12000},{name:'Crystal Slap',chance:3,reward:0},{name:'Lucky Block',chance:1,reward:0}]; let total=prizes.reduce((s,p)=>s+p.chance,0); let random=Math.random()*total; let sel=0; for(let i=0;i<prizes.length;i++){ if(random<prizes[i].chance){sel=i;break;} random-=prizes[i].chance; } wheelRotation+=360*10+sel*60; wheel.style.transition='transform 3s cubic-bezier(0.15,0.9,0.25,1)'; wheel.style.transform=`rotate(${wheelRotation}deg)`; setTimeout(()=>{ isSpinning=false; const p=prizes[sel]; if(p.reward>0){coins+=p.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});} showModal('Колесо',`Выпало: ${p.name}!`); }, 3000); }
 
 async function readUserData(n){try{const s=await db.ref('users/'+n).once('value');return s.exists()?s.val():null}catch(e){return null}}
 async function writeUserData(n,d){try{await db.ref('users/'+n).update(d)}catch(e){}}
+async function handleRegister(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните всё!');return;} const e=await readUserData(u); if(e){showModal('Ошибка','Ник занят!');return;} await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,level:1,last_online:Date.now(),ownedRedItems:[],autoBuyShopItems:[],avatar:'',background:'',friends:[],friendRequests:[],serverId:null}); currentNickname=u; showMainMenu(); }
+async function handleLogin(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните всё!');return;} const e=await readUserData(u); if(e){ if(e.password===p){ currentNickname=u; if(typeof e.dushka==='undefined')e.dushka=0; if(typeof e.spins==='undefined')e.spins=0; if(typeof e.ownedRedItems==='undefined')e.ownedRedItems=[]; if(typeof e.friends==='undefined')e.friends=[]; if(typeof e.friendRequests==='undefined')e.friendRequests=[]; await writeUserData(u,e); showMainMenu(); } else showModal('Ошибка','Неверный пароль!'); } else showModal('Ошибка','Ник не найден!'); }
+function showMainMenu(){ document.getElementById('auth').style.display='none'; document.getElementById('app').style.display='none'; document.getElementById('exit-btn').style.display='none'; document.getElementById('balance').style.display='none'; document.getElementById('version').style.display='none'; document.getElementById('base-info').style.display='none'; document.getElementById('main-menu').style.display='flex'; }
 
-async function handleRegister(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){showModal('Ошибка','Ник занят!');return} await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,level:1,last_online:Date.now(),ownedRedItems:[],autoBuyShopItems:[],avatar:'',background:'',friends:[],friendRequests:[],serverId:null}); currentNickname=u; showMainMenu(); }
-async function handleLogin(){ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim(); if(!u||!p){showModal('Ошибка','Заполните НИК и ПАРОЛЬ!');return} const e=await readUserData(u); if(e){ if(e.password===p){ currentNickname=u; if(typeof e.dushka==='undefined')e.dushka=0; if(typeof e.spins==='undefined')e.spins=0; if(typeof e.ownedRedItems==='undefined')e.ownedRedItems=[]; if(typeof e.autoBuyShopItems==='undefined')e.autoBuyShopItems=[]; if(typeof e.avatar==='undefined')e.avatar=''; if(typeof e.background==='undefined')e.background=''; if(typeof e.friends==='undefined')e.friends=[]; if(typeof e.friendRequests==='undefined')e.friendRequests=[]; await writeUserData(u,e); showMainMenu(); } else showModal('Ошибка','Неверный пароль!'); } else showModal('Ошибка','Ник не найден! Нажми РЕГ.'); }
-
-function showMainMenu(){ document.getElementById('auth').style.display='none'; document.getElementById('app').style.display='none'; document.getElementById('exit-btn').style.display='none'; document.getElementById('balance').style.display='none'; document.getElementById('version').style.display='none'; document.getElementById('main-menu').style.display='flex'; }
-
-async function playRandom(){ const snapshot=await db.ref('servers').once('value'); const servers=snapshot.val()||{}; let chosen=null; let minCount=8; for(let id in servers){ const count = await getServerCount(id); if(count < minCount){ minCount=count; chosen=id; } } if(!chosen){ const newRef=db.ref('servers').push(); const id=newRef.key; await newRef.set({name:'Сервер '+(Object.keys(servers).length+1), access:'all'}); chosen=id; } await db.ref('users/'+currentNickname).update({serverId:chosen}); currentServerId=chosen; startGame(); }
-
+async function playRandom(){ const snapshot=await db.ref('servers').once('value'); const servers=snapshot.val()||{}; let chosen=null; let minCount=8; for(let id in servers){ const count = await getServerCount(id); if(count<minCount){minCount=count;chosen=id;} } if(!chosen){ const newRef=db.ref('servers').push(); const id=newRef.key; await newRef.set({name:'Сервер '+(Object.keys(servers).length+1),access:'all'}); chosen=id; } await db.ref('users/'+currentNickname).update({serverId:chosen}); currentServerId=chosen; startGame(); }
 async function getServerCount(serverId){ const snap = await db.ref('servers/'+serverId+'/players').once('value'); const players = snap.val()||{}; return Object.keys(players).length; }
-
 async function openServers(){ document.getElementById('main-menu').style.display='none'; document.getElementById('server-menu').style.display='block'; await loadServers(); }
-async function loadServers(){ const container=document.getElementById('server-list'); container.innerHTML=''; const snapshot=await db.ref('servers').once('value'); const servers=snapshot.val()||{}; const me=await readUserData(currentNickname); const myFriends=me.friends||[]; for(let id in servers){ const s=servers[id]; let canSee=false; if(s.access==='all') canSee=true; else if(s.access==='friends'){ if(s.owner===currentNickname || myFriends.includes(s.owner)) canSee=true; } else if(s.access==='selected'){ if(s.owner===currentNickname || (s.selectedPlayers||[]).includes(currentNickname)) canSee=true; } if(!canSee) continue; const playersCount = await getServerCount(id); const full=playersCount>=8; const div=document.createElement('div'); div.className='server-item'; let deleteBtn=''; if(s.owner===currentNickname){ deleteBtn='<button style="background:#ff5555;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer;margin-left:5px" onclick="deleteServer(\''+id+'\')">Удалить</button>'; } div.innerHTML=`<div class="name">${s.name}</div><div class="players">${playersCount}/8</div>${full?'<span class="full">Полный</span>':'<button class="join-btn" onclick="joinServer(\''+id+'\')">Join</button>'}${deleteBtn}`; container.appendChild(div); } }
-async function deleteServer(id){ if(!confirm('Удалить сервер?')) return; await db.ref('servers/'+id).remove(); const usersSnap=await db.ref('users').once('value'); const users=usersSnap.val()||{}; for(let nick in users){ if(users[nick].serverId===id){ await db.ref('users/'+nick+'/serverId').remove(); } } await loadServers(); }
+async function loadServers(){ const container=document.getElementById('server-list'); container.innerHTML=''; const snapshot=await db.ref('servers').once('value'); const servers=snapshot.val()||{}; const me=await readUserData(currentNickname); const myFriends=me.friends||[]; for(let id in servers){ const s=servers[id]; let canSee=false; if(s.access==='all') canSee=true; else if(s.access==='friends'){ if(s.owner===currentNickname||myFriends.includes(s.owner)) canSee=true; } else if(s.access==='selected'){ if(s.owner===currentNickname||(s.selectedPlayers||[]).includes(currentNickname)) canSee=true; } if(!canSee) continue; const playersCount = await getServerCount(id); const full=playersCount>=8; const div=document.createElement('div'); div.className='server-item'; let deleteBtn=''; if(s.owner===currentNickname){ deleteBtn='<button style="background:#ff5555;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer;margin-left:5px" onclick="deleteServer(\''+id+'\')">X</button>'; } div.innerHTML=`<div class="name">${s.name}</div><div class="players">${playersCount}/8</div>${full?'<span class="full">Полный</span>':'<button class="join-btn" onclick="joinServer(\''+id+'\')">Join</button>'}${deleteBtn}`; container.appendChild(div); } }
+async function deleteServer(id){ if(!confirm('Удалить сервер?')) return; await db.ref('servers/'+id).remove(); await loadServers(); }
 async function joinServer(id){ await db.ref('users/'+currentNickname).update({serverId:id}); currentServerId=id; closeServers(); startGame(); }
 function closeServers(){ document.getElementById('server-menu').style.display='none'; showMainMenu(); }
 function openCreateServer(){ document.getElementById('create-server-modal').style.display='block'; }
 function closeCreateServer(){ document.getElementById('create-server-modal').style.display='none'; }
 function toggleSelectedPlayers(){ const access=document.getElementById('server-access').value; document.getElementById('selected-players').style.display=access==='selected'?'block':'none'; }
-function addSelectedPlayer(){ const input=document.getElementById('selected-player-input'); const nick=input.value.trim(); if(!nick)return; const listDiv=document.getElementById('selected-list'); const span=document.createElement('span'); span.textContent=nick; span.style.marginRight='5px'; const removeBtn=document.createElement('button'); removeBtn.textContent='X'; removeBtn.style.background='#f44'; removeBtn.style.border='none'; removeBtn.style.cursor='pointer'; removeBtn.onclick=()=>span.remove(); span.appendChild(removeBtn); listDiv.appendChild(span); input.value=''; }
-async function createServer(){ const name=document.getElementById('server-name').value.trim(); const access=document.getElementById('server-access').value; if(!name){showModal('Ошибка','Введите название сервера');return} const data=await readUserData(currentNickname); if(!data || data.dushka<100){showModal('Ошибка','Недостаточно Dushka Coins!');return} await db.ref('users/'+currentNickname).update({dushka:data.dushka-100}); const newRef=db.ref('servers').push(); const id=newRef.key; let selectedPlayers=[]; if(access==='selected'){ const listDiv=document.getElementById('selected-list'); selectedPlayers=Array.from(listDiv.children).map(child=>child.firstChild.textContent); } await newRef.set({name:name, access:access, selectedPlayers:selectedPlayers, owner:currentNickname}); closeCreateServer(); openServers(); }
+function addSelectedPlayer(){ const input=document.getElementById('selected-player-input'); const nick=input.value.trim(); if(!nick)return; const listDiv=document.getElementById('selected-list'); const span=document.createElement('span'); span.textContent=nick; span.style.marginRight='5px'; listDiv.appendChild(span); input.value=''; }
+async function createServer(){ const name=document.getElementById('server-name').value.trim(); const access=document.getElementById('server-access').value; if(!name){showModal('Ошибка','Введите название');return;} const data=await readUserData(currentNickname); if(!data||data.dushka<100){showModal('Ошибка','Нужно 100 Dushka Coins!');return;} await db.ref('users/'+currentNickname).update({dushka:data.dushka-100}); const newRef=db.ref('servers').push(); const id=newRef.key; let selectedPlayers=[]; await newRef.set({name:name,access:access,selectedPlayers:selectedPlayers,owner:currentNickname}); closeCreateServer(); openServers(); }
 
 async function openFriends(){ document.getElementById('main-menu').style.display='none'; document.getElementById('friends-menu').style.display='block'; await loadFriendRequests(); await loadFriends(); }
-async function searchFriend(){ const nick=document.getElementById('friend-search').value.trim(); if(!nick){showModal('Ошибка','Введите ник');return} const user=await readUserData(nick); const resultDiv=document.getElementById('friend-result'); if(!user){ resultDiv.innerHTML='<div style="color:#f44">Игрок не найден</div>'; return; } resultDiv.innerHTML='<div class="friend-item"><div class="nick">'+nick+'</div><button onclick="sendFriendRequest(\''+nick+'\')" style="background:#4caf50;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Отправить запрос</button></div>'; }
-async function sendFriendRequest(nick){ const data=await readUserData(nick); if(!data){showModal('Ошибка','Игрок не найден');return} let requests=data.friendRequests||[]; if(requests.includes(currentNickname)){showModal('Инфо','Запрос уже отправлен');return} requests.push(currentNickname); await db.ref('users/'+nick).update({friendRequests:requests}); showModal('Успех','Запрос отправлен'); }
+async function searchFriend(){ const nick=document.getElementById('friend-search').value.trim(); if(!nick){showModal('Ошибка','Введите ник');return;} const user=await readUserData(nick); const resultDiv=document.getElementById('friend-result'); if(!user){ resultDiv.innerHTML='<div style="color:#f44">Игрок не найден</div>'; return; } resultDiv.innerHTML='<div class="friend-item"><div class="nick">'+nick+'</div><button onclick="sendFriendRequest(\''+nick+'\')" style="background:#4caf50;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Отправить</button></div>'; }
+async function sendFriendRequest(nick){ const data=await readUserData(nick); if(!data){showModal('Ошибка','Не найден');return;} let requests=data.friendRequests||[]; if(requests.includes(currentNickname)){showModal('Инфо','Уже отправлено');return;} requests.push(currentNickname); await db.ref('users/'+nick).update({friendRequests:requests}); showModal('Успех','Отправлено!'); }
 async function loadFriendRequests(){ const data=await readUserData(currentNickname); const requests=(data&&data.friendRequests)||[]; const container=document.getElementById('friend-requests'); container.innerHTML=''; if(requests.length===0){ container.innerHTML='<div style="color:#aaa">Нет запросов</div>'; return; } requests.forEach(req=>{ const div=document.createElement('div'); div.className='friend-item'; div.innerHTML='<div class="nick">'+req+'</div><button onclick="acceptFriend(\''+req+'\')" style="background:#4caf50;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Принять</button>'; container.appendChild(div); }); }
 async function acceptFriend(nick){ const data=await readUserData(currentNickname); let friends=data.friends||[]; if(!friends.includes(nick)) friends.push(nick); await db.ref('users/'+currentNickname).update({friends:friends}); let requests=data.friendRequests||[]; requests=requests.filter(r=>r!==nick); await db.ref('users/'+currentNickname).update({friendRequests:requests}); const other=await readUserData(nick); let otherFriends=other.friends||[]; if(!otherFriends.includes(currentNickname)) otherFriends.push(currentNickname); await db.ref('users/'+nick).update({friends:otherFriends}); await loadFriendRequests(); await loadFriends(); }
-async function loadFriends(){ const data=await readUserData(currentNickname); const friends=(data&&data.friends)||[]; const container=document.getElementById('friends-list'); container.innerHTML=''; if(friends.length===0){ container.innerHTML='<div style="color:#aaa">Пока нет друзей</div>'; return; } friends.forEach(friend=>{ const div=document.createElement('div'); div.className='friend-item'; div.innerHTML='<div class="nick">'+friend+'</div><div><button onclick="showFriendProfile(\''+friend+'\')" style="background:#0f3460;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer;margin-right:5px">Профиль</button><button onclick="removeFriend(\''+friend+'\')" style="background:#ff5555;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Удалить</button></div>'; container.appendChild(div); }); }
-async function removeFriend(nick){ const me = await readUserData(currentNickname); let myFriends = me.friends || []; myFriends = myFriends.filter(f => f !== nick); await db.ref('users/'+currentNickname).update({friends:myFriends}); const other = await readUserData(nick); if(other){ let otherFriends = other.friends || []; otherFriends = otherFriends.filter(f => f !== currentNickname); await db.ref('users/'+nick).update({friends:otherFriends}); } await loadFriends(); showModal('Готово','Друг удалён'); }
-async function showFriendProfile(friend){ const data=await readUserData(friend); if(!data){showModal('Ошибка','Игрок не найден');return} document.getElementById('friend-profile-name').textContent=friend; document.getElementById('friend-avatar-preview').style.backgroundImage=data.avatar?'url('+data.avatar+')':'none'; document.getElementById('friend-profile').style.display='block'; document.getElementById('friend-profile').dataset.nick=friend; }
+async function loadFriends(){ const data=await readUserData(currentNickname); const friends=(data&&data.friends)||[]; const container=document.getElementById('friends-list'); container.innerHTML=''; if(friends.length===0){ container.innerHTML='<div style="color:#aaa">Нет друзей</div>'; return; } friends.forEach(friend=>{ const div=document.createElement('div'); div.className='friend-item'; div.innerHTML='<div class="nick">'+friend+'</div><div><button onclick="showFriendProfile(\''+friend+'\')" style="background:#0f3460;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer;margin-right:5px">Профиль</button><button onclick="removeFriend(\''+friend+'\')" style="background:#ff5555;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Удалить</button></div>'; container.appendChild(div); }); }
+async function removeFriend(nick){ const me = await readUserData(currentNickname); let myFriends = me.friends || []; myFriends = myFriends.filter(f => f !== nick); await db.ref('users/'+currentNickname).update({friends:myFriends}); await loadFriends(); }
+async function showFriendProfile(friend){ const data=await readUserData(friend); if(!data){showModal('Ошибка','Не найден');return;} document.getElementById('friend-profile-name').textContent=friend; document.getElementById('friend-avatar-preview').style.backgroundImage=data.avatar?'url('+data.avatar+')':'none'; document.getElementById('friend-profile').style.display='block'; document.getElementById('friend-profile').dataset.nick=friend; }
 function cancelFriendJoin(){ document.getElementById('friend-profile').style.display='none'; }
-function joinFriendGame(){ const nick=document.getElementById('friend-profile').dataset.nick; readUserData(nick).then(data=>{ if(data&&data.serverId){ joinServer(data.serverId); } else { showModal('Инфо','Друг сейчас не играет'); } cancelFriendJoin(); }); }
+function joinFriendGame(){ const nick=document.getElementById('friend-profile').dataset.nick; readUserData(nick).then(data=>{ if(data&&data.serverId){ joinServer(data.serverId); } else { showModal('Инфо','Друг не играет'); } cancelFriendJoin(); }); }
 function closeFriends(){ document.getElementById('friends-menu').style.display='none'; showMainMenu(); }
 
 function openProfile(){ document.getElementById('main-menu').style.display='none'; document.getElementById('profile-menu').style.display='block'; readUserData(currentNickname).then(data=>{ if(data){ document.getElementById('avatar-preview').style.backgroundImage=data.avatar?'url('+data.avatar+')':'none'; document.getElementById('bg-preview').style.backgroundImage=data.background?'url('+data.background+')':'none'; } }); }
@@ -337,7 +439,6 @@ async function startGame(){
             await db.ref('servers/' + sid + '/bases/' + currentNickname).remove();
         }
     }
-    
     document.getElementById('main-menu').style.display='none';
     document.getElementById('server-menu').style.display='none';
     document.getElementById('friends-menu').style.display='none';
@@ -346,6 +447,7 @@ async function startGame(){
     document.getElementById('exit-btn').style.display='block';
     document.getElementById('balance').style.display='flex';
     document.getElementById('version').style.display='block';
+    document.getElementById('base-info').style.display='block';
     const myPlayer = document.getElementById('player');
     if(myPlayer) myPlayer.style.display = 'grid';
     await loadDushkaCoins();
@@ -354,29 +456,25 @@ async function startGame(){
     if(currentBase === null){ showModal('Ошибка','Сервер заполнен!'); await exitToMenu(); return; }
     const spawn = baseSpawnPoints[currentBase];
     x = spawn.x; y = spawn.y;
-    
-    // ВЕРХ ВСЕГДА ЖЁЛТЫЙ, НИЗ СЛУЧАЙНЫЙ
     let topColor = '#FFCC00';
-    let bottomColor = pickRandomColor();
+    let bottomColor = skinColors[Math.floor(Math.random()*skinColors.length)];
     const existingSnap = await db.ref('servers/'+currentServerId+'/players/'+currentNickname).once('value');
     if(existingSnap.exists()){
         const existing = existingSnap.val();
         if(existing.topColor) topColor = existing.topColor;
         if(existing.bottomColor) bottomColor = existing.bottomColor;
     }
-    
     await db.ref('servers/'+currentServerId+'/players/'+currentNickname).set({x:x, y:y, base:currentBase, topColor:topColor, bottomColor:bottomColor});
     db.ref('servers/'+currentServerId+'/players/'+currentNickname).onDisconnect().remove();
     db.ref('servers/'+currentServerId+'/bases/'+currentNickname).onDisconnect().remove();
     db.ref('users/'+currentNickname).update({x:x, y:y, base:currentBase, serverId:currentServerId});
     db.ref('users/'+currentNickname+'/serverId').onDisconnect().remove();
-    db.ref('servers/'+currentServerId+'/bases').on('value', snap=>{
-        const bases = snap.val() || {};
-        updateBaseNicknames(bases);
-    });
+    db.ref('servers/'+currentServerId+'/bases').on('value', snap=>{ const bases = snap.val() || {}; updateBaseNicknames(bases); });
     initPlayer(topColor, bottomColor);
     initJoystick();
     startOtherPlayersListener();
+    updateBaseInfo();
+    lastConveyorSpawn = Date.now();
     update();
     window.focus();
     resizeGame();
@@ -385,7 +483,6 @@ async function startGame(){
     await loadShopData();
     window.beeStock=await loadBeeStock();
     await loadRedShopData();
-    await autoBuyShopItemsOnLoad();
     updateBeeUI();
 }
 
@@ -402,23 +499,11 @@ function initPlayer(topColor, bottomColor){
 function startOtherPlayersListener(){
     db.ref('servers/'+currentServerId+'/players').on('value',snapshot=>{
         const players=snapshot.val()||{};
-        
-        // СИНХРОНИЗАЦИЯ: если база без игрока — удаляем; если игрок без базы — удаляем
         db.ref('servers/'+currentServerId+'/bases').once('value').then(basesSnap=>{
             const bases = basesSnap.val() || {};
-            for(let nick in bases){
-                if(!players[nick]){
-                    db.ref('servers/'+currentServerId+'/bases/'+nick).remove();
-                }
-            }
-            for(let nick in players){
-                if(nick === currentNickname) continue;
-                if(!bases[nick]){
-                    db.ref('servers/'+currentServerId+'/players/'+nick).remove();
-                }
-            }
+            for(let nick in bases){ if(!players[nick]){ db.ref('servers/'+currentServerId+'/bases/'+nick).remove(); } }
+            for(let nick in players){ if(nick === currentNickname) continue; if(!bases[nick]){ db.ref('servers/'+currentServerId+'/players/'+nick).remove(); } }
         });
-        
         for(let key in otherPlayers){
             if(!players[key] || key===currentNickname){
                 if(otherPlayers[key]) otherPlayers[key].remove();
@@ -430,19 +515,12 @@ function startOtherPlayersListener(){
             const data=players[key];
             if(!data) continue;
             let px=data.x, py=data.y;
-            if(px===undefined || py===undefined){
-                const baseNum=data.base || 1;
-                const spawn=baseSpawnPoints[baseNum] || {x:52,y:81};
-                px=spawn.x; py=spawn.y;
-                db.ref('servers/'+currentServerId+'/players/'+key).update({x:px,y:py});
-            }
+            if(px===undefined||py===undefined){ const baseNum=data.base||1; const spawn=baseSpawnPoints[baseNum]||{x:52,y:81}; px=spawn.x; py=spawn.y; db.ref('servers/'+currentServerId+'/players/'+key).update({x:px,y:py}); }
             if(!otherPlayers[key]){
                 let div=document.createElement('div');
                 div.id='other-'+key;
                 div.className='other-player';
-                const topColor = data.topColor || '#FFCC00';
-                const bottomColor = data.bottomColor || '#FFCC00';
-                div.innerHTML='<div class="pixel" style="background:'+topColor+'"></div><div class="pixel" style="background:'+bottomColor+'"></div><div class="player-name">'+key+'</div>';
+                div.innerHTML='<div class="pixel" style="background:'+(data.topColor||'#FFCC00')+'"></div><div class="pixel" style="background:'+(data.bottomColor||'#FFCC00')+'"></div><div class="player-name">'+key+'</div>';
                 document.getElementById('game-container').appendChild(div);
                 otherPlayers[key]=div;
             }
@@ -452,13 +530,17 @@ function startOtherPlayersListener(){
     });
 }
 
-document.addEventListener('keydown',function(e){ const k=String(e.key).toLowerCase(); if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return; typedCode+=k; typedCode=typedCode.slice(-17); if(typedCode==='ядушкамистердушка'&&currentNickname==='MrDushka'){showModal('Админ-панель','Заглушка');typedCode='';} if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;keys.arrowup=true;e.preventDefault()} if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;keys.arrowdown=true;e.preventDefault()} if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;keys.arrowleft=true;e.preventDefault()} if(k==='d'||k==='в'||k==='arrowright'){keys.d=true;keys.arrowright=true;e.preventDefault()} if(k==='e'||k==='у'){interact();e.preventDefault()} });
+document.addEventListener('keydown',function(e){ const k=String(e.key).toLowerCase(); if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return; if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;keys.arrowup=true;e.preventDefault()} if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;keys.arrowdown=true;e.preventDefault()} if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;keys.arrowleft=true;e.preventDefault()} if(k==='d'||k==='в'||k==='arrowright'){keys.d=true;keys.arrowright=true;e.preventDefault()} if(k==='e'||k==='у'){interact();e.preventDefault()} });
 document.addEventListener('keyup',function(e){ const k=String(e.key).toLowerCase(); if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return; if(k==='w'||k==='ц'||k==='arrowup'){keys.w=false;keys.arrowup=false;e.preventDefault()} if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=false;keys.arrowdown=false;e.preventDefault()} if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=false;keys.arrowleft=false;e.preventDefault()} if(k==='d'||k==='в'||k==='arrowright'){keys.d=false;keys.arrowright=false;e.preventDefault()} });
 
 const SPEED=1,MAX_X=380,MAX_Y=380;
 const obstacles=[{x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},{x:150,y:137,w:20,h:20},{x:190,y:137,w:20,h:20},{x:230,y:137,w:20,h:24},{x:150,y:230,w:20,h:20},{x:190,y:230,w:20,h:20},{x:230,y:230,w:20,h:20}];
 const interactables=[{id:'rng-machine',x:190,y:137,h:20},{id:'shop-blue',x:150,y:137,h:20},{id:'queen-bee',x:230,y:137,h:24},{id:'shop-red',x:150,y:230,h:20},{id:'rng-circle',x:190,y:230,h:20},{id:'shop-white',x:230,y:230,h:20}];
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y)}
+
+// Какой объект сейчас в зоне действия
+let currentInteractTarget = null;
+
 let lastTime=0,lastSync=0;
 function update(time=0){
     requestAnimationFrame(update);
@@ -498,25 +580,85 @@ function update(time=0){
         db.ref('servers/'+currentServerId+'/players/'+currentNickname).update({x:x,y:y});
         lastSync=Date.now();
     }
-    let found=false;
-    let playerCenter={x:x+4,y:y+8};
-    for(let obj of interactables){
-        let objCenter={x:obj.x+10,y:obj.y+obj.h/2};
-        let dist=Math.sqrt(Math.pow(playerCenter.x-objCenter.x,2)+Math.pow(playerCenter.y-objCenter.y,2));
-        if(dist<25){
-            let btn=document.getElementById('interact');
-            btn.style.display='flex';
-            btn.style.left=(x-5)+'px';
-            btn.style.top=(y-22)+'px';
-            btn.dataset.obj=obj.id;
-            found=true;
+    
+    // Обновляем дорожку
+    updateConveyor(dt);
+    
+    // Проверяем взаимодействие
+    let found = false;
+    let playerCenter = {x:x+4, y:y+8};
+    currentInteractTarget = null;
+    
+    // 1. Проверяем брэинротов на дорожке
+    for(let b of conveyorBrainrots){
+        if(b.locked) continue;
+        const bc = {x:b.x+7, y:b.y+7};
+        const dist = Math.sqrt(Math.pow(playerCenter.x-bc.x,2)+Math.pow(playerCenter.y-bc.y,2));
+        if(dist < 18){
+            currentInteractTarget = {type:'brainrot', target:b};
+            found = true;
             break;
         }
     }
-    if(!found)document.getElementById('interact').style.display='none';
+    
+    // 2. Проверяем базу (если стоим на своей зелёной зоне)
+    if(!found && currentBase){
+        const base = baseSpawnPoints[currentBase];
+        // Ярко-зелёная зона снизу/сверху базы
+        const greenX = base.x + 20;
+        const greenY = currentBase <= 4 ? base.y + 75 : base.y - 14;
+        const dist = Math.sqrt(Math.pow(playerCenter.x-greenX,2)+Math.pow(playerCenter.y-greenY,2));
+        if(dist < 20){
+            currentInteractTarget = {type:'base'};
+            found = true;
+        }
+    }
+    
+    // 3. Проверяем магазины
+    if(!found){
+        for(let obj of interactables){
+            let objCenter={x:obj.x+10,y:obj.y+obj.h/2};
+            let dist=Math.sqrt(Math.pow(playerCenter.x-objCenter.x,2)+Math.pow(playerCenter.y-objCenter.y,2));
+            if(dist<25){
+                currentInteractTarget = {type:'shop', target:obj};
+                found = true;
+                break;
+            }
+        }
+    }
+    
+    const btn = document.getElementById('interact');
+    if(found){
+        btn.style.display='flex';
+        btn.style.left=(x-5)+'px';
+        btn.style.top=(y-22)+'px';
+    } else {
+        btn.style.display='none';
+    }
 }
-function interact(){ let btn=document.getElementById('interact'); if(btn.style.display==='none')return; let obj=btn.dataset.obj; if(obj==='shop-blue'){openShop();} else if(obj==='shop-red'){openRedShop();} else if(obj==='shop-white'){openTradePlaza();} else if(obj==='queen-bee'){openBee();} else if(obj==='rng-circle'){openWheel();} else if(obj==='rng-machine'){showModal('RNG Машина','Здесь будет случайный приз!');} else showModal('Взаимодействие','Объект: '+obj); }
+
+function interact(){
+    if(!currentInteractTarget) return;
+    if(currentInteractTarget.type === 'brainrot'){
+        catchBrainrot(currentInteractTarget.target);
+    } else if(currentInteractTarget.type === 'base'){
+        collectBaseMoney();
+    } else if(currentInteractTarget.type === 'shop'){
+        const obj = currentInteractTarget.target;
+        if(obj.id==='shop-blue'){openShop();}
+        else if(obj.id==='shop-red'){openRedShop();}
+        else if(obj.id==='shop-white'){openTradePlaza();}
+        else if(obj.id==='queen-bee'){openBee();}
+        else if(obj.id==='rng-circle'){openWheel();}
+        else if(obj.id==='rng-machine'){showModal('RNG Машина','Здесь будет приз!');}
+    }
+}
 function openWheel(){document.getElementById('wheel-menu').style.display='flex'}function closeWheel(){document.getElementById('wheel-menu').style.display='none'}
+
+function showBaseInfo(){
+    const total = baseBrainrots.reduce((s,b)=>s+b.brainrot.income,0);
+    showModal('База', 'Брэинротов: '+baseBrainrots.length+'/10\nДоход: $'+total+'/сек');
+}
 
 async function loadDushkaCoins(){ if(currentNickname){ const d=await readUserData(currentNickname); if(d){ dushka=d.dushka||0; document.getElementById('dushka-coins').textContent=formatNumber(dushka); } } }
 async function loadCoins(){ if(currentNickname){ const d=await readUserData(currentNickname); if(d){ coins=d.coins||25; document.getElementById('balance-amount').textContent=formatNumber(coins); } } }
