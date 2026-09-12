@@ -76,6 +76,9 @@ input[type="file"]{color:#fff}
 #interact{position:absolute;display:none;z-index:1000;width:26px;height:26px;background:rgba(0,0,0,.75);border:2px solid #fff;border-radius:5px;justify-content:center;align-items:center;color:#fff;font-size:14px;font-weight:bold;cursor:pointer;overflow:hidden}
 #interact .fill{position:absolute;bottom:0;left:0;width:100%;height:0%;background:#4caf50;opacity:.75}
 #interact span{position:relative;z-index:1}
+#interact-f{position:absolute;display:none;z-index:1000;width:26px;height:26px;background:rgba(0,0,0,.75);border:2px solid #fff;border-radius:5px;justify-content:center;align-items:center;color:#fff;font-size:14px;font-weight:bold;cursor:pointer;overflow:hidden}
+#interact-f .fill{position:absolute;bottom:0;left:0;width:100%;height:0%;background:#c0392b;opacity:.75}
+#interact-f span{position:relative;z-index:1}
 .brainrot-conveyor{position:absolute;width:28px;height:28px;z-index:18;border:2px solid rgba(0,0,0,.6);background-size:cover;background-position:center;border-radius:5px;pointer-events:none}
 .brainrot-conveyor.common{border-color:#aaa}.brainrot-conveyor.horror{border-color:#555}
 .brainrot-conveyor.epic{border-color:#9b59b6}.brainrot-conveyor.legendary{border-color:#f1c40f;box-shadow:0 0 8px #f1c40f}
@@ -130,7 +133,7 @@ input[type="file"]{color:#fff}
 <body>
 <div id="auth"><div id="auth-box"><label class="auth-label">НИК</label><input type="text" id="username" class="auth-input" autocomplete="off"><label class="auth-label">ПАРОЛЬ</label><input type="password" id="password" class="auth-input"><div class="auth-btns"><button class="auth-btn btn-login" onclick="handleLogin()">ВОЙТИ</button><button class="auth-btn btn-reg" onclick="handleRegister()">РЕГ</button></div><div class="hint">Запишите пароль</div></div></div>
 <div id="balance"><span class="label">Монеты:</span><span class="amount" id="balance-amount">25</span></div>
-<div id="version">Версия: 0.32</div>
+<div id="version">Версия: 0.33</div>
 <div id="exit-btn" onclick="exitToMenu()">Выйти</div>
 <div id="main-menu">
   <h1>Steal A Dushka</h1>
@@ -169,6 +172,7 @@ input[type="file"]{color:#fff}
       <div id="rng-circle"></div>
       <div id="shop-white"><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div></div>
       <div id="interact"><div class="fill"></div><span>E</span></div>
+      <div id="interact-f"><div class="fill"></div><span>F</span></div>
       <div id="player"></div>
     </div>
   </div>
@@ -224,17 +228,14 @@ function pickBrainrot(){const rar=pickRarity();const pool=BRAINROTS_LIST.filter(
 const BASE_POSITIONS={1:{x:20,y:20},2:{x:110,y:20},3:{x:200,y:20},4:{x:290,y:20},5:{x:20,y:300},6:{x:110,y:300},7:{x:200,y:300},8:{x:290,y:300}};
 const BASE_SPAWN={1:{x:52,y:81},2:{x:142,y:81},3:{x:232,y:81},4:{x:322,y:81},5:{x:52,y:300},6:{x:142,y:300},7:{x:232,y:300},8:{x:322,y:300}};
 const GREEN_ZONE={1:{x:60,y:105},2:{x:150,y:105},3:{x:240,y:105},4:{x:330,y:105},5:{x:60,y:295},6:{x:150,y:295},7:{x:240,y:295},8:{x:330,y:295}};
-// Слоты на базе (10 штук — 5 слева + 5 справа)
 const SLOT_OFFSETS=[{dx:6,dy:6},{dx:6,dy:22},{dx:6,dy:38},{dx:6,dy:54},{dx:6,dy:64},{dx:60,dy:6},{dx:60,dy:22},{dx:60,dy:38},{dx:60,dy:54},{dx:60,dy:64}];
 
-// Стены и объекты, через которые НЕЛЬЗЯ ходить (но базы — можно!)
 const OBSTACLES=[
   {x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},
   {x:150,y:137,w:20,h:20},{x:190,y:137,w:20,h:20},{x:230,y:137,w:20,h:24},
   {x:150,y:230,w:20,h:20},{x:190,y:230,w:20,h:20},{x:230,y:230,w:20,h:20}
 ];
 
-// ========== СОСТОЯНИЕ ==========
 let x=200,y=200,coins=25,currentNickname=null,currentServerId=null,myBaseId=0,myBaseLocked=false;
 let mySlots=new Array(10).fill(null);
 let allBasesData={},otherPlayers={},otherPlayersData={};
@@ -243,10 +244,9 @@ let lastConveyorSpawn=0;
 let currentTarget=null;
 let inMenu=false;
 const CONVEYOR_MAX=12, SPAWN_INTERVAL=2000, CONVEYOR_SPEED=0.5, BASE_MAX=10;
-const PLAYER_SPEED=2;          // px/frame
-const WALKER_SPEED=0.5;        // px/frame — в 4 раза медленнее игрока
+const PLAYER_SPEED=2;   // px/frame
+const WALKER_SPEED=1;   // в 2 раза медленнее игрока
 
-// ========== УТИЛ ==========
 function formatNumber(num){if(num>=1e15)return(num/1e15).toFixed(2)+'Qa';if(num>=1e12)return(num/1e12).toFixed(2)+'T';if(num>=1e9)return(num/1e9).toFixed(2)+'B';if(num>=1e6)return(num/1e6).toFixed(2)+'M';if(num>=1e3)return(num/1e3).toFixed(2)+'K';return num.toString();}
 function showModal(t,x){inMenu=true;document.getElementById('modal-title').textContent=t;document.getElementById('modal-text').textContent=x;document.getElementById('custom-modal').style.display='block';}
 function closeModal(){inMenu=false;document.getElementById('custom-modal').style.display='none';}
@@ -281,7 +281,6 @@ function showMainMenu(){
   document.getElementById('main-menu').style.display='flex';
 }
 
-// ========== СТАРТ ==========
 async function playRandom(){
   const s=await db.ref('servers').once('value'); const servers=s.val()||{};
   let chosen=null;
@@ -326,7 +325,6 @@ async function assignBase(){
 }
 async function loadAllBases(){const s=await db.ref('servers/'+currentServerId+'/bases').once('value');allBasesData=s.val()||{};}
 
-// ========== РЕНДЕР ==========
 function renderPlayer(){
   const p=document.getElementById('player');
   p.innerHTML='<div class="pixel" style="background:#FFCC00"></div><div class="pixel" style="background:#FF0000"></div><div class="player-name">'+currentNickname+'</div>';
@@ -372,7 +370,6 @@ function renderBaseSlots(){
   });
 }
 
-// ========== КОНВЕЙЕР ==========
 function spawnConveyor(){
   if(conveyorBrainrots.length>=CONVEYOR_MAX)return;
   const br=pickBrainrot();
@@ -400,7 +397,6 @@ function updateConveyor(dt){
   }
 }
 
-// ========== АНИМАЦИЯ ХОДЬБЫ (в 4 раза медленнее игрока) ==========
 function startWalking(br,startX,startY,targetX,targetY,onArrive){
   const dom=document.createElement('div');
   dom.className='brainrot-walker '+br.rarity;
@@ -428,7 +424,6 @@ function updateWalkers(dt){
   }
 }
 
-// ========== ПОКУПКА / ПРОДАЖА ==========
 async function buyConveyor(b){
   if(mySlots.filter(s=>s).length>=BASE_MAX){showModal('Ошибка','База полна!');return;}
   if(coins<b.brainrot.price){showModal('Ошибка','Нужно $'+formatNumber(b.brainrot.price));return;}
@@ -473,9 +468,9 @@ async function doSell(idx,br){
 function confirmYes(){if(window._pendingSell){doSell(window._pendingSell.idx,window._pendingSell.br);window._pendingSell=null;}document.getElementById('confirm-modal').style.display='none';}
 function confirmNo(){window._pendingSell=null;document.getElementById('confirm-modal').style.display='none';}
 
-// ========== УДЕРЖАНИЕ E (0.5 сек) ==========
-let eHoldTimer=null, eHoldRAF=null, eHoldStart=0, eHoldActive=false;
-let fHoldTimer=null, fHoldRAF=null, fHoldStart=0, fHoldActive=false;
+// ========== УДЕРЖАНИЕ E / F ==========
+let eHoldTimer=null, eHoldStart=0, eHoldActive=false;
+let fHoldTimer=null, fHoldStart=0, fHoldActive=false;
 
 function startEHold(){
   if(!currentTarget || eHoldActive || inMenu) return;
@@ -486,11 +481,10 @@ function startEHold(){
   const tick=()=>{
     const t=(Date.now()-eHoldStart)/500;
     if(t>=1){fill.style.height='100%';}
-    else{fill.style.height=(t*100)+'%';eHoldRAF=requestAnimationFrame(tick);}
+    else{fill.style.height=(t*100)+'%';requestAnimationFrame(tick);}
   };
   tick();
   eHoldTimer=setTimeout(()=>{
-    cancelAnimationFrame(eHoldRAF);
     btn.style.display='none';
     fill.style.height='0%';
     eHoldActive=false;
@@ -500,15 +494,13 @@ function startEHold(){
 function cancelEHold(){
   eHoldActive=false;
   if(eHoldTimer){clearTimeout(eHoldTimer);eHoldTimer=null;}
-  if(eHoldRAF){cancelAnimationFrame(eHoldRAF);eHoldRAF=null;}
   const btn=document.getElementById('interact');
-  if(btn){btn.style.display='none';btn.querySelector('.fill').style.height='0%';}
+  if(btn){btn.querySelector('.fill').style.height='0%';}
 }
 function executeE(){
   if(!currentTarget) return;
   if(currentTarget.type==='conveyor') buyConveyor(currentTarget.target);
   else if(currentTarget.type==='base') openBaseMenu();
-  else if(currentTarget.type==='myBrainrot') sellBrainrot(currentTarget.slot);
   else if(currentTarget.type==='obj'){
     const o=currentTarget.obj;
     if(o.action==='openShop')openShop();
@@ -518,16 +510,31 @@ function executeE(){
     else if(o.action==='showModal')showModal(o.args[0],o.args[1]);
   }
 }
-
 function startFHold(){
   if(!currentTarget || currentTarget.type!=='myBrainrot' || fHoldActive || inMenu) return;
   fHoldActive=true; fHoldStart=Date.now();
+  const btn=document.getElementById('interact-f');
+  btn.style.display='flex';
+  const fill=btn.querySelector('.fill');
+  const tick=()=>{
+    const t=(Date.now()-fHoldStart)/500;
+    if(t>=1){fill.style.height='100%';}
+    else{fill.style.height=(t*100)+'%';requestAnimationFrame(tick);}
+  };
+  tick();
   fHoldTimer=setTimeout(()=>{
+    btn.style.display='none';
+    fill.style.height='0%';
     fHoldActive=false;
     if(currentTarget && currentTarget.type==='myBrainrot') sellBrainrot(currentTarget.slot);
   },500);
 }
-function cancelFHold(){fHoldActive=false;if(fHoldTimer){clearTimeout(fHoldTimer);fHoldTimer=null;}}
+function cancelFHold(){
+  fHoldActive=false;
+  if(fHoldTimer){clearTimeout(fHoldTimer);fHoldTimer=null;}
+  const btn=document.getElementById('interact-f');
+  if(btn){btn.style.display='none';btn.querySelector('.fill').style.height='0%';}
+}
 
 // ========== УПРАВЛЕНИЕ ==========
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
@@ -576,13 +583,14 @@ function update(t=0){
       const len=Math.sqrt(dx*dx+dy*dy);
       const stepX=(dx/len)*PLAYER_SPEED*dt*60;
       const stepY=(dy/len)*PLAYER_SPEED*dt*60;
-      // Split-axis: сначала X, потом Y
+      // Если игрок уже в коллизии — двигаем без проверки, чтобы вылезти
+      const wasStuck=checkCollision(x,y);
       let nx=x+stepX;
-      if(!checkCollision(nx,y)) x=nx;
+      if(wasStuck||!checkCollision(nx,y)) x=nx;
       let ny=y+stepY;
-      if(!checkCollision(x,ny)) y=ny;
-      x=Math.max(10,Math.min(382,x));
-      y=Math.max(10,Math.min(382,y));
+      if(wasStuck||!checkCollision(x,ny)) y=ny;
+      x=Math.max(8,Math.min(384,x));
+      y=Math.max(8,Math.min(384,y));
       document.getElementById('player').style.left=x+'px';
       document.getElementById('player').style.top=y+'px';
     }
@@ -603,40 +611,68 @@ function checkCollision(cx,cy){
   return false;
 }
 function updateTarget(){
-  if(inMenu){currentTarget=null;return;}
+  if(inMenu){currentTarget=null;document.getElementById('interact').style.display='none';document.getElementById('interact-f').style.display='none';return;}
   const pc={x:x+4,y:y+8}; currentTarget=null;
   // 1. Брэинроты на дорожке
   for(const b of conveyorBrainrots){
     if(b.locked)continue;
     const d=Math.hypot(pc.x-(b.x+14),pc.y-(b.y+14));
-    if(d<26){currentTarget={type:'conveyor',target:b};return;}
+    if(d<26){currentTarget={type:'conveyor',target:b};break;}
   }
-  // 2. Свои брэинроты на базе (для продажи)
-  const bp=BASE_POSITIONS[myBaseId];
-  for(let i=0;i<10;i++){
-    if(!mySlots[i]) continue;
-    const off=SLOT_OFFSETS[i];
-    const d=Math.hypot(pc.x-(bp.x+off.dx+8),pc.y-(bp.y+off.dy+8));
-    if(d<18){currentTarget={type:'myBrainrot',slot:i};return;}
+  // 2. Свои брэинроты на базе
+  if(!currentTarget){
+    const bp=BASE_POSITIONS[myBaseId];
+    for(let i=0;i<10;i++){
+      if(!mySlots[i]) continue;
+      const off=SLOT_OFFSETS[i];
+      const d=Math.hypot(pc.x-(bp.x+off.dx+8),pc.y-(bp.y+off.dy+8));
+      if(d<18){currentTarget={type:'myBrainrot',slot:i};break;}
+    }
   }
   // 3. Декоративные объекты
-  const objs=[
-    {id:'rng-machine',x:190,y:137,w:20,h:20,action:'showModal',args:['RNG Машина','Скоро!']},
-    {id:'shop-blue',x:150,y:137,w:20,h:20,action:'openShop'},
-    {id:'queen-bee',x:230,y:137,w:20,h:24,action:'openBee'},
-    {id:'shop-red',x:150,y:230,w:20,h:20,action:'openRedShop'},
-    {id:'rng-circle',x:190,y:230,w:20,h:20,action:'openWheel'},
-    {id:'shop-white',x:230,y:230,w:20,h:20,action:'showModal',args:['Trade','Скоро!']}
-  ];
-  for(const o of objs){
-    const d=Math.hypot(pc.x-(o.x+10),pc.y-(o.y+o.h/2));
-    if(d<28){currentTarget={type:'obj',obj:o};return;}
+  if(!currentTarget){
+    const objs=[
+      {id:'rng-machine',x:190,y:137,w:20,h:20,action:'showModal',args:['RNG Машина','Скоро!']},
+      {id:'shop-blue',x:150,y:137,w:20,h:20,action:'openShop'},
+      {id:'queen-bee',x:230,y:137,w:20,h:24,action:'openBee'},
+      {id:'shop-red',x:150,y:230,w:20,h:20,action:'openRedShop'},
+      {id:'rng-circle',x:190,y:230,w:20,h:20,action:'openWheel'},
+      {id:'shop-white',x:230,y:230,w:20,h:20,action:'showModal',args:['Trade','Скоро!']}
+    ];
+    for(const o of objs){
+      const d=Math.hypot(pc.x-(o.x+10),pc.y-(o.y+o.h/2));
+      if(d<28){currentTarget={type:'obj',obj:o};break;}
+    }
   }
-  // 4. Зелёная зона на своей базе (открыть меню базы)
-  const gz=GREEN_ZONE[myBaseId];
-  if(gz){
-    const d=Math.hypot(pc.x-gz.x,pc.y-gz.y);
-    if(d<25){currentTarget={type:'base'};return;}
+  // 4. Зелёная зона
+  if(!currentTarget){
+    const gz=GREEN_ZONE[myBaseId];
+    if(gz){
+      const d=Math.hypot(pc.x-gz.x,pc.y-gz.y);
+      if(d<25){currentTarget={type:'base'};}
+    }
+  }
+  // Позиционирование кнопок
+  const eBtn=document.getElementById('interact');
+  const fBtn=document.getElementById('interact-f');
+  if(!currentTarget){
+    eBtn.style.display='none';
+    fBtn.style.display='none';
+    return;
+  }
+  eBtn.style.display='flex';
+  if(currentTarget.type==='myBrainrot'){
+    // E опускается вниз (на уровень тела), F правее E
+    eBtn.style.left=(x-30)+'px';
+    eBtn.style.top=(y+4)+'px';
+    fBtn.style.display='flex';
+    fBtn.style.left=(x-2)+'px';
+    fBtn.style.top=(y+4)+'px';
+  } else {
+    // E прямо над головой
+    eBtn.style.left=(x-9)+'px';
+    eBtn.style.top=(y-42)+'px';
+    fBtn.style.display='none';
   }
 }
 
@@ -662,7 +698,6 @@ function openBaseMenu(){
 }
 function closeBaseMenu(){inMenu=false;document.getElementById('base-menu').style.display='none';}
 
-// ========== МАГАЗИНЫ ==========
 function openShop(){
   inMenu=true;
   const c=document.getElementById('shop-list'); c.innerHTML='';
@@ -713,7 +748,6 @@ function doSpin(){
   showModal('Колесо','🎉 +$'+formatNumber(win));
 }
 
-// ========== СЕРВЕРЫ / ДРУЗЬЯ / ПРОФИЛЬ ==========
 async function openServers(){
   document.getElementById('main-menu').style.display='none';
   document.getElementById('server-menu').style.display='block';
