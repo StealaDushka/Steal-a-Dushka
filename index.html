@@ -44,6 +44,7 @@ input[type="file"]{color:#fff}
 #actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .action-btn{width:60px;height:60px;display:flex;justify-content:center;align-items:center;background:#666;border:4px solid #000;color:#fff;font-weight:bold;font-size:12px;cursor:pointer;text-align:center}
 .action-btn.pink{background:#E54B8C}
+.action-btn.purple{background:#6a1b9a}
 #game-wrapper{flex:1;height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden}
 #game-container{width:400px;height:400px;background:#20b94d;border:4px solid black;position:relative;overflow:hidden;transform-origin:left center}
 #floor-container{width:400px;height:400px;background:#5a5a5a;border:4px solid black;position:relative;overflow:hidden;display:none;transform-origin:left center}
@@ -202,7 +203,7 @@ input[type="file"]{color:#fff}
   <div class="box dushka"><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div>
   <div class="box"><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div>
 </div>
-<div id="version">Версия: 0.32</div>
+<div id="version">Версия: 0.33</div>
 <div id="exit-btn" onclick="exitToMenu()">Выйти</div>
 <div id="back-btn" onclick="exitFloor()">Назад</div>
 <div id="main-menu"><h1>Steal A Dushka</h1><button class="menu-btn green" onclick="playRandom()">Играть</button><button class="menu-btn blue" onclick="openServers()">Серверы</button><button class="menu-btn purple" onclick="openFriends()">Друзья</button><button class="menu-btn" onclick="openProfile()">Профиль</button></div>
@@ -222,7 +223,7 @@ input[type="file"]{color:#fff}
     <div class="action-btn pink" onclick="openRedShop()">SHOP</div>
     <div class="action-btn" onclick="showModal('Ребирт','Скоро!')">REBIRTH</div>
     <div class="action-btn" onclick="showModal('Трейд','Скоро!')">TRADE</div>
-    <div class="action-btn" onclick="openBaseMenu()">БАЗА</div>
+    <div class="action-btn purple" onclick="openIndexMenu()">ИНДЕКС</div>
   </div></div>
   <div id="game-wrapper">
     <div id="game-container">
@@ -327,6 +328,16 @@ const obstacles=[
   {x:148,y:228,w:24,h:24},{x:188,y:228,w:24,h:24},{x:228,y:228,w:24,h:24}
 ];
 
+// ========== ФИКС: превращаем объект в массив из 10 ==========
+function normalizeSlots(slots){
+  const arr = new Array(10).fill(null);
+  if(!slots) return arr;
+  for(let i=0;i<10;i++){
+    if(slots[i]) arr[i] = slots[i];
+  }
+  return arr;
+}
+
 function formatNumber(num){if(num>=1e15)return(num/1e15).toFixed(2)+'Qa';if(num>=1e12)return(num/1e12).toFixed(2)+'T';if(num>=1e9)return(num/1e9).toFixed(2)+'B';if(num>=1e6)return(num/1e6).toFixed(2)+'M';if(num>=1e3)return(num/1e3).toFixed(2)+'K';return num.toString();}
 function showModal(t,x){document.getElementById('modal-title').textContent=t;document.getElementById('modal-text').textContent=x;document.getElementById('custom-modal').style.display='block';}
 function closeModal(){document.getElementById('custom-modal').style.display='none';}
@@ -381,7 +392,7 @@ async function startGame(){
   document.getElementById('version').style.display='block';
   const d=await readUserData(currentNickname);
   coins=d.coins||25;dushka=d.dushka||0;myBaseId=d.baseId||0;myBaseLocked=d.baseLocked||false;
-  mySlots=d.baseSlots||new Array(10).fill(null);
+  mySlots=normalizeSlots(d.baseSlots);
   ownedItems=d.ownedItems||[];autoBuyShopItems=d.autoBuyShopItems||[];ownedRedItems=d.ownedRedItems||[];
   _spins=d.spins||0;
   document.getElementById('balance-amount').textContent=formatNumber(coins);
@@ -393,7 +404,7 @@ async function startGame(){
   db.ref('servers/'+currentServerId+'/bases').on('value',snap=>{
     allBasesData=snap.val()||{};
     if(allBasesData[myBaseId]&&allBasesData[myBaseId].owner===currentNickname){
-      mySlots=allBasesData[myBaseId].slots||mySlots;
+      mySlots=normalizeSlots(allBasesData[myBaseId].slots);
       myBaseLocked=allBasesData[myBaseId].locked||false;
     }
     renderAllBases();
@@ -499,6 +510,7 @@ async function doSell(idx,br){
   await db.ref('users/'+currentNickname).update({coins:coins,baseSlots:mySlots});
   await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
   if(inFloor)renderFloor();
+  if(document.getElementById('base-menu').style.display==='block')openBaseMenu();
   showModal('Продано',br.name+' +$'+formatNumber(price));
 }
 function confirmYes(){if(window._pendingSell){doSell(window._pendingSell.idx,window._pendingSell.br);window._pendingSell=null;}document.getElementById('confirm-modal').style.display='none';}
@@ -518,11 +530,12 @@ async function sellMyBrainrot(idx){
 async function stealBrainrot(bid,idx){
   const bdata=allBasesData[bid];
   if(!bdata||bdata.locked){showModal('Ошибка','База закрыта');return;}
-  const br=bdata.slots[idx];if(!br)return;
+  const victimSlots=normalizeSlots(bdata.slots);
+  const br=victimSlots[idx];if(!br)return;
   const free=mySlots.findIndex(s=>s===null);
   if(free<0){showModal('Ошибка','Нет свободного слота');return;}
-  const newSlots=bdata.slots.slice();newSlots[idx]=null;
-  await db.ref('servers/'+currentServerId+'/bases/'+bid+'/slots').set(newSlots);
+  victimSlots[idx]=null;
+  await db.ref('servers/'+currentServerId+'/bases/'+bid+'/slots').set(victimSlots);
   mySlots[free]={...br,placedAt:Date.now()};
   await db.ref('users/'+currentNickname).update({baseSlots:mySlots});
   await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
@@ -537,7 +550,7 @@ function quickE(){
   if(currentTarget.type==='green_mine'){openFloor(myBaseId);return;}
   if(currentTarget.type==='green_other'){openFloor(currentTarget.baseId);return;}
   if(currentTarget.type==='locked_other'){showModal('База закрыта','Владелец закрыл доступ');return;}
-  if(currentTarget.type==='slot_mine_full'){sellMyBrainrot(currentTarget.slot);return;}
+  if(currentTarget.type==='slot_mine_full'){openBaseMenu();return;}
   if(currentTarget.type==='slot_empty_mine'){openBaseMenu();return;}
   if(currentTarget.type==='slot_other_full'){stealBrainrot(currentTarget.baseId,currentTarget.slot);return;}
   if(currentTarget.type==='shop'){
@@ -549,6 +562,12 @@ function quickE(){
     else if(o.id==='rng-circle')openWheel();
     else if(o.id==='rng-machine')showModal('RNG','Здесь будет приз!');
   }
+}
+
+// ========== ИНДЕКС (замена БАЗА) ==========
+function openIndexMenu(){
+  const colors = ['—','Красный','Синий','Зелёный','Жёлтый','Фиолетовый','Оранжевый','Розовый','Голубой'];
+  showModal('ИНДЕКС', 'Твоя база: №' + myBaseId + '\nЦвет: ' + (colors[myBaseId] || 'Неизвестно') + '\nБрэинротов: ' + mySlots.filter(s=>s).length + '/10');
 }
 
 document.addEventListener('keydown',e=>{
@@ -576,7 +595,7 @@ function openFloor(baseId){
   if(!bdata)return;
   if(bdata.locked&&bdata.owner!==currentNickname){showModal('База закрыта','Владелец закрыл доступ');return;}
   viewingBaseId=baseId;floorOwner=bdata.owner;floorLocked=bdata.locked;
-  floorSlots=bdata.slots||new Array(10).fill(null);
+  floorSlots=normalizeSlots(bdata.slots);
   inFloor=true;fx=200;fy=200;
   document.getElementById('game-container').style.display='none';
   document.getElementById('floor-container').style.display='block';
@@ -585,7 +604,7 @@ function openFloor(baseId){
   renderFloor();renderFloorPlayer();
 }
 function closeFloorCleanup(){
-  document.querySelectorAll('#floor-container .base-slot,#floor-container .brainrot-on-base,#floor-container .hold-btn').forEach(e=>e.remove());
+  document.querySelectorAll('#floor-container .base-slot,#floor-container .brainrot-on-base').forEach(e=>e.remove());
   document.getElementById('floor-container').style.display='none';
   document.getElementById('game-container').style.display='block';
   document.getElementById('back-btn').style.display='none';
@@ -872,6 +891,7 @@ document.getElementById('bg-input').addEventListener('change',function(e){const 
 async function saveProfile(){let a=window._avatarData||'';let b=window._bgData||'';await db.ref('users/'+currentNickname).update({avatar:a,background:b});showModal('Успех','Профиль сохранён');}
 function closeProfile(){document.getElementById('profile-menu').style.display='none';showMainMenu();}
 
+// ========== МЕНЮ БАЗЫ (с двумя кнопками) ==========
 function openBaseMenu(){
   const c=document.getElementById('bm-list');c.innerHTML='';
   const totalIncome=mySlots.reduce((s,br)=>s+(br?br.income:0),0);
@@ -887,7 +907,7 @@ function openBaseMenu(){
       const t=Math.floor((Date.now()-(br.placedAt||Date.now()))/1000);
       const earned=Math.floor(t*br.income);
       const row=document.createElement('div');row.className='bm-row';
-      row.innerHTML=`<div class="icon" style="background-image:url('Картинки/${br.file}')"></div><div class="info"><div class="name">${br.name}</div><div class="line">${RARITY_NAMES[br.rarity]} · $${formatNumber(br.income)}/сек</div><div class="line">На базе: ${t} сек</div><div class="earned">+$${formatNumber(earned)}</div></div><button class="collect" onclick="collectFrom(${i})">Забрать</button>`;
+      row.innerHTML=`<div class="icon" style="background-image:url('Картинки/${br.file}')"></div><div class="info"><div class="name">${br.name}</div><div class="line">${RARITY_NAMES[br.rarity]} · $${formatNumber(br.income)}/сек</div><div class="line">На базе: ${t} сек</div><div class="earned">+$${formatNumber(earned)}</div></div><div style="display:flex;flex-direction:column;gap:6px"><button class="collect" onclick="collectFrom(${i})">Собрать</button><button class="collect" style="background:#c0392b" onclick="sellMyBrainrot(${i})">Продать</button></div>`;
       c.appendChild(row);
     });
   }
