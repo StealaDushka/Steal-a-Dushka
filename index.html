@@ -14,15 +14,15 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 </script>
 <style>
 *{box-sizing:border-box}body{margin:0;overflow:hidden;background:#1a1a1a;font-family:'Courier New',monospace;touch-action:none;user-select:none;-webkit-user-select:none}
-#auth{position:fixed;top:0;left:0;width:100vw;height:100vh;display:flex;justify-content:center;align-items:center;background:#1a1a1a;z-index:999}
+#auth{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background:#1a1a1a;z-index:999}
 #auth-box{background:#000;border:4px solid #111;padding:30px;width:400px;display:flex;flex-direction:column;align-items:center}
 .auth-label{color:#fff;font-size:14px;margin:10px 0 5px;width:100%;text-align:left}
-.auth-input{width:100%;height:35px;background:#fff;border:none;color:#000;font-size:14px;padding:0 10px;margin-bottom:20px;outline:none}
+.auth-input{width:100%;height:35px;background:#fff;border:none;font-size:14px;padding:0 10px;margin-bottom:20px;outline:none}
 .auth-btns{display:flex;gap:10px;width:100%}
 .auth-btn{flex:1;height:40px;border:none;font-weight:bold;cursor:pointer;font-size:13px}
 .btn-login{background:#fff;color:#000}.btn-reg{background:#fff;color:red}
-.hint{color:#888;font-size:12px;margin-top:15px;text-align:center}
-#main-menu{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:linear-gradient(45deg,#1a1a2e,#16213e);z-index:900;flex-direction:column;align-items:center;justify-content:center;gap:20px}
+.hint{color:#888;font-size:12px;margin-top:15px}
+#main-menu{display:none;position:fixed;inset:0;background:linear-gradient(45deg,#1a1a2e,#16213e);z-index:900;flex-direction:column;align-items:center;justify-content:center;gap:20px}
 #main-menu h1{color:#ffd700;font-size:36px;margin:0;text-shadow:0 0 20px #ffd700}
 .menu-btn{width:300px;height:60px;background:#e94560;border:none;border-radius:10px;color:#fff;font-size:20px;font-weight:bold;cursor:pointer}
 .menu-btn.green{background:#4caf50}
@@ -34,8 +34,8 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .action-btn.gray{background:#888}
 #game-wrapper{flex:1;height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden}
 #game-container{width:400px;height:400px;background:#20b94d;border:4px solid black;position:relative;overflow:hidden;transform-origin:left center}
+#floor-container{width:400px;height:400px;background:#5a5a5a;border:4px solid black;position:relative;overflow:hidden;display:none;transform-origin:left center}
 .center-line{position:absolute;top:180px;left:0;width:100%;height:40px;background:#e83e32;z-index:5}
-/* БАЗЫ */
 .base{position:absolute;width:80px;height:80px;background:#869292;z-index:6;border:1px solid #555}
 .base .brown{position:absolute;width:calc(100% - 8px);left:4px;height:16px;background:#bf5b1a;bottom:6px}
 .base .nickname{position:absolute;bottom:6px;left:0;width:100%;height:16px;line-height:16px;text-align:center;color:#fff;font-size:7px;font-weight:bold;text-shadow:1px 1px 1px #000;z-index:7;pointer-events:none;overflow:hidden;white-space:nowrap}
@@ -43,9 +43,11 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .base-bottom-1{bottom:20px;left:20px}.base-bottom-2{bottom:20px;left:110px}.base-bottom-3{bottom:20px;left:200px}.base-bottom-4{bottom:20px;left:290px}
 .base-bottom .brown{top:6px;bottom:auto}
 .base-bottom .nickname{top:6px;bottom:auto}
-.base.locked::after{content:'ЗАКРЫТО';position:absolute;inset:0;background:rgba(192,57,43,.5);color:#fff;font-weight:bold;font-size:12px;display:flex;justify-content:center;align-items:center;text-shadow:1px 1px 2px #000;z-index:11;pointer-events:none}
-/* СЛОТЫ (зелёные штуки) */
-.base-slot{position:absolute;width:15px;height:15px;background:#22e54c;border:1px solid #0a0a0a;z-index:7;border-radius:2px;box-sizing:border-box}
+.base .base-green{position:absolute;width:24px;height:14px;background:#22e54c;left:50%;transform:translateX(-50%);bottom:-14px;z-index:7;border:1px solid #000;cursor:pointer}
+.base-bottom .base-green{top:-14px;bottom:auto}
+.base.locked{background:#5a2020}
+.base.locked::after{content:'ЗАКРЫТО';position:absolute;inset:0;background:rgba(192,57,43,.5);color:#fff;font-weight:bold;font-size:13px;display:flex;justify-content:center;align-items:center;text-shadow:1px 1px 2px #000;z-index:12;pointer-events:none}
+.base-slot{position:absolute;width:15px;height:15px;background:#22e54c;border:1px solid #0a0a0a;z-index:7;border-radius:2px}
 .brainrot-on-base{position:absolute;width:15px;height:15px;background-size:cover;background-position:center;z-index:8;border-radius:2px;pointer-events:none;box-sizing:border-box}
 .brainrot-on-base.common{border:1px solid #aaa}
 .brainrot-on-base.horror{border:1px solid #555}
@@ -55,28 +57,22 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .brainrot-on-base.god{border:1px solid #e67e22;box-shadow:0 0 5px #e67e22}
 .brainrot-on-base.secret{border:1px solid #00bcd4;box-shadow:0 0 6px #00bcd4}
 .brainrot-on-base.og{border:1px solid #ffd700;box-shadow:0 0 8px #ffd700}
-/* КНОПКА ЗАМКА */
 .base-lock{position:absolute;width:16px;height:12px;background:#0066ff;border:1px solid #000;z-index:10;border-radius:2px;cursor:pointer}
 .base-lock.locked{background:#c0392b}
-/* КОНВЕЙЕР */
 .brainrot-conveyor{position:absolute;width:28px;height:28px;z-index:18;border:2px solid rgba(0,0,0,.6);background-size:cover;background-position:center;border-radius:5px;pointer-events:none}
 .brainrot-conveyor.common{border-color:#aaa}.brainrot-conveyor.horror{border-color:#555}
 .brainrot-conveyor.epic{border-color:#9b59b6}.brainrot-conveyor.legendary{border-color:#f1c40f;box-shadow:0 0 8px #f1c40f}
 .brainrot-conveyor.mythic{border-color:#e74c3c;box-shadow:0 0 8px #e74c3c}.brainrot-conveyor.god{border-color:#e67e22;box-shadow:0 0 10px #e67e22}
 .brainrot-conveyor.secret{border-color:#00bcd4;box-shadow:0 0 12px #00bcd4}.brainrot-conveyor.og{border-color:#ffd700;box-shadow:0 0 15px #ffd700,0 0 25px #ff00ff}
 .brainrot-price-tag{position:absolute;top:-16px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#ffd700;font-size:9px;font-weight:bold;padding:2px 5px;border-radius:4px;white-space:nowrap;border:1px solid #ffd700}
-/* ПЕРСОНАЖ */
-#player,.other-player{position:absolute;width:8px;height:16px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20;border:1px solid rgba(0,0,0,.5)}
-#player .pixel,.other-player .pixel{width:100%;height:100%}
+#player,#other-player,#floor-player{position:absolute;width:8px;height:16px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20;border:1px solid rgba(0,0,0,.5)}
+#player .pixel,#other-player .pixel,#floor-player .pixel{width:100%;height:100%}
 #player-name,.player-name{position:absolute;left:50%;transform:translateX(-50%);top:-12px;color:#fff;font-size:5px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
-/* HOLD КНОПКИ */
 .hold-btn{position:absolute;z-index:1000;width:26px;height:26px;background:rgba(0,0,0,.7);border:2px solid #fff;border-radius:5px;display:flex;justify-content:center;align-items:center;color:#fff;font-size:14px;font-weight:bold;pointer-events:none;overflow:hidden}
 .hold-btn .fill{position:absolute;bottom:0;left:0;width:100%;height:0%;background:#4caf50;opacity:.7}
 .hold-btn.f-btn .fill{background:#c0392b}
 .hold-btn span{position:relative;z-index:1}
-/* E quick */
 .e-hint{position:absolute;z-index:1000;width:26px;height:26px;background:rgba(0,0,0,.7);border:2px solid #fff;border-radius:5px;display:flex;justify-content:center;align-items:center;color:#fff;font-size:14px;font-weight:bold;pointer-events:none}
-/* МЕНЮ БАЗЫ */
 #base-menu{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #444;border-radius:12px;padding:20px;width:90%;max-width:520px;max-height:80vh;overflow-y:auto;z-index:2500}
 #base-menu h2{color:#fff;margin:0 0 15px;font-size:20px}
 #base-menu .cm-close{position:absolute;top:10px;right:10px;background:#c0392b;border:none;color:#fff;padding:6px 12px;border-radius:5px;cursor:pointer;font-weight:bold}
@@ -89,7 +85,6 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .bm-row .earned{color:#4caf50;font-weight:bold;font-size:13px}
 .bm-row .collect{background:#4caf50;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:12px}
 .bm-empty{text-align:center;color:#888;padding:20px}
-/* МОДАЛКИ */
 #custom-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #0f1214;border-radius:12px;padding:20px;z-index:9999;max-width:400px;width:90%;color:#fff;text-align:center}
 #custom-modal .modal-title{font-size:18px;font-weight:bold;margin-bottom:10px;color:#4a90e2}
 #custom-modal .modal-text{font-size:14px;margin-bottom:20px;white-space:pre-line}
@@ -99,16 +94,15 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 #confirm-modal .confirm-buttons{display:flex;gap:20px}
 #confirm-modal .confirm-btn{width:170px;height:75px;border:4px solid #000;font-size:28px;font-weight:bold;cursor:pointer;font-family:Arial;color:#fff}
 .confirm-yes{background:#2ecc40}.confirm-no{background:#b71c1c}
-/* Баланс */
 #balance{position:fixed;bottom:20px;left:20px;background:rgba(0,0,0,.8);padding:10px;border:2px solid #444;color:#fff;font-size:14px;display:none;border-radius:8px;z-index:1000}
 #balance .label{color:#aaa;margin-right:8px}
 #balance .amount{color:#4caf50;font-weight:bold}
 #version{position:fixed;bottom:20px;right:20px;color:#fff;font-size:12px;background:rgba(0,0,0,.5);padding:4px 8px;border-radius:4px;z-index:9999}
 #exit-btn{position:fixed;top:20px;left:20px;background:#c0392b;color:#fff;padding:8px 14px;border-radius:8px;font-weight:bold;cursor:pointer;z-index:5000;display:none}
-#joystick-zone{position:fixed;bottom:120px;left:30px;width:120px;height:120px;z-index:100;opacity:0.5;display:none;touch-action:none}
-/* Уведомление */
+#back-btn{position:fixed;top:20px;right:20px;background:#0f3460;color:#fff;padding:8px 14px;border-radius:8px;font-weight:bold;cursor:pointer;z-index:5000;display:none}
 #notif{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#c0392b;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;z-index:99999;display:none;box-shadow:0 4px 12px rgba(0,0,0,.5)}
-@media(max-width:700px){#game-container{width:300px;height:300px}}
+#floor-title{position:absolute;top:10px;left:50%;transform:translateX(-50%);color:#fff;font-size:14px;font-weight:bold;z-index:100}
+#joystick-zone{position:fixed;bottom:120px;left:30px;width:120px;height:120px;z-index:100;opacity:0.5;display:none;touch-action:none}
 </style>
 </head>
 <body>
@@ -116,17 +110,29 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <div id="balance"><span class="label">Монеты:</span><span class="amount" id="balance-amount">25</span></div>
 <div id="version">Версия: 0.25</div>
 <div id="exit-btn" onclick="exitToMenu()">Выйти</div>
+<div id="back-btn" onclick="exitFloor()">Назад</div>
 <div id="main-menu"><h1>Steal A Dushka</h1><button class="menu-btn green" onclick="playRandom()">Играть</button></div>
-<div id="app"><div id="sidebar"><div id="actions"><div class="action-btn pink" onclick="showModal('SHOP','Скоро!')">SHOP</div><div class="action-btn" onclick="showModal('REBIRTH','Скоро!')">REBIRTH</div><div class="action-btn" onclick="showModal('TRADE','Скоро!')">TRADE</div><div class="action-btn gray" onclick="openBaseMenu()">БАЗА</div></div></div><div id="game-wrapper"><div id="game-container"><div class="center-line"></div>
-<div class="base base-top-1" data-base="1"><div class="brown"></div><div class="nickname"></div></div>
-<div class="base base-top-2" data-base="2"><div class="brown"></div><div class="nickname"></div></div>
-<div class="base base-top-3" data-base="3"><div class="brown"></div><div class="nickname"></div></div>
-<div class="base base-top-4" data-base="4"><div class="brown"></div><div class="nickname"></div></div>
-<div class="base base-bottom base-bottom-1" data-base="5"><div class="brown"></div><div class="nickname"></div></div>
-<div class="base base-bottom base-bottom-2" data-base="6"><div class="brown"></div><div class="nickname"></div></div>
-<div class="base base-bottom base-bottom-3" data-base="7"><div class="brown"></div><div class="nickname"></div></div>
-<div class="base base-bottom base-bottom-4" data-base="8"><div class="brown"></div><div class="nickname"></div></div>
-<div id="player"></div></div></div></div>
+<div id="app">
+  <div id="sidebar"><div id="actions"><div class="action-btn pink" onclick="showModal('SHOP','Скоро!')">SHOP</div><div class="action-btn" onclick="showModal('REBIRTH','Скоро!')">REBIRTH</div><div class="action-btn" onclick="showModal('TRADE','Скоро!')">TRADE</div><div class="action-btn gray" onclick="openBaseMenu()">БАЗА</div></div></div>
+  <div id="game-wrapper">
+    <div id="game-container">
+      <div class="center-line"></div>
+      <div class="base base-top-1" data-base="1"><div class="brown"></div><div class="nickname"></div><div class="base-green"></div></div>
+      <div class="base base-top-2" data-base="2"><div class="brown"></div><div class="nickname"></div><div class="base-green"></div></div>
+      <div class="base base-top-3" data-base="3"><div class="brown"></div><div class="nickname"></div><div class="base-green"></div></div>
+      <div class="base base-top-4" data-base="4"><div class="brown"></div><div class="nickname"></div><div class="base-green"></div></div>
+      <div class="base base-bottom base-bottom-1" data-base="5"><div class="brown"></div><div class="nickname"></div><div class="base-green"></div></div>
+      <div class="base base-bottom base-bottom-2" data-base="6"><div class="brown"></div><div class="nickname"></div><div class="base-green"></div></div>
+      <div class="base base-bottom base-bottom-3" data-base="7"><div class="brown"></div><div class="nickname"></div><div class="base-green"></div></div>
+      <div class="base base-bottom base-bottom-4" data-base="8"><div class="brown"></div><div class="nickname"></div><div class="base-green"></div></div>
+      <div id="player"></div>
+    </div>
+    <div id="floor-container">
+      <div id="floor-title"></div>
+      <div id="floor-player"></div>
+    </div>
+  </div>
+</div>
 <div id="base-menu"><button class="cm-close" onclick="closeBaseMenu()">X</button><h2 id="bm-title">МОЯ БАЗА</h2><div id="bm-list"></div></div>
 <div id="custom-modal"><div class="modal-title" id="modal-title"></div><div class="modal-text" id="modal-text"></div><button class="modal-close" onclick="closeModal()">OK</button></div>
 <div id="confirm-modal"><div class="confirm-text" id="confirm-text"></div><div class="confirm-buttons"><button class="confirm-btn confirm-yes" onclick="confirmYes()">Yes</button><button class="confirm-btn confirm-no" onclick="confirmNo()">No</button></div></div>
@@ -134,666 +140,513 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <div id="joystick-zone"></div>
 
 <script>
-// ========== БРЭИНРОТЫ ==========
 const BRAINROTS_LIST=[
-    {file:'meme8.jpg',name:'200',rarity:'common',income:2,price:200},
-    {file:'meme9.jpg',name:'Нубини Пицанини',rarity:'common',income:1,price:25},
-    {file:'meme10.jpg',name:'Капибара',rarity:'common',income:3,price:100},
-    {file:'meme11.jpg',name:'Диманини Нубанини',rarity:'common',income:5,price:50},
-    {file:'meme22.jpg',name:'Гига Чат',rarity:'common',income:10,price:250},
-    {file:'meme28.jpg',name:'Математика',rarity:'horror',income:6.7,price:670},
-    {file:'meme3.jpg',name:'Биология',rarity:'horror',income:10,price:100},
-    {file:'meme17.jpg',name:'История',rarity:'horror',income:20,price:1500},
-    {file:'meme4.jpg',name:'Воздуханы',rarity:'horror',income:25,price:2000},
-    {file:'meme23.jpg',name:'Тони Кросс',rarity:'epic',income:45,price:4500},
-    {file:'meme7.jpg',name:'Кар-Карыч',rarity:'epic',income:50,price:5000},
-    {file:'meme13.jpg',name:'Spider Man',rarity:'epic',income:100,price:10000},
-    {file:'meme24.jpg',name:'Сквидвард',rarity:'epic',income:100,price:6700},
-    {file:'meme27.jpg',name:'Омайгат',rarity:'epic',income:100,price:6000},
-    {file:'meme2.jpg',name:'Кросс',rarity:'legendary',income:200,price:20000},
-    {file:'meme6.jpg',name:'Противостояние',rarity:'legendary',income:350,price:35000},
-    {file:'meme5.jpg',name:'Роналду',rarity:'legendary',income:400,price:40000},
-    {file:'meme12.jpg',name:'Spider Pig',rarity:'mythic',income:500,price:50000},
-    {file:'meme18.jpg',name:'Меси Сиси',rarity:'mythic',income:525,price:52500},
-    {file:'meme25.jpg',name:'Неймар',rarity:'mythic',income:560,price:56000},
-    {file:'meme21.jpg',name:'67',rarity:'god',income:670,price:67000},
-    {file:'meme29.jpg',name:'52',rarity:'god',income:850,price:85000},
-    {file:'meme26.jpg',name:'Копатыч',rarity:'god',income:900,price:100000},
-    {file:'meme19.jpg',name:'Килиан Диктатор',rarity:'god',income:1000,price:100000},
-    {file:'meme20.jpg',name:'Гарама',rarity:'secret',income:2500,price:250000},
-    {file:'meme15.jpg',name:'Драгон Канелони',rarity:'secret',income:5000,price:500000},
-    {file:'meme14.jpg',name:'Краснодар',rarity:'secret',income:6700,price:1000000},
-    {file:'meme16.jpg',name:'MrDushka OG',rarity:'og',income:100000,price:10000000}
+{file:'meme8.jpg',name:'200',rarity:'common',income:2,price:200},
+{file:'meme9.jpg',name:'Нубини Пицанини',rarity:'common',income:1,price:25},
+{file:'meme10.jpg',name:'Капибара',rarity:'common',income:3,price:100},
+{file:'meme11.jpg',name:'Диманини Нубанини',rarity:'common',income:5,price:50},
+{file:'meme22.jpg',name:'Гига Чат',rarity:'common',income:10,price:250},
+{file:'meme28.jpg',name:'Математика',rarity:'horror',income:6.7,price:670},
+{file:'meme3.jpg',name:'Биология',rarity:'horror',income:10,price:100},
+{file:'meme17.jpg',name:'История',rarity:'horror',income:20,price:1500},
+{file:'meme4.jpg',name:'Воздуханы',rarity:'horror',income:25,price:2000},
+{file:'meme23.jpg',name:'Тони Кросс',rarity:'epic',income:45,price:4500},
+{file:'meme7.jpg',name:'Кар-Карыч',rarity:'epic',income:50,price:5000},
+{file:'meme13.jpg',name:'Spider Man',rarity:'epic',income:100,price:10000},
+{file:'meme24.jpg',name:'Сквидвард',rarity:'epic',income:100,price:6700},
+{file:'meme27.jpg',name:'Омайгат',rarity:'epic',income:100,price:6000},
+{file:'meme2.jpg',name:'Кросс',rarity:'legendary',income:200,price:20000},
+{file:'meme6.jpg',name:'Противостояние',rarity:'legendary',income:350,price:35000},
+{file:'meme5.jpg',name:'Роналду',rarity:'legendary',income:400,price:40000},
+{file:'meme12.jpg',name:'Spider Pig',rarity:'mythic',income:500,price:50000},
+{file:'meme18.jpg',name:'Меси Сиси',rarity:'mythic',income:525,price:52500},
+{file:'meme25.jpg',name:'Неймар',rarity:'mythic',income:560,price:56000},
+{file:'meme21.jpg',name:'67',rarity:'god',income:670,price:67000},
+{file:'meme29.jpg',name:'52',rarity:'god',income:850,price:85000},
+{file:'meme26.jpg',name:'Копатыч',rarity:'god',income:900,price:100000},
+{file:'meme19.jpg',name:'Килиан Диктатор',rarity:'god',income:1000,price:100000},
+{file:'meme20.jpg',name:'Гарама',rarity:'secret',income:2500,price:250000},
+{file:'meme15.jpg',name:'Драгон Канелони',rarity:'secret',income:5000,price:500000},
+{file:'meme14.jpg',name:'Краснодар',rarity:'secret',income:6700,price:1000000},
+{file:'meme16.jpg',name:'MrDushka OG',rarity:'og',income:100000,price:10000000}
 ];
 const RARITY_NAMES={common:'Обычный',horror:'Ужас',epic:'Эпический',legendary:'Легендарный',mythic:'Мифический',god:'Бог',secret:'Секретный',og:'ОГ'};
 const RARITY_WEIGHTS={common:50,horror:25,epic:12,legendary:7,mythic:3,god:2,secret:0.9,og:0.1};
 const TOTAL_WEIGHT=Object.values(RARITY_WEIGHTS).reduce((s,w)=>s+w,0);
 function pickRarity(){ let r=Math.random()*TOTAL_WEIGHT; for(let rar in RARITY_WEIGHTS){ if(r<RARITY_WEIGHTS[rar]) return rar; r-=RARITY_WEIGHTS[rar]; } return 'common'; }
 function pickBrainrot(){ const rar=pickRarity(); const pool=BRAINROTS_LIST.filter(b=>b.rarity===rar); return pool[Math.floor(Math.random()*pool.length)]; }
+const BASE_POSITIONS={1:{x:20,y:20},2:{x:110,y:20},3:{x:200,y:20},4:{x:290,y:20},5:{x:20,y:300},6:{x:110,y:300},7:{x:200,y:300},8:{x:290,y:300}};
+const BASE_SPAWN={1:{x:52,y:81},2:{x:142,y:81},3:{x:232,y:81},4:{x:322,y:81},5:{x:52,y:300},6:{x:142,y:300},7:{x:232,y:300},8:{x:322,y:300}};
+const SLOT_OFFSETS=[{dx:3,dy:6},{dx:3,dy:21},{dx:3,dy:36},{dx:3,dy:51},{dx:3,dy:63},{dx:62,dy:6},{dx:62,dy:21},{dx:62,dy:36},{dx:62,dy:51},{dx:62,dy:63}];
+const GREEN_OFFSET={x:40,y:72};
+// Слоты на этаже (5 слева + 5 справа) — внутри 400x400
+const FLOOR_SLOT_OFFSETS=[{dx:80,dy:80},{dx:80,dy:150},{dx:80,dy:220},{dx:80,dy:290},{dx:80,dy:350},{dx:270,dy:80},{dx:270,dy:150},{dx:270,dy:220},{dx:270,dy:290},{dx:270,dy:350}];
 
-// ========== ПОЗИЦИИ ==========
-const BASE_POSITIONS={
-    1:{x:20,y:20},2:{x:110,y:20},3:{x:200,y:20},4:{x:290,y:20},
-    5:{x:20,y:300},6:{x:110,y:300},7:{x:200,y:300},8:{x:290,y:300}
-};
-const BASE_SPAWN={
-    1:{x:52,y:81},2:{x:142,y:81},3:{x:232,y:81},4:{x:322,y:81},
-    5:{x:52,y:300},6:{x:142,y:300},7:{x:232,y:300},8:{x:322,y:300}
-};
-const SLOT_OFFSETS=[
-    {dx:3,dy:6},{dx:3,dy:21},{dx:3,dy:36},{dx:3,dy:51},{dx:3,dy:63},
-    {dx:62,dy:6},{dx:62,dy:21},{dx:62,dy:36},{dx:62,dy:51},{dx:62,dy:63}
-];
-// Зелёная зона (сбор денег) - по центру базы
-const GREEN_ZONE={
-    1:{x:60,y:60},2:{x:150,y:60},3:{x:240,y:60},4:{x:330,y:60},
-    5:{x:60,y:340},6:{x:150,y:340},7:{x:240,y:340},8:{x:330,y:340}
-};
-
-// ========== СОСТОЯНИЕ ==========
 let x=200,y=200,coins=25,currentNickname=null,currentServerId=null,myBaseId=0,myBaseLocked=false;
 let mySlots=new Array(10).fill(null);
-let allBasesData={};  // {baseId: {owner, slots, locked}}
+let allBasesData={};
 let otherPlayers={};
 let conveyorBrainrots=[];
 let lastConveyorSpawn=0;
-let carried=null;  // {file,name,rarity,income,price} - брэинрот в руках
-const CONVEYOR_MAX=12;
-const SPAWN_INTERVAL=2500;
-const CONVEYOR_SPEED=0.5;
-const BASE_MAX=10;
+let currentTarget=null;
+let inFloor=false;
+let viewingBaseId=null;
+let fx=100,fy=100;
+let floorSlots=[];
+let floorLocked=false;
+let floorOwner=null;
+let eHoldActive=false,eHoldEl=null,eHoldTimer=null;
+let fHoldActive=false,fHoldEl=null,fHoldTimer=null;
+const CONVEYOR_MAX=12, SPAWN_INTERVAL=2500, CONVEYOR_SPEED=0.5, BASE_MAX=10;
 
-// ========== УТИЛ ==========
 function formatNumber(num){ if(num>=1e15)return(num/1e15).toFixed(2)+'Qa'; if(num>=1e12)return(num/1e12).toFixed(2)+'T'; if(num>=1e9)return(num/1e9).toFixed(2)+'B'; if(num>=1e6)return(num/1e6).toFixed(2)+'M'; if(num>=1e3)return(num/1e3).toFixed(2)+'K'; return num.toString(); }
 function showModal(t,x){document.getElementById('modal-title').textContent=t;document.getElementById('modal-text').textContent=x;document.getElementById('custom-modal').style.display='block';}
 function closeModal(){document.getElementById('custom-modal').style.display='none';}
 function showNotif(text){const n=document.getElementById('notif');n.textContent=text;n.style.display='block';setTimeout(()=>{n.style.display='none';},4000);}
-function resizeGame(){const g=document.getElementById('game-container');if(!g)return;const w=window.innerWidth,h=window.innerHeight;let s=Math.min(w/500,h/500);s=Math.max(0.6,Math.min(1.2,s));g.style.transform=`scale(${s})`;}
+function resizeGame(){const g=document.getElementById('game-container');const f=document.getElementById('floor-container');const w=window.innerWidth,h=window.innerHeight;let s=Math.min(w/500,h/500);s=Math.max(0.6,Math.min(1.2,s));g.style.transform=`scale(${s})`;f.style.transform=`scale(${s})`;}
 window.addEventListener('resize',resizeGame);
 
-// ========== АВТОРИЗАЦИЯ ==========
 async function readUserData(n){try{const s=await db.ref('users/'+n).once('value');return s.exists()?s.val():null}catch(e){return null}}
 async function writeUserData(n,d){try{await db.ref('users/'+n).update(d)}catch(e){}}
 async function handleRegister(){
-    const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();
-    if(!u||!p){showModal('Ошибка','Заполните всё!');return;}
-    const e=await readUserData(u);
-    if(e){showModal('Ошибка','Ник занят!');return;}
-    await writeUserData(u,{nickname:u,password:p,coins:25,baseId:0,baseLocked:false,baseSlots:new Array(10).fill(null),notifications:[],serverId:null});
-    currentNickname=u; showMainMenu();
+  const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();
+  if(!u||!p){showModal('Ошибка','Заполните всё!');return;}
+  const e=await readUserData(u); if(e){showModal('Ошибка','Ник занят!');return;}
+  await writeUserData(u,{nickname:u,password:p,coins:25,baseId:0,baseLocked:false,baseSlots:new Array(10).fill(null),notifications:[],serverId:null});
+  currentNickname=u; showMainMenu();
 }
 async function handleLogin(){
-    const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();
-    if(!u||!p){showModal('Ошибка','Заполните всё!');return;}
-    const e=await readUserData(u);
-    if(!e){showModal('Ошибка','Ник не найден!');return;}
-    if(e.password!==p){showModal('Ошибка','Неверный пароль!');return;}
-    currentNickname=u; showMainMenu();
+  const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();
+  if(!u||!p){showModal('Ошибка','Заполните всё!');return;}
+  const e=await readUserData(u); if(!e){showModal('Ошибка','Ник не найден!');return;}
+  if(e.password!==p){showModal('Ошибка','Неверный пароль!');return;}
+  currentNickname=u; showMainMenu();
 }
 function showMainMenu(){
-    document.getElementById('auth').style.display='none';
-    document.getElementById('app').style.display='none';
-    document.getElementById('exit-btn').style.display='none';
-    document.getElementById('balance').style.display='none';
-    document.getElementById('main-menu').style.display='flex';
+  document.getElementById('auth').style.display='none';
+  document.getElementById('app').style.display='none';
+  document.getElementById('exit-btn').style.display='none';
+  document.getElementById('balance').style.display='none';
+  document.getElementById('main-menu').style.display='flex';
 }
 
-// ========== СТАРТ ==========
 async function playRandom(){
-    const s=await db.ref('servers').once('value');
-    const servers=s.val()||{};
-    let chosen=null;
-    for(let id in servers){
-        const p=await db.ref('servers/'+id+'/players').once('value');
-        const cnt=Object.keys(p.val()||{}).length;
-        if(cnt<8){chosen=id;break;}
-    }
-    if(!chosen){
-        const n=db.ref('servers').push();
-        chosen=n.key;
-        await n.set({name:'Сервер',access:'all'});
-    }
-    currentServerId=chosen;
-    await db.ref('users/'+currentNickname).update({serverId:chosen});
-    startGame();
+  const s=await db.ref('servers').once('value'); const servers=s.val()||{};
+  let chosen=null;
+  for(let id in servers){ const p=await db.ref('servers/'+id+'/players').once('value'); if(Object.keys(p.val()||{}).length<8){chosen=id;break;} }
+  if(!chosen){ const n=db.ref('servers').push(); chosen=n.key; await n.set({name:'Сервер',access:'all'}); }
+  currentServerId=chosen;
+  await db.ref('users/'+currentNickname).update({serverId:chosen});
+  startGame();
 }
 
 async function startGame(){
-    document.getElementById('main-menu').style.display='none';
-    document.getElementById('app').style.display='flex';
-    document.getElementById('exit-btn').style.display='block';
-    document.getElementById('balance').style.display='block';
-    document.getElementById('version').style.display='block';
-    
-    const d=await readUserData(currentNickname);
-    coins=d.coins||25;
-    myBaseId=d.baseId||0;
-    myBaseLocked=d.baseLocked||false;
-    mySlots=d.baseSlots||new Array(10).fill(null);
-    document.getElementById('balance-amount').textContent=formatNumber(coins);
-    
-    // Выдача базы если нет
-    if(!myBaseId){
-        myBaseId=await assignBase();
-        await db.ref('users/'+currentNickname).update({baseId:myBaseId});
-    }
-    
-    // Регистрируем свою базу на сервере
-    await db.ref('servers/'+currentServerId+'/bases/'+myBaseId).set({
-        owner:currentNickname,
-        slots:mySlots,
-        locked:myBaseLocked
-    });
-    
-    // Загружаем базы
-    await loadAllBases();
-    
-    // Позиция
-    const spawn=BASE_SPAWN[myBaseId];
-    x=spawn.x; y=spawn.y;
-    renderPlayer();
-    renderAllBases();
-    
-    // Слушаем базы на сервере
-    db.ref('servers/'+currentServerId+'/bases').on('value', snap=>{
-        allBasesData=snap.val()||{};
-        // Обновляем свою базу если данные изменились извне
-        if(allBasesData[myBaseId] && allBasesData[myBaseId].slots){
-            if(allBasesData[myBaseId].owner===currentNickname){
-                mySlots=allBasesData[myBaseId].slots;
-                myBaseLocked=allBasesData[myBaseId].locked||false;
-            }
-        }
-        renderAllBases();
-    });
-    
-    // Слушаем игроков
-    db.ref('servers/'+currentServerId+'/players').on('value', snap=>{
-        const players=snap.val()||{};
-        renderOtherPlayers(players);
-    });
-    
-    // Слушаем уведомления
-    db.ref('users/'+currentNickname+'/notifications').on('value', snap=>{
-        const notifs=snap.val()||[];
-        if(notifs.length>0){
-            const latest=notifs[notifs.length-1];
-            if(!window._lastNotifShown || window._lastNotifShown!==latest.ts){
-                window._lastNotifShown=latest.ts;
-                showNotif(latest.text);
-            }
-        }
-    });
-    
-    // Слушаем монеты
-    db.ref('users/'+currentNickname+'/coins').on('value', snap=>{
-        const c=snap.val()||0;
-        if(c!==coins){ coins=c; document.getElementById('balance-amount').textContent=formatNumber(coins); }
-    });
-    
-    // Игрок в мире
-    await db.ref('servers/'+currentServerId+'/players/'+currentNickname).set({x:x,y:y,base:myBaseId});
-    db.ref('servers/'+currentServerId+'/players/'+currentNickname).onDisconnect().remove();
-    
-    lastConveyorSpawn=Date.now();
-    update();
-    window.focus();
-    resizeGame();
-    initJoystick();
-}
-
-async function assignBase(){
-    const snap=await db.ref('servers/'+currentServerId+'/bases').once('value');
-    const bases=snap.val()||{};
-    const taken=new Set();
-    for(let bid in bases){ taken.add(parseInt(bid)); }
-    for(let i=1;i<=8;i++){ if(!taken.has(i)) return i; }
-    return 1;
-}
-
-async function loadAllBases(){
-    const snap=await db.ref('servers/'+currentServerId+'/bases').once('value');
+  document.getElementById('main-menu').style.display='none';
+  document.getElementById('app').style.display='flex';
+  document.getElementById('exit-btn').style.display='block';
+  document.getElementById('balance').style.display='block';
+  document.getElementById('version').style.display='block';
+  const d=await readUserData(currentNickname);
+  coins=d.coins||25;
+  myBaseId=d.baseId||0;
+  myBaseLocked=d.baseLocked||false;
+  mySlots=d.baseSlots||new Array(10).fill(null);
+  document.getElementById('balance-amount').textContent=formatNumber(coins);
+  if(!myBaseId){ myBaseId=await assignBase(); await db.ref('users/'+currentNickname).update({baseId:myBaseId}); }
+  await db.ref('servers/'+currentServerId+'/bases/'+myBaseId).set({owner:currentNickname,slots:mySlots,locked:myBaseLocked});
+  await loadAllBases();
+  const spawn=BASE_SPAWN[myBaseId]; x=spawn.x; y=spawn.y;
+  renderPlayer();
+  renderAllBases();
+  db.ref('servers/'+currentServerId+'/bases').on('value',snap=>{
     allBasesData=snap.val()||{};
+    if(allBasesData[myBaseId] && allBasesData[myBaseId].owner===currentNickname){
+      mySlots=allBasesData[myBaseId].slots||mySlots;
+      myBaseLocked=allBasesData[myBaseId].locked||false;
+    }
+    renderAllBases();
+  });
+  db.ref('servers/'+currentServerId+'/players').on('value',snap=>{ renderOtherPlayers(snap.val()||{}); });
+  db.ref('users/'+currentNickname+'/notifications').on('value',snap=>{
+    const n=snap.val()||[];
+    if(n.length>0){ const last=n[n.length-1]; if(window._lastNotif!==last.ts){ window._lastNotif=last.ts; showNotif(last.text); } }
+  });
+  db.ref('users/'+currentNickname+'/coins').on('value',snap=>{ const c=snap.val()||0; if(c!==coins){ coins=c; document.getElementById('balance-amount').textContent=formatNumber(coins);} });
+  await db.ref('servers/'+currentServerId+'/players/'+currentNickname).set({x:x,y:y,base:myBaseId});
+  db.ref('servers/'+currentServerId+'/players/'+currentNickname).onDisconnect().remove();
+  lastConveyorSpawn=Date.now();
+  update(); window.focus(); resizeGame(); initJoystick();
 }
+async function assignBase(){
+  const snap=await db.ref('servers/'+currentServerId+'/bases').once('value');
+  const bases=snap.val()||{}; const taken=new Set();
+  for(let b in bases){ taken.add(parseInt(b)); }
+  for(let i=1;i<=8;i++){ if(!taken.has(i)) return i; } return 1;
+}
+async function loadAllBases(){ const s=await db.ref('servers/'+currentServerId+'/bases').once('value'); allBasesData=s.val()||{}; }
 
-// ========== РЕНДЕР ==========
 function renderPlayer(){
-    const p=document.getElementById('player');
-    p.innerHTML='<div class="pixel" style="background:#FFCC00"></div><div class="pixel" style="background:#FF0000"></div><div class="player-name">'+currentNickname+'</div>';
-    p.style.left=x+'px'; p.style.top=y+'px';
+  const p=document.getElementById('player');
+  p.innerHTML='<div class="pixel" style="background:#FFCC00"></div><div class="pixel" style="background:#FF0000"></div><div class="player-name">'+currentNickname+'</div>';
+  p.style.left=x+'px'; p.style.top=y+'px';
 }
 function renderOtherPlayers(players){
-    for(let key in otherPlayers){ if(!players[key]||key===currentNickname){ otherPlayers[key].remove(); delete otherPlayers[key]; } }
-    for(let key in players){
-        if(key===currentNickname) continue;
-        const d=players[key]; if(!d) continue;
-        if(!otherPlayers[key]){
-            const div=document.createElement('div');
-            div.className='other-player';
-            div.innerHTML='<div class="pixel" style="background:#00AAFF"></div><div class="pixel" style="background:#0088DD"></div><div class="player-name">'+key+'</div>';
-            document.getElementById('game-container').appendChild(div);
-            otherPlayers[key]=div;
-        }
-        otherPlayers[key].style.left=d.x+'px';
-        otherPlayers[key].style.top=d.y+'px';
-    }
+  for(let k in otherPlayers){ if(!players[k]||k===currentNickname){ otherPlayers[k].remove(); delete otherPlayers[k]; } }
+  for(let k in players){
+    if(k===currentNickname) continue;
+    const d=players[k]; if(!d) continue;
+    if(!otherPlayers[k]){ const div=document.createElement('div'); div.className='other-player'; div.id='other-'+k; div.innerHTML='<div class="pixel" style="background:#00AAFF"></div><div class="pixel" style="background:#0088DD"></div><div class="player-name">'+k+'</div>'; document.getElementById('game-container').appendChild(div); otherPlayers[k]=div; }
+    otherPlayers[k].style.left=d.x+'px'; otherPlayers[k].style.top=d.y+'px';
+  }
 }
 function renderAllBases(){
-    document.querySelectorAll('.base-slot,.brainrot-on-base,.base-lock').forEach(e=>e.remove());
-    document.querySelectorAll('.base .nickname').forEach(e=>e.textContent='');
-    document.querySelectorAll('.base').forEach(b=>b.classList.remove('locked'));
-    
-    // Своя база
-    renderBase(myBaseId,{owner:currentNickname,slots:mySlots,locked:myBaseLocked},true);
-    // Чужие
-    for(let bid in allBasesData){
-        if(parseInt(bid)===myBaseId) continue;
-        renderBase(parseInt(bid),allBasesData[bid],false);
-    }
+  document.querySelectorAll('.base-slot,.brainrot-on-base,.base-lock').forEach(e=>e.remove());
+  document.querySelectorAll('.base .nickname').forEach(e=>e.textContent='');
+  document.querySelectorAll('.base').forEach(b=>b.classList.remove('locked'));
+  renderBase(myBaseId,{owner:currentNickname,slots:mySlots,locked:myBaseLocked},true);
+  for(let bid in allBasesData){
+    if(parseInt(bid)===myBaseId) continue;
+    renderBase(parseInt(bid),allBasesData[bid],false);
+  }
 }
 function renderBase(bid,data,isMine){
-    const bp=BASE_POSITIONS[bid]; if(!bp) return;
-    const baseEl=document.querySelector('.base[data-base="'+bid+'"]'); if(!baseEl) return;
-    const nickEl=baseEl.querySelector('.nickname'); if(nickEl) nickEl.textContent=data.owner||'';
-    if(data.locked) baseEl.classList.add('locked');
-    
-    const slots=data.slots||[];
-    for(let i=0;i<10;i++){
-        const off=SLOT_OFFSETS[i];
-        const sx=bp.x+off.dx, sy=bp.y+off.dy;
-        if(!slots[i]){
-            const slot=document.createElement('div');
-            slot.className='base-slot';
-            slot.style.left=sx+'px'; slot.style.top=sy+'px';
-            document.getElementById('game-container').appendChild(slot);
-        } else {
-            const br=slots[i];
-            const dom=document.createElement('div');
-            dom.className='brainrot-on-base '+br.rarity;
-            dom.style.backgroundImage='url(Картинки/'+br.file+')';
-            dom.style.left=sx+'px'; dom.style.top=sy+'px';
-            document.getElementById('game-container').appendChild(dom);
-        }
+  const bp=BASE_POSITIONS[bid]; if(!bp) return;
+  const baseEl=document.querySelector('.base[data-base="'+bid+'"]'); if(!baseEl) return;
+  const nickEl=baseEl.querySelector('.nickname'); if(nickEl) nickEl.textContent=data.owner||'';
+  if(data.locked) baseEl.classList.add('locked');
+  const slots=data.slots||[];
+  for(let i=0;i<10;i++){
+    const off=SLOT_OFFSETS[i]; const sx=bp.x+off.dx, sy=bp.y+off.dy;
+    if(!slots[i]){
+      const s=document.createElement('div'); s.className='base-slot'; s.style.left=sx+'px'; s.style.top=sy+'px';
+      document.getElementById('game-container').appendChild(s);
+    } else {
+      const br=slots[i]; const d=document.createElement('div');
+      d.className='brainrot-on-base '+br.rarity;
+      d.style.backgroundImage='url(Картинки/'+br.file+')';
+      d.style.left=sx+'px'; d.style.top=sy+'px';
+      document.getElementById('game-container').appendChild(d);
     }
-    if(isMine){
-        const lock=document.createElement('div');
-        lock.className='base-lock'+(data.locked?' locked':'');
-        lock.style.left=(bp.x+32)+'px';
-        lock.style.top=(bp.y+68)+'px';
-        lock.onclick=(e)=>{e.stopPropagation();toggleMyLock();};
-        document.getElementById('game-container').appendChild(lock);
-    }
+  }
+  if(isMine){
+    const lock=document.createElement('div');
+    lock.className='base-lock'+(data.locked?' locked':'');
+    lock.style.left=(bp.x+32)+'px'; lock.style.top=(bp.y+68)+'px';
+    lock.onclick=(e)=>{e.stopPropagation();toggleMyLock();};
+    document.getElementById('game-container').appendChild(lock);
+  }
 }
-
 async function toggleMyLock(){
-    myBaseLocked=!myBaseLocked;
-    await db.ref('users/'+currentNickname).update({baseLocked:myBaseLocked});
-    await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/locked').set(myBaseLocked);
-    renderAllBases();
-    showModal('База',myBaseLocked?'Закрыта 🔒':'Открыта 🔓');
+  myBaseLocked=!myBaseLocked;
+  await db.ref('users/'+currentNickname).update({baseLocked:myBaseLocked});
+  await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/locked').set(myBaseLocked);
+  renderAllBases();
+  showModal('База',myBaseLocked?'Закрыта':'Открыта');
 }
 
-// ========== КОНВЕЙЕР ==========
+// ===== КОНВЕЙЕР =====
 function spawnConveyor(){
-    if(conveyorBrainrots.length>=CONVEYOR_MAX) return;
-    const br=pickBrainrot();
-    const id='br_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
-    const dom=document.createElement('div');
-    dom.className='brainrot-conveyor '+br.rarity;
-    dom.style.backgroundImage='url(Картинки/'+br.file+')';
-    dom.style.left='-30px';
-    dom.style.top='186px';
-    const pt=document.createElement('div');
-    pt.className='brainrot-price-tag';
-    pt.textContent='$'+formatNumber(br.price);
-    dom.appendChild(pt);
-    document.getElementById('game-container').appendChild(dom);
-    conveyorBrainrots.push({id,brainrot:br,x:-30,y:186,dom,locked:false});
+  if(conveyorBrainrots.length>=CONVEYOR_MAX) return;
+  const br=pickBrainrot(); const id='br_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+  const dom=document.createElement('div'); dom.className='brainrot-conveyor '+br.rarity;
+  dom.style.backgroundImage='url(Картинки/'+br.file+')';
+  dom.style.left='-30px'; dom.style.top='186px';
+  const pt=document.createElement('div'); pt.className='brainrot-price-tag'; pt.textContent='$'+formatNumber(br.price);
+  dom.appendChild(pt);
+  document.getElementById('game-container').appendChild(dom);
+  conveyorBrainrots.push({id,brainrot:br,x:-30,y:186,dom,locked:false});
 }
 function updateConveyor(dt){
-    const now=Date.now();
-    if(now-lastConveyorSpawn>SPAWN_INTERVAL){ lastConveyorSpawn=now; spawnConveyor(); }
-    for(let i=conveyorBrainrots.length-1;i>=0;i--){
-        const b=conveyorBrainrots[i];
-        if(b.locked) continue;
-        b.x += CONVEYOR_SPEED * 60 * dt;
-        b.dom.style.left=b.x+'px';
-        if(b.x>=384){ b.dom.remove(); conveyorBrainrots.splice(i,1); }
-    }
+  const now=Date.now();
+  if(now-lastConveyorSpawn>SPAWN_INTERVAL){ lastConveyorSpawn=now; spawnConveyor(); }
+  for(let i=conveyorBrainrots.length-1;i>=0;i--){
+    const b=conveyorBrainrots[i]; if(b.locked) continue;
+    b.x+=CONVEYOR_SPEED*60*dt; b.dom.style.left=b.x+'px';
+    if(b.x>=384){ b.dom.remove(); conveyorBrainrots.splice(i,1); }
+  }
 }
-
-// ========== ПОКУПКА ==========
 async function buyConveyor(b){
-    if(mySlots.filter(s=>s).length>=BASE_MAX){ showModal('Ошибка','База полна (10/10)'); return; }
-    if(coins < b.brainrot.price){ showModal('Ошибка','Нужно $'+formatNumber(b.brainrot.price)+'\nУ тебя: $'+formatNumber(coins)); return; }
-    const free=mySlots.findIndex(s=>s===null);
-    if(free<0){ showModal('Ошибка','Нет свободного слота'); return; }
-    coins-=b.brainrot.price;
-    document.getElementById('balance-amount').textContent=formatNumber(coins);
-    b.locked=true; b.dom.remove();
-    const idx=conveyorBrainrots.indexOf(b);
-    if(idx>-1) conveyorBrainrots.splice(idx,1);
-    mySlots[free]={file:b.brainrot.file,name:b.brainrot.name,rarity:b.brainrot.rarity,income:b.brainrot.income,price:b.brainrot.price,placedAt:Date.now()};
-    await db.ref('users/'+currentNickname).update({coins:coins,baseSlots:mySlots});
-    await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
-    showModal('Куплено!', b.brainrot.name+' -$'+formatNumber(b.brainrot.price));
+  if(mySlots.filter(s=>s).length>=BASE_MAX){ showModal('Ошибка','База полна!'); return; }
+  if(coins<b.brainrot.price){ showModal('Ошибка','Нужно $'+formatNumber(b.brainrot.price)); return; }
+  const free=mySlots.findIndex(s=>s===null); if(free<0){ showModal('Ошибка','Нет слота'); return; }
+  coins-=b.brainrot.price; document.getElementById('balance-amount').textContent=formatNumber(coins);
+  b.locked=true; b.dom.remove(); const idx=conveyorBrainrots.indexOf(b); if(idx>-1) conveyorBrainrots.splice(idx,1);
+  mySlots[free]={file:b.brainrot.file,name:b.brainrot.name,rarity:b.brainrot.rarity,income:b.brainrot.income,price:b.brainrot.price,placedAt:Date.now()};
+  await db.ref('users/'+currentNickname).update({coins:coins,baseSlots:mySlots});
+  await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
+  showModal('Куплено',b.brainrot.name+' -$'+formatNumber(b.brainrot.price));
 }
 
-// ========== УПРАВЛЕНИЕ ==========
+// ===== УПРАВЛЕНИЕ =====
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
 let touchDX=0,touchDY=0,joystickManager=null;
-function initJoystick(){ const z=document.getElementById('joystick-zone'); z.style.display='block'; if(typeof nipplejs==='undefined')return; joystickManager=nipplejs.create({zone:z,mode:'static',position:{left:'50%',top:'50%'},color:'white',size:100,restOpacity:0.5,fadeTime:150}); joystickManager.on('move',(e,d)=>{const f=Math.min(d.force,1);touchDX=Math.cos(d.angle.radian)*f;touchDY=-Math.sin(d.angle.radian)*f;}); joystickManager.on('end',()=>{touchDX=0;touchDY=0;}); }
+function initJoystick(){
+  const z=document.getElementById('joystick-zone'); z.style.display='block';
+  if(typeof nipplejs==='undefined') return;
+  joystickManager=nipplejs.create({zone:z,mode:'static',position:{left:'50%',top:'50%'},color:'white',size:100,restOpacity:0.5,fadeTime:150});
+  joystickManager.on('move',(e,d)=>{const f=Math.min(d.force,1);touchDX=Math.cos(d.angle.radian)*f;touchDY=-Math.sin(d.angle.radian)*f;});
+  joystickManager.on('end',()=>{touchDX=0;touchDY=0;});
+}
 
-let currentTarget=null;
-let eHintEl=null,eHoldEl=null,fHoldEl=null;
-let eHoldTimer=null,eHoldActive=false;
-let fHoldTimer=null,fHoldActive=false;
-
-function removeEHint(){ if(eHintEl){eHintEl.remove();eHintEl=null;} }
+function removeEHint(){ const e=document.querySelector('.e-hint'); if(e)e.remove(); }
+function showEHint(){ if(document.querySelector('.e-hint'))return; const e=document.createElement('div'); e.className='e-hint'; const cx=inFloor?fx:x; const cy=inFloor?fy:y; e.style.left=(cx-10)+'px'; e.style.top=(cy-45)+'px'; e.innerHTML='E'; (inFloor?document.getElementById('floor-container'):document.getElementById('game-container')).appendChild(e); }
 function removeHHold(){ if(eHoldEl){eHoldEl.remove();eHoldEl=null;} if(eHoldTimer){clearTimeout(eHoldTimer);eHoldTimer=null;} eHoldActive=false; }
 function removeFHold(){ if(fHoldEl){fHoldEl.remove();fHoldEl=null;} if(fHoldTimer){clearTimeout(fHoldTimer);fHoldTimer=null;} fHoldActive=false; }
 
 function startEHold(){
-    if(!currentTarget) return;
-    if(eHoldActive) return;
-    eHoldActive=true;
-    removeHHold(); eHoldActive=true;
-    eHoldEl=document.createElement('div');
-    eHoldEl.className='hold-btn';
-    eHoldEl.style.left=(x-10)+'px';
-    eHoldEl.style.top=(y-45)+'px';
-    eHoldEl.innerHTML='<div class="fill"></div><span>E</span>';
-    document.getElementById('game-container').appendChild(eHoldEl);
-    const start=Date.now();
-    const fill=eHoldEl.querySelector('.fill');
-    const iv=setInterval(()=>{ const t=(Date.now()-start)/1000; if(t<1) fill.style.height=(t*100)+'%'; },50);
-    eHoldTimer=setTimeout(async()=>{
-        clearInterval(iv);
-        removeHHold();
-        await executeHoldE();
-    },1000);
+  if(!currentTarget || eHoldActive) return;
+  eHoldActive=true;
+  eHoldEl=document.createElement('div'); eHoldEl.className='hold-btn';
+  const cx=inFloor?fx:x, cy=inFloor?fy:y;
+  eHoldEl.style.left=(cx-10)+'px'; eHoldEl.style.top=(cy-45)+'px';
+  eHoldEl.innerHTML='<div class="fill"></div><span>E</span>';
+  (inFloor?document.getElementById('floor-container'):document.getElementById('game-container')).appendChild(eHoldEl);
+  const start=Date.now(); const fill=eHoldEl.querySelector('.fill');
+  const iv=setInterval(()=>{ const t=(Date.now()-start)/1000; if(t<1) fill.style.height=(t*100)+'%'; },50);
+  eHoldTimer=setTimeout(async()=>{ clearInterval(iv); removeHHold(); await executeHoldE(); },1000);
 }
 async function executeHoldE(){
-    if(!currentTarget) return;
-    if(currentTarget.type==='slot_mine_full'){
-        // Переместить — открыть режим выбора
-        const idx=currentTarget.slot;
-        // Ищем пустой слот
-        const free=mySlots.findIndex(s=>s===null);
-        if(free<0){ showModal('Ошибка','Нет свободных слотов'); return; }
-        const br=mySlots[idx];
-        mySlots[idx]=null;
-        mySlots[free]=br;
-        await db.ref('users/'+currentNickname).update({baseSlots:mySlots});
-        await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
-        showModal('Перенесено',br.name+' → слот '+(free+1));
-    } else if(currentTarget.type==='slot_other_full'){
-        // Украсть
-        const bid=currentTarget.baseId;
-        const idx=currentTarget.slot;
-        const bdata=allBasesData[bid];
-        if(!bdata||bdata.locked){ showModal('Ошибка','База закрыта'); return; }
-        const br=bdata.slots[idx];
-        if(!br) return;
-        const free=mySlots.findIndex(s=>s===null);
-        if(free<0){ showModal('Ошибка','Нет свободного слота'); return; }
-        // Забираем у жертвы
-        const newSlots=bdata.slots.slice();
-        newSlots[idx]=null;
-        await db.ref('servers/'+currentServerId+'/bases/'+bid+'/slots').set(newSlots);
-        // Кладём себе
-        mySlots[free]={...br,placedAt:Date.now()};
-        await db.ref('users/'+currentNickname).update({baseSlots:mySlots});
-        await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
-        // Уведомление
-        const victNotifs=bdata.notifications||[];
-        await db.ref('users/'+bdata.owner+'/notifications').transaction(cur=>{
-            const arr=cur||[];
-            arr.push({text:'⚠️ У тебя украли '+br.name+'!',ts:Date.now()});
-            return arr;
-        });
-        showModal('Кража!','Ты украл: '+br.name);
-    }
+  if(!currentTarget) return;
+  if(currentTarget.type==='slot_mine_full'){
+    const idx=currentTarget.slot;
+    const free=mySlots.findIndex(s=>s===null);
+    if(free<0){ showModal('Ошибка','Нет свободных'); return; }
+    const br=mySlots[idx]; mySlots[idx]=null; mySlots[free]=br;
+    await db.ref('users/'+currentNickname).update({baseSlots:mySlots});
+    await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
+    showModal('Перенесено',br.name+' → слот '+(free+1));
+  } else if(currentTarget.type==='slot_other_full'){
+    const bid=currentTarget.baseId, idx=currentTarget.slot;
+    const bdata=allBasesData[bid]; if(!bdata||bdata.locked){ showModal('Ошибка','База закрыта'); return; }
+    const br=bdata.slots[idx]; if(!br) return;
+    const free=mySlots.findIndex(s=>s===null); if(free<0){ showModal('Ошибка','Нет слота'); return; }
+    const newSlots=bdata.slots.slice(); newSlots[idx]=null;
+    await db.ref('servers/'+currentServerId+'/bases/'+bid+'/slots').set(newSlots);
+    mySlots[free]={...br,placedAt:Date.now()};
+    await db.ref('users/'+currentNickname).update({baseSlots:mySlots});
+    await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
+    await db.ref('users/'+bdata.owner+'/notifications').transaction(cur=>{ const arr=cur||[]; arr.push({text:'⚠️ У тебя украли '+br.name+'!',ts:Date.now()}); return arr; });
+    showModal('Кража!','Украл: '+br.name);
+  }
 }
 function startFHold(){
-    if(!currentTarget||currentTarget.type!=='slot_mine_full') return;
-    if(fHoldActive) return;
-    fHoldActive=true;
-    removeFHold(); fHoldActive=true;
-    fHoldEl=document.createElement('div');
-    fHoldEl.className='hold-btn f-btn';
-    fHoldEl.style.left=(x+8)+'px';
-    fHoldEl.style.top=(y-45)+'px';
-    fHoldEl.innerHTML='<div class="fill"></div><span>F</span>';
-    document.getElementById('game-container').appendChild(fHoldEl);
-    const start=Date.now();
-    const fill=fHoldEl.querySelector('.fill');
-    const iv=setInterval(()=>{ const t=(Date.now()-start)/1000; if(t<1) fill.style.height=(t*100)+'%'; },50);
-    fHoldTimer=setTimeout(async()=>{
-        clearInterval(iv);
-        removeFHold();
-        await executeHoldF();
-    },1000);
+  if(!currentTarget || currentTarget.type!=='slot_mine_full' || fHoldActive) return;
+  fHoldActive=true;
+  fHoldEl=document.createElement('div'); fHoldEl.className='hold-btn f-btn';
+  const cx=inFloor?fx:x, cy=inFloor?fy:y;
+  fHoldEl.style.left=(cx+8)+'px'; fHoldEl.style.top=(cy-45)+'px';
+  fHoldEl.innerHTML='<div class="fill"></div><span>F</span>';
+  (inFloor?document.getElementById('floor-container'):document.getElementById('game-container')).appendChild(fHoldEl);
+  const start=Date.now(); const fill=fHoldEl.querySelector('.fill');
+  const iv=setInterval(()=>{ const t=(Date.now()-start)/1000; if(t<1) fill.style.height=(t*100)+'%'; },50);
+  fHoldTimer=setTimeout(async()=>{ clearInterval(iv); removeFHold(); await executeHoldF(); },1000);
 }
 async function executeHoldF(){
-    if(!currentTarget||currentTarget.type!=='slot_mine_full') return;
-    const idx=currentTarget.slot;
-    const br=mySlots[idx]; if(!br) return;
-    if(br.rarity==='god'||br.rarity==='secret'||br.rarity==='og'){
-        window._pendingSell={idx,br};
-        document.getElementById('confirm-text').textContent='Do you want to sell '+br.name+'?';
-        document.getElementById('confirm-modal').style.display='flex';
-        return;
-    }
-    await doSell(idx,br);
+  if(!currentTarget || currentTarget.type!=='slot_mine_full') return;
+  const idx=currentTarget.slot; const br=mySlots[idx]; if(!br) return;
+  if(br.rarity==='god'||br.rarity==='secret'||br.rarity==='og'){
+    window._pendingSell={idx,br};
+    document.getElementById('confirm-text').textContent='Do you want to sell '+br.name+'?';
+    document.getElementById('confirm-modal').style.display='flex';
+    return;
+  }
+  await doSell(idx,br);
 }
 async function doSell(idx,br){
-    const price=Math.floor(br.price*0.5);
-    coins+=price;
-    mySlots[idx]=null;
-    document.getElementById('balance-amount').textContent=formatNumber(coins);
-    await db.ref('users/'+currentNickname).update({coins:coins,baseSlots:mySlots});
-    await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
-    showModal('Продано',br.name+' +$'+formatNumber(price));
+  const price=Math.floor(br.price*0.5);
+  coins+=price; mySlots[idx]=null;
+  document.getElementById('balance-amount').textContent=formatNumber(coins);
+  await db.ref('users/'+currentNickname).update({coins:coins,baseSlots:mySlots});
+  await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
+  showModal('Продано',br.name+' +$'+formatNumber(price));
 }
-function confirmYes(){ if(window._pendingSell){doSell(window._pendingSell.idx,window._pendingSell.br);window._pendingSell=null;} document.getElementById('confirm-modal').style.display='none'; }
+function confirmYes(){ if(window._pendingSell){ doSell(window._pendingSell.idx,window._pendingSell.br); window._pendingSell=null; } document.getElementById('confirm-modal').style.display='none'; }
 function confirmNo(){ window._pendingSell=null; document.getElementById('confirm-modal').style.display='none'; }
 
-// Клавиатура
 document.addEventListener('keydown',e=>{
-    const k=e.key.toLowerCase();
-    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
-    if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;keys.arrowup=true;e.preventDefault()}
-    if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;keys.arrowdown=true;e.preventDefault()}
-    if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;keys.arrowleft=true;e.preventDefault()}
-    if(k==='d'||k==='в'||k==='arrowright'){keys.d=true;keys.arrowright=true;e.preventDefault()}
-    if(k==='e'||k==='у'){ if(!eHoldActive) startEHold(); }
-    if(k==='f'||k==='а'){ if(!fHoldActive) startFHold(); }
+  const k=String(e.key||'').toLowerCase(); if(!k) return;
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+  if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;e.preventDefault()}
+  if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;e.preventDefault()}
+  if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;e.preventDefault()}
+  if(k==='d'||k==='в'||k==='arrowright'){keys.d=true;e.preventDefault()}
+  if(k==='e'||k==='у'){ if(!eHoldActive) startEHold(); }
+  if(k==='f'||k==='а'){ if(!fHoldActive) startFHold(); }
 });
 document.addEventListener('keyup',e=>{
-    const k=e.key.toLowerCase();
-    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
-    if(k==='w'||k==='ц'||k==='arrowup'){keys.w=false;keys.arrowup=false;e.preventDefault()}
-    if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=false;keys.arrowdown=false;e.preventDefault()}
-    if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=false;keys.arrowleft=false;e.preventDefault()}
-    if(k==='d'||k==='в'||k==='arrowright'){keys.d=false;keys.arrowright=false;e.preventDefault()}
-    if(k==='e'||k==='у'){
-        if(eHoldActive){ removeHHold(); }
-        else { quickE(); }
-    }
-    if(k==='f'||k==='а'){ removeFHold(); }
+  const k=String(e.key||'').toLowerCase(); if(!k) return;
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+  if(k==='w'||k==='ц'||k==='arrowup'){keys.w=false;e.preventDefault()}
+  if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=false;e.preventDefault()}
+  if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=false;e.preventDefault()}
+  if(k==='d'||k==='в'||k==='arrowright'){keys.d=false;e.preventDefault()}
+  if(k==='e'||k==='у'){ if(eHoldActive){ removeHHold(); } else quickE(); }
+  if(k==='f'||k==='а'){ removeFHold(); }
 });
 function quickE(){
-    if(!currentTarget) return;
-    if(currentTarget.type==='conveyor'){ buyConveyor(currentTarget.target); }
-    else if(currentTarget.type==='green_mine'){ openBaseMenu(); }
-    else if(currentTarget.type==='slot_mine_full'){ openBaseMenu(); }
-    else if(currentTarget.type==='slot_other_full'){ showModal('Чужая база','Зажми E 1 сек — украсть'); }
+  if(!currentTarget) return;
+  if(currentTarget.type==='conveyor') buyConveyor(currentTarget.target);
+  else if(currentTarget.type==='green_mine') openFloor(myBaseId);
+  else if(currentTarget.type==='green_other') openFloor(currentTarget.baseId);
+  else if(currentTarget.type==='locked_other') showModal('База закрыта','Эта база закрыта владельцем');
+  else if(currentTarget.type==='slot_mine_full') openBaseMenu();
 }
 
-// ========== ИГРОВОЙ ЦИКЛ ==========
+// ===== ЭТАЖ =====
+function openFloor(baseId){
+  const bdata=baseId===myBaseId?{owner:currentNickname,slots:mySlots,locked:myBaseLocked}:allBasesData[baseId];
+  if(!bdata) return;
+  if(bdata.locked && bdata.owner!==currentNickname){ showModal('База закрыта','Владелец закрыл доступ'); return; }
+  viewingBaseId=baseId; floorOwner=bdata.owner; floorLocked=bdata.locked;
+  floorSlots=bdata.slots||new Array(10).fill(null);
+  inFloor=true; fx=200; fy=200;
+  document.getElementById('game-container').style.display='none';
+  document.getElementById('floor-container').style.display='block';
+  document.getElementById('back-btn').style.display='block';
+  document.getElementById('floor-title').textContent='Этаж: '+bdata.owner+' '+(bdata.locked?'🔒':'🔓');
+  renderFloor();
+  renderFloorPlayer();
+}
+function closeFloorCleanup(){
+  document.querySelectorAll('#floor-container .base-slot,#floor-container .brainrot-on-base,#floor-container .base-lock,#floor-container .e-hint,#floor-container .hold-btn').forEach(e=>e.remove());
+  document.getElementById('floor-container').style.display='none';
+  document.getElementById('game-container').style.display='block';
+  document.getElementById('back-btn').style.display='none';
+  inFloor=false; viewingBaseId=null; floorSlots=[]; removeHHold(); removeFHold(); removeEHint();
+}
+function exitFloor(){ closeFloorCleanup(); renderAllBases(); }
+function renderFloorPlayer(){
+  let p=document.getElementById('floor-player');
+  if(!p){ p=document.createElement('div'); p.id='floor-player'; document.getElementById('floor-container').appendChild(p); }
+  p.innerHTML='<div class="pixel" style="background:#FFCC00"></div><div class="pixel" style="background:#FF0000"></div>';
+  p.style.left=fx+'px'; p.style.top=fy+'px';
+}
+function renderFloor(){
+  document.querySelectorAll('#floor-container .base-slot,#floor-container .brainrot-on-base,#floor-container .base-lock').forEach(e=>e.remove());
+  const fc=document.getElementById('floor-container');
+  for(let i=0;i<10;i++){
+    const off=FLOOR_SLOT_OFFSETS[i];
+    const sx=off.dx, sy=off.dy;
+    if(floorSlots[i]){
+      const br=floorSlots[i]; const d=document.createElement('div');
+      d.className='brainrot-on-base '+br.rarity;
+      d.style.backgroundImage='url(Картинки/'+br.file+')';
+      d.style.left=sx+'px'; d.style.top=sy+'px';
+      d.style.width='30px'; d.style.height='30px';
+      fc.appendChild(d);
+    } else {
+      const s=document.createElement('div'); s.className='base-slot';
+      s.style.left=sx+'px'; s.style.top=sy+'px';
+      s.style.width='30px'; s.style.height='30px';
+      fc.appendChild(s);
+    }
+  }
+  if(floorOwner===currentNickname){
+    const lock=document.createElement('div');
+    lock.className='base-lock'+(floorLocked?' locked':'');
+    lock.style.left='190px'; lock.style.top='370px';
+    lock.style.width='24px'; lock.style.height='18px';
+    lock.onclick=(e)=>{e.stopPropagation();toggleFloorLock();};
+    fc.appendChild(lock);
+  }
+}
+async function toggleFloorLock(){
+  if(floorOwner!==currentNickname) return;
+  floorLocked=!floorLocked; myBaseLocked=floorLocked;
+  await db.ref('users/'+currentNickname).update({baseLocked:myBaseLocked});
+  await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/locked').set(myBaseLocked);
+  document.getElementById('floor-title').textContent='Этаж: '+currentNickname+' '+(floorLocked?'🔒':'🔓');
+  renderFloor();
+}
+
+// ===== ИГРОВОЙ ЦИКЛ =====
 let lastTime=0;
 function update(t=0){
-    requestAnimationFrame(update);
-    const dt=Math.min((t-lastTime)/1000,0.1);
-    lastTime=t;
-    let dx=0,dy=0;
-    if(keys.w||keys.arrowup)dy-=1;
-    if(keys.s||keys.arrowdown)dy+=1;
-    if(keys.a||keys.arrowleft)dx-=1;
-    if(keys.d||keys.arrowright)dx+=1;
-    if(Math.abs(touchDX)>0.05||Math.abs(touchDY)>0.05){dx+=touchDX;dy+=touchDY;}
-    if(dx!==0||dy!==0){
-        const len=Math.sqrt(dx*dx+dy*dy);
-        x+=(dx/len)*2; y+=(dy/len)*2;
-        x=Math.max(10,Math.min(390,x));
-        y=Math.max(10,Math.min(390,y));
-        document.getElementById('player').style.left=x+'px';
-        document.getElementById('player').style.top=y+'px';
-        // Обновляем позицию на сервере
-        if(currentServerId) db.ref('servers/'+currentServerId+'/players/'+currentNickname).update({x:x,y:y});
-    }
-    updateConveyor(dt);
-    updateTarget();
+  requestAnimationFrame(update);
+  const dt=Math.min((t-lastTime)/1000,0.1); lastTime=t;
+  let dx=0,dy=0;
+  if(keys.w)dy-=1; if(keys.s)dy+=1; if(keys.a)dx-=1; if(keys.d)dx+=1;
+  if(Math.abs(touchDX)>0.05||Math.abs(touchDY)>0.05){dx+=touchDX;dy+=touchDY;}
+  if(dx!==0||dy!==0){
+    const len=Math.sqrt(dx*dx+dy*dy);
+    if(inFloor){ fx+=(dx/len)*2; fy+=(dy/len)*2; fx=Math.max(20,Math.min(370,fx)); fy=Math.max(30,Math.min(370,fy)); renderFloorPlayer(); }
+    else { x+=(dx/len)*2; y+=(dy/len)*2; x=Math.max(10,Math.min(390,x)); y=Math.max(10,Math.min(390,y)); document.getElementById('player').style.left=x+'px'; document.getElementById('player').style.top=y+'px'; if(currentServerId) db.ref('servers/'+currentServerId+'/players/'+currentNickname).update({x:x,y:y}); }
+  }
+  if(!inFloor){ updateConveyor(dt); updateTarget(); } else { updateFloorTarget(); }
 }
 function updateTarget(){
-    const pc={x:x+4,y:y+8};
-    currentTarget=null;
-    // 1. Брэинроты на дорожке
-    for(const b of conveyorBrainrots){
-        if(b.locked) continue;
-        const d=Math.sqrt(Math.pow(pc.x-(b.x+14),2)+Math.pow(pc.y-(b.y+14),2));
-        if(d<25){ currentTarget={type:'conveyor',target:b}; showEHint(); return; }
-    }
-    // 2. Своя база
-    const bp=BASE_POSITIONS[myBaseId];
-    if(bp){
-        // Зелёная зона (центр базы)
-        const gz=GREEN_ZONE[myBaseId];
-        if(gz){
-            const d=Math.sqrt(Math.pow(pc.x-gz.x,2)+Math.pow(pc.y-gz.y,2));
-            if(d<22){ currentTarget={type:'green_mine'}; showEHint(); return; }
-        }
-        // Слоты свои
-        for(let i=0;i<10;i++){
-            const off=SLOT_OFFSETS[i];
-            const sx=bp.x+off.dx+7, sy=bp.y+off.dy+7;
-            const d=Math.sqrt(Math.pow(pc.x-sx,2)+Math.pow(pc.y-sy,2));
-            if(d<14){
-                if(mySlots[i]) currentTarget={type:'slot_mine_full',slot:i,baseId:myBaseId};
-                else currentTarget={type:'slot_empty_mine',slot:i,baseId:myBaseId};
-                showEHint(); return;
-            }
-        }
-    }
-    // 3. Чужие базы
-    for(let bid in allBasesData){
-        const id=parseInt(bid);
-        if(id===myBaseId) continue;
-        const bdata=allBasesData[bid];
-        const obp=BASE_POSITIONS[id];
-        if(!obp) continue;
-        const gz=GREEN_ZONE[id];
-        if(gz){
-            const d=Math.sqrt(Math.pow(pc.x-gz.x,2)+Math.pow(pc.y-gz.y,2));
-            if(d<22){
-                if(bdata.locked){ currentTarget={type:'locked_other'}; showEHint(); return; }
-                else { currentTarget={type:'green_other',baseId:id}; showEHint(); return; }
-            }
-        }
-        for(let i=0;i<10;i++){
-            const off=SLOT_OFFSETS[i];
-            const sx=obp.x+off.dx+7, sy=obp.y+off.dy+7;
-            const d=Math.sqrt(Math.pow(pc.x-sx,2)+Math.pow(pc.y-sy,2));
-            if(d<14){
-                if(bdata.locked){ currentTarget={type:'locked_other'}; }
-                else if(bdata.slots && bdata.slots[i]) currentTarget={type:'slot_other_full',slot:i,baseId:id};
-                else currentTarget={type:'slot_empty_other',slot:i,baseId:id};
-                showEHint(); return;
-            }
-        }
-    }
-    removeEHint();
+  const pc={x:x+4,y:y+8}; currentTarget=null; removeEHint();
+  for(const b of conveyorBrainrots){ if(b.locked)continue; const d=Math.hypot(pc.x-(b.x+14),pc.y-(b.y+14)); if(d<25){ currentTarget={type:'conveyor',target:b}; showEHint(); return; } }
+  const bp=BASE_POSITIONS[myBaseId];
+  if(bp){
+    const gx=bp.x+40, gy=bp.y+72;
+    if(Math.hypot(pc.x-gx,pc.y-gy)<25){ currentTarget={type:'green_mine'}; showEHint(); return; }
+    for(let i=0;i<10;i++){ const off=SLOT_OFFSETS[i]; const sx=bp.x+off.dx+7, sy=bp.y+off.dy+7; if(Math.hypot(pc.x-sx,pc.y-sy)<14){ currentTarget={type:mySlots[i]?'slot_mine_full':'slot_empty_mine',slot:i,baseId:myBaseId}; showEHint(); return; } }
+  }
+  for(let bid in allBasesData){
+    const id=parseInt(bid); if(id===myBaseId) continue;
+    const bdata=allBasesData[bid]; const obp=BASE_POSITIONS[id]; if(!obp) continue;
+    const gx=obp.x+40, gy=obp.y+72;
+    if(Math.hypot(pc.x-gx,pc.y-gy)<25){ currentTarget={type:bdata.locked?'locked_other':'green_other',baseId:id}; showEHint(); return; }
+    for(let i=0;i<10;i++){ const off=SLOT_OFFSETS[i]; const sx=obp.x+off.dx+7, sy=obp.y+off.dy+7; if(Math.hypot(pc.x-sx,pc.y-sy)<14){ if(bdata.locked) currentTarget={type:'locked_other',baseId:id}; else if(bdata.slots&&bdata.slots[i]) currentTarget={type:'slot_other_full',slot:i,baseId:id}; else currentTarget={type:'slot_empty_other',slot:i,baseId:id}; showEHint(); return; } }
+  }
 }
-function showEHint(){
-    if(eHintEl) return;
-    eHintEl=document.createElement('div');
-    eHintEl.className='e-hint';
-    eHintEl.style.left=(x-10)+'px';
-    eHintEl.style.top=(y-45)+'px';
-    eHintEl.innerHTML='E';
-    document.getElementById('game-container').appendChild(eHintEl);
+function updateFloorTarget(){
+  const pc={x:fx+4,y:fy+8}; currentTarget=null; removeEHint();
+  for(let i=0;i<10;i++){
+    const off=FLOOR_SLOT_OFFSETS[i]; const sx=off.dx+15, sy=off.dy+15;
+    if(Math.hypot(pc.x-sx,pc.y-sy)<25){
+      if(floorSlots[i]) currentTarget={type:'floor_slot_full',slot:i};
+      else currentTarget={type:'floor_slot_empty',slot:i};
+      showEHint(); return;
+    }
+  }
 }
-function removeEHint(){ if(eHintEl){ eHintEl.remove(); eHintEl=null; } }
 
-// ========== МЕНЮ БАЗЫ ==========
+// ===== МЕНЮ БАЗЫ =====
 function openBaseMenu(){
-    const c=document.getElementById('bm-list');
-    c.innerHTML='';
-    const totalIncome=mySlots.reduce((s,br)=>s+(br?br.income:0),0);
-    const info=document.createElement('div');
-    info.className='bm-info';
-    info.textContent='Брэинротов: '+mySlots.filter(s=>s).length+'/10 | Доход: $'+formatNumber(totalIncome)+'/сек';
-    c.appendChild(info);
-    
-    if(mySlots.filter(s=>s).length===0){
-        const empty=document.createElement('div');
-        empty.className='bm-empty';
-        empty.textContent='Пока нет брэинротов на базе.';
-        c.appendChild(empty);
-    } else {
-        mySlots.forEach((br,i)=>{
-            if(!br) return;
-            const t=Math.floor((Date.now()-(br.placedAt||Date.now()))/1000);
-            const earned=Math.floor(t*br.income);
-            const row=document.createElement('div');
-            row.className='bm-row';
-            row.innerHTML=`
-                <div class="icon" style="background-image:url('Картинки/${br.file}')"></div>
-                <div class="info">
-                    <div class="name">${br.name}</div>
-                    <div class="line">${RARITY_NAMES[br.rarity]} · $${formatNumber(br.income)}/сек</div>
-                    <div class="line">На базе: ${t} сек</div>
-                    <div class="earned">+$${formatNumber(earned)}</div>
-                </div>
-                <button class="collect" onclick="collectFrom(${i})">Забрать</button>
-            `;
-            c.appendChild(row);
-        });
-    }
-    document.getElementById('base-menu').style.display='block';
+  const c=document.getElementById('bm-list'); c.innerHTML='';
+  const totalIncome=mySlots.reduce((s,br)=>s+(br?br.income:0),0);
+  const info=document.createElement('div'); info.className='bm-info';
+  info.textContent='Брэинротов: '+mySlots.filter(s=>s).length+'/10 | Доход: $'+formatNumber(totalIncome)+'/сек';
+  c.appendChild(info);
+  if(mySlots.filter(s=>s).length===0){
+    const e=document.createElement('div'); e.className='bm-empty'; e.textContent='Пока нет брэинротов'; c.appendChild(e);
+  } else {
+    mySlots.forEach((br,i)=>{
+      if(!br) return;
+      const t=Math.floor((Date.now()-(br.placedAt||Date.now()))/1000);
+      const earned=Math.floor(t*br.income);
+      const row=document.createElement('div'); row.className='bm-row';
+      row.innerHTML=`<div class="icon" style="background-image:url('Картинки/${br.file}')"></div><div class="info"><div class="name">${br.name}</div><div class="line">${RARITY_NAMES[br.rarity]} · $${formatNumber(br.income)}/сек</div><div class="line">На базе: ${t} сек</div><div class="earned">+$${formatNumber(earned)}</div></div><button class="collect" onclick="collectFrom(${i})">Забрать</button>`;
+      c.appendChild(row);
+    });
+  }
+  document.getElementById('base-menu').style.display='block';
 }
 function closeBaseMenu(){ document.getElementById('base-menu').style.display='none'; }
 async function collectFrom(i){
-    const br=mySlots[i];
-    if(!br) return;
-    const t=Math.floor((Date.now()-(br.placedAt||Date.now()))/1000);
-    const earned=Math.floor(t*br.income);
-    if(earned<=0){ showModal('Пусто','Ещё не заработал'); return; }
-    coins+=earned;
-    br.placedAt=Date.now();
-    document.getElementById('balance-amount').textContent=formatNumber(coins);
-    await db.ref('users/'+currentNickname).update({coins:coins,baseSlots:mySlots});
-    await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
-    openBaseMenu();
-    showModal('Собрано','+$'+formatNumber(earned));
+  const br=mySlots[i]; if(!br) return;
+  const t=Math.floor((Date.now()-(br.placedAt||Date.now()))/1000);
+  const earned=Math.floor(t*br.income);
+  if(earned<=0){ showModal('Пусто','Ещё не заработал'); return; }
+  coins+=earned; br.placedAt=Date.now();
+  document.getElementById('balance-amount').textContent=formatNumber(coins);
+  await db.ref('users/'+currentNickname).update({coins:coins,baseSlots:mySlots});
+  await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
+  openBaseMenu(); showModal('Собрано','+$'+formatNumber(earned));
 }
 
-// ========== ВЫХОД ==========
 async function exitToMenu(){
-    if(currentServerId && currentNickname){
-        try{ await db.ref('servers/'+currentServerId+'/players/'+currentNickname).remove(); }catch(e){}
-    }
-    conveyorBrainrots.forEach(b=>b.dom.remove()); conveyorBrainrots=[];
-    for(let k in otherPlayers){ otherPlayers[k].remove(); }
-    otherPlayers={};
-    removeEHint(); removeHHold(); removeFHold();
-    document.getElementById('app').style.display='none';
-    document.getElementById('exit-btn').style.display='none';
-    document.getElementById('balance').style.display='none';
-    document.getElementById('main-menu').style.display='flex';
+  if(currentServerId && currentNickname){ try{ await db.ref('servers/'+currentServerId+'/players/'+currentNickname).remove(); }catch(e){} }
+  conveyorBrainrots.forEach(b=>b.dom.remove()); conveyorBrainrots=[];
+  for(let k in otherPlayers){ otherPlayers[k].remove(); } otherPlayers={};
+  removeEHint(); removeHHold(); removeFHold(); closeFloorCleanup();
+  document.getElementById('app').style.display='none';
+  document.getElementById('exit-btn').style.display='none';
+  document.getElementById('balance').style.display='none';
+  document.getElementById('main-menu').style.display='flex';
 }
-
 window.addEventListener('load',()=>{ resizeGame(); });
 </script>
 </body>
