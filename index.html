@@ -36,6 +36,9 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 #game-container{width:400px;height:400px;background:#20b94d;border:4px solid black;position:relative;overflow:hidden;transform-origin:left center}
 #floor-container{width:400px;height:400px;background:#5a5a5a;border:4px solid black;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);overflow:hidden;display:none}
 .center-line{position:absolute;top:180px;left:0;width:100%;height:40px;background:#e83e32;z-index:5}
+.center-cap{position:absolute;top:-10px;width:16px;height:60px;background:black;z-index:6}
+.cap-left{left:0}.cap-right{right:0}
+/* БАЗЫ */
 .base{position:absolute;width:80px;height:80px;background:#869292;z-index:6;border:1px solid #555}
 .base .brown{position:absolute;width:calc(100% - 8px);left:4px;height:16px;background:#bf5b1a;bottom:6px}
 .base .nickname{position:absolute;bottom:6px;left:0;width:100%;height:16px;line-height:16px;text-align:center;color:#fff;font-size:7px;font-weight:bold;text-shadow:1px 1px 1px #000;z-index:7;pointer-events:none;overflow:hidden;white-space:nowrap}
@@ -59,20 +62,38 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .brainrot-on-base.og{border:1px solid #ffd700;box-shadow:0 0 8px #ffd700}
 .base-lock{position:absolute;width:16px;height:12px;background:#0066ff;border:1px solid #000;z-index:10;border-radius:2px;cursor:pointer}
 .base-lock.locked{background:#c0392b}
+/* ДЕКОРАТИВНЫЕ ОБЪЕКТЫ НА КАРТЕ */
+#rng-machine,#shop-blue,#shop-red,#queen-bee,#rng-circle,#shop-white{position:absolute;width:20px;height:20px;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);z-index:15}
+#queen-bee{height:24px;grid-template-rows:repeat(6,1fr)}
+#rng-machine{left:190px;top:137px}
+#shop-blue{left:150px;top:137px}
+#shop-red{left:150px;top:230px}
+#queen-bee{left:230px;top:137px}
+#rng-circle{left:190px;top:230px;background:#A454B4;border-radius:50%}
+#shop-white{left:230px;top:230px}
+.c-cyan{background:#00F0FF}.c-gray{background:#808080}.c-empty{background:transparent}
+.s-blue{background:#0000FF}.s-white{background:#FFFFFF}
+.r-red{background:#FF0000}.r-white{background:#FFFFFF}
+.q-yellow{background:#FFD966}.q-red{background:#F44336}.q-brown{background:#8B4513}
+.w-dark{background:#003366}.w-white{background:#FFFFFF}
+/* КОНВЕЙЕР */
 .brainrot-conveyor{position:absolute;width:28px;height:28px;z-index:18;border:2px solid rgba(0,0,0,.6);background-size:cover;background-position:center;border-radius:5px;pointer-events:none}
 .brainrot-conveyor.common{border-color:#aaa}.brainrot-conveyor.horror{border-color:#555}
 .brainrot-conveyor.epic{border-color:#9b59b6}.brainrot-conveyor.legendary{border-color:#f1c40f;box-shadow:0 0 8px #f1c40f}
 .brainrot-conveyor.mythic{border-color:#e74c3c;box-shadow:0 0 8px #e74c3c}.brainrot-conveyor.god{border-color:#e67e22;box-shadow:0 0 10px #e67e22}
 .brainrot-conveyor.secret{border-color:#00bcd4;box-shadow:0 0 12px #00bcd4}.brainrot-conveyor.og{border-color:#ffd700;box-shadow:0 0 15px #ffd700,0 0 25px #ff00ff}
 .brainrot-price-tag{position:absolute;top:-16px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#ffd700;font-size:9px;font-weight:bold;padding:2px 5px;border-radius:4px;white-space:nowrap;border:1px solid #ffd700}
-#player,#other-player,#floor-player{position:absolute;width:8px;height:16px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20;border:1px solid rgba(0,0,0,.5)}
-#player .pixel,#other-player .pixel,#floor-player .pixel{width:100%;height:100%}
+/* ИГРОК */
+#player,.other-player,#floor-player{position:absolute;width:8px;height:16px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20;border:1px solid rgba(0,0,0,.5)}
+#player .pixel,.other-player .pixel,#floor-player .pixel{width:100%;height:100%}
 .player-name{position:absolute;left:50%;transform:translateX(-50%);top:-12px;color:#fff;font-size:5px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
+/* HOLD */
 .hold-btn{position:absolute;z-index:1000;width:26px;height:26px;background:rgba(0,0,0,.7);border:2px solid #fff;border-radius:5px;display:flex;justify-content:center;align-items:center;color:#fff;font-size:14px;font-weight:bold;pointer-events:none;overflow:hidden}
 .hold-btn .fill{position:absolute;bottom:0;left:0;width:100%;height:0%;background:#4caf50;opacity:.7}
 .hold-btn.f-btn .fill{background:#c0392b}
 .hold-btn span{position:relative;z-index:1}
 .e-hint{position:absolute;z-index:1000;width:26px;height:26px;background:rgba(0,0,0,.7);border:2px solid #fff;border-radius:5px;display:flex;justify-content:center;align-items:center;color:#fff;font-size:14px;font-weight:bold;pointer-events:none}
+/* МЕНЮ БАЗЫ */
 #base-menu{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #444;border-radius:12px;padding:20px;width:90%;max-width:520px;max-height:80vh;overflow-y:auto;z-index:2500}
 #base-menu h2{color:#fff;margin:0 0 15px;font-size:20px}
 #base-menu .cm-close{position:absolute;top:10px;right:10px;background:#c0392b;border:none;color:#fff;padding:6px 12px;border-radius:5px;cursor:pointer;font-weight:bold}
@@ -85,6 +106,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .bm-row .earned{color:#4caf50;font-weight:bold;font-size:13px}
 .bm-row .collect{background:#4caf50;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:12px}
 .bm-empty{text-align:center;color:#888;padding:20px}
+/* МОДАЛКИ */
 #custom-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #0f1214;border-radius:12px;padding:20px;z-index:9999;max-width:400px;width:90%;color:#fff;text-align:center}
 #custom-modal .modal-title{font-size:18px;font-weight:bold;margin-bottom:10px;color:#4a90e2}
 #custom-modal .modal-text{font-size:14px;margin-bottom:20px;white-space:pre-line}
@@ -108,7 +130,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <body>
 <div id="auth"><div id="auth-box"><label class="auth-label">НИК</label><input type="text" id="username" class="auth-input" autocomplete="off"><label class="auth-label">ПАРОЛЬ</label><input type="password" id="password" class="auth-input"><div class="auth-btns"><button class="auth-btn btn-login" onclick="handleLogin()">ВОЙТИ</button><button class="auth-btn btn-reg" onclick="handleRegister()">РЕГ</button></div><div class="hint">Запишите пароль</div></div></div>
 <div id="balance"><span class="label">Монеты:</span><span class="amount" id="balance-amount">25</span></div>
-<div id="version">Версия: 0.26</div>
+<div id="version">Версия: 0.27</div>
 <div id="exit-btn" onclick="exitToMenu()">Выйти</div>
 <div id="back-btn" onclick="exitFloor()">← Назад</div>
 <div id="main-menu"><h1>Steal A Dushka</h1><button class="menu-btn green" onclick="playRandom()">Играть</button></div>
@@ -116,7 +138,8 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
   <div id="sidebar"><div id="actions"><div class="action-btn pink" onclick="showModal('SHOP','Скоро!')">SHOP</div><div class="action-btn" onclick="showModal('REBIRTH','Скоро!')">REBIRTH</div><div class="action-btn" onclick="showModal('TRADE','Скоро!')">TRADE</div><div class="action-btn gray" onclick="openBaseMenu()">БАЗА</div></div></div>
   <div id="game-wrapper">
     <div id="game-container">
-      <div class="center-line"></div>
+      <div class="center-line"><div class="center-cap cap-left"></div><div class="center-cap cap-right"></div></div>
+      <!-- БАЗЫ -->
       <div class="base base-top-1" data-base="1"><div class="brown"></div><div class="nickname"></div><div class="base-green"></div></div>
       <div class="base base-top-2" data-base="2"><div class="brown"></div><div class="nickname"></div><div class="base-green"></div></div>
       <div class="base base-top-3" data-base="3"><div class="brown"></div><div class="nickname"></div><div class="base-green"></div></div>
@@ -125,6 +148,13 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
       <div class="base base-bottom base-bottom-2" data-base="6"><div class="brown"></div><div class="nickname"></div><div class="base-green"></div></div>
       <div class="base base-bottom base-bottom-3" data-base="7"><div class="brown"></div><div class="nickname"></div><div class="base-green"></div></div>
       <div class="base base-bottom base-bottom-4" data-base="8"><div class="brown"></div><div class="nickname"></div><div class="base-green"></div></div>
+      <!-- ДЕКОРАТИВНЫЕ ОБЪЕКТЫ -->
+      <div id="rng-machine"><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-cyan"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-empty"></div><div class="pixel c-cyan"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div><div class="pixel c-gray"></div></div>
+      <div id="shop-blue"><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div><div class="pixel s-white"></div><div class="pixel s-blue"></div></div>
+      <div id="shop-red"><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div><div class="pixel r-white"></div><div class="pixel r-red"></div></div>
+      <div id="queen-bee"><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-yellow"></div></div>
+      <div id="rng-circle"></div>
+      <div id="shop-white"><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div></div>
       <div id="player"></div>
     </div>
     <div id="floor-container">
@@ -140,7 +170,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 <div id="joystick-zone"></div>
 
 <script>
-// ========== ДАННЫЕ БРЭИНРОТОВ ==========
+// ========== ДАННЫЕ ==========
 const BRAINROTS_LIST=[
 {file:'meme8.jpg',name:'200',rarity:'common',income:2,price:200},
 {file:'meme9.jpg',name:'Нубини',rarity:'common',income:1,price:25},
@@ -177,13 +207,11 @@ const TOTAL_WEIGHT=Object.values(RARITY_WEIGHTS).reduce((s,w)=>s+w,0);
 function pickRarity(){ let r=Math.random()*TOTAL_WEIGHT; for(let rar in RARITY_WEIGHTS){ if(r<RARITY_WEIGHTS[rar]) return rar; r-=RARITY_WEIGHTS[rar]; } return 'common'; }
 function pickBrainrot(){ const rar=pickRarity(); const pool=BRAINROTS_LIST.filter(b=>b.rarity===rar); return pool[Math.floor(Math.random()*pool.length)]; }
 
-// ========== КООРДИНАТЫ ==========
 const BASE_POSITIONS={1:{x:20,y:20},2:{x:110,y:20},3:{x:200,y:20},4:{x:290,y:20},5:{x:20,y:300},6:{x:110,y:300},7:{x:200,y:300},8:{x:290,y:300}};
 const BASE_SPAWN={1:{x:52,y:81},2:{x:142,y:81},3:{x:232,y:81},4:{x:322,y:81},5:{x:52,y:300},6:{x:142,y:300},7:{x:232,y:300},8:{x:322,y:300}};
 const SLOT_OFFSETS=[{dx:3,dy:6},{dx:3,dy:21},{dx:3,dy:36},{dx:3,dy:51},{dx:3,dy:63},{dx:62,dy:6},{dx:62,dy:21},{dx:62,dy:36},{dx:62,dy:51},{dx:62,dy:63}];
 const FLOOR_SLOT_OFFSETS=[{dx:80,dy:80},{dx:80,dy:150},{dx:80,dy:220},{dx:80,dy:290},{dx:80,dy:340},{dx:270,dy:80},{dx:270,dy:150},{dx:270,dy:220},{dx:270,dy:290},{dx:270,dy:340}];
 
-// ========== СОСТОЯНИЕ ==========
 let x=200,y=200,coins=25,currentNickname=null,currentServerId=null,myBaseId=0,myBaseLocked=false;
 let mySlots=new Array(10).fill(null);
 let allBasesData={};
@@ -199,9 +227,8 @@ let floorLocked=false;
 let floorOwner=null;
 let eHoldActive=false,eHoldEl=null,eHoldTimer=null;
 let fHoldActive=false,fHoldEl=null,fHoldTimer=null;
-const CONVEYOR_MAX=12, SPAWN_INTERVAL=2500, CONVEYOR_SPEED=0.5, BASE_MAX=10;
+const CONVEYOR_MAX=12, SPAWN_INTERVAL=2000, CONVEYOR_SPEED=0.5, BASE_MAX=10;
 
-// ========== УТИЛ ==========
 function formatNumber(num){ if(num>=1e15)return(num/1e15).toFixed(2)+'Qa'; if(num>=1e12)return(num/1e12).toFixed(2)+'T'; if(num>=1e9)return(num/1e9).toFixed(2)+'B'; if(num>=1e6)return(num/1e6).toFixed(2)+'M'; if(num>=1e3)return(num/1e3).toFixed(2)+'K'; return num.toString(); }
 function showModal(t,x){document.getElementById('modal-title').textContent=t;document.getElementById('modal-text').textContent=x;document.getElementById('custom-modal').style.display='block';}
 function closeModal(){document.getElementById('custom-modal').style.display='none';}
@@ -209,7 +236,6 @@ function showNotif(text){const n=document.getElementById('notif');n.textContent=
 function resizeGame(){const g=document.getElementById('game-container');const f=document.getElementById('floor-container');const w=window.innerWidth,h=window.innerHeight;let s=Math.min(w/500,h/500);s=Math.max(0.6,Math.min(1.2,s));g.style.transform=`scale(${s})`;f.style.transform=`translate(-50%,-50%) scale(${s})`;}
 window.addEventListener('resize',resizeGame);
 
-// ========== АВТОРИЗАЦИЯ ==========
 async function readUserData(n){try{const s=await db.ref('users/'+n).once('value');return s.exists()?s.val():null}catch(e){return null}}
 async function writeUserData(n,d){try{await db.ref('users/'+n).update(d)}catch(e){}}
 async function handleRegister(){
@@ -234,7 +260,6 @@ function showMainMenu(){
   document.getElementById('main-menu').style.display='flex';
 }
 
-// ========== СТАРТ ==========
 async function playRandom(){
   const s=await db.ref('servers').once('value'); const servers=s.val()||{};
   let chosen=null;
@@ -290,7 +315,6 @@ async function assignBase(){
 }
 async function loadAllBases(){ const s=await db.ref('servers/'+currentServerId+'/bases').once('value'); allBasesData=s.val()||{}; }
 
-// ========== РЕНДЕР ==========
 function renderPlayer(){
   const p=document.getElementById('player');
   p.innerHTML='<div class="pixel" style="background:#FFCC00"></div><div class="pixel" style="background:#FF0000"></div><div class="player-name">'+currentNickname+'</div>';
@@ -350,7 +374,6 @@ async function toggleMyLock(){
   showModal('База',myBaseLocked?'Закрыта 🔒':'Открыта 🔓');
 }
 
-// ========== КОНВЕЙЕР ==========
 function spawnConveyor(){
   if(conveyorBrainrots.length>=CONVEYOR_MAX) return;
   const br=pickBrainrot(); const id='br_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
@@ -383,7 +406,6 @@ async function buyConveyor(b){
   showModal('Куплено',b.brainrot.name+' -$'+formatNumber(b.brainrot.price));
 }
 
-// ========== УПРАВЛЕНИЕ ==========
 const keys={w:false,s:false,a:false,d:false};
 let touchDX=0,touchDY=0,joystickManager=null;
 function initJoystick(){
@@ -439,30 +461,32 @@ async function executeHoldE(){
     await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
     await db.ref('users/'+bdata.owner+'/notifications').transaction(cur=>{ const arr=cur||[]; arr.push({text:'⚠️ У тебя украли '+br.name+'!',ts:Date.now()}); return arr; });
     showModal('Кража!','Украл: '+br.name);
-  } else if(currentTarget.type==='floor_slot_full' && floorOwner===currentNickname){
+  } else if(currentTarget.type==='floor_slot_full'){
     const idx=currentTarget.slot;
-    const free=floorSlots.findIndex(s=>s===null);
-    if(free<0){ showModal('Ошибка','Нет свободных'); return; }
-    const br=floorSlots[idx]; floorSlots[idx]=null; floorSlots[free]=br;
-    await db.ref('users/'+currentNickname).update({baseSlots:floorSlots});
-    await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(floorSlots);
-    mySlots=floorSlots;
-    renderFloor();
-    showModal('Перенесено',br.name);
-  } else if(currentTarget.type==='floor_slot_full' && floorOwner!==currentNickname){
-    // Кража с этажа
-    const idx=currentTarget.slot;
-    const free=mySlots.findIndex(s=>s===null); if(free<0){ showModal('Ошибка','Нет слота'); return; }
-    const br=floorSlots[idx]; if(!br) return;
-    const newSlots=floorSlots.slice(); newSlots[idx]=null;
-    await db.ref('servers/'+currentServerId+'/bases/'+viewingBaseId+'/slots').set(newSlots);
-    mySlots[free]={...br,placedAt:Date.now()};
-    await db.ref('users/'+currentNickname).update({baseSlots:mySlots});
-    await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
-    await db.ref('users/'+floorOwner+'/notifications').transaction(cur=>{ const arr=cur||[]; arr.push({text:'⚠️ У тебя украли '+br.name+'!',ts:Date.now()}); return arr; });
-    floorSlots=newSlots;
-    renderFloor();
-    showModal('Кража!','Украл: '+br.name);
+    const isMine=(floorOwner===currentNickname);
+    const free=mySlots.findIndex(s=>s===null);
+    if(isMine){
+      const free2=floorSlots.findIndex(s=>s===null);
+      if(free2<0){ showModal('Ошибка','Нет свободных'); return; }
+      const br=floorSlots[idx]; floorSlots[idx]=null; floorSlots[free2]=br;
+      mySlots=floorSlots;
+      await db.ref('users/'+currentNickname).update({baseSlots:floorSlots});
+      await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(floorSlots);
+      renderFloor();
+      showModal('Перенесено',br.name);
+    } else {
+      if(free<0){ showModal('Ошибка','Нет слота'); return; }
+      const br=floorSlots[idx]; if(!br) return;
+      const newSlots=floorSlots.slice(); newSlots[idx]=null;
+      await db.ref('servers/'+currentServerId+'/bases/'+viewingBaseId+'/slots').set(newSlots);
+      mySlots[free]={...br,placedAt:Date.now()};
+      await db.ref('users/'+currentNickname).update({baseSlots:mySlots});
+      await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
+      await db.ref('users/'+floorOwner+'/notifications').transaction(cur=>{ const arr=cur||[]; arr.push({text:'⚠️ У тебя украли '+br.name+'!',ts:Date.now()}); return arr; });
+      floorSlots=newSlots;
+      renderFloor();
+      showModal('Кража!','Украл: '+br.name);
+    }
   }
 }
 function startFHold(){
@@ -544,7 +568,6 @@ function quickE(){
   else if(currentTarget.type==='slot_other_full') showModal('Чужая база','Зажми E 1 сек — украсть');
 }
 
-// ========== ЭТАЖ ==========
 function openFloor(baseId){
   const bdata = baseId===myBaseId ? {owner:currentNickname,slots:mySlots,locked:myBaseLocked} : allBasesData[baseId];
   if(!bdata) return;
@@ -611,7 +634,6 @@ async function toggleFloorLock(){
   renderFloor();
 }
 
-// ========== ИГРОВОЙ ЦИКЛ ==========
 let lastTime=0;
 function update(t=0){
   requestAnimationFrame(update);
@@ -655,7 +677,6 @@ function updateFloorTarget(){
   }
 }
 
-// ========== МЕНЮ БАЗЫ ==========
 function openBaseMenu(){
   const c=document.getElementById('bm-list'); c.innerHTML='';
   const totalIncome=mySlots.reduce((s,br)=>s+(br?br.income:0),0);
