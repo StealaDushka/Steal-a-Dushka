@@ -44,10 +44,9 @@ input[type="file"]{color:#fff}
 #actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .action-btn{width:60px;height:60px;display:flex;justify-content:center;align-items:center;background:#666;border:4px solid #000;color:#fff;font-weight:bold;font-size:12px;cursor:pointer;text-align:center}
 .action-btn.pink{background:#E54B8C}
-.action-btn.purple{background:#6a1b9a}
 #game-wrapper{flex:1;height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden}
 #game-container{width:400px;height:400px;background:#20b94d;border:4px solid black;position:relative;overflow:hidden;transform-origin:left center}
-#floor-container{width:400px;height:400px;background:#a8a8a8;border:4px solid black;position:relative;overflow:hidden;display:none;transform-origin:left center}
+#floor-container{width:400px;height:400px;background-color:#a8a8a8;background-image:linear-gradient(#909090 1px,transparent 1px),linear-gradient(90deg,#909090 1px,transparent 1px);background-size:20px 20px;border:4px solid black;position:relative;overflow:hidden;display:none;transform-origin:left center}
 .center-line{position:absolute;top:180px;left:0;width:100%;height:40px;background:#e83e32;z-index:5}
 .center-cap{position:absolute;top:-10px;width:16px;height:60px;background:black}.cap-left{left:0}.cap-right{right:0}
 .base{position:absolute;width:75px;height:75px;background:#869292}
@@ -79,7 +78,11 @@ input[type="file"]{color:#fff}
 #player,.other-player,#floor-player{position:absolute;width:8px;height:16px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20;border:1px solid rgba(0,0,0,.5)}
 #player .pixel,.other-player .pixel,#floor-player .pixel{width:100%;height:100%}
 #player-name,.player-name{position:absolute;left:50%;transform:translateX(-50%);top:-12px;color:#fff;font-size:5px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
-#interact{position:absolute;display:none;z-index:1000;width:22px;height:22px;background:#777;border:2px solid #444;border-radius:4px;justify-content:center;align-items:center;color:#fff;font-size:14px;font-weight:bold;cursor:pointer;box-shadow:0 0 4px rgba(0,0,0,.6)}
+#interact{position:absolute;display:none;z-index:1000;width:26px;height:26px;background:#777;border:2px solid #222;border-radius:4px;justify-content:center;align-items:center;color:#fff;font-size:14px;font-weight:bold;cursor:pointer;box-shadow:0 0 4px rgba(0,0,0,.6)}
+#interactF{position:absolute;display:none;z-index:1000;width:26px;height:26px;background:#c0392b;border:2px solid #222;border-radius:4px;justify-content:center;align-items:center;color:#fff;font-size:14px;font-weight:bold;cursor:pointer;box-shadow:0 0 4px rgba(0,0,0,.6)}
+#holdProgress{position:absolute;display:none;z-index:1001;width:60px;height:8px;background:rgba(0,0,0,.7);border:1px solid #fff;border-radius:4px;overflow:hidden;pointer-events:none}
+#holdProgress .fill{position:absolute;left:0;top:0;height:100%;width:0%;background:#4caf50}
+#floor-carried{position:absolute;width:28px;height:28px;background-size:cover;background-position:center;z-index:25;border:2px solid #fff;border-radius:4px;pointer-events:none;box-shadow:0 0 8px #fff;display:none}
 .brainrot-conveyor{position:absolute;width:28px;height:28px;z-index:18;border:2px solid rgba(0,0,0,.6);background-size:cover;background-position:center;border-radius:5px;pointer-events:none}
 .brainrot-conveyor.common{border-color:#aaa}
 .brainrot-conveyor.horror{border-color:#555}
@@ -203,7 +206,7 @@ input[type="file"]{color:#fff}
   <div class="box dushka"><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div>
   <div class="box"><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div>
 </div>
-<div id="version">Версия: 0.34</div>
+<div id="version">Версия: 0.35</div>
 <div id="exit-btn" onclick="exitToMenu()">Выйти</div>
 <div id="back-btn" onclick="exitFloor()">Назад</div>
 <div id="main-menu"><h1>Steal A Dushka</h1><button class="menu-btn green" onclick="playRandom()">Играть</button><button class="menu-btn blue" onclick="openServers()">Серверы</button><button class="menu-btn purple" onclick="openFriends()">Друзья</button><button class="menu-btn" onclick="openProfile()">Профиль</button></div>
@@ -242,10 +245,16 @@ input[type="file"]{color:#fff}
       <div id="queen-bee"><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-yellow"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-red"></div><div class="pixel q-yellow"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-brown"></div><div class="pixel q-yellow"></div></div>
       <div id="rng-circle"></div>
       <div id="shop-white"><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div></div>
-      <div id="interact" onclick="quickE()">E</div>
       <div id="player"></div>
     </div>
-    <div id="floor-container"><div id="floor-title"></div><div id="floor-player"></div></div>
+    <div id="floor-container">
+      <div id="floor-title"></div>
+      <div id="floor-player"></div>
+      <div id="floor-carried"></div>
+      <div id="interact">E</div>
+      <div id="interactF">F</div>
+      <div id="holdProgress"><div class="fill"></div></div>
+    </div>
   </div>
 </div>
 
@@ -306,20 +315,24 @@ function pickBrainrot(){const rar=pickRarity();const pool=BRAINROTS_LIST.filter(
 const BASE_POSITIONS={1:{x:20,y:20},2:{x:115,y:20},3:{x:210,y:20},4:{x:305,y:20},5:{x:20,y:305},6:{x:115,y:305},7:{x:210,y:305},8:{x:305,y:305}};
 const BASE_SPAWN={1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81},5:{x:52,y:307},6:{x:147,y:307},7:{x:242,y:307},8:{x:337,y:307}};
 const SLOT_OFFSETS=[{dx:4,dy:6},{dx:4,dy:20},{dx:4,dy:34},{dx:4,dy:48},{dx:4,dy:60},{dx:57,dy:6},{dx:57,dy:20},{dx:57,dy:34},{dx:57,dy:48},{dx:57,dy:60}];
-// Слоты на этаже — 5 слева + 5 справа
-const FLOOR_SLOT_OFFSETS=[{dx:20,dy:60},{dx:20,dy:130},{dx:20,dy:200},{dx:20,dy:270},{dx:20,dy:340},{dx:350,dy:60},{dx:350,dy:130},{dx:350,dy:200},{dx:350,dy:270},{dx:350,dy:340}];
+// 12 слотов на этаже — 6 слева + 6 справа
+const FLOOR_SLOT_OFFSETS=[
+  {dx:10,dy:55},{dx:10,dy:105},{dx:10,dy:155},{dx:10,dy:205},{dx:10,dy:255},{dx:10,dy:305},
+  {dx:362,dy:55},{dx:362,dy:105},{dx:362,dy:155},{dx:362,dy:205},{dx:362,dy:255},{dx:362,dy:305}
+];
 
 let x=200,y=200,coins=25,dushka=0,currentNickname=null,currentServerId=null,myBaseId=0,myBaseLocked=false;
-let mySlots=new Array(10).fill(null);
+let mySlots=new Array(12).fill(null);
 let allBasesData={};
 let otherPlayers={};
 let conveyorBrainrots=[];
 let lastConveyorSpawn=0;
 let currentTarget=null;
-let inFloor=false,fx=195,fy=345,floorSlots=[],floorLocked=false,floorOwner=null,viewingBaseId=null;
+let inFloor=false,fx=195,fy=370,floorSlots=[],floorLocked=false,floorOwner=null,viewingBaseId=null;
+let carriedBrainrot=null;
 let _spins=0,isSpinning=false,wheelRotation=0;
 let ownedItems=[],autoBuyShopItems=[],ownedRedItems=[],currentRedTab='gear';
-const CONVEYOR_MAX=12,SPAWN_INTERVAL=2000,CONVEYOR_SPEED=0.5,BASE_MAX=10;
+const CONVEYOR_MAX=12,SPAWN_INTERVAL=2000,CONVEYOR_SPEED=0.5,BASE_MAX=12;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
 let touchDX=0,touchDY=0,joystickManager=null;
 let typedCode='';
@@ -329,11 +342,12 @@ const obstacles=[
   {x:148,y:228,w:24,h:24},{x:188,y:228,w:24,h:24},{x:228,y:228,w:24,h:24}
 ];
 
-// ФИКС Гарамы — превращаем объект в массив из 10
-function normalizeSlots(slots){
-  const arr = new Array(10).fill(null);
+// ФИКС: превращаем объект в массив из 12
+function normalizeSlots(slots, size){
+  size = size || 12;
+  const arr = new Array(size).fill(null);
   if(!slots) return arr;
-  for(let i=0;i<10;i++){ if(slots[i]) arr[i] = slots[i]; }
+  for(let i=0;i<size;i++){ if(slots[i]) arr[i] = slots[i]; }
   return arr;
 }
 
@@ -350,7 +364,7 @@ async function handleRegister(){
   const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();
   if(!u||!p){showModal('Ошибка','Заполните всё!');return;}
   const e=await readUserData(u);if(e){showModal('Ошибка','Ник занят!');return;}
-  await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,ownedItems:[],autoBuyShopItems:[],ownedRedItems:[],baseId:0,baseLocked:false,baseSlots:new Array(10).fill(null),notifications:[],avatar:'',background:'',friends:[],friendRequests:[],serverId:null});
+  await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,ownedItems:[],autoBuyShopItems:[],ownedRedItems:[],baseId:0,baseLocked:false,baseSlots:new Array(12).fill(null),notifications:[],avatar:'',background:'',friends:[],friendRequests:[],serverId:null});
   currentNickname=u;showMainMenu();
 }
 async function handleLogin(){
@@ -391,7 +405,7 @@ async function startGame(){
   document.getElementById('version').style.display='block';
   const d=await readUserData(currentNickname);
   coins=d.coins||25;dushka=d.dushka||0;myBaseId=d.baseId||0;myBaseLocked=d.baseLocked||false;
-  mySlots=normalizeSlots(d.baseSlots);
+  mySlots=normalizeSlots(d.baseSlots,12);
   ownedItems=d.ownedItems||[];autoBuyShopItems=d.autoBuyShopItems||[];ownedRedItems=d.ownedRedItems||[];
   _spins=d.spins||0;
   document.getElementById('balance-amount').textContent=formatNumber(coins);
@@ -403,7 +417,7 @@ async function startGame(){
   db.ref('servers/'+currentServerId+'/bases').on('value',snap=>{
     allBasesData=snap.val()||{};
     if(allBasesData[myBaseId]&&allBasesData[myBaseId].owner===currentNickname){
-      mySlots=normalizeSlots(allBasesData[myBaseId].slots);
+      mySlots=normalizeSlots(allBasesData[myBaseId].slots,12);
       myBaseLocked=allBasesData[myBaseId].locked||false;
     }
     renderAllBases();
@@ -475,7 +489,7 @@ function updateConveyor(dt){
 }
 function countFreeSlots(){return mySlots.filter(s=>s===null).length;}
 async function buyConveyor(b){
-  if(mySlots.filter(s=>s).length>=BASE_MAX){showModal('Ошибка','База полна! 10/10');return;}
+  if(mySlots.filter(s=>s).length>=BASE_MAX){showModal('Ошибка','База полна! '+BASE_MAX+'/'+BASE_MAX);return;}
   if(coins<b.brainrot.price){showModal('Ошибка','Нужно $'+formatNumber(b.brainrot.price)+'\nУ тебя: $'+formatNumber(coins));return;}
   const free=mySlots.findIndex(s=>s===null);
   if(free<0){showModal('Ошибка','Нет свободного места');return;}
@@ -484,7 +498,7 @@ async function buyConveyor(b){
   mySlots[free]={file:b.brainrot.file,name:b.brainrot.name,rarity:b.brainrot.rarity,income:b.brainrot.income,price:b.brainrot.price,placedAt:Date.now()};
   await db.ref('users/'+currentNickname).update({coins:coins,baseSlots:mySlots});
   await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
-  showModal('Куплено',b.brainrot.name+' -$'+formatNumber(b.brainrot.price)+'\nСвободно: '+countFreeSlots()+'/10');
+  showModal('Куплено',b.brainrot.name+' -$'+formatNumber(b.brainrot.price)+'\nСвободно: '+countFreeSlots()+'/'+BASE_MAX);
 }
 
 function initJoystick(){
@@ -493,13 +507,6 @@ function initJoystick(){
   joystickManager=nipplejs.create({zone:z,mode:'static',position:{left:'50%',top:'50%'},color:'white',size:100,restOpacity:0.5,fadeTime:150});
   joystickManager.on('move',(e,d)=>{const f=Math.min(d.force,1);touchDX=Math.cos(d.angle.radian)*f;touchDY=-Math.sin(d.angle.radian)*f;});
   joystickManager.on('end',()=>{touchDX=0;touchDY=0;});
-}
-function removeEHint(){const e=document.getElementById('interact');if(e)e.style.display='none';}
-function showEHint(cx,cy){
-  const btn=document.getElementById('interact');
-  btn.style.display='flex';
-  btn.style.left=(cx-10)+'px';
-  btn.style.top=(cy-30)+'px';
 }
 
 async function doSell(idx,br){
@@ -526,46 +533,215 @@ async function sellMyBrainrot(idx){
   await doSell(idx,br);
 }
 
-async function stealBrainrot(bid,idx){
-  const bdata=allBasesData[bid];
-  if(!bdata||bdata.locked){showModal('Ошибка','База закрыта');return;}
-  const victimSlots=normalizeSlots(bdata.slots);
-  const br=victimSlots[idx];if(!br)return;
-  const free=mySlots.findIndex(s=>s===null);
-  if(free<0){showModal('Ошибка','Нет свободного слота');return;}
-  victimSlots[idx]=null;
-  await db.ref('servers/'+currentServerId+'/bases/'+bid+'/slots').set(victimSlots);
-  mySlots[free]={...br,placedAt:Date.now()};
-  await db.ref('users/'+currentNickname).update({baseSlots:mySlots});
-  await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
-  await db.ref('users/'+bdata.owner+'/notifications').transaction(cur=>{const arr=cur||[];arr.push({text:'⚠️ У тебя украли '+br.name+'!',ts:Date.now()});return arr;});
-  if(inFloor)renderFloor();
-  showModal('Кража!','Украл: '+br.name);
+// ==== ЛОГИКА E/F ====
+let eHoldTimer=null,eHoldStart=0,eHoldActive=false,eHoldTargetSnap=null;
+
+function startEHold(){
+  if(eHoldActive)return;
+  if(!currentTarget)return;
+  eHoldActive=true;
+  eHoldStart=Date.now();
+  eHoldTargetSnap=JSON.parse(JSON.stringify(currentTarget));
+  // показать прогресс
+  const hp=document.getElementById('holdProgress');
+  hp.style.display='block';
+  const px=inFloor?fx:x, py=inFloor?fy:y;
+  hp.style.left=(px-22)+'px';
+  hp.style.top=(py-40)+'px';
+  hp.querySelector('.fill').style.width='0%';
+  // анимация
+  const t0=Date.now();
+  const iv=setInterval(()=>{
+    const t=(Date.now()-t0)/500;
+    if(t<=1)hp.querySelector('.fill').style.width=(t*100)+'%';
+  },30);
+  eHoldTimer=setTimeout(()=>{
+    clearInterval(iv);
+    hp.style.display='none';
+    executeLongE(eHoldTargetSnap);
+    eHoldActive=false;
+  },500);
+}
+function cancelEHold(){
+  if(eHoldTimer){clearTimeout(eHoldTimer);eHoldTimer=null;}
+  document.getElementById('holdProgress').style.display='none';
+  eHoldActive=false;
+}
+function releaseE(){
+  if(eHoldActive && Date.now()-eHoldStart<500){
+    cancelEHold();
+    executeShortE(eHoldTargetSnap);
+  } else {
+    cancelEHold();
+  }
+  eHoldActive=false;
 }
 
-function quickE(){
-  if(!currentTarget)return;
-  if(currentTarget.type==='conveyor'){buyConveyor(currentTarget.target);return;}
-  if(currentTarget.type==='green_mine'){openFloor(myBaseId);return;}
-  if(currentTarget.type==='green_other'){openFloor(currentTarget.baseId);return;}
-  if(currentTarget.type==='locked_other'){showModal('База закрыта','Владелец закрыл доступ');return;}
-  if(currentTarget.type==='slot_mine_full'){openBaseMenu();return;}
-  if(currentTarget.type==='slot_empty_mine'){openBaseMenu();return;}
-  if(currentTarget.type==='slot_other_full'){stealBrainrot(currentTarget.baseId,currentTarget.slot);return;}
-  if(currentTarget.type==='shop'){
-    const o=currentTarget.target;
-    if(o.id==='shop-blue')openShop();
-    else if(o.id==='shop-red')openRedShop();
-    else if(o.id==='shop-white')openTradePlaza();
-    else if(o.id==='queen-bee')openBee();
-    else if(o.id==='rng-circle')openWheel();
-    else if(o.id==='rng-machine')showModal('RNG','Здесь будет приз!');
+async function executeShortE(snap){
+  if(!snap)return;
+  if(snap.type==='conveyor'){buyConveyor(snap.target);return;}
+  if(snap.type==='shop'){quickShopOpen(snap.target);return;}
+  if(snap.type==='green_mine'){openFloor(myBaseId);return;}
+  if(snap.type==='green_other'){openFloor(snap.baseId);return;}
+  if(snap.type==='locked_other'){showModal('База закрыта','Владелец закрыл доступ');return;}
+  if(snap.type==='slot_mine_full'){
+    if(carriedBrainrot){return;} // если что-то несём — не открывать меню
+    openBaseMenu();
+    return;
+  }
+  if(snap.type==='slot_empty_mine'){
+    if(carriedBrainrot){return;}
+    return;
+  }
+  if(snap.type==='slot_other_full'){
+    showModal('Чужой брэинрот','Зажми E 0.5 сек чтобы украсть');
+    return;
   }
 }
 
+async function executeLongE(snap){
+  if(!snap)return;
+  // Если руки пустые — берём
+  if(!carriedBrainrot){
+    if(snap.type==='slot_mine_full'){
+      carriedBrainrot={...mySlots[snap.slot],fromBase:myBaseId,fromSlot:snap.slot};
+      mySlots[snap.slot]=null;
+      await db.ref('users/'+currentNickname).update({baseSlots:mySlots});
+      await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
+      floorSlots=mySlots;
+      if(inFloor)renderFloor();
+      updateCarried();
+      showNotif('✋ Взял: '+carriedBrainrot.name);
+    } else if(snap.type==='slot_other_full'){
+      // кража
+      const bid=snap.baseId;
+      const bdata=allBasesData[bid];
+      if(!bdata||bdata.locked){showModal('Ошибка','База закрыта');return;}
+      const victimSlots=normalizeSlots(bdata.slots,12);
+      const br=victimSlots[snap.slot];if(!br)return;
+      victimSlots[snap.slot]=null;
+      await db.ref('servers/'+currentServerId+'/bases/'+bid+'/slots').set(victimSlots);
+      carriedBrainrot={...br,fromBase:bid,fromSlot:snap.slot};
+      floorSlots=victimSlots;
+      if(inFloor)renderFloor();
+      updateCarried();
+      // уведомление жертве
+      await db.ref('users/'+bdata.owner+'/notifications').transaction(cur=>{const arr=cur||[];arr.push({text:'⚠️ У тебя украли '+br.name+'!',ts:Date.now()});return arr;});
+      showNotif('👊 Украл: '+br.name);
+    }
+  } else {
+    // Руки заняты — кладём/меняем
+    if(snap.type==='slot_mine_full'||snap.type==='slot_empty_mine'){
+      const idx=snap.slot;
+      const current=mySlots[idx];
+      const fromBase=carriedBrainrot.fromBase;
+      const fromSlot=carriedBrainrot.fromSlot;
+      if(current){
+        // обмен
+        if(fromBase===myBaseId){
+          mySlots[fromSlot]=current;
+          mySlots[idx]=carriedBrainrot;
+        } else {
+          // забрали у чужого — теперь кладём своё на место, а чужое в руках
+          mySlots[idx]=carriedBrainrot;
+          // положить current в чужую базу на fromSlot
+          const otherSlots=normalizeSlots(allBasesData[fromBase]?.slots,12);
+          otherSlots[fromSlot]=current;
+          await db.ref('servers/'+currentServerId+'/bases/'+fromBase+'/slots').set(otherSlots);
+        }
+      } else {
+        if(fromBase===myBaseId){
+          mySlots[fromSlot]=null;
+          mySlots[idx]=carriedBrainrot;
+        } else {
+          mySlots[idx]=carriedBrainrot;
+          // уже убрали из чужой базы при взятии
+        }
+      }
+      // убираем fromBase/fromSlot
+      delete carriedBrainrot.fromBase;
+      delete carriedBrainrot.fromSlot;
+      carriedBrainrot=null;
+      await db.ref('users/'+currentNickname).update({baseSlots:mySlots});
+      await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
+      floorSlots=mySlots;
+      if(inFloor)renderFloor();
+      updateCarried();
+      showNotif('✅ Положил');
+    } else if(snap.type==='slot_other_full'){
+      // попытка положить в чужой занятый слот — не разрешаем
+      showNotif('Нельзя класть в чужой занятый слот');
+    }
+  }
+}
+
+async function executeShortF(snap){
+  if(!snap)return;
+  if(carriedBrainrot){return;} // если что-то несём — не продаём
+  if(snap.type==='slot_mine_full'){
+    await sellMyBrainrot(snap.slot);
+  }
+}
+
+function updateCarried(){
+  const el=document.getElementById('floor-carried');
+  if(!carriedBrainrot){el.style.display='none';return;}
+  el.style.display='block';
+  el.style.backgroundImage='url(Картинки/'+carriedBrainrot.file+')';
+  el.className='brainrot-on-base '+carriedBrainrot.rarity;
+  el.style.position='absolute';
+  el.style.left=(fx-10)+'px';
+  el.style.top=(fy-38)+'px';
+  el.style.width='28px';
+  el.style.height='28px';
+  el.style.zIndex='25';
+}
+
+// короткое/длинное F
+let fHoldTimer=null,fHoldStart=0,fHoldActive=false,fHoldTargetSnap=null;
+function startFHold(){
+  if(fHoldActive)return;
+  if(!currentTarget)return;
+  fHoldActive=true;
+  fHoldStart=Date.now();
+  fHoldTargetSnap=JSON.parse(JSON.stringify(currentTarget));
+  const hp=document.getElementById('holdProgress');
+  hp.style.display='block';
+  const px=inFloor?fx:x,py=inFloor?fy:y;
+  hp.style.left=(px+10)+'px';
+  hp.style.top=(py-40)+'px';
+  hp.querySelector('.fill').style.width='0%';
+  hp.querySelector('.fill').style.background='#c0392b';
+  const t0=Date.now();
+  const iv=setInterval(()=>{
+    const t=(Date.now()-t0)/500;
+    if(t<=1)hp.querySelector('.fill').style.width=(t*100)+'%';
+  },30);
+  fHoldTimer=setTimeout(()=>{
+    clearInterval(iv);
+    hp.style.display='none';
+    executeShortF(fHoldTargetSnap);
+    fHoldActive=false;
+  },500);
+}
+function releaseF(){
+  if(fHoldTimer){clearTimeout(fHoldTimer);fHoldTimer=null;}
+  document.getElementById('holdProgress').style.display='none';
+  fHoldActive=false;
+}
+
+function quickShopOpen(o){
+  if(o.id==='shop-blue')openShop();
+  else if(o.id==='shop-red')openRedShop();
+  else if(o.id==='shop-white')openTradePlaza();
+  else if(o.id==='queen-bee')openBee();
+  else if(o.id==='rng-circle')openWheel();
+  else if(o.id==='rng-machine')showModal('RNG','Здесь будет приз!');
+}
+
 function openIndexMenu(){
-  const colors = ['—','Красный','Синий','Зелёный','Жёлтый','Фиолетовый','Оранжевый','Розовый','Голубой'];
-  showModal('ИНДЕКС', 'Твоя база: №' + myBaseId + '\nЦвет: ' + (colors[myBaseId] || 'Неизвестно') + '\nБрэинротов: ' + mySlots.filter(s=>s).length + '/10');
+  const colors=['—','Красный','Синий','Зелёный','Жёлтый','Фиолетовый','Оранжевый','Розовый','Голубой'];
+  showModal('ИНДЕКС','Твоя база: №'+myBaseId+'\nЦвет: '+(colors[myBaseId]||'Неизвестно')+'\nБрэинротов: '+mySlots.filter(s=>s).length+'/'+BASE_MAX);
 }
 
 document.addEventListener('keydown',e=>{
@@ -577,7 +753,8 @@ document.addEventListener('keydown',e=>{
   if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;e.preventDefault()}
   if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;e.preventDefault()}
   if(k==='d'||k==='в'||k==='arrowright'){keys.d=true;e.preventDefault()}
-  if(k==='e'||k==='у'){quickE();e.preventDefault()}
+  if(k==='e'||k==='у'){if(!eHoldActive)startEHold();e.preventDefault()}
+  if(k==='f'||k==='а'){if(!fHoldActive)startFHold();e.preventDefault()}
 });
 document.addEventListener('keyup',e=>{
   const k=String(e.key||'').toLowerCase();if(!k)return;
@@ -586,6 +763,8 @@ document.addEventListener('keyup',e=>{
   if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=false;e.preventDefault()}
   if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=false;e.preventDefault()}
   if(k==='d'||k==='в'||k==='arrowright'){keys.d=false;e.preventDefault()}
+  if(k==='e'||k==='у'){releaseE();e.preventDefault()}
+  if(k==='f'||k==='а'){releaseF();e.preventDefault()}
 });
 
 function openFloor(baseId){
@@ -593,19 +772,31 @@ function openFloor(baseId){
   if(!bdata)return;
   if(bdata.locked&&bdata.owner!==currentNickname){showModal('База закрыта','Владелец закрыл доступ');return;}
   viewingBaseId=baseId;floorOwner=bdata.owner;floorLocked=bdata.locked;
-  floorSlots=normalizeSlots(bdata.slots);
-  inFloor=true;fx=190;fy=345;
+  floorSlots=normalizeSlots(bdata.slots,12);
+  inFloor=true;fx=195;fy=370;
   document.getElementById('game-container').style.display='none';
   document.getElementById('floor-container').style.display='block';
   document.getElementById('back-btn').style.display='block';
   document.getElementById('floor-title').textContent='Этаж: '+bdata.owner+' '+(bdata.locked?'🔒':'🔓');
-  renderFloor();renderFloorPlayer();
+  renderFloor();renderFloorPlayer();updateCarried();
 }
 function closeFloorCleanup(){
-  document.querySelectorAll('#floor-container .base-slot,#floor-container .brainrot-on-base,#floor-container .floor-decor').forEach(e=>e.remove());
+  document.querySelectorAll('#floor-container .floor-decor').forEach(e=>e.remove());
   document.getElementById('floor-container').style.display='none';
   document.getElementById('game-container').style.display='block';
   document.getElementById('back-btn').style.display='none';
+  document.getElementById('interact').style.display='none';
+  document.getElementById('interactF').style.display='none';
+  document.getElementById('holdProgress').style.display='none';
+  if(carriedBrainrot){
+    // возвращаем брэинрот на исходный слот если возможно
+    if(carriedBrainrot.fromBase===myBaseId){
+      const free=mySlots.findIndex(s=>s===null);
+      if(free>=0){mySlots[free]=carriedBrainrot;db.ref('users/'+currentNickname).update({baseSlots:mySlots});}
+    }
+    carriedBrainrot=null;
+  }
+  document.getElementById('floor-carried').style.display='none';
   inFloor=false;viewingBaseId=null;floorSlots=[];removeEHint();
 }
 function exitFloor(){closeFloorCleanup();renderAllBases();}
@@ -616,54 +807,56 @@ function renderFloorPlayer(){
   p.style.left=fx+'px';p.style.top=fy+'px';
 }
 function renderFloor(){
-  document.querySelectorAll('#floor-container .base-slot,#floor-container .brainrot-on-base,#floor-container .floor-decor').forEach(e=>e.remove());
+  document.querySelectorAll('#floor-container .floor-decor').forEach(e=>e.remove());
   const fc=document.getElementById('floor-container');
 
-  // СЕРАЯ ЗОНА СБОКУ УЖЕ ФОН КОНТЕЙНЕРА (a8a8a8)
+  // Синие полосы (между слотами и проходами)
+  const bsL=document.createElement('div');bsL.className='floor-decor';
+  bsL.style.cssText='position:absolute;left:42px;top:30px;width:20px;height:340px;background:#0044ff;z-index:1';
+  fc.appendChild(bsL);
+  const bsR=document.createElement('div');bsR.className='floor-decor';
+  bsR.style.cssText='position:absolute;left:338px;top:30px;width:20px;height:340px;background:#0044ff;z-index:1';
+  fc.appendChild(bsR);
 
-  // КРАСНАЯ ДОРОЖКА ПО ЦЕНТРУ
-  const road=document.createElement('div');
-  road.className='floor-decor';
-  road.style.cssText='position:absolute;left:145px;top:40px;width:110px;height:320px;background:#e83e32;z-index:1';
+  // Красная дорожка по центру
+  const road=document.createElement('div');road.className='floor-decor';
+  road.style.cssText='position:absolute;left:160px;top:30px;width:80px;height:340px;background:#e83e32;z-index:2';
   fc.appendChild(road);
 
-  // ЧЁРНАЯ ПОЛОСА СНИЗУ
-  const blackBar=document.createElement('div');
-  blackBar.className='floor-decor';
-  blackBar.style.cssText='position:absolute;left:0;bottom:0;width:100%;height:32px;background:#000;z-index:2';
-  fc.appendChild(blackBar);
+  // Чёрная полоса снизу
+  const bb=document.createElement('div');bb.className='floor-decor';
+  bb.style.cssText='position:absolute;left:150px;bottom:0;width:100px;height:40px;background:#000;z-index:3';
+  fc.appendChild(bb);
 
-  // ЗЕЛЁНАЯ ТОЧКА СПАВНА (в начале дорожки)
-  const spawnMark=document.createElement('div');
-  spawnMark.className='floor-decor';
-  spawnMark.style.cssText='position:absolute;left:180px;top:336px;width:40px;height:30px;background:#22e54c;z-index:3;border:2px solid #000;box-sizing:border-box';
-  fc.appendChild(spawnMark);
+  // Зелёный спавн
+  const sp=document.createElement('div');sp.className='floor-decor';
+  sp.style.cssText='position:absolute;left:185px;bottom:8px;width:30px;height:24px;background:#22e54c;border:2px solid #000;z-index:4;box-sizing:border-box';
+  fc.appendChild(sp);
 
-  // СИНЯЯ КНОПКА ЗАМКА (для владельца, на дорожке у низа)
+  // Синяя кнопка замка
   if(floorOwner===currentNickname){
-    const lock=document.createElement('div');
-    lock.className='floor-decor';
-    lock.style.cssText='position:absolute;left:192px;top:305px;width:26px;height:22px;background:'+(floorLocked?'#c0392b':'#0066ff')+';border:2px solid #000;z-index:4;cursor:pointer;border-radius:3px';
-    lock.onclick=(e)=>{e.stopPropagation();toggleFloorLock();};
-    fc.appendChild(lock);
+    const lk=document.createElement('div');lk.className='floor-decor';
+    lk.style.cssText='position:absolute;left:186px;top:298px;width:28px;height:22px;background:'+(floorLocked?'#c0392b':'#0066ff')+';border:2px solid #000;z-index:5;cursor:pointer;border-radius:3px';
+    lk.onclick=(e)=>{e.stopPropagation();toggleFloorLock();};
+    fc.appendChild(lk);
   }
 
-  // СЛОТЫ ПО БОКАМ
-  for(let i=0;i<10;i++){
+  // Слоты
+  for(let i=0;i<12;i++){
     const off=FLOOR_SLOT_OFFSETS[i];const sx=off.dx,sy=off.dy;
     if(floorSlots[i]){
       const br=floorSlots[i];const d=document.createElement('div');
       d.className='brainrot-on-base '+br.rarity;
       d.style.backgroundImage='url(Картинки/'+br.file+')';
       d.style.left=sx+'px';d.style.top=sy+'px';
-      d.style.width='30px';d.style.height='30px';
-      d.style.zIndex='5';
+      d.style.width='28px';d.style.height='28px';
+      d.style.zIndex='6';
       fc.appendChild(d);
     } else {
       const s=document.createElement('div');s.className='base-slot';
       s.style.left=sx+'px';s.style.top=sy+'px';
-      s.style.width='30px';s.style.height='30px';
-      s.style.zIndex='5';
+      s.style.width='28px';s.style.height='28px';
+      s.style.zIndex='6';
       fc.appendChild(s);
     }
   }
@@ -686,7 +879,7 @@ function update(t=0){
   if(Math.abs(touchDX)>0.05||Math.abs(touchDY)>0.05){dx+=touchDX;dy+=touchDY;}
   if(dx!==0||dy!==0){
     const len=Math.sqrt(dx*dx+dy*dy);
-    if(inFloor){fx+=(dx/len)*1;fy+=(dy/len)*1;fx=Math.max(10,Math.min(382,fx));fy=Math.max(30,Math.min(360,fy));renderFloorPlayer();}
+    if(inFloor){fx+=(dx/len)*1;fy+=(dy/len)*1;fx=Math.max(10,Math.min(382,fx));fy=Math.max(30,Math.min(365,fy));renderFloorPlayer();updateCarried();}
     else{
       let nx=x+(dx/len)*1,ny=y+(dy/len)*1;
       const rX={x:nx,y:y,w:8,h:16};let bX=false;
@@ -703,37 +896,81 @@ function update(t=0){
   if(!inFloor){updateConveyor(dt);updateTarget();}else{updateFloorTarget();}
 }
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y);}
+function removeEHint(){document.getElementById('interact').style.display='none';document.getElementById('interactF').style.display='none';}
+
 function updateTarget(){
   const pc={x:x+4,y:y+8};currentTarget=null;removeEHint();
-  for(const b of conveyorBrainrots){if(b.locked)continue;const d=Math.hypot(pc.x-(b.x+14),pc.y-(b.y+14));if(d<25){currentTarget={type:'conveyor',target:b};showEHint(x,y);return;}}
+  for(const b of conveyorBrainrots){if(b.locked)continue;const d=Math.hypot(pc.x-(b.x+14),pc.y-(b.y+14));if(d<25){currentTarget={type:'conveyor',target:b};showEandF(x,y,false);return;}}
   const bp=BASE_POSITIONS[myBaseId];
-  if(bp){const gx=bp.x+37.5,gy=bp.y+89;if(Math.hypot(pc.x-gx,pc.y-gy)<28){currentTarget={type:'green_mine'};showEHint(x,y);return;}}
+  if(bp){const gx=bp.x+37.5,gy=bp.y+89;if(Math.hypot(pc.x-gx,pc.y-gy)<28){currentTarget={type:'green_mine'};showEandF(x,y,false);return;}}
   for(let bid in allBasesData){
     const id=parseInt(bid);if(id===myBaseId)continue;
     const bdata=allBasesData[bid];const obp=BASE_POSITIONS[id];if(!obp)continue;
     const gx=obp.x+37.5,gy=obp.y+89;
-    if(Math.hypot(pc.x-gx,pc.y-gy)<28){currentTarget={type:bdata.locked?'locked_other':'green_other',baseId:id};showEHint(x,y);return;}
+    if(Math.hypot(pc.x-gx,pc.y-gy)<28){currentTarget={type:bdata.locked?'locked_other':'green_other',baseId:id};showEandF(x,y,false);return;}
   }
   const interactables=[{id:'rng-machine',x:190,y:137,h:20},{id:'shop-blue',x:150,y:137,h:20},{id:'queen-bee',x:230,y:137,h:24},{id:'shop-red',x:150,y:230,h:20},{id:'rng-circle',x:190,y:230,h:20},{id:'shop-white',x:230,y:230,h:20}];
   for(const obj of interactables){
     const oc={x:obj.x+10,y:obj.y+obj.h/2};
-    if(Math.hypot(pc.x-oc.x,pc.y-oc.y)<25){currentTarget={type:'shop',target:obj};showEHint(x,y);return;}
+    if(Math.hypot(pc.x-oc.x,pc.y-oc.y)<25){currentTarget={type:'shop',target:obj};showEandF(x,y,false);return;}
   }
 }
-function updateFloorTarget(){
-  const pc={x:fx+4,y:fy+8};currentTarget=null;removeEHint();
-  for(let i=0;i<10;i++){
-    const off=FLOOR_SLOT_OFFSETS[i];const sx=off.dx+15,sy=off.dy+15;
-    if(Math.hypot(pc.x-sx,pc.y-sy)<25){
-      if(floorSlots[i]){
-        if(floorOwner===currentNickname)currentTarget={type:'slot_mine_full',slot:i};
-        else currentTarget={type:'slot_other_full',slot:i,baseId:viewingBaseId};
-      } else currentTarget={type:'slot_empty_mine',slot:i};
-      showEHint(fx,fy);return;
-    }
-  }
+function showEandF(cx,cy,withF){
+  const e=document.getElementById('interact');e.style.display='flex';
+  e.style.left=(cx-16)+'px';e.style.top=(cy-32)+'px';
+  const f=document.getElementById('interactF');
+  if(withF){f.style.display='flex';f.style.left=(cx+10)+'px';f.style.top=(cy-32)+'px';}
+  else {f.style.display='none';}
 }
 
+function updateFloorTarget(){
+  const pc={x:fx+4,y:fy+8};currentTarget=null;removeEHint();
+  for(let i=0;i<12;i++){
+    const off=FLOOR_SLOT_OFFSETS[i];const sx=off.dx+14,sy=off.dy+14;
+    if(Math.hypot(pc.x-sx,pc.y-sy)<22){
+      if(floorSlots[i]){
+        if(floorOwner===currentNickname){currentTarget={type:'slot_mine_full',slot:i};showEandF(fx,fy,true);}
+        else{currentTarget={type:'slot_other_full',slot:i,baseId:viewingBaseId};showEandF(fx,fy,false);}
+      } else {
+        currentTarget={type:'slot_empty_mine',slot:i};
+        showEandF(fx,fy,false);
+      }
+      return;
+    }
+  }
+  // Если несём брэинрот — показываем E для любого слота (уже обработано выше)
+}
+
+// Кнопки на мобилке — при клике срабатывает длинное действие если удерживать
+// Упрощённо: клик = короткое, двойной клик = длинное
+document.getElementById('interact').addEventListener('click',()=>{
+  if(eHoldActive)return;
+  const snap=currentTarget?JSON.parse(JSON.stringify(currentTarget)):null;
+  executeShortE(snap);
+});
+document.getElementById('interactF').addEventListener('click',()=>{
+  const snap=currentTarget?JSON.parse(JSON.stringify(currentTarget)):null;
+  executeShortF(snap);
+});
+// Долгое нажатие на кнопку E — имитируем long E
+let touchStartTime=0;
+document.getElementById('interact').addEventListener('touchstart',(e)=>{
+  touchStartTime=Date.now();
+  e.preventDefault();
+});
+document.getElementById('interact').addEventListener('touchend',(e)=>{
+  const dur=Date.now()-touchStartTime;
+  if(dur>=500){
+    const snap=currentTarget?JSON.parse(JSON.stringify(currentTarget)):null;
+    executeLongE(snap);
+  } else {
+    const snap=currentTarget?JSON.parse(JSON.stringify(currentTarget)):null;
+    executeShortE(snap);
+  }
+  e.preventDefault();
+});
+
+// ========== SHOP / BEES / RED SHOP / WHEEL / TRADE PLAZA ==========
 const shopItems=[
 {id:'slap',name:'Slap',desc:'Slap thieves!',price:500,icon:'slap'},
 {id:'speed-coil',name:'Speed Coil',desc:'Zoom!',price:750,icon:'speed-coil'},
@@ -817,7 +1054,7 @@ function getRedIcon(type){switch(type){
 case'blackhole-slap':return`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="25" fill="black"/><path d="M20 50 L80 50 M50 20 L50 80 M30 30 L70 70 M70 30 L30 70" stroke="white" stroke-width="3"/></svg>`;
 case'ban-hammer':return`<svg viewBox="0 0 100 100"><rect x="20" y="30" width="60" height="15" fill="#7f8c8d"/><rect x="45" y="20" width="10" height="60" fill="#95a5a6"/></svg>`;
 case'laser-gun':return`<svg viewBox="0 0 100 100"><rect x="10" y="40" width="60" height="15" fill="#2c3e50"/><rect x="20" y="55" width="15" height="15" fill="#34495e"/><path d="M70 45 L90 42" stroke="red" stroke-width="5"/></svg>`;
-case'carpet':return`<svg viewBox="0 0 100 100"><defs><linearGradient id="carpetGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ff00ff"/><stop offset="25%" stop-color="#00ffff"/><stop offset="50%" stop-color="#ffff00"/><stop offset="75%" stop-color="#ff0000"/><stop offset="100%" stop-color="#00ff00"/></linearGradient></defs><rect x="10" y="30" width="80" height="40" fill="url(#carpetGrad)" rx="10"/></svg>`;
+case'carpet':return`<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#ff00ff" rx="10"/></svg>`;
 case'vip':return`<svg viewBox="0 0 100 100"><text x="10" y="70" font-size="45" fill="#f1c40f" font-weight="bold">VIP</text></svg>`;
 case'2x-money':return`<svg viewBox="0 0 100 100"><text x="10" y="65" font-size="40" fill="#2ecc71" font-weight="bold">x2</text></svg>`;
 case'admin-panel':return`<svg viewBox="0 0 100 100"><rect x="10" y="20" width="80" height="60" fill="#34495e"/><text x="25" y="60" fill="white" font-size="25" font-weight="bold">AP</text></svg>`;
@@ -895,6 +1132,7 @@ function closeWheel(){document.getElementById('wheel-menu').style.display='none'
 function openTradePlaza(){document.getElementById('trade-plaza-modal').style.display='flex';}
 function closeTradePlaza(){document.getElementById('trade-plaza-modal').style.display='none';}
 
+// ========== СЕРВЕРЫ / ДРУЗЬЯ / ПРОФИЛЬ ==========
 async function openServers(){document.getElementById('main-menu').style.display='none';document.getElementById('server-menu').style.display='block';await loadServers();}
 async function loadServers(){
   const c=document.getElementById('server-list');c.innerHTML='';
@@ -930,12 +1168,13 @@ document.getElementById('bg-input').addEventListener('change',function(e){const 
 async function saveProfile(){let a=window._avatarData||'';let b=window._bgData||'';await db.ref('users/'+currentNickname).update({avatar:a,background:b});showModal('Успех','Профиль сохранён');}
 function closeProfile(){document.getElementById('profile-menu').style.display='none';showMainMenu();}
 
+// ========== МЕНЮ БАЗЫ ==========
 function openBaseMenu(){
   const c=document.getElementById('bm-list');c.innerHTML='';
   const totalIncome=mySlots.reduce((s,br)=>s+(br?br.income:0),0);
   const free=countFreeSlots();
   const info=document.createElement('div');info.className='bm-info';
-  info.textContent='Брэинротов: '+mySlots.filter(s=>s).length+'/10 | Свободно: '+free+' | Доход: $'+formatNumber(totalIncome)+'/сек';
+  info.textContent='Брэинротов: '+mySlots.filter(s=>s).length+'/'+BASE_MAX+' | Свободно: '+free+' | Доход: $'+formatNumber(totalIncome)+'/сек';
   c.appendChild(info);
   if(mySlots.filter(s=>s).length===0){
     const e=document.createElement('div');e.className='bm-empty';e.textContent='Пока нет брэинротов';c.appendChild(e);
