@@ -78,8 +78,13 @@ input[type="file"]{color:#fff}
 #player,.other-player,#floor-player{position:absolute;width:8px;height:16px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20;border:1px solid rgba(0,0,0,.5)}
 #player .pixel,.other-player .pixel,#floor-player .pixel{width:100%;height:100%}
 #player-name,.player-name{position:absolute;left:50%;transform:translateX(-50%);top:-12px;color:#fff;font-size:5px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
-#interact{position:absolute;display:none;z-index:1000;width:26px;height:26px;background:#777;border:2px solid #222;border-radius:4px;justify-content:center;align-items:center;color:#fff;font-size:14px;font-weight:bold;cursor:pointer;box-shadow:0 0 4px rgba(0,0,0,.6)}
-#interactF{position:absolute;display:none;z-index:1000;width:26px;height:26px;background:#c0392b;border:2px solid #222;border-radius:4px;justify-content:center;align-items:center;color:#fff;font-size:14px;font-weight:bold;cursor:pointer;box-shadow:0 0 4px rgba(0,0,0,.6)}
+
+/* ====== ИЗМЕНЕНО: КНОПКИ E и F — ФИКСИРОВАННЫЕ В ПРАВОМ НИЖНЕМ УГЛУ ====== */
+#interact,#interactF{position:fixed;bottom:30px;display:none;z-index:10000;width:70px;height:70px;border:4px solid #222;border-radius:50%;justify-content:center;align-items:center;color:#fff;font-size:28px;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,.6);user-select:none;touch-action:none}
+#interact{right:30px;background:#4caf50}
+#interactF{right:120px;background:#c0392b}
+/* ====== КОНЕЦ ИЗМЕНЕНИЙ ====== */
+
 #holdProgress{position:absolute;display:none;z-index:1001;width:60px;height:8px;background:rgba(0,0,0,.7);border:1px solid #fff;border-radius:4px;overflow:hidden;pointer-events:none}
 #holdProgress .fill{position:absolute;left:0;top:0;height:100%;width:0%;background:#4caf50}
 #floor-carried{position:absolute;width:28px;height:28px;background-size:cover;background-position:center;z-index:25;border:2px solid #fff;border-radius:4px;pointer-events:none;box-shadow:0 0 8px #fff;display:none}
@@ -251,8 +256,6 @@ input[type="file"]{color:#fff}
       <div id="floor-title"></div>
       <div id="floor-player"></div>
       <div id="floor-carried"></div>
-      <div id="interact">E</div>
-      <div id="interactF">F</div>
       <div id="holdProgress"><div class="fill"></div></div>
     </div>
   </div>
@@ -273,6 +276,10 @@ input[type="file"]{color:#fff}
 <div id="confirm-modal"><div class="confirm-text" id="confirm-text"></div><div class="confirm-buttons"><button class="confirm-btn confirm-yes" onclick="confirmYes()">Yes</button><button class="confirm-btn confirm-no" onclick="confirmNo()">No</button></div></div>
 <div id="notif"></div>
 <div id="joystick-zone"></div>
+
+<!-- ====== ИЗМЕНЕНО: КНОПКИ E и F ВЫНЕСЕНЫ СЮДА, ЧТОБЫ БЫТЬ ФИКСИРОВАННЫМИ ====== -->
+<div id="interact">E</div>
+<div id="interactF">F</div>
 
 <script>
 // ========== БРЭИНРОТЫ ==========
@@ -915,13 +922,13 @@ function updateTarget(){
     if(Math.hypot(pc.x-oc.x,pc.y-oc.y)<25){currentTarget={type:'shop',target:obj};showEandF(x,y,false);return;}
   }
 }
+
+// ====== ИЗМЕНЕНО: КНОПКИ ТЕПЕРЬ ПРОСТО ПОКАЗЫВАЮТСЯ/СКРЫВАЮТСЯ ======
 function showEandF(cx,cy,withF){
-  const e=document.getElementById('interact');e.style.display='flex';
-  e.style.left=(cx-16)+'px';e.style.top=(cy-32)+'px';
-  const f=document.getElementById('interactF');
-  if(withF){f.style.display='flex';f.style.left=(cx+10)+'px';f.style.top=(cy-32)+'px';}
-  else {f.style.display='none';}
+  document.getElementById('interact').style.display='flex';
+  document.getElementById('interactF').style.display=withF?'flex':'none';
 }
+// ====== КОНЕЦ ИЗМЕНЕНИЙ ======
 
 function updateFloorTarget(){
   const pc={x:fx+4,y:fy+8};currentTarget=null;removeEHint();
