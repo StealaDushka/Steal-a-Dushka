@@ -22,10 +22,47 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 .auth-btn{flex:1;height:40px;border:none;font-weight:bold;cursor:pointer;font-size:13px}
 .btn-login{background:#fff;color:#000}.btn-reg{background:#fff;color:red}
 .hint{color:#888;font-size:12px;margin-top:15px;text-align:center}
-#main-menu{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:linear-gradient(45deg,#1a1a2e,#16213e);z-index:900;flex-direction:column;align-items:center;justify-content:center;gap:20px}
-#main-menu h1{color:#ffd700;font-size:36px;margin:0;text-shadow:0 0 20px #ffd700}
-.menu-btn{width:300px;height:60px;background:#e94560;border:none;border-radius:10px;color:#fff;font-size:20px;font-weight:bold;cursor:pointer}
-.menu-btn.blue{background:#0f3460}.menu-btn.green{background:#4caf50}.menu-btn.purple{background:#6a1b9a}
+
+/* ====== НОВОЕ ГЛАВНОЕ МЕНЮ ====== */
+#main-menu{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:900;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,#0a0a1e 0%,#1a1a3e 50%,#0a0a1a 100%);transition:background .6s ease}
+#main-menu.light-theme{background:linear-gradient(135deg,#eef2ff 0%,#dce4f7 50%,#f0f4ff 100%)}
+#main-menu::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 30%,rgba(255,215,0,.08),transparent 50%),radial-gradient(circle at 70% 70%,rgba(233,69,96,.08),transparent 50%);animation:menu-bg-rotate 30s linear infinite;pointer-events:none}
+@keyframes menu-bg-rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.menu-content{display:flex;flex-direction:column;align-items:center;gap:14px;z-index:2;animation:menu-fade-in .8s ease;padding:20px}
+@keyframes menu-fade-in{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.menu-logo{font-size:64px;animation:logo-float 3s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(255,215,0,.6))}
+@keyframes logo-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+#main-menu h1{color:#ffd700;font-size:46px;margin:0;text-shadow:0 0 30px rgba(255,215,0,.6),0 0 60px rgba(255,215,0,.3);letter-spacing:3px;font-weight:900;text-align:center;animation:title-glow 2.5s ease-in-out infinite alternate;font-family:'Courier New',monospace}
+@keyframes title-glow{from{text-shadow:0 0 20px rgba(255,215,0,.5),0 0 40px rgba(255,215,0,.2)}to{text-shadow:0 0 40px rgba(255,215,0,.8),0 0 80px rgba(255,215,0,.4)}}
+#main-menu.light-theme h1{color:#6a1b9a;text-shadow:0 0 30px rgba(106,27,154,.3),0 0 60px rgba(106,27,154,.1)}
+.menu-subtitle{color:#aaa;font-size:13px;letter-spacing:4px;text-transform:uppercase;margin-bottom:15px;opacity:.8}
+#main-menu.light-theme .menu-subtitle{color:#555}
+.menu-buttons{display:flex;flex-direction:column;gap:12px}
+.menu-btn{width:320px;height:62px;border:none;border-radius:14px;color:#fff;font-size:18px;font-weight:bold;cursor:pointer;transition:all .25s ease;display:flex;align-items:center;justify-content:center;gap:12px;position:relative;overflow:hidden;letter-spacing:1.5px;font-family:'Courier New',monospace}
+.menu-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);transition:left .6s}
+.menu-btn:hover::before{left:100%}
+.menu-btn:hover{transform:translateY(-3px) scale(1.02)}
+.menu-btn:active{transform:translateY(0) scale(.98)}
+.menu-icon{font-size:22px;display:inline-flex}
+.menu-btn.green{background:linear-gradient(135deg,#4caf50,#2e7d32);box-shadow:0 6px 20px rgba(76,175,80,.4)}
+.menu-btn.green:hover{box-shadow:0 10px 30px rgba(76,175,80,.6)}
+.menu-btn.blue{background:linear-gradient(135deg,#2196f3,#0d47a1);box-shadow:0 6px 20px rgba(33,150,243,.4)}
+.menu-btn.blue:hover{box-shadow:0 10px 30px rgba(33,150,243,.6)}
+.menu-btn.purple{background:linear-gradient(135deg,#9c27b0,#4a148c);box-shadow:0 6px 20px rgba(156,39,176,.4)}
+.menu-btn.purple:hover{box-shadow:0 10px 30px rgba(156,39,176,.6)}
+.menu-btn.red{background:linear-gradient(135deg,#e94560,#b71c1c);box-shadow:0 6px 20px rgba(233,69,96,.4)}
+.menu-btn.red:hover{box-shadow:0 10px 30px rgba(233,69,96,.6)}
+.menu-footer{color:#666;font-size:12px;margin-top:20px;letter-spacing:1px;opacity:.8}
+#main-menu.light-theme .menu-footer{color:#999}
+
+/* ====== ПОЛУМЕСЯЦ ====== */
+.theme-toggle{position:fixed;bottom:30px;left:30px;width:64px;height:64px;cursor:pointer;z-index:950;border-radius:50%;padding:8px;transition:all .3s ease;color:#fff;display:flex;justify-content:center;align-items:center}
+.theme-toggle:hover{transform:scale(1.15) rotate(-20deg);background:rgba(255,255,255,.1)}
+#main-menu.light-theme .theme-toggle{color:#1a1a2e}
+#main-menu.light-theme .theme-toggle:hover{background:rgba(0,0,0,.05)}
+.theme-toggle svg{width:100%;height:100%;filter:drop-shadow(0 0 10px currentColor);transition:filter .3s}
+
+/* ====== ОСТАЛЬНОЕ ====== */
 #server-menu,#friends-menu,#profile-menu{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e2426;border:2px solid #444;border-radius:12px;padding:20px;width:90%;max-width:600px;max-height:80vh;overflow-y:auto;z-index:950}
 .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
 .header h2{color:#fff;margin:0}
@@ -79,13 +116,15 @@ input[type="file"]{color:#fff}
 #player .pixel,.other-player .pixel,#floor-player .pixel{width:100%;height:100%}
 #player-name,.player-name{position:absolute;left:50%;transform:translateX(-50%);top:-12px;color:#fff;font-size:5px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
 
-/* ====== ИЗМЕНЕНО: КНОПКИ E и F — ФИКСИРОВАННЫЕ В ПРАВОМ НИЖНЕМ УГЛУ ====== */
-#interact,#interactF{position:fixed;bottom:30px;display:none;z-index:10000;width:70px;height:70px;border:4px solid #222;border-radius:50%;justify-content:center;align-items:center;color:#fff;font-size:28px;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,.6);user-select:none;touch-action:none}
+/* ====== КНОПКИ E и F ====== */
+#interact,#interactF{position:fixed;bottom:30px;display:none;z-index:10000;width:70px;height:70px;border:4px solid #222;border-radius:50%;justify-content:center;align-items:center;color:#fff;font-size:28px;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,.6);user-select:none;touch-action:none;transition:transform .15s,box-shadow .15s}
 #interact{right:30px;background:#4caf50}
+#interact:hover{transform:scale(1.08);box-shadow:0 6px 22px rgba(76,175,80,.7)}
 #interactF{right:120px;background:#c0392b}
-/* ====== КОНЕЦ ИЗМЕНЕНИЙ ====== */
+#interactF:hover{transform:scale(1.08);box-shadow:0 6px 22px rgba(192,57,43,.7)}
+#interact:active,#interactF:active{transform:scale(.95)}
 
-#holdProgress{position:absolute;display:none;z-index:1001;width:60px;height:8px;background:rgba(0,0,0,.7);border:1px solid #fff;border-radius:4px;overflow:hidden;pointer-events:none}
+#holdProgress{position:fixed;display:none;z-index:10001;width:60px;height:8px;background:rgba(0,0,0,.7);border:1px solid #fff;border-radius:4px;overflow:hidden;pointer-events:none}
 #holdProgress .fill{position:absolute;left:0;top:0;height:100%;width:0%;background:#4caf50}
 #floor-carried{position:absolute;width:28px;height:28px;background-size:cover;background-position:center;z-index:25;border:2px solid #fff;border-radius:4px;pointer-events:none;box-shadow:0 0 8px #fff;display:none}
 .brainrot-conveyor{position:absolute;width:28px;height:28px;z-index:18;border:2px solid rgba(0,0,0,.6);background-size:cover;background-position:center;border-radius:5px;pointer-events:none}
@@ -214,7 +253,33 @@ input[type="file"]{color:#fff}
 <div id="version">Версия: 0.35</div>
 <div id="exit-btn" onclick="exitToMenu()">Выйти</div>
 <div id="back-btn" onclick="exitFloor()">Назад</div>
-<div id="main-menu"><h1>Steal A Dushka</h1><button class="menu-btn green" onclick="playRandom()">Играть</button><button class="menu-btn blue" onclick="openServers()">Серверы</button><button class="menu-btn purple" onclick="openFriends()">Друзья</button><button class="menu-btn" onclick="openProfile()">Профиль</button></div>
+
+<!-- ====== НОВОЕ ГЛАВНОЕ МЕНЮ ====== -->
+<div id="main-menu">
+  <div class="menu-content">
+    <div class="menu-logo">🌀</div>
+    <h1>Steal A Dushka</h1>
+    <div class="menu-subtitle">Укради · Защити · Разбогатей</div>
+    <div class="menu-buttons">
+      <button class="menu-btn green" onclick="playRandom()"><span class="menu-icon">▶</span> Играть</button>
+      <button class="menu-btn blue" onclick="openServers()"><span class="menu-icon">🌐</span> Серверы</button>
+      <button class="menu-btn purple" onclick="openFriends()"><span class="menu-icon">👥</span> Друзья</button>
+      <button class="menu-btn red" onclick="openProfile()"><span class="menu-icon">👤</span> Профиль</button>
+    </div>
+    <div class="menu-footer">v0.35 · by MrDushka</div>
+  </div>
+  <div class="theme-toggle" onclick="toggleMenuTheme()" title="Сменить тему">
+    <svg viewBox="0 0 100 100">
+      <defs>
+        <mask id="moon-mask">
+          <rect width="100" height="100" fill="white"/>
+          <circle cx="68" cy="38" r="38" fill="black"/>
+        </mask>
+      </defs>
+      <circle cx="50" cy="50" r="42" fill="currentColor" mask="url(#moon-mask)"/>
+    </svg>
+  </div>
+</div>
 
 <div id="server-menu"><div class="header"><h2>Серверы</h2><button class="close-btn" onclick="closeServers()">X</button></div><div id="server-list"></div><button style="width:100%;padding:12px;background:#ffd700;color:#000;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px" onclick="openCreateServer()">Создать сервер (100 Dushka Coins)</button></div>
 
@@ -277,11 +342,24 @@ input[type="file"]{color:#fff}
 <div id="notif"></div>
 <div id="joystick-zone"></div>
 
-<!-- ====== ИЗМЕНЕНО: КНОПКИ E и F ВЫНЕСЕНЫ СЮДА, ЧТОБЫ БЫТЬ ФИКСИРОВАННЫМИ ====== -->
 <div id="interact">E</div>
 <div id="interactF">F</div>
 
 <script>
+// ========== ТЕМА МЕНЮ ==========
+function toggleMenuTheme(){
+  const menu=document.getElementById('main-menu');
+  menu.classList.toggle('light-theme');
+  const isLight=menu.classList.contains('light-theme');
+  try{localStorage.setItem('menuTheme',isLight?'light':'dark');}catch(e){}
+}
+(function initTheme(){
+  try{
+    const saved=localStorage.getItem('menuTheme');
+    if(saved==='light'){document.getElementById('main-menu').classList.add('light-theme');}
+  }catch(e){}
+})();
+
 // ========== БРЭИНРОТЫ ==========
 const BRAINROTS_LIST=[
 {file:'meme8.jpg',name:'200',rarity:'common',income:2,price:200},
@@ -322,7 +400,6 @@ function pickBrainrot(){const rar=pickRarity();const pool=BRAINROTS_LIST.filter(
 const BASE_POSITIONS={1:{x:20,y:20},2:{x:115,y:20},3:{x:210,y:20},4:{x:305,y:20},5:{x:20,y:305},6:{x:115,y:305},7:{x:210,y:305},8:{x:305,y:305}};
 const BASE_SPAWN={1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81},5:{x:52,y:307},6:{x:147,y:307},7:{x:242,y:307},8:{x:337,y:307}};
 const SLOT_OFFSETS=[{dx:4,dy:6},{dx:4,dy:20},{dx:4,dy:34},{dx:4,dy:48},{dx:4,dy:60},{dx:57,dy:6},{dx:57,dy:20},{dx:57,dy:34},{dx:57,dy:48},{dx:57,dy:60}];
-// 12 слотов на этаже — 6 слева + 6 справа
 const FLOOR_SLOT_OFFSETS=[
   {dx:10,dy:55},{dx:10,dy:105},{dx:10,dy:155},{dx:10,dy:205},{dx:10,dy:255},{dx:10,dy:305},
   {dx:362,dy:55},{dx:362,dy:105},{dx:362,dy:155},{dx:362,dy:205},{dx:362,dy:255},{dx:362,dy:305}
@@ -349,12 +426,11 @@ const obstacles=[
   {x:148,y:228,w:24,h:24},{x:188,y:228,w:24,h:24},{x:228,y:228,w:24,h:24}
 ];
 
-// ФИКС: превращаем объект в массив из 12
-function normalizeSlots(slots, size){
-  size = size || 12;
-  const arr = new Array(size).fill(null);
-  if(!slots) return arr;
-  for(let i=0;i<size;i++){ if(slots[i]) arr[i] = slots[i]; }
+function normalizeSlots(slots,size){
+  size=size||12;
+  const arr=new Array(size).fill(null);
+  if(!slots)return arr;
+  for(let i=0;i<size;i++){if(slots[i])arr[i]=slots[i];}
   return arr;
 }
 
@@ -540,7 +616,7 @@ async function sellMyBrainrot(idx){
   await doSell(idx,br);
 }
 
-// ==== ЛОГИКА E/F ====
+// ==== E/F ЛОГИКА ====
 let eHoldTimer=null,eHoldStart=0,eHoldActive=false,eHoldTargetSnap=null;
 
 function startEHold(){
@@ -549,14 +625,12 @@ function startEHold(){
   eHoldActive=true;
   eHoldStart=Date.now();
   eHoldTargetSnap=JSON.parse(JSON.stringify(currentTarget));
-  // показать прогресс
   const hp=document.getElementById('holdProgress');
   hp.style.display='block';
   const px=inFloor?fx:x, py=inFloor?fy:y;
   hp.style.left=(px-22)+'px';
   hp.style.top=(py-40)+'px';
   hp.querySelector('.fill').style.width='0%';
-  // анимация
   const t0=Date.now();
   const iv=setInterval(()=>{
     const t=(Date.now()-t0)/500;
@@ -592,7 +666,7 @@ async function executeShortE(snap){
   if(snap.type==='green_other'){openFloor(snap.baseId);return;}
   if(snap.type==='locked_other'){showModal('База закрыта','Владелец закрыл доступ');return;}
   if(snap.type==='slot_mine_full'){
-    if(carriedBrainrot){return;} // если что-то несём — не открывать меню
+    if(carriedBrainrot){return;}
     openBaseMenu();
     return;
   }
@@ -608,7 +682,6 @@ async function executeShortE(snap){
 
 async function executeLongE(snap){
   if(!snap)return;
-  // Если руки пустые — берём
   if(!carriedBrainrot){
     if(snap.type==='slot_mine_full'){
       carriedBrainrot={...mySlots[snap.slot],fromBase:myBaseId,fromSlot:snap.slot};
@@ -620,7 +693,6 @@ async function executeLongE(snap){
       updateCarried();
       showNotif('✋ Взял: '+carriedBrainrot.name);
     } else if(snap.type==='slot_other_full'){
-      // кража
       const bid=snap.baseId;
       const bdata=allBasesData[bid];
       if(!bdata||bdata.locked){showModal('Ошибка','База закрыта');return;}
@@ -632,26 +704,21 @@ async function executeLongE(snap){
       floorSlots=victimSlots;
       if(inFloor)renderFloor();
       updateCarried();
-      // уведомление жертве
       await db.ref('users/'+bdata.owner+'/notifications').transaction(cur=>{const arr=cur||[];arr.push({text:'⚠️ У тебя украли '+br.name+'!',ts:Date.now()});return arr;});
       showNotif('👊 Украл: '+br.name);
     }
   } else {
-    // Руки заняты — кладём/меняем
     if(snap.type==='slot_mine_full'||snap.type==='slot_empty_mine'){
       const idx=snap.slot;
       const current=mySlots[idx];
       const fromBase=carriedBrainrot.fromBase;
       const fromSlot=carriedBrainrot.fromSlot;
       if(current){
-        // обмен
         if(fromBase===myBaseId){
           mySlots[fromSlot]=current;
           mySlots[idx]=carriedBrainrot;
         } else {
-          // забрали у чужого — теперь кладём своё на место, а чужое в руках
           mySlots[idx]=carriedBrainrot;
-          // положить current в чужую базу на fromSlot
           const otherSlots=normalizeSlots(allBasesData[fromBase]?.slots,12);
           otherSlots[fromSlot]=current;
           await db.ref('servers/'+currentServerId+'/bases/'+fromBase+'/slots').set(otherSlots);
@@ -662,10 +729,8 @@ async function executeLongE(snap){
           mySlots[idx]=carriedBrainrot;
         } else {
           mySlots[idx]=carriedBrainrot;
-          // уже убрали из чужой базы при взятии
         }
       }
-      // убираем fromBase/fromSlot
       delete carriedBrainrot.fromBase;
       delete carriedBrainrot.fromSlot;
       carriedBrainrot=null;
@@ -676,7 +741,6 @@ async function executeLongE(snap){
       updateCarried();
       showNotif('✅ Положил');
     } else if(snap.type==='slot_other_full'){
-      // попытка положить в чужой занятый слот — не разрешаем
       showNotif('Нельзя класть в чужой занятый слот');
     }
   }
@@ -684,7 +748,7 @@ async function executeLongE(snap){
 
 async function executeShortF(snap){
   if(!snap)return;
-  if(carriedBrainrot){return;} // если что-то несём — не продаём
+  if(carriedBrainrot){return;}
   if(snap.type==='slot_mine_full'){
     await sellMyBrainrot(snap.slot);
   }
@@ -704,7 +768,6 @@ function updateCarried(){
   el.style.zIndex='25';
 }
 
-// короткое/длинное F
 let fHoldTimer=null,fHoldStart=0,fHoldActive=false,fHoldTargetSnap=null;
 function startFHold(){
   if(fHoldActive)return;
@@ -796,7 +859,6 @@ function closeFloorCleanup(){
   document.getElementById('interactF').style.display='none';
   document.getElementById('holdProgress').style.display='none';
   if(carriedBrainrot){
-    // возвращаем брэинрот на исходный слот если возможно
     if(carriedBrainrot.fromBase===myBaseId){
       const free=mySlots.findIndex(s=>s===null);
       if(free>=0){mySlots[free]=carriedBrainrot;db.ref('users/'+currentNickname).update({baseSlots:mySlots});}
@@ -816,39 +878,27 @@ function renderFloorPlayer(){
 function renderFloor(){
   document.querySelectorAll('#floor-container .floor-decor').forEach(e=>e.remove());
   const fc=document.getElementById('floor-container');
-
-  // Синие полосы (между слотами и проходами)
   const bsL=document.createElement('div');bsL.className='floor-decor';
   bsL.style.cssText='position:absolute;left:42px;top:30px;width:20px;height:340px;background:#0044ff;z-index:1';
   fc.appendChild(bsL);
   const bsR=document.createElement('div');bsR.className='floor-decor';
   bsR.style.cssText='position:absolute;left:338px;top:30px;width:20px;height:340px;background:#0044ff;z-index:1';
   fc.appendChild(bsR);
-
-  // Красная дорожка по центру
   const road=document.createElement('div');road.className='floor-decor';
   road.style.cssText='position:absolute;left:160px;top:30px;width:80px;height:340px;background:#e83e32;z-index:2';
   fc.appendChild(road);
-
-  // Чёрная полоса снизу
   const bb=document.createElement('div');bb.className='floor-decor';
   bb.style.cssText='position:absolute;left:150px;bottom:0;width:100px;height:40px;background:#000;z-index:3';
   fc.appendChild(bb);
-
-  // Зелёный спавн
   const sp=document.createElement('div');sp.className='floor-decor';
   sp.style.cssText='position:absolute;left:185px;bottom:8px;width:30px;height:24px;background:#22e54c;border:2px solid #000;z-index:4;box-sizing:border-box';
   fc.appendChild(sp);
-
-  // Синяя кнопка замка
   if(floorOwner===currentNickname){
     const lk=document.createElement('div');lk.className='floor-decor';
     lk.style.cssText='position:absolute;left:186px;top:298px;width:28px;height:22px;background:'+(floorLocked?'#c0392b':'#0066ff')+';border:2px solid #000;z-index:5;cursor:pointer;border-radius:3px';
     lk.onclick=(e)=>{e.stopPropagation();toggleFloorLock();};
     fc.appendChild(lk);
   }
-
-  // Слоты
   for(let i=0;i<12;i++){
     const off=FLOOR_SLOT_OFFSETS[i];const sx=off.dx,sy=off.dy;
     if(floorSlots[i]){
@@ -905,30 +955,35 @@ function update(t=0){
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y);}
 function removeEHint(){document.getElementById('interact').style.display='none';document.getElementById('interactF').style.display='none';}
 
+// ====== ЛОГИКА ПОДСКАЗОК E/F ======
+// E: показываем всегда когда есть взаимодействие
+// F: показываем ТОЛЬКО на своей базе (в меню этажа на своём слоте с брэинротом)
+function showEOnly(){
+  document.getElementById('interact').style.display='flex';
+  document.getElementById('interactF').style.display='none';
+}
+function showEAndF(){
+  document.getElementById('interact').style.display='flex';
+  document.getElementById('interactF').style.display='flex';
+}
+
 function updateTarget(){
   const pc={x:x+4,y:y+8};currentTarget=null;removeEHint();
-  for(const b of conveyorBrainrots){if(b.locked)continue;const d=Math.hypot(pc.x-(b.x+14),pc.y-(b.y+14));if(d<25){currentTarget={type:'conveyor',target:b};showEandF(x,y,false);return;}}
+  for(const b of conveyorBrainrots){if(b.locked)continue;const d=Math.hypot(pc.x-(b.x+14),pc.y-(b.y+14));if(d<25){currentTarget={type:'conveyor',target:b};showEOnly();return;}}
   const bp=BASE_POSITIONS[myBaseId];
-  if(bp){const gx=bp.x+37.5,gy=bp.y+89;if(Math.hypot(pc.x-gx,pc.y-gy)<28){currentTarget={type:'green_mine'};showEandF(x,y,false);return;}}
+  if(bp){const gx=bp.x+37.5,gy=bp.y+89;if(Math.hypot(pc.x-gx,pc.y-gy)<28){currentTarget={type:'green_mine'};showEOnly();return;}}
   for(let bid in allBasesData){
     const id=parseInt(bid);if(id===myBaseId)continue;
     const bdata=allBasesData[bid];const obp=BASE_POSITIONS[id];if(!obp)continue;
     const gx=obp.x+37.5,gy=obp.y+89;
-    if(Math.hypot(pc.x-gx,pc.y-gy)<28){currentTarget={type:bdata.locked?'locked_other':'green_other',baseId:id};showEandF(x,y,false);return;}
+    if(Math.hypot(pc.x-gx,pc.y-gy)<28){currentTarget={type:bdata.locked?'locked_other':'green_other',baseId:id};showEOnly();return;}
   }
   const interactables=[{id:'rng-machine',x:190,y:137,h:20},{id:'shop-blue',x:150,y:137,h:20},{id:'queen-bee',x:230,y:137,h:24},{id:'shop-red',x:150,y:230,h:20},{id:'rng-circle',x:190,y:230,h:20},{id:'shop-white',x:230,y:230,h:20}];
   for(const obj of interactables){
     const oc={x:obj.x+10,y:obj.y+obj.h/2};
-    if(Math.hypot(pc.x-oc.x,pc.y-oc.y)<25){currentTarget={type:'shop',target:obj};showEandF(x,y,false);return;}
+    if(Math.hypot(pc.x-oc.x,pc.y-oc.y)<25){currentTarget={type:'shop',target:obj};showEOnly();return;}
   }
 }
-
-// ====== ИЗМЕНЕНО: КНОПКИ ТЕПЕРЬ ПРОСТО ПОКАЗЫВАЮТСЯ/СКРЫВАЮТСЯ ======
-function showEandF(cx,cy,withF){
-  document.getElementById('interact').style.display='flex';
-  document.getElementById('interactF').style.display=withF?'flex':'none';
-}
-// ====== КОНЕЦ ИЗМЕНЕНИЙ ======
 
 function updateFloorTarget(){
   const pc={x:fx+4,y:fy+8};currentTarget=null;removeEHint();
@@ -936,20 +991,22 @@ function updateFloorTarget(){
     const off=FLOOR_SLOT_OFFSETS[i];const sx=off.dx+14,sy=off.dy+14;
     if(Math.hypot(pc.x-sx,pc.y-sy)<22){
       if(floorSlots[i]){
-        if(floorOwner===currentNickname){currentTarget={type:'slot_mine_full',slot:i};showEandF(fx,fy,true);}
-        else{currentTarget={type:'slot_other_full',slot:i,baseId:viewingBaseId};showEandF(fx,fy,false);}
+        if(floorOwner===currentNickname){
+          currentTarget={type:'slot_mine_full',slot:i};
+          showEAndF(); // E для взять/меню, F для продать — только на своей базе
+        } else {
+          currentTarget={type:'slot_other_full',slot:i,baseId:viewingBaseId};
+          showEOnly(); // на чужой базе F скрыта
+        }
       } else {
         currentTarget={type:'slot_empty_mine',slot:i};
-        showEandF(fx,fy,false);
+        showEOnly();
       }
       return;
     }
   }
-  // Если несём брэинрот — показываем E для любого слота (уже обработано выше)
 }
 
-// Кнопки на мобилке — при клике срабатывает длинное действие если удерживать
-// Упрощённо: клик = короткое, двойной клик = длинное
 document.getElementById('interact').addEventListener('click',()=>{
   if(eHoldActive)return;
   const snap=currentTarget?JSON.parse(JSON.stringify(currentTarget)):null;
@@ -959,7 +1016,6 @@ document.getElementById('interactF').addEventListener('click',()=>{
   const snap=currentTarget?JSON.parse(JSON.stringify(currentTarget)):null;
   executeShortF(snap);
 });
-// Долгое нажатие на кнопку E — имитируем long E
 let touchStartTime=0;
 document.getElementById('interact').addEventListener('touchstart',(e)=>{
   touchStartTime=Date.now();
