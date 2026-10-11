@@ -13,7 +13,6 @@ const firebaseConfig={apiKey:"AIzaSyDkXM7aHtofhx8WAT1eSfLnbsOYVXXg28o",authDomai
 firebase.initializeApp(firebaseConfig);const db=firebase.database();
 </script>
 <style>
-/* ====== ПЕРЕМЕННЫЕ ТЕМЫ ====== */
 :root{
   --bg-main:#0a0a1e;--bg-main-2:#1a1a3e;--bg-panel:#1e2426;--bg-panel-2:#141a1c;
   --bg-item:#2c2c2c;--bg-item-hover:#3a3a3a;--text-main:#ffffff;--text-dim:#aaa;--text-mid:#888;
@@ -36,7 +35,6 @@ body{background:var(--bg-main);font-family:'Courier New',monospace;touch-action:
 ::-webkit-scrollbar-thumb{background:var(--border-color);border-radius:4px}
 ::-webkit-scrollbar-thumb:hover{background:var(--border-soft)}
 
-/* ====== АВТОРИЗАЦИЯ ====== */
 #auth{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background:#1a1a1a;z-index:999}
 #auth-box{background:#000;border:4px solid #111;padding:30px;width:400px;max-width:92vw;display:flex;flex-direction:column;align-items:center}
 .auth-label{color:#fff;font-size:14px;margin:10px 0 5px;width:100%;text-align:left}
@@ -46,7 +44,6 @@ body{background:var(--bg-main);font-family:'Courier New',monospace;touch-action:
 .btn-login{background:#fff;color:#000}.btn-reg{background:#fff;color:red}
 .hint{color:#888;font-size:12px;margin-top:15px;text-align:center}
 
-/* ====== ГЛАВНОЕ МЕНЮ ====== */
 #main-menu{display:none;position:fixed;inset:0;z-index:900;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,var(--bg-main) 0%,var(--bg-main-2) 50%,var(--bg-main) 100%);transition:background .6s ease}
 #main-menu::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(255,215,0,.10),transparent 55%),radial-gradient(circle at 70% 70%,rgba(233,69,96,.08),transparent 55%);pointer-events:none;animation:menu-glow-pulse 4s ease-in-out infinite alternate}
 body.light-theme #main-menu::before{background:radial-gradient(circle at 30% 30%,rgba(106,27,154,.08),transparent 55%),radial-gradient(circle at 70% 70%,rgba(74,144,226,.08),transparent 55%)}
@@ -60,8 +57,6 @@ body.light-theme #main-menu h1{text-shadow:0 0 30px rgba(106,27,154,.2)}
 @media(max-width:600px){#main-menu h1{font-size:32px}.menu-logo{font-size:48px}}
 .menu-subtitle{color:var(--text-dim);font-size:13px;letter-spacing:4px;text-transform:uppercase;margin-bottom:15px;opacity:.8;transition:color .4s ease;text-align:center}
 .menu-buttons{display:flex;flex-direction:column;gap:12px;width:100%;align-items:center}
-
-/* КНОПКИ ИНВЕРТИРУЮТСЯ С ТЕМОЙ */
 .menu-btn{width:320px;max-width:90vw;height:62px;border:2px solid var(--btn-border);border-radius:14px;font-size:18px;font-weight:bold;cursor:pointer;transition:all .25s ease;display:flex;align-items:center;justify-content:center;gap:12px;position:relative;overflow:hidden;letter-spacing:1.5px;font-family:'Courier New',monospace;background:var(--btn-bg);color:var(--btn-text)}
 .menu-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(128,128,128,.2),transparent);transition:left .6s}
 .menu-btn:hover::before{left:100%}
@@ -69,22 +64,21 @@ body.light-theme #main-menu h1{text-shadow:0 0 30px rgba(106,27,154,.2)}
 body.light-theme .menu-btn:hover{box-shadow:0 10px 30px rgba(0,0,0,.2)}
 .menu-btn:active{transform:translateY(0) scale(.98)}
 .menu-icon{font-size:22px;display:inline-flex}
-.menu-footer{color:var(--text-mid);font-size:12px;margin-top:20px;letter-spacing:1px;opacity:.8;transition:color .4s ease}
+.menu-footer{color:var(--text-mid);font-size:12px;margin-top:20px;letter-spacing:1px;opacity:.8;transition:color .4s ease;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+#changelog-display{max-width:400px;color:var(--text-dim);font-size:12px;text-align:center;white-space:pre-wrap;line-height:1.5;padding:8px 12px;border-radius:8px;background:rgba(74,144,226,.1);border:1px solid rgba(74,144,226,.3);display:none}
+#changelog-display.visible{display:block}
 
-/* ====== ПОЛУМЕСЯЦ ====== */
 .theme-toggle{position:fixed;bottom:30px;left:30px;width:64px;height:64px;cursor:pointer;z-index:950;border-radius:50%;padding:8px;transition:all .3s ease;color:#fff;display:flex;justify-content:center;align-items:center}
 body.light-theme .theme-toggle{color:#1a1a2e}
 .theme-toggle:hover{transform:scale(1.15) rotate(-20deg);background:rgba(128,128,128,.15)}
 .theme-toggle svg{width:100%;height:100%;filter:drop-shadow(0 0 10px currentColor)}
 
-/* ====== ШЕСТЕРЁНКА (НАСТРОЙКИ) ====== */
 #settings-btn{position:fixed;top:20px;right:20px;width:48px;height:48px;background:var(--bg-panel);border:2px solid var(--border-color);border-radius:50%;cursor:pointer;display:flex;justify-content:center;align-items:center;z-index:5000;transition:all .25s ease;color:var(--text-main)}
 #settings-btn:hover{transform:rotate(90deg) scale(1.1);border-color:var(--accent)}
 #settings-btn svg{width:26px;height:26px;transition:transform .25s}
 #settings-btn.spinning svg{animation:spin-gear .6s ease}
 @keyframes spin-gear{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 
-/* ====== МОДАЛКА НАСТРОЕК ====== */
 #settings-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:6000;justify-content:center;align-items:center;padding:20px}
 #settings-modal.open{display:flex;animation:fade-in .25s ease}
 @keyframes fade-in{from{opacity:0}to{opacity:1}}
@@ -107,7 +101,6 @@ body.light-theme .theme-toggle{color:#1a1a2e}
 .lang-option.active{border-color:var(--accent);background:var(--bg-item-hover);box-shadow:0 0 15px rgba(74,144,226,.3)}
 .lang-flag{font-size:20px}
 
-/* ====== ПОДМЕНЮ ====== */
 #server-menu,#friends-menu,#profile-menu{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--border-color);border-radius:12px;padding:20px;width:90%;max-width:600px;max-height:80vh;overflow-y:auto;z-index:950;color:var(--text-main);transition:background .3s,border-color .3s;box-shadow:0 20px 60px rgba(0,0,0,.4)}
 .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
 .header h2{color:var(--text-main);margin:0}
@@ -122,12 +115,7 @@ body.light-theme .theme-toggle{color:#1a1a2e}
 input[type="file"]{color:var(--text-main)}
 .save-btn{background:#4caf50;color:#fff;padding:8px 15px;border:none;border-radius:6px;cursor:pointer;margin-top:10px}
 
-/* ====== ИГРА ====== */
 #app{display:none;flex-direction:row;width:100vw;height:100vh;justify-content:center;align-items:center}
-#sidebar{width:140px;display:flex;justify-content:center;align-items:center;margin-right:12px}
-#actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.action-btn{width:60px;height:60px;display:flex;justify-content:center;align-items:center;background:#666;border:4px solid #000;color:#fff;font-weight:bold;font-size:12px;cursor:pointer;text-align:center}
-.action-btn.pink{background:#E54B8C}
 #game-wrapper{flex:1;height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden}
 #game-container{width:400px;height:400px;background:#20b94d;border:4px solid black;position:relative;overflow:hidden;transform-origin:left center}
 #floor-container{width:400px;height:400px;background-color:#a8a8a8;background-image:linear-gradient(#909090 1px,transparent 1px),linear-gradient(90deg,#909090 1px,transparent 1px);background-size:20px 20px;border:4px solid black;position:relative;overflow:hidden;display:none;transform-origin:left center}
@@ -162,6 +150,14 @@ input[type="file"]{color:var(--text-main)}
 #player,.other-player,#floor-player{position:absolute;width:8px;height:16px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20;border:1px solid rgba(0,0,0,.5)}
 #player .pixel,.other-player .pixel,#floor-player .pixel{width:100%;height:100%}
 #player-name,.player-name{position:absolute;left:50%;transform:translateX(-50%);top:-12px;color:#fff;font-size:5px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
+
+/* КНОПКИ НАД ГОЛОВОЙ ПЕРСОНАЖА */
+#player-actions{position:absolute;display:flex;gap:4px;z-index:19;pointer-events:none}
+#player-actions .action-btn{width:44px;height:44px;display:flex;justify-content:center;align-items:center;background:#666;border:3px solid #000;color:#fff;font-weight:bold;font-size:9px;cursor:pointer;text-align:center;pointer-events:auto;border-radius:6px;transition:transform .15s}
+#player-actions .action-btn:hover{transform:scale(1.1);background:#777}
+#player-actions .action-btn:active{transform:scale(.95)}
+#player-actions .action-btn.pink{background:#E54B8C}
+#player-actions .action-btn.pink:hover{background:#f060a0}
 
 #interact,#interactF{position:fixed;bottom:30px;display:none;z-index:10000;width:70px;height:70px;border:4px solid #222;border-radius:50%;justify-content:center;align-items:center;color:#fff;font-size:28px;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,.6);user-select:none;touch-action:none;transition:transform .15s,box-shadow .15s}
 #interact{right:30px;background:#4caf50}
@@ -203,6 +199,13 @@ input[type="file"]{color:var(--text-main)}
 .menu-overlay .header .title p{margin:5px 0 0;color:var(--text-dim);font-size:13px}
 .menu-overlay .header .close-btn{background:#c0392b;border:2px solid #922b21;color:#fff;font-size:20px;font-weight:bold;width:40px;height:40px;display:flex;justify-content:center;align-items:center;cursor:pointer;border-radius:4px}
 .menu-overlay .content{padding:0 15px 15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;flex:1;background:var(--bg-panel);transition:background .3s}
+
+/* ADMIN PANEL */
+.admin-btn{width:100%;padding:14px;border:2px solid var(--border-color);background:var(--bg-item);color:var(--text-main);border-radius:10px;font-weight:bold;font-size:15px;cursor:pointer;transition:all .2s;text-align:left;display:flex;align-items:center;gap:12px;font-family:inherit}
+.admin-btn:hover{background:var(--bg-item-hover);border-color:var(--accent);transform:translateX(4px)}
+.admin-btn .num{width:28px;height:28px;background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+#admin-changelog-input{width:100%;min-height:140px;padding:12px;border-radius:10px;background:var(--bg-item);color:var(--text-main);border:2px solid var(--border-color);font-family:inherit;font-size:14px;resize:vertical;outline:none}
+#admin-changelog-input:focus{border-color:var(--accent)}
 
 #shop-menu{max-width:700px;max-height:90vh}
 #shop-menu .content{padding:15px}
@@ -308,7 +311,7 @@ body.light-theme .secret-panel{background:rgba(0,0,0,.05)}
 
 <div id="main-menu">
   <div class="menu-content">
-    <div class="menu-logo">🌀</div>
+    <div class="menu-logo">💰</div>
     <h1>Steal A Dushka</h1>
     <div class="menu-subtitle" data-i18n="subtitle">Укради · Защити · Разбогатей</div>
     <div class="menu-buttons">
@@ -317,7 +320,10 @@ body.light-theme .secret-panel{background:rgba(0,0,0,.05)}
       <button class="menu-btn" onclick="openFriends()"><span class="menu-icon">👥</span> <span data-i18n="friends">Друзья</span></button>
       <button class="menu-btn" onclick="openProfile()"><span class="menu-icon">👤</span> <span data-i18n="profile">Профиль</span></button>
     </div>
-    <div class="menu-footer">v0.35 · by MrDushka</div>
+    <div class="menu-footer">
+      <div>v0.35 · by MrDushka</div>
+      <div id="changelog-display"></div>
+    </div>
   </div>
   <div class="theme-toggle" onclick="toggleMenuTheme()" title="Theme">
     <svg viewBox="0 0 100 100">
@@ -325,48 +331,30 @@ body.light-theme .secret-panel{background:rgba(0,0,0,.05)}
       <circle cx="50" cy="50" r="42" fill="currentColor" mask="url(#moon-mask)"/>
     </svg>
   </div>
-</div>
-
-<div id="settings-btn" onclick="openSettings()" title="Settings">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="3"/>
-    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-  </svg>
+  <div id="settings-btn" onclick="openSettings()" title="Settings">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  </div>
 </div>
 
 <div id="settings-modal" onclick="if(event.target===this)closeSettings()">
   <div class="settings-panel">
-    <div class="settings-header">
-      <h2 data-i18n="settings">Настройки</h2>
-      <button class="settings-close" onclick="closeSettings()">✕</button>
-    </div>
-
-    <div class="settings-section">
-      <label class="settings-label" data-i18n="theme">Тема</label>
+    <div class="settings-header"><h2 data-i18n="settings">Настройки</h2><button class="settings-close" onclick="closeSettings()">✕</button></div>
+    <div class="settings-section"><label class="settings-label" data-i18n="theme">Тема</label>
       <div class="theme-picker">
         <div class="theme-option" data-theme="dark" onclick="setTheme('dark')"><span class="icon">🌙</span><span data-i18n="dark">Тёмная</span></div>
         <div class="theme-option" data-theme="light" onclick="setTheme('light')"><span class="icon">☀️</span><span data-i18n="light">Светлая</span></div>
       </div>
     </div>
-
-    <div class="settings-section">
-      <label class="settings-label" data-i18n="brightness">Яркость</label>
-      <div class="range-wrap">
-        <input type="range" id="brightness-slider" min="50" max="150" value="100" oninput="setBrightness(this.value)">
-        <span class="range-value" id="brightness-value">100%</span>
-      </div>
+    <div class="settings-section"><label class="settings-label" data-i18n="brightness">Яркость</label>
+      <div class="range-wrap"><input type="range" id="brightness-slider" min="50" max="150" value="100" oninput="setBrightness(this.value)"><span class="range-value" id="brightness-value">100%</span></div>
     </div>
-
-    <div class="settings-section">
-      <label class="settings-label" data-i18n="music">Музыка</label>
-      <div class="range-wrap">
-        <input type="range" id="music-slider" min="0" max="100" value="50" oninput="setMusicVolume(this.value)">
-        <span class="range-value" id="music-value">50%</span>
-      </div>
+    <div class="settings-section"><label class="settings-label" data-i18n="music">Музыка</label>
+      <div class="range-wrap"><input type="range" id="music-slider" min="0" max="100" value="50" oninput="setMusicVolume(this.value)"><span class="range-value" id="music-value">50%</span></div>
     </div>
-
-    <div class="settings-section">
-      <label class="settings-label" data-i18n="language">Язык</label>
+    <div class="settings-section"><label class="settings-label" data-i18n="language">Язык</label>
       <div class="lang-picker">
         <div class="lang-option" data-lang="ru" onclick="setLanguage('ru')"><span class="lang-flag">🇷🇺</span> Русский</div>
         <div class="lang-option" data-lang="en" onclick="setLanguage('en')"><span class="lang-flag">🇬🇧</span> English</div>
@@ -375,23 +363,67 @@ body.light-theme .secret-panel{background:rgba(0,0,0,.05)}
   </div>
 </div>
 
+<!-- ADMIN PANEL -->
+<div id="admin-panel" class="menu-overlay" style="display:none;max-width:520px">
+  <div class="header">
+    <div class="title"><h2>⚙ ADMIN PANEL</h2><p>MrDushka only</p></div>
+    <div class="close-btn" onclick="closeAdmin()">X</div>
+  </div>
+  <div class="content" style="padding:20px">
+    <button class="admin-btn" onclick="adminUpdateManage()"><span class="num">1</span> Управление обновлением</button>
+    <button class="admin-btn" onclick="adminViewServers()"><span class="num">2</span> Сервера</button>
+    <button class="admin-btn" onclick="adminRestartServers()"><span class="num">3</span> Рестарт серверов</button>
+    <button class="admin-btn" onclick="adminEditChangelog()"><span class="num">4</span> Обновление</button>
+  </div>
+</div>
+
+<!-- ADMIN: UPDATE MANAGE -->
+<div id="admin-update-panel" class="menu-overlay" style="display:none;max-width:520px">
+  <div class="header">
+    <div class="title"><h2>Управление обновлением</h2><p>Скоро...</p></div>
+    <div class="close-btn" onclick="closeAdminUpdate()">X</div>
+  </div>
+  <div class="content" style="padding:30px;text-align:center;color:var(--text-dim)">
+    <div style="font-size:48px;margin-bottom:10px">🚧</div>
+    <div>Тут пока пусто</div>
+  </div>
+</div>
+
+<!-- ADMIN: SERVERS -->
+<div id="admin-servers-panel" class="menu-overlay" style="display:none;max-width:700px">
+  <div class="header">
+    <div class="title"><h2>Все серверы</h2><p id="admin-servers-count">—</p></div>
+    <div class="close-btn" onclick="closeAdminServers()">X</div>
+  </div>
+  <div class="content" id="admin-servers-list" style="padding:15px"></div>
+</div>
+
+<!-- ADMIN: CHANGELOG -->
+<div id="admin-changelog-panel" class="menu-overlay" style="display:none;max-width:520px">
+  <div class="header">
+    <div class="title"><h2>Обновление</h2><p>Текст появится в главном меню</p></div>
+    <div class="close-btn" onclick="closeAdminChangelog()">X</div>
+  </div>
+  <div class="content" style="padding:20px">
+    <textarea id="admin-changelog-input" placeholder="Что нового? Например: Добавлен новый брэинрот!"></textarea>
+    <div style="display:flex;gap:10px;margin-top:15px">
+      <button class="save-btn" style="flex:1;margin-top:0" onclick="saveChangelog()">Сохранить</button>
+      <button class="save-btn" style="flex:1;margin-top:0;background:#c0392b" onclick="clearChangelog()">Очистить</button>
+    </div>
+  </div>
+</div>
+
 <div id="server-menu"><div class="header"><h2 data-i18n="servers">Серверы</h2><button class="close-btn" onclick="closeServers()">X</button></div><div id="server-list"></div><button style="width:100%;padding:12px;background:#ffd700;color:#000;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px" onclick="openCreateServer()" data-i18n="createServer">Создать сервер (100 Dushka Coins)</button></div>
 
-<div id="friends-menu"><div class="header"><h2 data-i18n="friends">Друзья</h2><button class="close-btn" onclick="closeFriends()">X</button></div><div style="margin-bottom:10px"><input type="text" id="friend-search" placeholder="Ник" data-i18n-placeholder="nickPlaceholder" style="width:70%;padding:8px;border-radius:6px;border:none"><button style="padding:8px 15px;border:none;border-radius:6px;background:#4caf50;color:#fff;cursor:pointer" onclick="searchFriend()" data-i18n="find">Найти</button></div><div id="friend-result"></div><div style="color:var(--text-dim);margin:10px 0 5px" data-i18n="requests">Запросы</div><div id="friend-requests"></div><div style="color:var(--text-dim);margin:10px 0 5px" data-i18n="friends">Друзья</div><div id="friends-list"></div></div>
+<div id="friends-menu"><div class="header"><h2 data-i18n="friends">Друзья</h2><button class="close-btn" onclick="closeFriends()">X</button></div><div style="margin-bottom:10px"><input type="text" id="friend-search" placeholder="Ник" style="width:70%;padding:8px;border-radius:6px;border:none"><button style="padding:8px 15px;border:none;border-radius:6px;background:#4caf50;color:#fff;cursor:pointer" onclick="searchFriend()" data-i18n="find">Найти</button></div><div id="friend-result"></div><div style="color:var(--text-dim);margin:10px 0 5px" data-i18n="requests">Запросы</div><div id="friend-requests"></div><div style="color:var(--text-dim);margin:10px 0 5px" data-i18n="friends">Друзья</div><div id="friends-list"></div></div>
 
 <div id="profile-menu"><div class="header"><h2 data-i18n="profile">Профиль</h2><button class="close-btn" onclick="closeProfile()">X</button></div><div class="profile-preview" id="avatar-preview"></div><label style="color:var(--text-main);display:block;margin:10px 0" data-i18n="avatar">Аватарка</label><input type="file" id="avatar-input" accept="image/*"><div class="profile-bg-preview" id="bg-preview"></div><label style="color:var(--text-main);display:block;margin:10px 0" data-i18n="profileBg">Фон профиля</label><input type="file" id="bg-input" accept="image/*"><button class="save-btn" onclick="saveProfile()" data-i18n="save">Сохранить</button></div>
 
-<div id="create-server-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--border-color);border-radius:12px;padding:20px;width:90%;max-width:400px;z-index:960"><h3 style="color:var(--text-main)" data-i18n="createServerTitle">Создать сервер</h3><input type="text" id="server-name" placeholder="Название" data-i18n-placeholder="serverName" style="width:100%;padding:8px;border-radius:6px;border:none;margin-bottom:10px"><button style="width:100%;padding:10px;border:none;border-radius:8px;background:#ffd700;color:#000;font-weight:bold;cursor:pointer" onclick="createServer()" data-i18n="create">Создать</button><button style="width:100%;padding:8px;border:none;border-radius:8px;background:#666;color:#fff;margin-top:5px;cursor:pointer" onclick="closeCreateServer()" data-i18n="cancel">Отмена</button></div>
+<div id="create-server-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--border-color);border-radius:12px;padding:20px;width:90%;max-width:400px;z-index:960"><h3 style="color:var(--text-main)" data-i18n="createServerTitle">Создать сервер</h3><input type="text" id="server-name" placeholder="Название" style="width:100%;padding:8px;border-radius:6px;border:none;margin-bottom:10px"><button style="width:100%;padding:10px;border:none;border-radius:8px;background:#ffd700;color:#000;font-weight:bold;cursor:pointer" onclick="createServer()" data-i18n="create">Создать</button><button style="width:100%;padding:8px;border:none;border-radius:8px;background:#666;color:#fff;margin-top:5px;cursor:pointer" onclick="closeCreateServer()" data-i18n="cancel">Отмена</button></div>
 
 <div id="friend-profile" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--border-color);border-radius:12px;padding:20px;width:90%;max-width:300px;z-index:960;text-align:center"><div class="profile-preview" id="friend-avatar-preview" style="margin:0 auto 10px"></div><div style="color:var(--text-main);font-size:18px;font-weight:bold" id="friend-profile-name"></div><button style="padding:10px 20px;border:none;border-radius:8px;background:#4caf50;color:#fff;font-weight:bold;cursor:pointer;margin-top:10px" onclick="joinFriendGame()" data-i18n="join">Join</button><button style="padding:8px 20px;border:none;border-radius:8px;background:#666;color:#fff;margin-top:5px;cursor:pointer" onclick="cancelFriendJoin()" data-i18n="cancel">Cancel</button></div>
 
 <div id="app">
-  <div id="sidebar"><div id="actions">
-    <div class="action-btn pink" onclick="openRedShop()">SHOP</div>
-    <div class="action-btn" onclick="showModal('Ребирт','Скоро!')">REBIRTH</div>
-    <div class="action-btn" onclick="showModal('Трейд','Скоро!')">TRADE</div>
-    <div class="action-btn" onclick="openIndexMenu()">ИНДЕКС</div>
-  </div></div>
   <div id="game-wrapper">
     <div id="game-container">
       <div class="center-line"><div class="center-cap cap-left"></div><div class="center-cap cap-right"></div></div>
@@ -410,6 +442,12 @@ body.light-theme .secret-panel{background:rgba(0,0,0,.05)}
       <div id="rng-circle"></div>
       <div id="shop-white"><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-white"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div><div class="pixel w-dark"></div></div>
       <div id="player"></div>
+      <div id="player-actions">
+        <div class="action-btn pink" onclick="openRedShop()">SHOP</div>
+        <div class="action-btn" onclick="showModal('Ребирт','Скоро!')">REB</div>
+        <div class="action-btn" onclick="showModal('Трейд','Скоро!')">TRD</div>
+        <div class="action-btn" onclick="openIndexMenu()">IDX</div>
+      </div>
     </div>
     <div id="floor-container">
       <div id="floor-title"></div>
@@ -430,7 +468,7 @@ body.light-theme .secret-panel{background:rgba(0,0,0,.05)}
 
 <div id="wheel-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>CRYSTAL WHEEL</h2></div><div class="close-btn" onclick="closeWheel()">X</div></div><div class="content"><div class="wheel-container"><div class="pin">📍</div><div class="wheel" id="wheel-spin"><div class="label" style="--angle:30deg"><div class="icon">💵</div><div class="label-text">$12K</div><div class="chance">60%</div></div><div class="label" style="--angle:90deg"><div class="icon">💎</div><div class="label-text">$1M</div><div class="chance">30%</div></div><div class="label" style="--angle:150deg"><div class="icon">🍀</div><div class="label-text">2x<br>Lucky</div><div class="chance">2%</div></div><div class="label" style="--angle:210deg"><div class="icon">💵</div><div class="label-text">$12K</div><div class="chance">4%</div></div><div class="label" style="--angle:270deg"><div class="icon">🔮</div><div class="label-text">Crystal</div><div class="chance">3%</div></div><div class="label" style="--angle:330deg"><div class="icon">❓</div><div class="label-text">Lucky</div><div class="chance">1%</div></div></div></div><div class="secret-panel"><h3>CRYSTAL SECRET</h3><div class="row"><span class="name">Tortuginni Dragonfrutini</span><span class="mps">+325k/s</span><span class="val">74.45%</span></div><div class="row"><span class="name">Pot Hotspot</span><span class="mps">+2.5M/s</span><span class="val">20%</span></div><div class="row"><span class="name">Esok Sekolah</span><span class="mps">+30M/s</span><span class="val">5%</span></div><div class="row"><span class="name">Spaghetti Tualeti</span><span class="mps">+60M/s</span><span class="val">1%</span></div><div class="row"><span class="name">Pegasus</span><span class="mps">+175M/s</span><span class="val">0.05%</span></div></div><div class="controls"><div class="timer" id="wheel-timer" data-i18n="freeSpin">Бесплатный спин: 2ч 0м 0с</div><div class="actions"><button class="buy-btn" onclick="buySpin(1)">💰 49</button><button class="spin-btn" onclick="doSpin()">Spin (0)</button><button class="buy-btn" onclick="buySpin(3)">💰 199</button></div></div></div></div>
 
-<div id="trade-plaza-modal" class="menu-overlay" style="display:none;"><div class="header"><div class="title"><h2>Trade Plaza</h2></div><div class="close-btn" onclick="closeTradePlaza()">X</div></div><div class="content"><p data-i18n="tradeConfirm">Are you sure you want to join the Trade Plaza?</p><div class="buttons"><button onclick="closeTradePlaza()" data-i18n="join">Join</button><button class="cancel" onclick="closeTradePlaza()" data-i18n="cancel">Cancel</button></div></div></div>
+<div id="trade-plaza-modal" class="menu-overlay" style="display:none;"><div class="header"><div class="title"><h2>Trade Plaza</h2></div><div class="close-btn" onclick="closeTradePlaza()">X</div></div><div class="content"><p>Are you sure you want to join the Trade Plaza?</p><div class="buttons"><button onclick="closeTradePlaza()">Join</button><button class="cancel" onclick="closeTradePlaza()">Cancel</button></div></div></div>
 <div id="custom-modal"><div class="modal-title" id="modal-title"></div><div class="modal-text" id="modal-text"></div><button class="modal-close" onclick="closeModal()">OK</button></div>
 <div id="confirm-modal"><div class="confirm-text" id="confirm-text"></div><div class="confirm-buttons"><button class="confirm-btn confirm-yes" onclick="confirmYes()">Yes</button><button class="confirm-btn confirm-no" onclick="confirmNo()">No</button></div></div>
 <div id="notif"></div>
@@ -440,43 +478,19 @@ body.light-theme .secret-panel{background:rgba(0,0,0,.05)}
 <div id="interactF">F</div>
 
 <script>
-// ========== i18n СИСТЕМА ==========
+// ========== i18n ==========
 const I18N={
-  ru:{
-    nick:'НИК',password:'ПАРОЛЬ',login:'ВОЙТИ',register:'РЕГ',savePasswordHint:'Запишите ваш пароль',
-    coins:'Монеты',exit:'Выйти',back:'Назад',play:'Играть',servers:'Серверы',friends:'Друзья',profile:'Профиль',
-    subtitle:'Укради · Защити · Разбогатей',
-    settings:'Настройки',theme:'Тема',dark:'Тёмная',light:'Светлая',brightness:'Яркость',music:'Музыка',language:'Язык',
-    createServer:'Создать сервер (100 Dushka Coins)',find:'Найти',nickPlaceholder:'Ник',requests:'Запросы',
-    avatar:'Аватарка',profileBg:'Фон профиля',save:'Сохранить',createServerTitle:'Создать сервер',serverName:'Название',create:'Создать',cancel:'Отмена',join:'Join',
-    shopDesc:'Купи инструменты!',queenBee:'Королева Пчёл',premiumDesc:'Эксклюзив за Dushka Coins!',freeSpin:'Бесплатный спин',tradeConfirm:'Are you sure you want to join the Trade Plaza?'
-  },
-  en:{
-    nick:'NICKNAME',password:'PASSWORD',login:'LOGIN',register:'REG',savePasswordHint:'Save your password',
-    coins:'Coins',exit:'Exit',back:'Back',play:'Play',servers:'Servers',friends:'Friends',profile:'Profile',
-    subtitle:'Steal · Defend · Get Rich',
-    settings:'Settings',theme:'Theme',dark:'Dark',light:'Light',brightness:'Brightness',music:'Music',language:'Language',
-    createServer:'Create server (100 Dushka Coins)',find:'Find',nickPlaceholder:'Nickname',requests:'Requests',
-    avatar:'Avatar',profileBg:'Profile background',save:'Save',createServerTitle:'Create Server',serverName:'Name',create:'Create',cancel:'Cancel',join:'Join',
-    shopDesc:'Buy tools!',queenBee:'Queen Bee',premiumDesc:'Exclusive for Dushka Coins!',freeSpin:'Free spin',tradeConfirm:'Are you sure you want to join the Trade Plaza?'
-  }
+  ru:{nick:'НИК',password:'ПАРОЛЬ',login:'ВОЙТИ',register:'РЕГ',savePasswordHint:'Запишите ваш пароль',coins:'Монеты',exit:'Выйти',back:'Назад',play:'Играть',servers:'Серверы',friends:'Друзья',profile:'Профиль',subtitle:'Укради · Защити · Разбогатей',settings:'Настройки',theme:'Тема',dark:'Тёмная',light:'Светлая',brightness:'Яркость',music:'Музыка',language:'Язык',createServer:'Создать сервер (100 Dushka Coins)',find:'Найти',requests:'Запросы',avatar:'Аватарка',profileBg:'Фон профиля',save:'Сохранить',createServerTitle:'Создать сервер',create:'Создать',cancel:'Отмена',join:'Join',shopDesc:'Купи инструменты!',queenBee:'Королева Пчёл',premiumDesc:'Эксклюзив за Dushka Coins!',freeSpin:'Бесплатный спин'},
+  en:{nick:'NICKNAME',password:'PASSWORD',login:'LOGIN',register:'REG',savePasswordHint:'Save your password',coins:'Coins',exit:'Exit',back:'Back',play:'Play',servers:'Servers',friends:'Friends',profile:'Profile',subtitle:'Steal · Defend · Get Rich',settings:'Settings',theme:'Theme',dark:'Dark',light:'Light',brightness:'Brightness',music:'Music',language:'Language',createServer:'Create server (100 Dushka Coins)',find:'Find',requests:'Requests',avatar:'Avatar',profileBg:'Profile background',save:'Save',createServerTitle:'Create Server',create:'Create',cancel:'Cancel',join:'Join',shopDesc:'Buy tools!',queenBee:'Queen Bee',premiumDesc:'Exclusive for Dushka Coins!',freeSpin:'Free spin'}
 };
 let currentLang='ru';
-
 function t(key){return (I18N[currentLang]&&I18N[currentLang][key])||(I18N.ru[key])||key;}
-
 function applyLanguage(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');const v=t(k);if(v)el.textContent=v;});
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{const k=el.getAttribute('data-i18n-placeholder');const v=t(k);if(v)el.placeholder=v;});
   document.querySelectorAll('.lang-option').forEach(el=>{el.classList.toggle('active',el.dataset.lang===currentLang);});
   updateFreeSpinTimer();
 }
-function setLanguage(lang){
-  currentLang=lang;
-  try{localStorage.setItem('lang',lang);}catch(e){}
-  document.documentElement.lang=lang;
-  applyLanguage();
-}
+function setLanguage(lang){currentLang=lang;try{localStorage.setItem('lang',lang);}catch(e){}document.documentElement.lang=lang;applyLanguage();}
 
 // ========== ТЕМА ==========
 function applyTheme(theme){
@@ -484,98 +498,82 @@ function applyTheme(theme){
   else document.body.classList.remove('light-theme');
   document.querySelectorAll('.theme-option').forEach(el=>{el.classList.toggle('active',el.dataset.theme===theme);});
 }
-function setTheme(theme){
-  applyTheme(theme);
-  try{localStorage.setItem('theme',theme);}catch(e){}
-}
-function toggleMenuTheme(){
-  const isLight=document.body.classList.contains('light-theme');
-  setTheme(isLight?'dark':'light');
-}
+function setTheme(theme){applyTheme(theme);try{localStorage.setItem('theme',theme);}catch(e){}}
+function toggleMenuTheme(){const isLight=document.body.classList.contains('light-theme');setTheme(isLight?'dark':'light');}
 
-// ========== ЯРКОСТЬ ==========
-function setBrightness(v){
-  const val=parseInt(v);
-  document.documentElement.style.filter='brightness('+(val/100)+')';
-  document.getElementById('brightness-value').textContent=val+'%';
-  try{localStorage.setItem('brightness',val);}catch(e){}
-}
-
-// ========== МУЗЫКА ==========
+// ========== ЯРКОСТЬ / МУЗЫКА ==========
+function setBrightness(v){const val=parseInt(v);document.documentElement.style.filter='brightness('+(val/100)+')';document.getElementById('brightness-value').textContent=val+'%';try{localStorage.setItem('brightness',val);}catch(e){}}
 let bgMusic=null;
-function setMusicVolume(v){
-  const val=parseInt(v);
-  if(bgMusic)bgMusic.volume=val/100;
-  document.getElementById('music-value').textContent=val+'%';
-  try{localStorage.setItem('musicVolume',val);}catch(e){}
-}
+function setMusicVolume(v){const val=parseInt(v);if(bgMusic)bgMusic.volume=val/100;document.getElementById('music-value').textContent=val+'%';try{localStorage.setItem('musicVolume',val);}catch(e){}}
 function initMusic(){
-  // Положи свой трек в файл music.mp3 рядом с index.html
-  bgMusic=new Audio('music.mp3');
-  bgMusic.loop=true;
-  let v=50;try{v=parseInt(localStorage.getItem('musicVolume')||'50');}catch(e){}
-  bgMusic.volume=v/100;
-  bgMusic.play().catch(()=>{});
-  document.getElementById('music-slider').value=v;
-  document.getElementById('music-value').textContent=v+'%';
+  try{bgMusic=new Audio('music.mp3');bgMusic.loop=true;let v=50;try{v=parseInt(localStorage.getItem('musicVolume')||'50');}catch(e){}bgMusic.volume=v/100;bgMusic.play().catch(()=>{});document.getElementById('music-slider').value=v;document.getElementById('music-value').textContent=v+'%';}catch(e){}
 }
 
-// ========== МОДАЛКА НАСТРОЕК ==========
-function openSettings(){
-  document.getElementById('settings-modal').classList.add('open');
-  const btn=document.getElementById('settings-btn');
-  btn.classList.add('spinning');
-  setTimeout(()=>btn.classList.remove('spinning'),600);
-}
-function closeSettings(){
-  document.getElementById('settings-modal').classList.remove('open');
-}
-
-// ========== ИНИЦИАЛИЗАЦИЯ НАСТРОЕК ==========
+// ========== НАСТРОЙКИ ==========
+function openSettings(){document.getElementById('settings-modal').classList.add('open');const btn=document.getElementById('settings-btn');btn.classList.add('spinning');setTimeout(()=>btn.classList.remove('spinning'),600);}
+function closeSettings(){document.getElementById('settings-modal').classList.remove('open');}
 (function initSettings(){
   let theme='dark',lang='ru',brightness=100;
-  try{
-    theme=localStorage.getItem('theme')||'dark';
-    lang=localStorage.getItem('lang')||'ru';
-    brightness=parseInt(localStorage.getItem('brightness')||'100');
-  }catch(e){}
-  applyTheme(theme);
-  currentLang=lang;
-  document.documentElement.lang=lang;
-  setBrightness(brightness);
-  document.getElementById('brightness-slider').value=brightness;
+  try{theme=localStorage.getItem('theme')||'dark';lang=localStorage.getItem('lang')||'ru';brightness=parseInt(localStorage.getItem('brightness')||'100');}catch(e){}
+  applyTheme(theme);currentLang=lang;document.documentElement.lang=lang;setBrightness(brightness);document.getElementById('brightness-slider').value=brightness;
 })();
+
+// ========== ADMIN PANEL ==========
+function openAdmin(){document.getElementById('admin-panel').style.display='flex';}
+function closeAdmin(){document.getElementById('admin-panel').style.display='none';}
+function adminUpdateManage(){document.getElementById('admin-update-panel').style.display='flex';}
+function closeAdminUpdate(){document.getElementById('admin-update-panel').style.display='none';}
+async function adminViewServers(){
+  document.getElementById('admin-servers-panel').style.display='flex';
+  const c=document.getElementById('admin-servers-list');c.innerHTML='<div style="color:var(--text-dim);text-align:center;padding:20px">Загрузка...</div>';
+  const s=await db.ref('servers').once('value');const servers=s.val()||{};
+  c.innerHTML='';
+  const entries=Object.entries(servers);
+  document.getElementById('admin-servers-count').textContent=entries.length+' шт.';
+  if(entries.length===0){c.innerHTML='<div style="color:var(--text-dim);text-align:center;padding:20px">Нет серверов</div>';return;}
+  for(const [id,sv] of entries){
+    const p=await db.ref('servers/'+id+'/players').once('value');
+    const pc=Object.keys(p.val()||{}).length;
+    const div=document.createElement('div');div.className='server-item';
+    const isVip=sv.vip||false;
+    div.innerHTML='<div class="name">'+(sv.name||'Server')+(isVip?' <span style="color:#ffd700">👑 VIP</span>':'')+'</div><div class="players">'+pc+'/8 · '+id.slice(-6)+'</div>';
+    c.appendChild(div);
+  }
+}
+function closeAdminServers(){document.getElementById('admin-servers-panel').style.display='none';}
+async function adminRestartServers(){
+  if(!confirm('Перезапустить ВСЕ серверы? Все игроки будут отключены.'))return;
+  const snap=await db.ref('servers').once('value');
+  const servers=snap.val()||{};
+  const now=Date.now();
+  for(let id in servers){await db.ref('servers/'+id+'/restart').set(now);}
+  showNotif('⚡ Все серверы перезагружены');
+  closeAdmin();
+}
+function adminEditChangelog(){document.getElementById('admin-changelog-panel').style.display='flex';}
+function closeAdminChangelog(){document.getElementById('admin-changelog-panel').style.display='none';}
+async function saveChangelog(){
+  const text=document.getElementById('admin-changelog-input').value.trim();
+  if(!text){showNotif('Введите текст');return;}
+  await db.ref('global/changelog').set({text:text,time:Date.now()});
+  showNotif('✅ Обновление сохранено');
+  closeAdminChangelog();
+}
+async function clearChangelog(){
+  await db.ref('global/changelog').remove();
+  document.getElementById('admin-changelog-input').value='';
+  showNotif('Очищено');
+  closeAdminChangelog();
+}
+db.ref('global/changelog').on('value',snap=>{
+  const data=snap.val();const el=document.getElementById('changelog-display');
+  if(data&&data.text){el.textContent='📢 '+data.text;el.classList.add('visible');}
+  else{el.textContent='';el.classList.remove('visible');}
+});
 
 // ========== БРЭИНРОТЫ ==========
 const BRAINROTS_LIST=[
-{file:'meme8.jpg',name:'200',rarity:'common',income:2,price:200},
-{file:'meme9.jpg',name:'Нубини',rarity:'common',income:1,price:25},
-{file:'meme10.jpg',name:'Капибара',rarity:'common',income:3,price:100},
-{file:'meme11.jpg',name:'Диманини',rarity:'common',income:5,price:50},
-{file:'meme22.jpg',name:'Гига Чат',rarity:'common',income:10,price:250},
-{file:'meme28.jpg',name:'Математика',rarity:'horror',income:6.7,price:670},
-{file:'meme3.jpg',name:'Биология',rarity:'horror',income:10,price:100},
-{file:'meme17.jpg',name:'История',rarity:'horror',income:20,price:1500},
-{file:'meme4.jpg',name:'Воздуханы',rarity:'horror',income:25,price:2000},
-{file:'meme23.jpg',name:'Тони Кросс',rarity:'epic',income:45,price:4500},
-{file:'meme7.jpg',name:'Кар-Карыч',rarity:'epic',income:50,price:5000},
-{file:'meme13.jpg',name:'Spider Man',rarity:'epic',income:100,price:10000},
-{file:'meme24.jpg',name:'Сквидвард',rarity:'epic',income:100,price:6700},
-{file:'meme27.jpg',name:'Омайгат',rarity:'epic',income:100,price:6000},
-{file:'meme2.jpg',name:'Кросс',rarity:'legendary',income:200,price:20000},
-{file:'meme6.jpg',name:'Противостояние',rarity:'legendary',income:350,price:35000},
-{file:'meme5.jpg',name:'Роналду',rarity:'legendary',income:400,price:40000},
-{file:'meme12.jpg',name:'Spider Pig',rarity:'mythic',income:500,price:50000},
-{file:'meme18.jpg',name:'Меси Сиси',rarity:'mythic',income:525,price:52500},
-{file:'meme25.jpg',name:'Неймар',rarity:'mythic',income:560,price:56000},
-{file:'meme21.jpg',name:'67',rarity:'god',income:670,price:67000},
-{file:'meme29.jpg',name:'52',rarity:'god',income:850,price:85000},
-{file:'meme26.jpg',name:'Копатыч',rarity:'god',income:900,price:100000},
-{file:'meme19.jpg',name:'Килиан',rarity:'god',income:1000,price:100000},
-{file:'meme20.jpg',name:'Гарама',rarity:'secret',income:2500,price:250000},
-{file:'meme15.jpg',name:'Драгон',rarity:'secret',income:5000,price:500000},
-{file:'meme14.jpg',name:'Краснодар',rarity:'secret',income:6700,price:1000000},
-{file:'meme16.jpg',name:'MrDushka OG',rarity:'og',income:100000,price:10000000}
+{file:'meme8.jpg',name:'200',rarity:'common',income:2,price:200},{file:'meme9.jpg',name:'Нубини',rarity:'common',income:1,price:25},{file:'meme10.jpg',name:'Капибара',rarity:'common',income:3,price:100},{file:'meme11.jpg',name:'Диманини',rarity:'common',income:5,price:50},{file:'meme22.jpg',name:'Гига Чат',rarity:'common',income:10,price:250},{file:'meme28.jpg',name:'Математика',rarity:'horror',income:6.7,price:670},{file:'meme3.jpg',name:'Биология',rarity:'horror',income:10,price:100},{file:'meme17.jpg',name:'История',rarity:'horror',income:20,price:1500},{file:'meme4.jpg',name:'Воздуханы',rarity:'horror',income:25,price:2000},{file:'meme23.jpg',name:'Тони Кросс',rarity:'epic',income:45,price:4500},{file:'meme7.jpg',name:'Кар-Карыч',rarity:'epic',income:50,price:5000},{file:'meme13.jpg',name:'Spider Man',rarity:'epic',income:100,price:10000},{file:'meme24.jpg',name:'Сквидвард',rarity:'epic',income:100,price:6700},{file:'meme27.jpg',name:'Омайгат',rarity:'epic',income:100,price:6000},{file:'meme2.jpg',name:'Кросс',rarity:'legendary',income:200,price:20000},{file:'meme6.jpg',name:'Противостояние',rarity:'legendary',income:350,price:35000},{file:'meme5.jpg',name:'Роналду',rarity:'legendary',income:400,price:40000},{file:'meme12.jpg',name:'Spider Pig',rarity:'mythic',income:500,price:50000},{file:'meme18.jpg',name:'Меси Сиси',rarity:'mythic',income:525,price:52500},{file:'meme25.jpg',name:'Неймар',rarity:'mythic',income:560,price:56000},{file:'meme21.jpg',name:'67',rarity:'god',income:670,price:67000},{file:'meme29.jpg',name:'52',rarity:'god',income:850,price:85000},{file:'meme26.jpg',name:'Копатыч',rarity:'god',income:900,price:100000},{file:'meme19.jpg',name:'Килиан',rarity:'god',income:1000,price:100000},{file:'meme20.jpg',name:'Гарама',rarity:'secret',income:2500,price:250000},{file:'meme15.jpg',name:'Драгон',rarity:'secret',income:5000,price:500000},{file:'meme14.jpg',name:'Краснодар',rarity:'secret',income:6700,price:1000000},{file:'meme16.jpg',name:'MrDushka OG',rarity:'og',income:100000,price:10000000}
 ];
 const RARITY_NAMES={common:'Обычный',horror:'Ужас',epic:'Эпический',legendary:'Легендарный',mythic:'Мифический',god:'Бог',secret:'Секретный',og:'ОГ'};
 const RARITY_WEIGHTS={common:50,horror:25,epic:12,legendary:7,mythic:3,god:2,secret:0.9,og:0.1};
@@ -585,31 +583,17 @@ function pickBrainrot(){const rar=pickRarity();const pool=BRAINROTS_LIST.filter(
 
 const BASE_POSITIONS={1:{x:20,y:20},2:{x:115,y:20},3:{x:210,y:20},4:{x:305,y:20},5:{x:20,y:305},6:{x:115,y:305},7:{x:210,y:305},8:{x:305,y:305}};
 const BASE_SPAWN={1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81},5:{x:52,y:307},6:{x:147,y:307},7:{x:242,y:307},8:{x:337,y:307}};
-const FLOOR_SLOT_OFFSETS=[
-  {dx:10,dy:55},{dx:10,dy:105},{dx:10,dy:155},{dx:10,dy:205},{dx:10,dy:255},{dx:10,dy:305},
-  {dx:362,dy:55},{dx:362,dy:105},{dx:362,dy:155},{dx:362,dy:205},{dx:362,dy:255},{dx:362,dy:305}
-];
+const FLOOR_SLOT_OFFSETS=[{dx:10,dy:55},{dx:10,dy:105},{dx:10,dy:155},{dx:10,dy:205},{dx:10,dy:255},{dx:10,dy:305},{dx:362,dy:55},{dx:362,dy:105},{dx:362,dy:155},{dx:362,dy:205},{dx:362,dy:255},{dx:362,dy:305}];
 
 let x=200,y=200,coins=25,dushka=0,currentNickname=null,currentServerId=null,myBaseId=0,myBaseLocked=false;
-let mySlots=new Array(12).fill(null);
-let allBasesData={};
-let otherPlayers={};
-let conveyorBrainrots=[];
-let lastConveyorSpawn=0;
-let currentTarget=null;
-let inFloor=false,fx=195,fy=370,floorSlots=[],floorLocked=false,floorOwner=null,viewingBaseId=null;
-let carriedBrainrot=null;
-let _spins=0,isSpinning=false,wheelRotation=0;
-let ownedItems=[],autoBuyShopItems=[],ownedRedItems=[],currentRedTab='gear';
+let mySlots=new Array(12).fill(null);let allBasesData={};let otherPlayers={};let conveyorBrainrots=[];let lastConveyorSpawn=0;let currentTarget=null;
+let inFloor=false,fx=195,fy=370,floorSlots=[],floorLocked=false,floorOwner=null,viewingBaseId=null;let carriedBrainrot=null;
+let _spins=0,isSpinning=false,wheelRotation=0;let ownedItems=[],autoBuyShopItems=[],ownedRedItems=[],currentRedTab='gear';
 const CONVEYOR_MAX=12,SPAWN_INTERVAL=2000,CONVEYOR_SPEED=0.5,BASE_MAX=12;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
-let touchDX=0,touchDY=0,joystickManager=null;
-let typedCode='';
-const obstacles=[
-  {x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},
-  {x:148,y:135,w:24,h:24},{x:188,y:135,w:24,h:24},{x:228,y:135,w:24,h:28},
-  {x:148,y:228,w:24,h:24},{x:188,y:228,w:24,h:24},{x:228,y:228,w:24,h:24}
-];
+let touchDX=0,touchDY=0,joystickManager=null;let typedCode='';
+let _lastRestartSeen=null;
+const obstacles=[{x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},{x:148,y:135,w:24,h:24},{x:188,y:135,w:24,h:24},{x:228,y:135,w:24,h:28},{x:148,y:228,w:24,h:24},{x:188,y:228,w:24,h:24},{x:228,y:228,w:24,h:24}];
 
 function normalizeSlots(slots,size){size=size||12;const arr=new Array(size).fill(null);if(!slots)return arr;for(let i=0;i<size;i++){if(slots[i])arr[i]=slots[i];}return arr;}
 function formatNumber(num){if(num>=1e15)return(num/1e15).toFixed(2)+'Qa';if(num>=1e12)return(num/1e12).toFixed(2)+'T';if(num>=1e9)return(num/1e9).toFixed(2)+'B';if(num>=1e6)return(num/1e6).toFixed(2)+'M';if(num>=1e3)return(num/1e3).toFixed(2)+'K';return num.toString();}
@@ -650,9 +634,7 @@ async function playRandom(){
   let chosen=null;
   for(let id in servers){const p=await db.ref('servers/'+id+'/players').once('value');if(Object.keys(p.val()||{}).length<8){chosen=id;break;}}
   if(!chosen){const n=db.ref('servers').push();chosen=n.key;await n.set({name:'Сервер',access:'all'});}
-  currentServerId=chosen;
-  await db.ref('users/'+currentNickname).update({serverId:chosen});
-  startGame();
+  currentServerId=chosen;await db.ref('users/'+currentNickname).update({serverId:chosen});startGame();
 }
 
 async function startGame(){
@@ -667,19 +649,17 @@ async function startGame(){
   const d=await readUserData(currentNickname);
   coins=d.coins||25;dushka=d.dushka||0;myBaseId=d.baseId||0;myBaseLocked=d.baseLocked||false;
   mySlots=normalizeSlots(d.baseSlots,12);
-  ownedItems=d.ownedItems||[];autoBuyShopItems=d.autoBuyShopItems||[];ownedRedItems=d.ownedRedItems||[];
-  _spins=d.spins||0;
+  ownedItems=d.ownedItems||[];autoBuyShopItems=d.autoBuyShopItems||[];ownedRedItems=d.ownedRedItems||[];_spins=d.spins||0;
   document.getElementById('balance-amount').textContent=formatNumber(coins);
   document.getElementById('dushka-coins').textContent=formatNumber(dushka);
   if(!myBaseId){myBaseId=await assignBase();await db.ref('users/'+currentNickname).update({baseId:myBaseId});}
   await db.ref('servers/'+currentServerId+'/bases/'+myBaseId).set({owner:currentNickname,slots:mySlots,locked:myBaseLocked});
   const spawn=BASE_SPAWN[myBaseId];x=spawn.x;y=spawn.y;
-  renderPlayer();renderAllBases();
+  renderPlayer();renderAllBases();updatePlayerActions();
   db.ref('servers/'+currentServerId+'/bases').on('value',snap=>{
     allBasesData=snap.val()||{};
     if(allBasesData[myBaseId]&&allBasesData[myBaseId].owner===currentNickname){
-      mySlots=normalizeSlots(allBasesData[myBaseId].slots,12);
-      myBaseLocked=allBasesData[myBaseId].locked||false;
+      mySlots=normalizeSlots(allBasesData[myBaseId].slots,12);myBaseLocked=allBasesData[myBaseId].locked||false;
     }
     renderAllBases();
   });
@@ -687,11 +667,16 @@ async function startGame(){
   db.ref('users/'+currentNickname+'/notifications').on('value',snap=>{
     const n=snap.val()||[];if(n.length>0){const last=n[n.length-1];if(window._lastNotif!==last.ts){window._lastNotif=last.ts;showNotif(last.text);}}
   });
+  // Restart watcher
+  _lastRestartSeen=null;
+  db.ref('servers/'+currentServerId+'/restart').on('value',snap=>{
+    const val=snap.val();
+    if(val&&_lastRestartSeen!==null&&val!==_lastRestartSeen){_lastRestartSeen=val;showNotif('⚡ Сервер перезагружен');setTimeout(()=>exitToMenu(),1200);return;}
+    _lastRestartSeen=val;
+  });
   await db.ref('servers/'+currentServerId+'/players/'+currentNickname).set({x:x,y:y,base:myBaseId});
   db.ref('servers/'+currentServerId+'/players/'+currentNickname).onDisconnect().remove();
-  lastConveyorSpawn=Date.now();
-  update();window.focus();resizeGame();initJoystick();
-  updateFreeSpinTimer();updateBeeUI();
+  lastConveyorSpawn=Date.now();update();window.focus();resizeGame();initJoystick();updateFreeSpinTimer();updateBeeUI();
 }
 async function assignBase(){
   const snap=await db.ref('servers/'+currentServerId+'/bases').once('value');
@@ -705,11 +690,18 @@ function renderPlayer(){
   p.innerHTML='<div class="pixel" style="background:#FFCC00"></div><div class="pixel" style="background:#FF0000"></div><div class="player-name">'+currentNickname+'</div>';
   p.style.left=x+'px';p.style.top=y+'px';
 }
+function updatePlayerActions(){
+  const pa=document.getElementById('player-actions');if(!pa)return;
+  if(inFloor){pa.style.display='none';return;}
+  pa.style.display='flex';
+  const w=pa.offsetWidth||190;
+  pa.style.left=(x+4-w/2)+'px';
+  pa.style.top=(y-52)+'px';
+}
 function renderOtherPlayers(players){
   for(let k in otherPlayers){if(!players[k]||k===currentNickname){otherPlayers[k].remove();delete otherPlayers[k];}}
   for(let k in players){
-    if(k===currentNickname)continue;
-    const d=players[k];if(!d)continue;
+    if(k===currentNickname)continue;const d=players[k];if(!d)continue;
     if(!otherPlayers[k]){const div=document.createElement('div');div.className='other-player';div.id='other-'+k;div.innerHTML='<div class="pixel" style="background:#00AAFF"></div><div class="pixel" style="background:#0088DD"></div><div class="player-name">'+k+'</div>';document.getElementById('game-container').appendChild(div);otherPlayers[k]=div;}
     otherPlayers[k].style.left=d.x+'px';otherPlayers[k].style.top=d.y+'px';
   }
@@ -733,8 +725,7 @@ function spawnConveyor(){
   for(const b of conveyorBrainrots){if(b.x<30)return;}
   const br=pickBrainrot();const id='br_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
   const dom=document.createElement('div');dom.className='brainrot-conveyor '+br.rarity;
-  dom.style.backgroundImage='url(Картинки/'+br.file+')';
-  dom.style.left='-30px';dom.style.top='186px';
+  dom.style.backgroundImage='url(Картинки/'+br.file+')';dom.style.left='-30px';dom.style.top='186px';
   const pt=document.createElement('div');pt.className='brainrot-price-tag';pt.textContent='$'+formatNumber(br.price);
   dom.appendChild(pt);document.getElementById('game-container').appendChild(dom);
   conveyorBrainrots.push({id,brainrot:br,x:-30,y:186,dom,locked:false});
@@ -752,8 +743,7 @@ function countFreeSlots(){return mySlots.filter(s=>s===null).length;}
 async function buyConveyor(b){
   if(mySlots.filter(s=>s).length>=BASE_MAX){showModal('Ошибка','База полна! '+BASE_MAX+'/'+BASE_MAX);return;}
   if(coins<b.brainrot.price){showModal('Ошибка','Нужно $'+formatNumber(b.brainrot.price)+'\nУ тебя: $'+formatNumber(coins));return;}
-  const free=mySlots.findIndex(s=>s===null);
-  if(free<0){showModal('Ошибка','Нет свободного места');return;}
+  const free=mySlots.findIndex(s=>s===null);if(free<0){showModal('Ошибка','Нет свободного места');return;}
   coins-=b.brainrot.price;document.getElementById('balance-amount').textContent=formatNumber(coins);
   b.locked=true;b.dom.remove();const idx=conveyorBrainrots.indexOf(b);if(idx>-1)conveyorBrainrots.splice(idx,1);
   mySlots[free]={file:b.brainrot.file,name:b.brainrot.name,rarity:b.brainrot.rarity,income:b.brainrot.income,price:b.brainrot.price,placedAt:Date.now()};
@@ -771,25 +761,20 @@ function initJoystick(){
 }
 
 async function doSell(idx,br){
-  const price=Math.floor(br.price*0.5);
-  coins+=price;mySlots[idx]=null;
+  const price=Math.floor(br.price*0.5);coins+=price;mySlots[idx]=null;
   document.getElementById('balance-amount').textContent=formatNumber(coins);
   await db.ref('users/'+currentNickname).update({coins:coins,baseSlots:mySlots});
   await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
-  if(inFloor)renderFloor();
-  if(document.getElementById('base-menu').style.display==='block')openBaseMenu();
+  if(inFloor)renderFloor();if(document.getElementById('base-menu').style.display==='block')openBaseMenu();
   showModal('Продано',br.name+' +$'+formatNumber(price));
 }
 function confirmYes(){if(window._pendingSell){doSell(window._pendingSell.idx,window._pendingSell.br);window._pendingSell=null;}document.getElementById('confirm-modal').style.display='none';}
 function confirmNo(){window._pendingSell=null;document.getElementById('confirm-modal').style.display='none';}
-
 async function sellMyBrainrot(idx){
   const br=mySlots[idx];if(!br)return;
   if(br.rarity==='god'||br.rarity==='secret'||br.rarity==='og'){
-    window._pendingSell={idx,br};
-    document.getElementById('confirm-text').textContent='Do you want to sell '+br.name+'?';
-    document.getElementById('confirm-modal').style.display='flex';
-    return;
+    window._pendingSell={idx,br};document.getElementById('confirm-text').textContent='Do you want to sell '+br.name+'?';
+    document.getElementById('confirm-modal').style.display='flex';return;
   }
   await doSell(idx,br);
 }
@@ -799,14 +784,14 @@ function startEHold(){
   if(eHoldActive)return;if(!currentTarget)return;
   eHoldActive=true;eHoldStart=Date.now();eHoldTargetSnap=JSON.parse(JSON.stringify(currentTarget));
   const hp=document.getElementById('holdProgress');hp.style.display='block';
-  const px=inFloor?fx:x, py=inFloor?fy:y;
+  const px=inFloor?fx:x,py=inFloor?fy:y;
   hp.style.left=(px-22)+'px';hp.style.top=(py-40)+'px';hp.querySelector('.fill').style.width='0%';
   const t0=Date.now();
   const iv=setInterval(()=>{const t=(Date.now()-t0)/500;if(t<=1)hp.querySelector('.fill').style.width=(t*100)+'%';},30);
   eHoldTimer=setTimeout(()=>{clearInterval(iv);hp.style.display='none';executeLongE(eHoldTargetSnap);eHoldActive=false;},500);
 }
 function cancelEHold(){if(eHoldTimer){clearTimeout(eHoldTimer);eHoldTimer=null;}document.getElementById('holdProgress').style.display='none';eHoldActive=false;}
-function releaseE(){if(eHoldActive && Date.now()-eHoldStart<500){cancelEHold();executeShortE(eHoldTargetSnap);}else{cancelEHold();}eHoldActive=false;}
+function releaseE(){if(eHoldActive&&Date.now()-eHoldStart<500){cancelEHold();executeShortE(eHoldTargetSnap);}else{cancelEHold();}eHoldActive=false;}
 
 async function executeShortE(snap){
   if(!snap)return;
@@ -819,37 +804,28 @@ async function executeShortE(snap){
   if(snap.type==='slot_empty_mine'){if(carriedBrainrot){return;}return;}
   if(snap.type==='slot_other_full'){showModal('Чужой брэинрот','Зажми E 0.5 сек чтобы украсть');return;}
 }
-
 async function executeLongE(snap){
   if(!snap)return;
   if(!carriedBrainrot){
     if(snap.type==='slot_mine_full'){
-      carriedBrainrot={...mySlots[snap.slot],fromBase:myBaseId,fromSlot:snap.slot};
-      mySlots[snap.slot]=null;
+      carriedBrainrot={...mySlots[snap.slot],fromBase:myBaseId,fromSlot:snap.slot};mySlots[snap.slot]=null;
       await db.ref('users/'+currentNickname).update({baseSlots:mySlots});
       await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
-      floorSlots=mySlots;
-      if(inFloor)renderFloor();
-      updateCarried();
-      showNotif('✋ Взял: '+carriedBrainrot.name);
+      floorSlots=mySlots;if(inFloor)renderFloor();updateCarried();showNotif('✋ Взял: '+carriedBrainrot.name);
     } else if(snap.type==='slot_other_full'){
       const bid=snap.baseId;const bdata=allBasesData[bid];
       if(!bdata||bdata.locked){showModal('Ошибка','База закрыта');return;}
-      const victimSlots=normalizeSlots(bdata.slots,12);
-      const br=victimSlots[snap.slot];if(!br)return;
+      const victimSlots=normalizeSlots(bdata.slots,12);const br=victimSlots[snap.slot];if(!br)return;
       victimSlots[snap.slot]=null;
       await db.ref('servers/'+currentServerId+'/bases/'+bid+'/slots').set(victimSlots);
-      carriedBrainrot={...br,fromBase:bid,fromSlot:snap.slot};
-      floorSlots=victimSlots;
-      if(inFloor)renderFloor();
-      updateCarried();
+      carriedBrainrot={...br,fromBase:bid,fromSlot:snap.slot};floorSlots=victimSlots;
+      if(inFloor)renderFloor();updateCarried();
       await db.ref('users/'+bdata.owner+'/notifications').transaction(cur=>{const arr=cur||[];arr.push({text:'⚠️ У тебя украли '+br.name+'!',ts:Date.now()});return arr;});
       showNotif('👊 Украл: '+br.name);
     }
   } else {
     if(snap.type==='slot_mine_full'||snap.type==='slot_empty_mine'){
-      const idx=snap.slot;const current=mySlots[idx];
-      const fromBase=carriedBrainrot.fromBase;const fromSlot=carriedBrainrot.fromSlot;
+      const idx=snap.slot;const current=mySlots[idx];const fromBase=carriedBrainrot.fromBase;const fromSlot=carriedBrainrot.fromSlot;
       if(current){
         if(fromBase===myBaseId){mySlots[fromSlot]=current;mySlots[idx]=carriedBrainrot;}
         else{mySlots[idx]=carriedBrainrot;const otherSlots=normalizeSlots(allBasesData[fromBase]?.slots,12);otherSlots[fromSlot]=current;await db.ref('servers/'+currentServerId+'/bases/'+fromBase+'/slots').set(otherSlots);}
@@ -860,23 +836,16 @@ async function executeLongE(snap){
       delete carriedBrainrot.fromBase;delete carriedBrainrot.fromSlot;carriedBrainrot=null;
       await db.ref('users/'+currentNickname).update({baseSlots:mySlots});
       await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
-      floorSlots=mySlots;if(inFloor)renderFloor();updateCarried();
-      showNotif('✅ Положил');
+      floorSlots=mySlots;if(inFloor)renderFloor();updateCarried();showNotif('✅ Положил');
     } else if(snap.type==='slot_other_full'){showNotif('Нельзя класть в чужой занятый слот');}
   }
 }
-
-async function executeShortF(snap){
-  if(!snap)return;
-  if(carriedBrainrot){return;}
-  if(snap.type==='slot_mine_full'){await sellMyBrainrot(snap.slot);}
-}
+async function executeShortF(snap){if(!snap)return;if(carriedBrainrot)return;if(snap.type==='slot_mine_full'){await sellMyBrainrot(snap.slot);}}
 
 function updateCarried(){
   const el=document.getElementById('floor-carried');
   if(!carriedBrainrot){el.style.display='none';return;}
-  el.style.display='block';
-  el.style.backgroundImage='url(Картинки/'+carriedBrainrot.file+')';
+  el.style.display='block';el.style.backgroundImage='url(Картинки/'+carriedBrainrot.file+')';
   el.className='brainrot-on-base '+carriedBrainrot.rarity;
   el.style.position='absolute';el.style.left=(fx-10)+'px';el.style.top=(fy-38)+'px';
   el.style.width='28px';el.style.height='28px';el.style.zIndex='25';
@@ -896,14 +865,10 @@ function startFHold(){
 function releaseF(){if(fHoldTimer){clearTimeout(fHoldTimer);fHoldTimer=null;}document.getElementById('holdProgress').style.display='none';fHoldActive=false;}
 
 function quickShopOpen(o){
-  if(o.id==='shop-blue')openShop();
-  else if(o.id==='shop-red')openRedShop();
-  else if(o.id==='shop-white')openTradePlaza();
-  else if(o.id==='queen-bee')openBee();
-  else if(o.id==='rng-circle')openWheel();
-  else if(o.id==='rng-machine')showModal('RNG','Здесь будет приз!');
+  if(o.id==='shop-blue')openShop();else if(o.id==='shop-red')openRedShop();
+  else if(o.id==='shop-white')openTradePlaza();else if(o.id==='queen-bee')openBee();
+  else if(o.id==='rng-circle')openWheel();else if(o.id==='rng-machine')showModal('RNG','Здесь будет приз!');
 }
-
 function openIndexMenu(){
   const colors=['—','Красный','Синий','Зелёный','Жёлтый','Фиолетовый','Оранжевый','Розовый','Голубой'];
   showModal('ИНДЕКС','Твоя база: №'+myBaseId+'\nЦвет: '+(colors[myBaseId]||'Неизвестно')+'\nБрэинротов: '+mySlots.filter(s=>s).length+'/'+BASE_MAX);
@@ -911,9 +876,33 @@ function openIndexMenu(){
 
 document.addEventListener('keydown',e=>{
   const k=String(e.key||'').toLowerCase();if(!k)return;
+  // ESC работает всегда
+  if(k==='escape'||k==='esc'){
+    e.preventDefault();
+    if(document.getElementById('settings-modal').classList.contains('open')){closeSettings();return;}
+    if(document.getElementById('admin-changelog-panel').style.display==='flex'){closeAdminChangelog();return;}
+    if(document.getElementById('admin-servers-panel').style.display==='flex'){closeAdminServers();return;}
+    if(document.getElementById('admin-update-panel').style.display==='flex'){closeAdminUpdate();return;}
+    if(document.getElementById('admin-panel').style.display==='flex'){closeAdmin();return;}
+    if(document.getElementById('base-menu').style.display==='block'){closeBaseMenu();return;}
+    if(document.getElementById('shop-menu').style.display==='flex'){closeShop();return;}
+    if(document.getElementById('red-shop-menu').style.display==='flex'){closeRedShop();return;}
+    if(document.getElementById('bee-menu').style.display==='flex'){closeBee();return;}
+    if(document.getElementById('wheel-menu').style.display==='flex'){closeWheel();return;}
+    if(document.getElementById('trade-plaza-modal').style.display==='flex'){closeTradePlaza();return;}
+    if(document.getElementById('custom-modal').style.display==='block'){closeModal();return;}
+    if(inFloor){exitFloor();return;}
+    if(document.getElementById('app').style.display==='flex'){exitToMenu();return;}
+    if(document.getElementById('server-menu').style.display==='block'){closeServers();return;}
+    if(document.getElementById('friends-menu').style.display==='block'){closeFriends();return;}
+    if(document.getElementById('profile-menu').style.display==='block'){closeProfile();return;}
+    if(document.getElementById('create-server-modal').style.display==='block'){closeCreateServer();return;}
+    if(document.getElementById('friend-profile').style.display==='block'){cancelFriendJoin();return;}
+    return;
+  }
   if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
   typedCode+=k;typedCode=typedCode.slice(-17);
-  if(typedCode==='ядушкамистердушка'&&currentNickname==='MrDushka'){showModal('Админ-панель','Ты админ!');typedCode='';}
+  if(typedCode==='ядушкамистердушка'&&currentNickname==='MrDushka'){openAdmin();typedCode='';return;}
   if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;e.preventDefault()}
   if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;e.preventDefault()}
   if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;e.preventDefault()}
@@ -937,13 +926,12 @@ function openFloor(baseId){
   if(!bdata)return;
   if(bdata.locked&&bdata.owner!==currentNickname){showModal('База закрыта','Владелец закрыл доступ');return;}
   viewingBaseId=baseId;floorOwner=bdata.owner;floorLocked=bdata.locked;
-  floorSlots=normalizeSlots(bdata.slots,12);
-  inFloor=true;fx=195;fy=370;
+  floorSlots=normalizeSlots(bdata.slots,12);inFloor=true;fx=195;fy=370;
   document.getElementById('game-container').style.display='none';
   document.getElementById('floor-container').style.display='block';
   document.getElementById('back-btn').style.display='block';
   document.getElementById('floor-title').textContent='Этаж: '+bdata.owner+' '+(bdata.locked?'🔒':'🔓');
-  renderFloor();renderFloorPlayer();updateCarried();
+  renderFloor();renderFloorPlayer();updateCarried();updatePlayerActions();
 }
 function closeFloorCleanup(){
   document.querySelectorAll('#floor-container .floor-decor').forEach(e=>e.remove());
@@ -954,14 +942,11 @@ function closeFloorCleanup(){
   document.getElementById('interactF').style.display='none';
   document.getElementById('holdProgress').style.display='none';
   if(carriedBrainrot){
-    if(carriedBrainrot.fromBase===myBaseId){
-      const free=mySlots.findIndex(s=>s===null);
-      if(free>=0){mySlots[free]=carriedBrainrot;db.ref('users/'+currentNickname).update({baseSlots:mySlots});}
-    }
+    if(carriedBrainrot.fromBase===myBaseId){const free=mySlots.findIndex(s=>s===null);if(free>=0){mySlots[free]=carriedBrainrot;db.ref('users/'+currentNickname).update({baseSlots:mySlots});}}
     carriedBrainrot=null;
   }
   document.getElementById('floor-carried').style.display='none';
-  inFloor=false;viewingBaseId=null;floorSlots=[];removeEHint();
+  inFloor=false;viewingBaseId=null;floorSlots=[];removeEHint();updatePlayerActions();
 }
 function exitFloor(){closeFloorCleanup();renderAllBases();}
 function renderFloorPlayer(){
@@ -992,14 +977,11 @@ function renderFloor(){
     const off=FLOOR_SLOT_OFFSETS[i];const sx=off.dx,sy=off.dy;
     if(floorSlots[i]){
       const br=floorSlots[i];const d=document.createElement('div');
-      d.className='brainrot-on-base '+br.rarity;
-      d.style.backgroundImage='url(Картинки/'+br.file+')';
-      d.style.left=sx+'px';d.style.top=sy+'px';d.style.width='28px';d.style.height='28px';d.style.zIndex='6';
-      fc.appendChild(d);
+      d.className='brainrot-on-base '+br.rarity;d.style.backgroundImage='url(Картинки/'+br.file+')';
+      d.style.left=sx+'px';d.style.top=sy+'px';d.style.width='28px';d.style.height='28px';d.style.zIndex='6';fc.appendChild(d);
     } else {
       const s=document.createElement('div');s.className='base-slot';
-      s.style.left=sx+'px';s.style.top=sy+'px';s.style.width='28px';s.style.height='28px';s.style.zIndex='6';
-      fc.appendChild(s);
+      s.style.left=sx+'px';s.style.top=sy+'px';s.style.width='28px';s.style.height='28px';s.style.zIndex='6';fc.appendChild(s);
     }
   }
 }
@@ -1035,7 +1017,7 @@ function update(t=0){
       if(Date.now()-lastSync>100){db.ref('servers/'+currentServerId+'/players/'+currentNickname).update({x:x,y:y});lastSync=Date.now();}
     }
   }
-  if(!inFloor){updateConveyor(dt);updateTarget();}else{updateFloorTarget();}
+  if(!inFloor){updateConveyor(dt);updateTarget();updatePlayerActions();}else{updateFloorTarget();}
 }
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y);}
 function removeEHint(){document.getElementById('interact').style.display='none';document.getElementById('interactF').style.display='none';}
@@ -1059,7 +1041,6 @@ function updateTarget(){
     if(Math.hypot(pc.x-oc.x,pc.y-oc.y)<25){currentTarget={type:'shop',target:obj};showEOnly();return;}
   }
 }
-
 function updateFloorTarget(){
   const pc={x:fx+4,y:fy+8};currentTarget=null;removeEHint();
   for(let i=0;i<12;i++){
@@ -1068,9 +1049,7 @@ function updateFloorTarget(){
       if(floorSlots[i]){
         if(floorOwner===currentNickname){currentTarget={type:'slot_mine_full',slot:i};showEAndF();}
         else{currentTarget={type:'slot_other_full',slot:i,baseId:viewingBaseId};showEOnly();}
-      } else {
-        currentTarget={type:'slot_empty_mine',slot:i};showEOnly();
-      }
+      } else {currentTarget={type:'slot_empty_mine',slot:i};showEOnly();}
       return;
     }
   }
@@ -1088,17 +1067,7 @@ document.getElementById('interact').addEventListener('touchend',(e)=>{
 });
 
 // ========== SHOP / BEES / RED SHOP / WHEEL / TRADE PLAZA ==========
-const shopItems=[
-{id:'slap',name:'Slap',desc:'Slap thieves!',price:500,icon:'slap'},
-{id:'speed-coil',name:'Speed Coil',desc:'Zoom!',price:750,icon:'speed-coil'},
-{id:'trap',name:'Trap',desc:'Freeze 10 sec',price:1000,icon:'trap'},
-{id:'iron-slap',name:'Iron Slap',desc:'Heavy slap!',price:2500,icon:'iron-slap'},
-{id:'gravity-coil',name:'Gravity Coil',desc:'Jump!',price:3000,icon:'gravity-coil'},
-{id:'bee-launcher',name:'Bee Launcher',desc:'Bees!',price:10000,icon:'bee-launcher'},
-{id:'coil-combo',name:'Coil Combo',desc:'Ultimate!',price:20000,icon:'coil-combo'},
-{id:'rage-table',name:'Rage Table',desc:'Table!',price:25000,icon:'rage-table'},
-{id:'diamond-slap',name:'Diamond Slap',desc:'Knock!',price:50000,icon:'diamond-slap'}
-];
+const shopItems=[{id:'slap',name:'Slap',desc:'Slap thieves!',price:500,icon:'slap'},{id:'speed-coil',name:'Speed Coil',desc:'Zoom!',price:750,icon:'speed-coil'},{id:'trap',name:'Trap',desc:'Freeze 10 sec',price:1000,icon:'trap'},{id:'iron-slap',name:'Iron Slap',desc:'Heavy slap!',price:2500,icon:'iron-slap'},{id:'gravity-coil',name:'Gravity Coil',desc:'Jump!',price:3000,icon:'gravity-coil'},{id:'bee-launcher',name:'Bee Launcher',desc:'Bees!',price:10000,icon:'bee-launcher'},{id:'coil-combo',name:'Coil Combo',desc:'Ultimate!',price:20000,icon:'coil-combo'},{id:'rage-table',name:'Rage Table',desc:'Table!',price:25000,icon:'rage-table'},{id:'diamond-slap',name:'Diamond Slap',desc:'Knock!',price:50000,icon:'diamond-slap'}];
 function getShopIcon(type){switch(type){
 case'slap':return`<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="white" stroke-width="6" fill="none"/></svg>`;
 case'speed-coil':return`<svg viewBox="0 0 100 100"><path d="M50 15 Q20 30 50 45 Q80 60 50 75 Q20 90 50 95" stroke="#e74c3c" stroke-width="8" fill="none"/></svg>`;
@@ -1126,8 +1095,7 @@ async function buyShopItem(id){
   const item=shopItems.find(i=>i.id===id);if(!item)return;
   if(ownedItems.includes(id))return;
   if(coins<item.price){showModal('Ошибка','Нужно $'+item.price.toLocaleString()+'\nУ тебя: $'+formatNumber(coins));return;}
-  coins-=item.price;ownedItems.push(id);
-  document.getElementById('balance-amount').textContent=formatNumber(coins);
+  coins-=item.price;ownedItems.push(id);document.getElementById('balance-amount').textContent=formatNumber(coins);
   await db.ref('users/'+currentNickname).update({coins:coins,ownedItems:ownedItems});
   openShop();showModal('Покупка','Куплено: '+item.name);
 }
@@ -1201,8 +1169,7 @@ function openRedShop(){switchRedTab('gear');document.getElementById('red-shop-me
 function closeRedShop(){document.getElementById('red-shop-menu').style.display='none';}
 async function buyRedShopItem(id){
   const item=Object.values(redShopItems).flat().find(i=>i.id===id);
-  if(!item)return;
-  if(item.once&&ownedRedItems.includes(id))return;
+  if(!item)return;if(item.once&&ownedRedItems.includes(id))return;
   if(dushka>=item.price){
     dushka-=item.price;if(item.once)ownedRedItems.push(id);
     if(item.reward){coins+=item.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);}
@@ -1218,8 +1185,8 @@ function updateFreeSpinTimer(){
   const e=Math.floor((Date.now()-lastFreeSpinTime)/1000);const r=FREE_SPIN_INTERVAL-e;
   if(r<=0){_spins++;lastFreeSpinTime=Date.now();localStorage.setItem('lastFreeSpinTime',lastFreeSpinTime.toString());updateSpinBtn();}
   const h=Math.floor(r/3600),m=Math.floor((r%3600)/60),s=r%60;
-  const t=document.getElementById('wheel-timer');
-  if(t)t.textContent=t('freeSpin')+': '+h+'h '+m+'m '+s+'s';
+  const tEl=document.getElementById('wheel-timer');
+  if(tEl)tEl.textContent=t('freeSpin')+': '+h+'h '+m+'m '+s+'s';
 }
 setInterval(updateFreeSpinTimer,1000);
 async function buySpin(a){let c=a===1?49:199;if(dushka>=c){dushka-=c;_spins+=a;document.getElementById('dushka-coins').textContent=formatNumber(dushka);await db.ref('users/'+currentNickname).update({dushka:dushka,spins:_spins});updateSpinBtn();}else showModal('Ошибка','Нужно Dushka Coins!');}
@@ -1236,15 +1203,10 @@ function doSpin(){
   let deltaMod=(desiredMod-currentMod+360)%360;const extra=10*360;wheelRotation+=deltaMod+extra;
   w.style.transition='none';w.style.transform=`rotate(${wheelRotation}deg)`;void w.offsetWidth;
   setTimeout(()=>{w.style.transition='transform 3s cubic-bezier(0.15,0.9,0.25,1)';w.style.transform=`rotate(${wheelRotation}deg)`;},20);
-  setTimeout(()=>{
-    isSpinning=false;const p=prizes[sel];
-    if(p.reward>0){coins+=p.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});}
-    showModal('Колесо','Выпало: '+p.name+'!');
-  },3000);
+  setTimeout(()=>{isSpinning=false;const p=prizes[sel];if(p.reward>0){coins+=p.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});}showModal('Колесо','Выпало: '+p.name+'!');},3000);
 }
 function openWheel(){document.getElementById('wheel-menu').style.display='flex';}
 function closeWheel(){document.getElementById('wheel-menu').style.display='none';}
-
 function openTradePlaza(){document.getElementById('trade-plaza-modal').style.display='flex';}
 function closeTradePlaza(){document.getElementById('trade-plaza-modal').style.display='none';}
 
@@ -1291,13 +1253,11 @@ function openBaseMenu(){
   const info=document.createElement('div');info.className='bm-info';
   info.textContent='Брэинротов: '+mySlots.filter(s=>s).length+'/'+BASE_MAX+' | Свободно: '+free+' | Доход: $'+formatNumber(totalIncome)+'/сек';
   c.appendChild(info);
-  if(mySlots.filter(s=>s).length===0){
-    const e=document.createElement('div');e.className='bm-empty';e.textContent='Пока нет брэинротов';c.appendChild(e);
-  } else {
+  if(mySlots.filter(s=>s).length===0){const e=document.createElement('div');e.className='bm-empty';e.textContent='Пока нет брэинротов';c.appendChild(e);}
+  else{
     mySlots.forEach((br,i)=>{
       if(!br)return;
-      const t=Math.floor((Date.now()-(br.placedAt||Date.now()))/1000);
-      const earned=Math.floor(t*br.income);
+      const t=Math.floor((Date.now()-(br.placedAt||Date.now()))/1000);const earned=Math.floor(t*br.income);
       const row=document.createElement('div');row.className='bm-row';
       row.innerHTML=`<div class="icon" style="background-image:url('Картинки/${br.file}')"></div><div class="info"><div class="name">${br.name}</div><div class="line">${RARITY_NAMES[br.rarity]} · $${formatNumber(br.income)}/сек</div><div class="line">На базе: ${t} сек</div><div class="earned">+$${formatNumber(earned)}</div></div><div style="display:flex;flex-direction:column;gap:6px"><button class="collect" onclick="collectFrom(${i})">Собрать</button><button class="collect" style="background:#c0392b" onclick="sellMyBrainrot(${i})">Продать</button></div>`;
       c.appendChild(row);
@@ -1308,8 +1268,7 @@ function openBaseMenu(){
 function closeBaseMenu(){document.getElementById('base-menu').style.display='none';}
 async function collectFrom(i){
   const br=mySlots[i];if(!br)return;
-  const t=Math.floor((Date.now()-(br.placedAt||Date.now()))/1000);
-  const earned=Math.floor(t*br.income);
+  const t=Math.floor((Date.now()-(br.placedAt||Date.now()))/1000);const earned=Math.floor(t*br.income);
   if(earned<=0){showModal('Пусто','Ещё не заработал');return;}
   coins+=earned;br.placedAt=Date.now();
   document.getElementById('balance-amount').textContent=formatNumber(coins);
@@ -1319,7 +1278,7 @@ async function collectFrom(i){
 }
 
 async function exitToMenu(){
-  if(currentServerId && currentNickname){try{await db.ref('servers/'+currentServerId+'/players/'+currentNickname).remove();}catch(e){}}
+  if(currentServerId&&currentNickname){try{await db.ref('servers/'+currentServerId+'/players/'+currentNickname).remove();}catch(e){}}
   conveyorBrainrots.forEach(b=>b.dom.remove());conveyorBrainrots=[];
   for(let k in otherPlayers){otherPlayers[k].remove();}otherPlayers={};
   removeEHint();closeFloorCleanup();
@@ -1328,11 +1287,7 @@ async function exitToMenu(){
   document.getElementById('balance').style.display='none';
   document.getElementById('main-menu').style.display='flex';
 }
-window.addEventListener('load',()=>{
-  resizeGame();
-  applyLanguage();
-  initMusic();
-});
+window.addEventListener('load',()=>{resizeGame();applyLanguage();initMusic();});
 </script>
 </body>
 </html>
