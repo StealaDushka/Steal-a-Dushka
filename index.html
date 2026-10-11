@@ -79,28 +79,76 @@ body.light-theme .theme-toggle{color:#1a1a2e}
 #settings-btn.spinning svg{animation:spin-gear .6s ease}
 @keyframes spin-gear{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 
-#settings-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:6000;justify-content:center;align-items:center;padding:20px}
+/* ====== НОВОЕ МЕНЮ НАСТРОЕК С КАТЕГОРИЯМИ ====== */
+#settings-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:6000;justify-content:center;align-items:center;padding:20px}
 #settings-modal.open{display:flex;animation:fade-in .25s ease}
 @keyframes fade-in{from{opacity:0}to{opacity:1}}
-.settings-panel{background:var(--bg-panel);border:2px solid var(--border-color);border-radius:16px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:slide-up .3s ease}
+.settings-panel{background:var(--bg-panel);border:2px solid var(--border-color);border-radius:16px;width:100%;max-width:780px;max-height:90vh;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:slide-up .3s ease;display:flex;flex-direction:column}
 @keyframes slide-up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.settings-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:15px;border-bottom:1px solid var(--border-color)}
+.settings-header{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;border-bottom:1px solid var(--border-color);flex-shrink:0}
 .settings-header h2{margin:0;color:var(--text-main);font-size:22px;letter-spacing:1px}
 .settings-close{background:#c0392b;border:none;color:#fff;width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:18px;font-weight:bold}
-.settings-section{margin-bottom:20px}
-.settings-label{display:block;color:var(--text-dim);font-size:13px;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;font-weight:bold}
-.theme-picker{display:flex;gap:10px}
-.theme-option{flex:1;padding:12px;border:2px solid var(--border-color);border-radius:10px;cursor:pointer;background:var(--bg-item);text-align:center;transition:all .2s;color:var(--text-main);font-weight:bold;font-size:14px}
-.theme-option.active{border-color:var(--accent);background:var(--bg-item-hover);box-shadow:0 0 15px rgba(74,144,226,.3)}
-.theme-option .icon{display:block;font-size:24px;margin-bottom:5px}
-.range-wrap{display:flex;align-items:center;gap:12px}
-.range-wrap input[type=range]{flex:1;accent-color:var(--accent);height:6px;cursor:pointer}
-.range-value{color:var(--text-main);font-weight:bold;min-width:50px;text-align:right;font-size:14px}
-.lang-picker{display:flex;gap:10px}
-.lang-option{flex:1;padding:12px;border:2px solid var(--border-color);border-radius:10px;cursor:pointer;background:var(--bg-item);text-align:center;transition:all .2s;color:var(--text-main);font-weight:bold;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px}
-.lang-option.active{border-color:var(--accent);background:var(--bg-item-hover);box-shadow:0 0 15px rgba(74,144,226,.3)}
-.lang-flag{font-size:20px}
+.settings-body{display:flex;flex:1;overflow:hidden;min-height:0}
 
+/* Левая колонка — категории */
+.settings-tabs{width:200px;flex-shrink:0;background:var(--bg-panel-2);border-right:1px solid var(--border-color);overflow-y:auto;padding:12px 8px;display:flex;flex-direction:column;gap:4px}
+@media(max-width:640px){.settings-body{flex-direction:column}.settings-tabs{width:100%;flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid var(--border-color);padding:8px;gap:6px;flex-shrink:0}.settings-tabs .tab-btn{white-space:nowrap;flex-shrink:0}}
+.tab-btn{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;color:var(--text-dim);font-size:13px;font-weight:bold;transition:all .2s;border:none;background:transparent;font-family:inherit;text-align:left;width:100%}
+.tab-btn:hover{background:var(--bg-item-hover);color:var(--text-main)}
+.tab-btn.active{background:var(--accent);color:#fff;box-shadow:0 4px 15px rgba(74,144,226,.4)}
+.tab-btn .tab-icon{font-size:18px;width:24px;text-align:center;flex-shrink:0}
+
+/* Правая колонка — контент */
+.settings-content{flex:1;overflow-y:auto;padding:24px;scroll-behavior:smooth}
+.settings-section{margin-bottom:28px}
+.settings-section:last-child{margin-bottom:0}
+.settings-section-title{color:var(--text-main);font-size:16px;font-weight:bold;margin:0 0 16px;padding-bottom:10px;border-bottom:2px solid var(--accent);display:flex;align-items:center;gap:8px}
+.setting-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(128,128,128,.1);gap:12px}
+.setting-row:last-child{border-bottom:none}
+.setting-label{color:var(--text-main);font-size:14px;font-weight:500;flex:1}
+.setting-hint{color:var(--text-mid);font-size:11px;margin-top:2px}
+.setting-control{flex-shrink:0;display:flex;align-items:center;gap:8px}
+@media(max-width:500px){.setting-row{flex-direction:column;align-items:flex-start;gap:10px}.setting-control{width:100%}}
+
+/* Переключатели */
+.switch{position:relative;width:48px;height:26px;background:var(--border-color);border-radius:13px;cursor:pointer;transition:background .25s;flex-shrink:0}
+.switch.on{background:var(--accent)}
+.switch::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform .25s;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+.switch.on::after{transform:translateX(22px)}
+
+/* Кнопки-опции */
+.opt-group{display:flex;gap:6px}
+.opt-btn{padding:7px 14px;border:2px solid var(--border-color);background:var(--bg-item);color:var(--text-main);border-radius:8px;cursor:pointer;font-size:12px;font-weight:bold;transition:all .2s;font-family:inherit}
+.opt-btn:hover{background:var(--bg-item-hover)}
+.opt-btn.active{border-color:var(--accent);background:var(--accent);color:#fff}
+
+/* Слайдеры */
+.range-wrap{display:flex;align-items:center;gap:10px;min-width:180px}
+.range-wrap input[type=range]{flex:1;accent-color:var(--accent);height:6px;cursor:pointer;min-width:100px}
+.range-value{color:var(--text-main);font-weight:bold;min-width:45px;text-align:right;font-size:13px}
+
+/* Языки */
+.lang-picker{display:flex;gap:8px}
+.lang-option{padding:10px 16px;border:2px solid var(--border-color);border-radius:10px;cursor:pointer;background:var(--bg-item);color:var(--text-main);font-weight:bold;font-size:13px;display:flex;align-items:center;gap:8px;transition:all .2s;font-family:inherit}
+.lang-option.active{border-color:var(--accent);background:var(--bg-item-hover);box-shadow:0 0 15px rgba(74,144,226,.3)}
+.lang-flag{font-size:18px}
+
+/* Кнопки действий */
+.action-big-btn{width:100%;padding:12px;border:none;border-radius:10px;font-weight:bold;font-size:14px;cursor:pointer;transition:all .2s;font-family:inherit;margin-top:8px}
+.btn-danger{background:#c0392b;color:#fff}
+.btn-danger:hover{background:#a93226}
+.btn-warning{background:#f39c12;color:#fff}
+.btn-warning:hover{background:#e67e22}
+.btn-success{background:#4caf50;color:#fff}
+.btn-success:hover{background:#388e3c}
+.btn-info{background:#4a90e2;color:#fff}
+.btn-info:hover{background:#357abd}
+
+/* FPS / Пинг */
+#fps-counter{position:fixed;top:8px;right:80px;background:rgba(0,0,0,.6);color:#0f0;font-size:11px;font-weight:bold;padding:4px 8px;border-radius:6px;z-index:9999;display:none;font-family:monospace}
+#fps-counter.visible{display:block}
+
+/* Игра */
 #server-menu,#friends-menu,#profile-menu{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--border-color);border-radius:12px;padding:20px;width:90%;max-width:600px;max-height:80vh;overflow-y:auto;z-index:950;color:var(--text-main);transition:background .3s,border-color .3s;box-shadow:0 20px 60px rgba(0,0,0,.4)}
 .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
 .header h2{color:var(--text-main);margin:0}
@@ -150,8 +198,6 @@ input[type="file"]{color:var(--text-main)}
 #player,.other-player,#floor-player{position:absolute;width:8px;height:16px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20;border:1px solid rgba(0,0,0,.5)}
 #player .pixel,.other-player .pixel,#floor-player .pixel{width:100%;height:100%}
 #player-name,.player-name{position:absolute;left:50%;transform:translateX(-50%);top:-12px;color:#fff;font-size:5px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
-
-/* КНОПКИ НАД ГОЛОВОЙ ПЕРСОНАЖА */
 #player-actions{position:absolute;display:flex;gap:4px;z-index:19;pointer-events:none}
 #player-actions .action-btn{width:44px;height:44px;display:flex;justify-content:center;align-items:center;background:#666;border:3px solid #000;color:#fff;font-weight:bold;font-size:9px;cursor:pointer;text-align:center;pointer-events:auto;border-radius:6px;transition:transform .15s}
 #player-actions .action-btn:hover{transform:scale(1.1);background:#777}
@@ -165,7 +211,6 @@ input[type="file"]{color:var(--text-main)}
 #interactF{right:120px;background:#c0392b}
 #interactF:hover{transform:scale(1.08);box-shadow:0 6px 22px rgba(192,57,43,.7)}
 #interact:active,#interactF:active{transform:scale(.95)}
-
 #holdProgress{position:fixed;display:none;z-index:10001;width:60px;height:8px;background:rgba(0,0,0,.7);border:1px solid #fff;border-radius:4px;overflow:hidden;pointer-events:none}
 #holdProgress .fill{position:absolute;left:0;top:0;height:100%;width:0%;background:#4caf50}
 #floor-carried{position:absolute;width:28px;height:28px;background-size:cover;background-position:center;z-index:25;border:2px solid #fff;border-radius:4px;pointer-events:none;box-shadow:0 0 8px #fff;display:none}
@@ -200,7 +245,6 @@ input[type="file"]{color:var(--text-main)}
 .menu-overlay .header .close-btn{background:#c0392b;border:2px solid #922b21;color:#fff;font-size:20px;font-weight:bold;width:40px;height:40px;display:flex;justify-content:center;align-items:center;cursor:pointer;border-radius:4px}
 .menu-overlay .content{padding:0 15px 15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;flex:1;background:var(--bg-panel);transition:background .3s}
 
-/* ADMIN PANEL */
 .admin-btn{width:100%;padding:14px;border:2px solid var(--border-color);background:var(--bg-item);color:var(--text-main);border-radius:10px;font-weight:bold;font-size:15px;cursor:pointer;transition:all .2s;text-align:left;display:flex;align-items:center;gap:12px;font-family:inherit}
 .admin-btn:hover{background:var(--bg-item-hover);border-color:var(--accent);transform:translateX(4px)}
 .admin-btn .num{width:28px;height:28px;background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
@@ -308,6 +352,7 @@ body.light-theme .secret-panel{background:rgba(0,0,0,.05)}
 <div id="version">Версия: 0.35</div>
 <div id="exit-btn" onclick="exitToMenu()" data-i18n="exit">Выйти</div>
 <div id="back-btn" onclick="exitFloor()" data-i18n="back">Назад</div>
+<div id="fps-counter">FPS: -- | PING: --</div>
 
 <div id="main-menu">
   <div class="menu-content">
@@ -339,25 +384,262 @@ body.light-theme .secret-panel{background:rgba(0,0,0,.05)}
   </div>
 </div>
 
+<!-- ====== НОВОЕ МЕНЮ НАСТРОЕК С КАТЕГОРИЯМИ ====== -->
 <div id="settings-modal" onclick="if(event.target===this)closeSettings()">
   <div class="settings-panel">
-    <div class="settings-header"><h2 data-i18n="settings">Настройки</h2><button class="settings-close" onclick="closeSettings()">✕</button></div>
-    <div class="settings-section"><label class="settings-label" data-i18n="theme">Тема</label>
-      <div class="theme-picker">
-        <div class="theme-option" data-theme="dark" onclick="setTheme('dark')"><span class="icon">🌙</span><span data-i18n="dark">Тёмная</span></div>
-        <div class="theme-option" data-theme="light" onclick="setTheme('light')"><span class="icon">☀️</span><span data-i18n="light">Светлая</span></div>
+    <div class="settings-header">
+      <h2 data-i18n="settings">⚙️ Настройки</h2>
+      <button class="settings-close" onclick="closeSettings()">✕</button>
+    </div>
+    <div class="settings-body">
+      <!-- Левая колонка — категории -->
+      <div class="settings-tabs" id="settings-tabs">
+        <button class="tab-btn active" data-tab="appearance" onclick="switchSettingsTab('appearance')"><span class="tab-icon">🎨</span> <span data-i18n="catAppearance">Внешний вид</span></button>
+        <button class="tab-btn" data-tab="sound" onclick="switchSettingsTab('sound')"><span class="tab-icon">🔊</span> <span data-i18n="catSound">Звук</span></button>
+        <button class="tab-btn" data-tab="controls" onclick="switchSettingsTab('controls')"><span class="tab-icon">🎮</span> <span data-i18n="catControls">Управление</span></button>
+        <button class="tab-btn" data-tab="notifications" onclick="switchSettingsTab('notifications')"><span class="tab-icon">🔔</span> <span data-i18n="catNotifications">Уведомления</span></button>
+        <button class="tab-btn" data-tab="performance" onclick="switchSettingsTab('performance')"><span class="tab-icon">⚡</span> <span data-i18n="catPerformance">Производительность</span></button>
+        <button class="tab-btn" data-tab="network" onclick="switchSettingsTab('network')"><span class="tab-icon">📶</span> <span data-i18n="catNetwork">Сеть</span></button>
+        <button class="tab-btn" data-tab="account" onclick="switchSettingsTab('account')"><span class="tab-icon">👤</span> <span data-i18n="catAccount">Аккаунт</span></button>
+        <button class="tab-btn" data-tab="language" onclick="switchSettingsTab('language')"><span class="tab-icon">🌐</span> <span data-i18n="catLanguage">Язык</span></button>
+        <button class="tab-btn" data-tab="help" onclick="switchSettingsTab('help')"><span class="tab-icon">❓</span> <span data-i18n="catHelp">Помощь</span></button>
+        <button class="tab-btn" data-tab="about" onclick="switchSettingsTab('about')"><span class="tab-icon">ℹ️</span> <span data-i18n="catAbout">О игре</span></button>
       </div>
-    </div>
-    <div class="settings-section"><label class="settings-label" data-i18n="brightness">Яркость</label>
-      <div class="range-wrap"><input type="range" id="brightness-slider" min="50" max="150" value="100" oninput="setBrightness(this.value)"><span class="range-value" id="brightness-value">100%</span></div>
-    </div>
-    <div class="settings-section"><label class="settings-label" data-i18n="music">Музыка</label>
-      <div class="range-wrap"><input type="range" id="music-slider" min="0" max="100" value="50" oninput="setMusicVolume(this.value)"><span class="range-value" id="music-value">50%</span></div>
-    </div>
-    <div class="settings-section"><label class="settings-label" data-i18n="language">Язык</label>
-      <div class="lang-picker">
-        <div class="lang-option" data-lang="ru" onclick="setLanguage('ru')"><span class="lang-flag">🇷🇺</span> Русский</div>
-        <div class="lang-option" data-lang="en" onclick="setLanguage('en')"><span class="lang-flag">🇬🇧</span> English</div>
+
+      <!-- Правая колонка — контент -->
+      <div class="settings-content" id="settings-content">
+
+        <!-- ====== 1. ВНЕШНИЙ ВИД ====== -->
+        <div class="settings-section" data-section="appearance">
+          <h3 class="settings-section-title">🎨 <span data-i18n="catAppearance">Внешний вид</span></h3>
+          <div class="setting-row">
+            <div class="setting-label" data-i18n="theme">Тема</div>
+            <div class="setting-control">
+              <div class="opt-group">
+                <button class="opt-btn" data-theme="dark" onclick="setTheme('dark')">🌙 <span data-i18n="dark">Тёмная</span></button>
+                <button class="opt-btn" data-theme="light" onclick="setTheme('light')">☀️ <span data-i18n="light">Светлая</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="brightness">Яркость</span></div>
+            <div class="setting-control">
+              <div class="range-wrap">
+                <input type="range" id="brightness-slider" min="50" max="150" value="100" oninput="setBrightness(this.value)">
+                <span class="range-value" id="brightness-value">100%</span>
+              </div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="animations">Анимации интерфейса</span><div class="setting-hint" data-i18n="animationsHint">Свечения, плавные переходы</div></div>
+            <div class="setting-control">
+              <div class="switch on" id="switch-animations" onclick="toggleSetting('animations',this)"></div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="compactMode">Компактный режим</span><div class="setting-hint" data-i18n="compactHint">Маленькие кнопки, больше помещается</div></div>
+            <div class="setting-control">
+              <div class="switch" id="switch-compact" onclick="toggleSetting('compact',this)"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== 2. ЗВУК ====== -->
+        <div class="settings-section" data-section="sound" style="display:none">
+          <h3 class="settings-section-title">🔊 <span data-i18n="catSound">Звук</span></h3>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="music">Музыка</span></div>
+            <div class="setting-control">
+              <div class="range-wrap">
+                <input type="range" id="music-slider" min="0" max="100" value="50" oninput="setMusicVolume(this.value)">
+                <span class="range-value" id="music-value">50%</span>
+              </div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="sfx">Звуковые эффекты</span><div class="setting-hint" data-i18n="sfxHint">Кража, покупка, клики</div></div>
+            <div class="setting-control">
+              <div class="range-wrap">
+                <input type="range" id="sfx-slider" min="0" max="100" value="70" oninput="setSfxVolume(this.value)">
+                <span class="range-value" id="sfx-value">70%</span>
+              </div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="sfxEnabled">Включить звуковые эффекты</span></div>
+            <div class="setting-control">
+              <div class="switch on" id="switch-sfx" onclick="toggleSetting('sfxEnabled',this)"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== 3. УПРАВЛЕНИЕ ====== -->
+        <div class="settings-section" data-section="controls" style="display:none">
+          <h3 class="settings-section-title">🎮 <span data-i18n="catControls">Управление</span></h3>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="joystickSize">Размер джойстика</span></div>
+            <div class="setting-control">
+              <div class="opt-group">
+                <button class="opt-btn" data-joy="small" onclick="setJoystickSize('small')" data-i18n="sizeSmall">Маленький</button>
+                <button class="opt-btn active" data-joy="medium" onclick="setJoystickSize('medium')" data-i18n="sizeMedium">Средний</button>
+                <button class="opt-btn" data-joy="large" onclick="setJoystickSize('large')" data-i18n="sizeLarge">Большой</button>
+              </div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="joystickOpacity">Прозрачность джойстика</span></div>
+            <div class="setting-control">
+              <div class="range-wrap">
+                <input type="range" id="joy-opacity-slider" min="10" max="100" value="50" oninput="setJoystickOpacity(this.value)">
+                <span class="range-value" id="joy-opacity-value">50%</span>
+              </div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="showEButtons">Показывать кнопки E/F</span><div class="setting-hint" data-i18n="showEButtonsHint">Если играешь с клавы — можно выключить</div></div>
+            <div class="setting-control">
+              <div class="switch on" id="switch-eButtons" onclick="toggleSetting('showEButtons',this)"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== 4. УВЕДОМЛЕНИЯ ====== -->
+        <div class="settings-section" data-section="notifications" style="display:none">
+          <h3 class="settings-section-title">🔔 <span data-i18n="catNotifications">Уведомления</span></h3>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="notifySteal">Уведомления о краже</span><div class="setting-hint" data-i18n="notifyStealHint">"У тебя украли X"</div></div>
+            <div class="setting-control">
+              <div class="switch on" id="switch-notifySteal" onclick="toggleSetting('notifySteal',this)"></div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="vibration">Вибрация</span><div class="setting-hint" data-i18n="vibrationHint">Только на телефоне</div></div>
+            <div class="setting-control">
+              <div class="switch on" id="switch-vibration" onclick="toggleSetting('vibration',this)"></div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="notifSound">Звук уведомлений</span></div>
+            <div class="setting-control">
+              <div class="switch on" id="switch-notifSound" onclick="toggleSetting('notifSound',this)"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== 5. ПРОИЗВОДИТЕЛЬНОСТЬ ====== -->
+        <div class="settings-section" data-section="performance" style="display:none">
+          <h3 class="settings-section-title">⚡ <span data-i18n="catPerformance">Производительность</span></h3>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="graphicsQuality">Качество графики</span></div>
+            <div class="setting-control">
+              <div class="opt-group">
+                <button class="opt-btn" data-gfx="low" onclick="setGraphicsQuality('low')" data-i18n="gfxLow">Низкое</button>
+                <button class="opt-btn active" data-gfx="medium" onclick="setGraphicsQuality('medium')" data-i18n="gfxMedium">Среднее</button>
+                <button class="opt-btn" data-gfx="high" onclick="setGraphicsQuality('high')" data-i18n="gfxHigh">Высокое</button>
+              </div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="showFps">Показывать FPS / Пинг</span></div>
+            <div class="setting-control">
+              <div class="switch" id="switch-fps" onclick="toggleSetting('showFps',this)"></div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="showNames">Показывать ник над персонажем</span></div>
+            <div class="setting-control">
+              <div class="switch on" id="switch-showNames" onclick="toggleSetting('showNames',this)"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== 6. СЕТЬ ====== -->
+        <div class="settings-section" data-section="network" style="display:none">
+          <h3 class="settings-section-title">📶 <span data-i18n="catNetwork">Сеть</span></h3>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="serverRegion">Регион сервера</span></div>
+            <div class="setting-control">
+              <div class="opt-group">
+                <button class="opt-btn active" data-region="auto" onclick="setServerRegion('auto')" data-i18n="regionAuto">Авто</button>
+                <button class="opt-btn" data-region="eu" onclick="setServerRegion('eu')" data-i18n="regionEu">EU</button>
+                <button class="opt-btn" data-region="us" onclick="setServerRegion('us')" data-i18n="regionUs">US</button>
+                <button class="opt-btn" data-region="ru" onclick="setServerRegion('ru')" data-i18n="regionRu">RU</button>
+              </div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="clearCache">Очистить кеш</span><div class="setting-hint" data-i18n="clearCacheHint">Сбросит настройки, аккаунт останется</div></div>
+            <div class="setting-control">
+              <button class="action-big-btn btn-warning" style="width:auto;margin:0;padding:8px 16px;font-size:12px" onclick="clearCache()" data-i18n="clear">Очистить</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== 7. АККАУНТ ====== -->
+        <div class="settings-section" data-section="account" style="display:none">
+          <h3 class="settings-section-title">👤 <span data-i18n="catAccount">Аккаунт</span></h3>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="myId">Мой ID</span></div>
+            <div class="setting-control">
+              <span id="my-uid" style="color:var(--text-dim);font-size:13px">—</span>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="logout">Выйти из аккаунта</span></div>
+            <div class="setting-control">
+              <button class="action-big-btn btn-danger" style="width:auto;margin:0;padding:8px 16px;font-size:12px" onclick="logoutAccount()" data-i18n="logout">Выйти</button>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label" style="color:#e74c3c"><span data-i18n="deleteAccount">Удалить аккаунт</span><div class="setting-hint" data-i18n="deleteAccountHint">Навсегда. Нельзя отменить.</div></div>
+            <div class="setting-control">
+              <button class="action-big-btn btn-danger" style="width:auto;margin:0;padding:8px 16px;font-size:12px;background:#7f1d1d" onclick="deleteAccount()" data-i18n="delete">Удалить</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== 8. ЯЗЫК ====== -->
+        <div class="settings-section" data-section="language" style="display:none">
+          <h3 class="settings-section-title">🌐 <span data-i18n="catLanguage">Язык</span></h3>
+          <div class="setting-row">
+            <div class="setting-label"><span data-i18n="language">Язык</span></div>
+            <div class="setting-control">
+              <div class="lang-picker">
+                <button class="lang-option active" data-lang="ru" onclick="setLanguage('ru')"><span class="lang-flag">🇷🇺</span> Русский</button>
+                <button class="lang-option" data-lang="en" onclick="setLanguage('en')"><span class="lang-flag">🇬🇧</span> English</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== 9. ПОМОЩЬ ====== -->
+        <div class="settings-section" data-section="help" style="display:none">
+          <h3 class="settings-section-title">❓ <span data-i18n="catHelp">Помощь</span></h3>
+          <div class="setting-row" style="flex-direction:column;align-items:flex-start">
+            <div style="color:var(--text-main);font-size:14px;line-height:1.8">
+              <b data-i18n="helpControls">🎮 Управление:</b><br>
+              <span data-i18n="helpControlsText">WASD / Стрелки — движение<br>E — взаимодействие (клик, открыть базу)<br>F — продать брэинрота (только на своей базе)<br>ESC — выйти назад</span><br><br>
+              <b data-i18n="helpSteal">👊 Как украсть:</b><br>
+              <span data-i18n="helpStealText">1. Зайди на чужую базу (нажми E)<br>2. Подойди к чужому брэинроту<br>3. Зажми E на 0.5 секунды<br>4. Неси на свою базу и положи</span><br><br>
+              <b data-i18n="helpMoney">💰 Как заработать:</b><br>
+              <span data-i18n="helpMoneyText">• Покупай брэинротов с конвейера (E)<br>• Собирай доход с базы (кнопка "Собрать")<br>• Продавай ненужных (кнопка "Продать")<br>• Крути колесо удачи</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== 10. О ИГРЕ ====== -->
+        <div class="settings-section" data-section="about" style="display:none">
+          <h3 class="settings-section-title">ℹ️ <span data-i18n="catAbout">О игре</span></h3>
+          <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:12px">
+            <div style="color:var(--text-main);font-size:14px;line-height:1.8">
+              <b>Steal A Dushka</b><br>
+              <span data-i18n="aboutVersion">Версия: 0.35</span><br>
+              <span data-i18n="aboutDev">Разработчик: MrDushka</span><br>
+              <span data-i18n="aboutDesc">Укради · Защити · Разбогатей</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -376,34 +658,16 @@ body.light-theme .secret-panel{background:rgba(0,0,0,.05)}
     <button class="admin-btn" onclick="adminEditChangelog()"><span class="num">4</span> Обновление</button>
   </div>
 </div>
-
-<!-- ADMIN: UPDATE MANAGE -->
 <div id="admin-update-panel" class="menu-overlay" style="display:none;max-width:520px">
-  <div class="header">
-    <div class="title"><h2>Управление обновлением</h2><p>Скоро...</p></div>
-    <div class="close-btn" onclick="closeAdminUpdate()">X</div>
-  </div>
-  <div class="content" style="padding:30px;text-align:center;color:var(--text-dim)">
-    <div style="font-size:48px;margin-bottom:10px">🚧</div>
-    <div>Тут пока пусто</div>
-  </div>
+  <div class="header"><div class="title"><h2>Управление обновлением</h2><p>Скоро...</p></div><div class="close-btn" onclick="closeAdminUpdate()">X</div></div>
+  <div class="content" style="padding:30px;text-align:center;color:var(--text-dim)"><div style="font-size:48px;margin-bottom:10px">🚧</div><div>Тут пока пусто</div></div>
 </div>
-
-<!-- ADMIN: SERVERS -->
 <div id="admin-servers-panel" class="menu-overlay" style="display:none;max-width:700px">
-  <div class="header">
-    <div class="title"><h2>Все серверы</h2><p id="admin-servers-count">—</p></div>
-    <div class="close-btn" onclick="closeAdminServers()">X</div>
-  </div>
+  <div class="header"><div class="title"><h2>Все серверы</h2><p id="admin-servers-count">—</p></div><div class="close-btn" onclick="closeAdminServers()">X</div></div>
   <div class="content" id="admin-servers-list" style="padding:15px"></div>
 </div>
-
-<!-- ADMIN: CHANGELOG -->
 <div id="admin-changelog-panel" class="menu-overlay" style="display:none;max-width:520px">
-  <div class="header">
-    <div class="title"><h2>Обновление</h2><p>Текст появится в главном меню</p></div>
-    <div class="close-btn" onclick="closeAdminChangelog()">X</div>
-  </div>
+  <div class="header"><div class="title"><h2>Обновление</h2><p>Текст появится в главном меню</p></div><div class="close-btn" onclick="closeAdminChangelog()">X</div></div>
   <div class="content" style="padding:20px">
     <textarea id="admin-changelog-input" placeholder="Что нового? Например: Добавлен новый брэинрот!"></textarea>
     <div style="display:flex;gap:10px;margin-top:15px">
@@ -414,13 +678,9 @@ body.light-theme .secret-panel{background:rgba(0,0,0,.05)}
 </div>
 
 <div id="server-menu"><div class="header"><h2 data-i18n="servers">Серверы</h2><button class="close-btn" onclick="closeServers()">X</button></div><div id="server-list"></div><button style="width:100%;padding:12px;background:#ffd700;color:#000;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px" onclick="openCreateServer()" data-i18n="createServer">Создать сервер (100 Dushka Coins)</button></div>
-
 <div id="friends-menu"><div class="header"><h2 data-i18n="friends">Друзья</h2><button class="close-btn" onclick="closeFriends()">X</button></div><div style="margin-bottom:10px"><input type="text" id="friend-search" placeholder="Ник" style="width:70%;padding:8px;border-radius:6px;border:none"><button style="padding:8px 15px;border:none;border-radius:6px;background:#4caf50;color:#fff;cursor:pointer" onclick="searchFriend()" data-i18n="find">Найти</button></div><div id="friend-result"></div><div style="color:var(--text-dim);margin:10px 0 5px" data-i18n="requests">Запросы</div><div id="friend-requests"></div><div style="color:var(--text-dim);margin:10px 0 5px" data-i18n="friends">Друзья</div><div id="friends-list"></div></div>
-
 <div id="profile-menu"><div class="header"><h2 data-i18n="profile">Профиль</h2><button class="close-btn" onclick="closeProfile()">X</button></div><div class="profile-preview" id="avatar-preview"></div><label style="color:var(--text-main);display:block;margin:10px 0" data-i18n="avatar">Аватарка</label><input type="file" id="avatar-input" accept="image/*"><div class="profile-bg-preview" id="bg-preview"></div><label style="color:var(--text-main);display:block;margin:10px 0" data-i18n="profileBg">Фон профиля</label><input type="file" id="bg-input" accept="image/*"><button class="save-btn" onclick="saveProfile()" data-i18n="save">Сохранить</button></div>
-
 <div id="create-server-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--border-color);border-radius:12px;padding:20px;width:90%;max-width:400px;z-index:960"><h3 style="color:var(--text-main)" data-i18n="createServerTitle">Создать сервер</h3><input type="text" id="server-name" placeholder="Название" style="width:100%;padding:8px;border-radius:6px;border:none;margin-bottom:10px"><button style="width:100%;padding:10px;border:none;border-radius:8px;background:#ffd700;color:#000;font-weight:bold;cursor:pointer" onclick="createServer()" data-i18n="create">Создать</button><button style="width:100%;padding:8px;border:none;border-radius:8px;background:#666;color:#fff;margin-top:5px;cursor:pointer" onclick="closeCreateServer()" data-i18n="cancel">Отмена</button></div>
-
 <div id="friend-profile" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--border-color);border-radius:12px;padding:20px;width:90%;max-width:300px;z-index:960;text-align:center"><div class="profile-preview" id="friend-avatar-preview" style="margin:0 auto 10px"></div><div style="color:var(--text-main);font-size:18px;font-weight:bold" id="friend-profile-name"></div><button style="padding:10px 20px;border:none;border-radius:8px;background:#4caf50;color:#fff;font-weight:bold;cursor:pointer;margin-top:10px" onclick="joinFriendGame()" data-i18n="join">Join</button><button style="padding:8px 20px;border:none;border-radius:8px;background:#666;color:#fff;margin-top:5px;cursor:pointer" onclick="cancelFriendJoin()" data-i18n="cancel">Cancel</button></div>
 
 <div id="app">
@@ -459,117 +719,227 @@ body.light-theme .secret-panel{background:rgba(0,0,0,.05)}
 </div>
 
 <div id="base-menu"><button class="cm-close" onclick="closeBaseMenu()">X</button><h2 id="bm-title">МОЯ БАЗА</h2><div id="bm-list"></div></div>
-
 <div id="shop-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Shop</h2><p data-i18n="shopDesc">Купи инструменты!</p></div><div class="close-btn" onclick="closeShop()">X</div></div><div class="content" id="shop-items"></div></div>
-
 <div id="bee-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2 data-i18n="queenBee">Королева Пчёл</h2><p>Update: <span id="bee-timer">90:00</span></p></div><div class="close-btn" onclick="closeBee()">X</div></div><div class="content"><div class="grid"><div class="bee-card" id="bee-raccoon"><div class="status" id="status-raccoon"></div><div class="img-placeholder">🦝</div><div class="mps">$10M/s</div><div class="name">Conetto Morsetto</div><button class="price-btn" onclick="buyBee('raccoon')">D 499</button></div><div class="bee-card" id="bee-bear"><div class="status" id="status-bear"></div><div class="img-placeholder">🐻</div><div class="mps">$32M/s</div><div class="name">Honey Honey Bear</div><button class="price-btn" onclick="buyBee('bear')">D 999</button></div><div class="bee-card" id="bee-queen"><div class="status" id="status-queen"></div><div class="img-placeholder">🐝</div><div class="mps">$65M/s</div><div class="name">Queen Bee</div><button class="price-btn" onclick="buyBee('queen')">D 2,499</button></div><div class="bee-card" id="bee-chocolate"><div class="status" id="status-chocolate"></div><div class="img-placeholder">🍫</div><div class="mps">$85M/s</div><div class="name">S'more Serat</div><button class="price-btn" onclick="buyBee('chocolate')">D 4,999</button></div><div class="bee-card" id="bee-bumbatron"><div class="status" id="status-bumbatron"></div><div class="img-placeholder">🤖</div><div class="mps">$172.5M/s</div><div class="name">Bumbatron</div><button class="price-btn" onclick="buyBee('bumbatron')">D 9,999</button></div></div></div></div>
-
 <div id="red-shop-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>Premium Shop</h2><p data-i18n="premiumDesc">Эксклюзив за Dushka Coins!</p></div><div class="close-btn" onclick="closeRedShop()">X</div></div><div class="tabs"><div class="tab active" data-tab="gear" onclick="switchRedTab('gear')">GEAR</div><div class="tab" data-tab="gamepasses" onclick="switchRedTab('gamepasses')">GAMEPASSES</div><div class="tab" data-tab="money" onclick="switchRedTab('money')">MONEY</div><div class="tab" data-tab="lucky" onclick="switchRedTab('lucky')">LUCKY</div><div class="tab" data-tab="server" onclick="switchRedTab('server')">SERVER</div><div class="tab" data-tab="redeem" onclick="switchRedTab('redeem')">REDEEM</div></div><div class="content" id="red-shop-items"></div></div>
-
 <div id="wheel-menu" class="menu-overlay" style="display:none"><div class="header"><div class="title"><h2>CRYSTAL WHEEL</h2></div><div class="close-btn" onclick="closeWheel()">X</div></div><div class="content"><div class="wheel-container"><div class="pin">📍</div><div class="wheel" id="wheel-spin"><div class="label" style="--angle:30deg"><div class="icon">💵</div><div class="label-text">$12K</div><div class="chance">60%</div></div><div class="label" style="--angle:90deg"><div class="icon">💎</div><div class="label-text">$1M</div><div class="chance">30%</div></div><div class="label" style="--angle:150deg"><div class="icon">🍀</div><div class="label-text">2x<br>Lucky</div><div class="chance">2%</div></div><div class="label" style="--angle:210deg"><div class="icon">💵</div><div class="label-text">$12K</div><div class="chance">4%</div></div><div class="label" style="--angle:270deg"><div class="icon">🔮</div><div class="label-text">Crystal</div><div class="chance">3%</div></div><div class="label" style="--angle:330deg"><div class="icon">❓</div><div class="label-text">Lucky</div><div class="chance">1%</div></div></div></div><div class="secret-panel"><h3>CRYSTAL SECRET</h3><div class="row"><span class="name">Tortuginni Dragonfrutini</span><span class="mps">+325k/s</span><span class="val">74.45%</span></div><div class="row"><span class="name">Pot Hotspot</span><span class="mps">+2.5M/s</span><span class="val">20%</span></div><div class="row"><span class="name">Esok Sekolah</span><span class="mps">+30M/s</span><span class="val">5%</span></div><div class="row"><span class="name">Spaghetti Tualeti</span><span class="mps">+60M/s</span><span class="val">1%</span></div><div class="row"><span class="name">Pegasus</span><span class="mps">+175M/s</span><span class="val">0.05%</span></div></div><div class="controls"><div class="timer" id="wheel-timer" data-i18n="freeSpin">Бесплатный спин: 2ч 0м 0с</div><div class="actions"><button class="buy-btn" onclick="buySpin(1)">💰 49</button><button class="spin-btn" onclick="doSpin()">Spin (0)</button><button class="buy-btn" onclick="buySpin(3)">💰 199</button></div></div></div></div>
-
 <div id="trade-plaza-modal" class="menu-overlay" style="display:none;"><div class="header"><div class="title"><h2>Trade Plaza</h2></div><div class="close-btn" onclick="closeTradePlaza()">X</div></div><div class="content"><p>Are you sure you want to join the Trade Plaza?</p><div class="buttons"><button onclick="closeTradePlaza()">Join</button><button class="cancel" onclick="closeTradePlaza()">Cancel</button></div></div></div>
 <div id="custom-modal"><div class="modal-title" id="modal-title"></div><div class="modal-text" id="modal-text"></div><button class="modal-close" onclick="closeModal()">OK</button></div>
 <div id="confirm-modal"><div class="confirm-text" id="confirm-text"></div><div class="confirm-buttons"><button class="confirm-btn confirm-yes" onclick="confirmYes()">Yes</button><button class="confirm-btn confirm-no" onclick="confirmNo()">No</button></div></div>
 <div id="notif"></div>
 <div id="joystick-zone"></div>
-
 <div id="interact">E</div>
 <div id="interactF">F</div>
 
 <script>
-// ========== i18n ==========
+// ========== i18n (расширенный) ==========
 const I18N={
-  ru:{nick:'НИК',password:'ПАРОЛЬ',login:'ВОЙТИ',register:'РЕГ',savePasswordHint:'Запишите ваш пароль',coins:'Монеты',exit:'Выйти',back:'Назад',play:'Играть',servers:'Серверы',friends:'Друзья',profile:'Профиль',subtitle:'Укради · Защити · Разбогатей',settings:'Настройки',theme:'Тема',dark:'Тёмная',light:'Светлая',brightness:'Яркость',music:'Музыка',language:'Язык',createServer:'Создать сервер (100 Dushka Coins)',find:'Найти',requests:'Запросы',avatar:'Аватарка',profileBg:'Фон профиля',save:'Сохранить',createServerTitle:'Создать сервер',create:'Создать',cancel:'Отмена',join:'Join',shopDesc:'Купи инструменты!',queenBee:'Королева Пчёл',premiumDesc:'Эксклюзив за Dushka Coins!',freeSpin:'Бесплатный спин'},
-  en:{nick:'NICKNAME',password:'PASSWORD',login:'LOGIN',register:'REG',savePasswordHint:'Save your password',coins:'Coins',exit:'Exit',back:'Back',play:'Play',servers:'Servers',friends:'Friends',profile:'Profile',subtitle:'Steal · Defend · Get Rich',settings:'Settings',theme:'Theme',dark:'Dark',light:'Light',brightness:'Brightness',music:'Music',language:'Language',createServer:'Create server (100 Dushka Coins)',find:'Find',requests:'Requests',avatar:'Avatar',profileBg:'Profile background',save:'Save',createServerTitle:'Create Server',create:'Create',cancel:'Cancel',join:'Join',shopDesc:'Buy tools!',queenBee:'Queen Bee',premiumDesc:'Exclusive for Dushka Coins!',freeSpin:'Free spin'}
+  ru:{
+    nick:'НИК',password:'ПАРОЛЬ',login:'ВОЙТИ',register:'РЕГ',savePasswordHint:'Запишите ваш пароль',coins:'Монеты',exit:'Выйти',back:'Назад',play:'Играть',servers:'Серверы',friends:'Друзья',profile:'Профиль',subtitle:'Укради · Защити · Разбогатей',
+    settings:'Настройки',theme:'Тема',dark:'Тёмная',light:'Светлая',brightness:'Яркость',music:'Музыка',language:'Язык',
+    catAppearance:'Внешний вид',catSound:'Звук',catControls:'Управление',catNotifications:'Уведомления',catPerformance:'Производительность',catNetwork:'Сеть',catAccount:'Аккаунт',catLanguage:'Язык',catHelp:'Помощь',catAbout:'О игре',
+    animations:'Анимации интерфейса',animationsHint:'Свечения, плавные переходы',compactMode:'Компактный режим',compactHint:'Маленькие кнопки',
+    sfx:'Звуковые эффекты',sfxHint:'Кража, покупка, клики',sfxEnabled:'Включить звуковые эффекты',
+    joystickSize:'Размер джойстика',sizeSmall:'Маленький',sizeMedium:'Средний',sizeLarge:'Большой',joystickOpacity:'Прозрачность джойстика',showEButtons:'Показывать кнопки E/F',showEButtonsHint:'Если играешь с клавы — можно выключить',
+    notifySteal:'Уведомления о краже',notifyStealHint:'"У тебя украли X"',vibration:'Вибрация',vibrationHint:'Только на телефоне',notifSound:'Звук уведомлений',
+    graphicsQuality:'Качество графики',gfxLow:'Низкое',gfxMedium:'Среднее',gfxHigh:'Высокое',showFps:'Показывать FPS / Пинг',showNames:'Показывать ник над персонажем',
+    serverRegion:'Регион сервера',regionAuto:'Авто',regionEu:'EU',regionUs:'US',regionRu:'RU',clearCache:'Очистить кеш',clearCacheHint:'Сбросит настройки, аккаунт останется',clear:'Очистить',
+    myId:'Мой ID',logout:'Выйти из аккаунта',deleteAccount:'Удалить аккаунт',deleteAccountHint:'Навсегда. Нельзя отменить.',delete:'Удалить',
+    helpControls:'🎮 Управление:',helpControlsText:'WASD / Стрелки — движение\nE — взаимодействие (клик, открыть базу)\nF — продать брэинрота (только на своей базе)\nESC — выйти назад',
+    helpSteal:'👊 Как украсть:',helpStealText:'1. Зайди на чужую базу (нажми E)\n2. Подойди к чужому брэинроту\n3. Зажми E на 0.5 секунды\n4. Неси на свою базу и положи',
+    helpMoney:'💰 Как заработать:',helpMoneyText:'• Покупай брэинротов с конвейера (E)\n• Собирай доход с базы (кнопка "Собрать")\n• Продавай ненужных (кнопка "Продать")\n• Крути колесо удачи',
+    aboutVersion:'Версия: 0.35',aboutDev:'Разработчик: MrDushka',aboutDesc:'Укради · Защити · Разбогатей',
+    createServer:'Создать сервер (100 Dushka Coins)',find:'Найти',requests:'Запросы',avatar:'Аватарка',profileBg:'Фон профиля',save:'Сохранить',createServerTitle:'Создать сервер',create:'Создать',cancel:'Отмена',join:'Join',shopDesc:'Купи инструменты!',queenBee:'Королева Пчёл',premiumDesc:'Эксклюзив за Dushka Coins!',freeSpin:'Бесплатный спин'
+  },
+  en:{
+    nick:'NICKNAME',password:'PASSWORD',login:'LOGIN',register:'REG',savePasswordHint:'Save your password',coins:'Coins',exit:'Exit',back:'Back',play:'Play',servers:'Servers',friends:'Friends',profile:'Profile',subtitle:'Steal · Defend · Get Rich',
+    settings:'Settings',theme:'Theme',dark:'Dark',light:'Light',brightness:'Brightness',music:'Music',language:'Language',
+    catAppearance:'Appearance',catSound:'Sound',catControls:'Controls',catNotifications:'Notifications',catPerformance:'Performance',catNetwork:'Network',catAccount:'Account',catLanguage:'Language',catHelp:'Help',catAbout:'About',
+    animations:'UI Animations',animationsHint:'Glows, smooth transitions',compactMode:'Compact Mode',compactHint:'Small buttons',
+    sfx:'Sound Effects',sfxHint:'Steal, purchase, clicks',sfxEnabled:'Enable Sound Effects',
+    joystickSize:'Joystick Size',sizeSmall:'Small',sizeMedium:'Medium',sizeLarge:'Large',joystickOpacity:'Joystick Opacity',showEButtons:'Show E/F Buttons',showEButtonsHint:'If playing with keyboard — can disable',
+    notifySteal:'Steal Notifications',notifyStealHint:'"X was stolen from you"',vibration:'Vibration',vibrationHint:'Phone only',notifSound:'Notification Sound',
+    graphicsQuality:'Graphics Quality',gfxLow:'Low',gfxMedium:'Medium',gfxHigh:'High',showFps:'Show FPS / Ping',showNames:'Show name above character',
+    serverRegion:'Server Region',regionAuto:'Auto',regionEu:'EU',regionUs:'US',regionRu:'RU',clearCache:'Clear Cache',clearCacheHint:'Resets settings, account stays',clear:'Clear',
+    myId:'My ID',logout:'Log Out',deleteAccount:'Delete Account',deleteAccountHint:'Forever. Cannot be undone.',delete:'Delete',
+    helpControls:'🎮 Controls:',helpControlsText:'WASD / Arrows — movement\nE — interact (click, open base)\nF — sell brainrot (own base only)\nESC — go back',
+    helpSteal:'👊 How to steal:',helpStealText:'1. Enter someone\'s base (press E)\n2. Approach their brainrot\n3. Hold E for 0.5 seconds\n4. Carry to your base and place',
+    helpMoney:'💰 How to earn:',helpMoneyText:'• Buy brainrots from conveyor (E)\n• Collect income from base (button "Collect")\n• Sell unwanted (button "Sell")\n• Spin the lucky wheel',
+    aboutVersion:'Version: 0.35',aboutDev:'Developer: MrDushka',aboutDesc:'Steal · Defend · Get Rich',
+    createServer:'Create server (100 Dushka Coins)',find:'Find',requests:'Requests',avatar:'Avatar',profileBg:'Profile background',save:'Save',createServerTitle:'Create Server',create:'Create',cancel:'Cancel',join:'Join',shopDesc:'Buy tools!',queenBee:'Queen Bee',premiumDesc:'Exclusive for Dushka Coins!',freeSpin:'Free spin'
+  }
 };
 let currentLang='ru';
 function t(key){return (I18N[currentLang]&&I18N[currentLang][key])||(I18N.ru[key])||key;}
 function applyLanguage(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');const v=t(k);if(v)el.textContent=v;});
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{const k=el.getAttribute('data-i18n-placeholder');const v=t(k);if(v)el.placeholder=v;});
   document.querySelectorAll('.lang-option').forEach(el=>{el.classList.toggle('active',el.dataset.lang===currentLang);});
   updateFreeSpinTimer();
 }
 function setLanguage(lang){currentLang=lang;try{localStorage.setItem('lang',lang);}catch(e){}document.documentElement.lang=lang;applyLanguage();}
 
-// ========== ТЕМА ==========
-function applyTheme(theme){
-  if(theme==='light')document.body.classList.add('light-theme');
-  else document.body.classList.remove('light-theme');
-  document.querySelectorAll('.theme-option').forEach(el=>{el.classList.toggle('active',el.dataset.theme===theme);});
-}
-function setTheme(theme){applyTheme(theme);try{localStorage.setItem('theme',theme);}catch(e){}}
-function toggleMenuTheme(){const isLight=document.body.classList.contains('light-theme');setTheme(isLight?'dark':'light');}
-
-// ========== ЯРКОСТЬ / МУЗЫКА ==========
-function setBrightness(v){const val=parseInt(v);document.documentElement.style.filter='brightness('+(val/100)+')';document.getElementById('brightness-value').textContent=val+'%';try{localStorage.setItem('brightness',val);}catch(e){}}
-let bgMusic=null;
-function setMusicVolume(v){const val=parseInt(v);if(bgMusic)bgMusic.volume=val/100;document.getElementById('music-value').textContent=val+'%';try{localStorage.setItem('musicVolume',val);}catch(e){}}
-function initMusic(){
-  try{bgMusic=new Audio('music.mp3');bgMusic.loop=true;let v=50;try{v=parseInt(localStorage.getItem('musicVolume')||'50');}catch(e){}bgMusic.volume=v/100;bgMusic.play().catch(()=>{});document.getElementById('music-slider').value=v;document.getElementById('music-value').textContent=v+'%';}catch(e){}
-}
-
 // ========== НАСТРОЙКИ ==========
-function openSettings(){document.getElementById('settings-modal').classList.add('open');const btn=document.getElementById('settings-btn');btn.classList.add('spinning');setTimeout(()=>btn.classList.remove('spinning'),600);}
-function closeSettings(){document.getElementById('settings-modal').classList.remove('open');}
-(function initSettings(){
-  let theme='dark',lang='ru',brightness=100;
-  try{theme=localStorage.getItem('theme')||'dark';lang=localStorage.getItem('lang')||'ru';brightness=parseInt(localStorage.getItem('brightness')||'100');}catch(e){}
-  applyTheme(theme);currentLang=lang;document.documentElement.lang=lang;setBrightness(brightness);document.getElementById('brightness-slider').value=brightness;
-})();
-
-// ========== ADMIN PANEL ==========
-function openAdmin(){document.getElementById('admin-panel').style.display='flex';}
-function closeAdmin(){document.getElementById('admin-panel').style.display='none';}
-function adminUpdateManage(){document.getElementById('admin-update-panel').style.display='flex';}
-function closeAdminUpdate(){document.getElementById('admin-update-panel').style.display='none';}
-async function adminViewServers(){
-  document.getElementById('admin-servers-panel').style.display='flex';
-  const c=document.getElementById('admin-servers-list');c.innerHTML='<div style="color:var(--text-dim);text-align:center;padding:20px">Загрузка...</div>';
-  const s=await db.ref('servers').once('value');const servers=s.val()||{};
-  c.innerHTML='';
-  const entries=Object.entries(servers);
-  document.getElementById('admin-servers-count').textContent=entries.length+' шт.';
-  if(entries.length===0){c.innerHTML='<div style="color:var(--text-dim);text-align:center;padding:20px">Нет серверов</div>';return;}
-  for(const [id,sv] of entries){
-    const p=await db.ref('servers/'+id+'/players').once('value');
-    const pc=Object.keys(p.val()||{}).length;
-    const div=document.createElement('div');div.className='server-item';
-    const isVip=sv.vip||false;
-    div.innerHTML='<div class="name">'+(sv.name||'Server')+(isVip?' <span style="color:#ffd700">👑 VIP</span>':'')+'</div><div class="players">'+pc+'/8 · '+id.slice(-6)+'</div>';
-    c.appendChild(div);
+const Settings={
+  animations:true,compact:false,sfxEnabled:true,
+  joystickSize:'medium',joystickOpacity:50,showEButtons:true,
+  notifySteal:true,vibration:true,notifSound:true,
+  graphicsQuality:'medium',showFps:false,showNames:true,
+  serverRegion:'auto',
+  theme:'dark',brightness:100,musicVolume:50,sfxVolume:70,
+  lang:'ru'
+};
+function loadSettings(){
+  try{
+    const saved=localStorage.getItem('dushka_settings');
+    if(saved){const parsed=JSON.parse(saved);Object.assign(Settings,parsed);}
+  }catch(e){}
+  applyAllSettings();
+}
+function saveSettings(){
+  try{localStorage.setItem('dushka_settings',JSON.stringify(Settings));}catch(e){}
+}
+function applyAllSettings(){
+  // Тема
+  applyTheme(Settings.theme);
+  // Яркость
+  document.documentElement.style.filter='brightness('+(Settings.brightness/100)+')';
+  document.getElementById('brightness-slider').value=Settings.brightness;
+  document.getElementById('brightness-value').textContent=Settings.brightness+'%';
+  // Язык
+  currentLang=Settings.lang;
+  document.documentElement.lang=Settings.lang;
+  applyLanguage();
+  // Звук
+  if(bgMusic)bgMusic.volume=Settings.musicVolume/100;
+  document.getElementById('music-slider').value=Settings.musicVolume;
+  document.getElementById('music-value').textContent=Settings.musicVolume+'%';
+  document.getElementById('sfx-slider').value=Settings.sfxVolume;
+  document.getElementById('sfx-value').textContent=Settings.sfxVolume+'%';
+  // Переключатели
+  updateSwitch('switch-animations',Settings.animations);
+  updateSwitch('switch-compact',Settings.compact);
+  updateSwitch('switch-sfx',Settings.sfxEnabled);
+  updateSwitch('switch-eButtons',Settings.showEButtons);
+  updateSwitch('switch-notifySteal',Settings.notifySteal);
+  updateSwitch('switch-vibration',Settings.vibration);
+  updateSwitch('switch-notifSound',Settings.notifSound);
+  updateSwitch('switch-fps',Settings.showFps);
+  updateSwitch('switch-showNames',Settings.showNames);
+  // Опции
+  updateOptGroup('joy',Settings.joystickSize);
+  updateOptGroup('gfx',Settings.graphicsQuality);
+  updateOptGroup('region',Settings.serverRegion);
+  updateOptGroup('theme',Settings.theme);
+  // Джойстик
+  document.getElementById('joystick-zone').style.opacity=Settings.joystickOpacity/100;
+  // FPS
+  document.getElementById('fps-counter').classList.toggle('visible',Settings.showFps);
+  // Ники
+  document.querySelectorAll('.player-name').forEach(el=>{el.style.display=Settings.showNames?'':'none';});
+  // Кнопки E/F
+  if(!Settings.showEButtons){document.getElementById('interact').style.display='none';document.getElementById('interactF').style.display='none';}
+  // Компакт
+  document.body.classList.toggle('compact-mode',Settings.compact);
+  // Анимации
+  if(!Settings.animations){document.body.classList.add('no-animations');}
+  else{document.body.classList.remove('no-animations');}
+  // Графика
+  applyGraphicsQuality(Settings.graphicsQuality);
+}
+function updateSwitch(id,val){const el=document.getElementById(id);if(el)el.classList.toggle('on',!!val);}
+function updateOptGroup(prefix,val){document.querySelectorAll('.opt-btn[data-'+prefix+']').forEach(el=>{el.classList.toggle('active',el.dataset[prefix]===val);});}
+function toggleSetting(key,el){
+  Settings[key]=!Settings[key];
+  el.classList.toggle('on',Settings[key]);
+  saveSettings();applyAllSettings();
+}
+function setTheme(theme){Settings.theme=theme;saveSettings();applyAllSettings();}
+function applyTheme(theme){if(theme==='light')document.body.classList.add('light-theme');else document.body.classList.remove('light-theme');}
+function toggleMenuTheme(){Settings.theme=Settings.theme==='light'?'dark':'light';saveSettings();applyAllSettings();}
+function setBrightness(v){Settings.brightness=parseInt(v);document.documentElement.style.filter='brightness('+(Settings.brightness/100)+')';document.getElementById('brightness-value').textContent=Settings.brightness+'%';saveSettings();}
+function setMusicVolume(v){Settings.musicVolume=parseInt(v);if(bgMusic)bgMusic.volume=Settings.musicVolume/100;document.getElementById('music-value').textContent=Settings.musicVolume+'%';saveSettings();}
+function setSfxVolume(v){Settings.sfxVolume=parseInt(v);document.getElementById('sfx-value').textContent=Settings.sfxVolume+'%';saveSettings();}
+function setJoystickSize(size){Settings.joystickSize=size;saveSettings();applyAllSettings();}
+function setJoystickOpacity(v){Settings.joystickOpacity=parseInt(v);document.getElementById('joy-opacity-value').textContent=Settings.joystickOpacity+'%';document.getElementById('joystick-zone').style.opacity=Settings.joystickOpacity/100;saveSettings();}
+function setGraphicsQuality(q){Settings.graphicsQuality=q;saveSettings();applyAllSettings();}
+function applyGraphicsQuality(q){
+  if(q==='low'){
+    document.querySelectorAll('.brainrot-on-base,.brainrot-conveyor').forEach(el=>{el.style.boxShadow='none';});
+  } else if(q==='high'){
+    // включить свечения (по умолчанию они есть в CSS)
   }
 }
-function closeAdminServers(){document.getElementById('admin-servers-panel').style.display='none';}
-async function adminRestartServers(){
-  if(!confirm('Перезапустить ВСЕ серверы? Все игроки будут отключены.'))return;
-  const snap=await db.ref('servers').once('value');
-  const servers=snap.val()||{};
-  const now=Date.now();
-  for(let id in servers){await db.ref('servers/'+id+'/restart').set(now);}
-  showNotif('⚡ Все серверы перезагружены');
-  closeAdmin();
+function setServerRegion(r){Settings.serverRegion=r;saveSettings();applyAllSettings();}
+function clearCache(){
+  if(!confirm('Очистить кеш? Настройки сбросятся, аккаунт останется.'))return;
+  try{localStorage.removeItem('dushka_settings');localStorage.removeItem('lastFreeSpinTime');}catch(e){}
+  showNotif('✅ Кеш очищен');
 }
-function adminEditChangelog(){document.getElementById('admin-changelog-panel').style.display='flex';}
-function closeAdminChangelog(){document.getElementById('admin-changelog-panel').style.display='none';}
-async function saveChangelog(){
-  const text=document.getElementById('admin-changelog-input').value.trim();
-  if(!text){showNotif('Введите текст');return;}
-  await db.ref('global/changelog').set({text:text,time:Date.now()});
-  showNotif('✅ Обновление сохранено');
-  closeAdminChangelog();
+function logoutAccount(){
+  if(!confirm('Выйти из аккаунта?'))return;
+  currentNickname=null;try{localStorage.removeItem('dushka_nick');}catch(e){}
+  document.getElementById('settings-modal').classList.remove('open');
+  document.getElementById('main-menu').style.display='none';
+  document.getElementById('auth').style.display='flex';
+  document.getElementById('username').value='';
+  document.getElementById('password').value='';
 }
-async function clearChangelog(){
-  await db.ref('global/changelog').remove();
-  document.getElementById('admin-changelog-input').value='';
-  showNotif('Очищено');
-  closeAdminChangelog();
+function deleteAccount(){
+  if(!confirm('УДАЛИТЬ АККАУНТ НАВСЕГДА? Это нельзя отменить!'))return;
+  if(!confirm('Точно уверен? Все данные будут потеряны.'))return;
+  if(currentNickname){db.ref('users/'+currentNickname).remove();}
+  logoutAccount();
+  showNotif('🗑 Аккаунт удалён');
 }
-db.ref('global/changelog').on('value',snap=>{
-  const data=snap.val();const el=document.getElementById('changelog-display');
-  if(data&&data.text){el.textContent='📢 '+data.text;el.classList.add('visible');}
-  else{el.textContent='';el.classList.remove('visible');}
-});
+
+// ========== ВКЛАДКИ НАСТРОЕК ==========
+function openSettings(){
+  document.getElementById('settings-modal').classList.add('open');
+  const btn=document.getElementById('settings-btn');
+  btn.classList.add('spinning');setTimeout(()=>btn.classList.remove('spinning'),600);
+  // Показать ID
+  document.getElementById('my-uid').textContent=currentNickname||'—';
+}
+function closeSettings(){document.getElementById('settings-modal').classList.remove('open');}
+function switchSettingsTab(tab){
+  // Обновить активную вкладку
+  document.querySelectorAll('.settings-tabs .tab-btn').forEach(el=>{el.classList.toggle('active',el.dataset.tab===tab);});
+  // Показать нужную секцию
+  document.querySelectorAll('.settings-section').forEach(el=>{el.style.display=el.dataset.section===tab?'block':'none';});
+  // Прокрутить контент наверх
+  document.getElementById('settings-content').scrollTop=0;
+}
+
+// ========== ЗВУКОВЫЕ ЭФФЕКТЫ (Web Audio API) ==========
+let audioCtx=null;
+function initAudioCtx(){if(!audioCtx){try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}}
+function playSfx(type){
+  if(!Settings.sfxEnabled)return;
+  initAudioCtx();if(!audioCtx)return;
+  const vol=Settings.sfxVolume/100;
+  const o=audioCtx.createOscillator();const g=audioCtx.createGain();
+  o.connect(g);g.connect(audioCtx.destination);
+  const now=audioCtx.currentTime;
+  if(type==='click'){o.frequency.value=600;g.gain.setValueAtTime(vol*0.1,now);g.gain.exponentialRampToValueAtTime(0.001,now+0.08);o.start(now);o.stop(now+0.08);}
+  else if(type==='steal'){o.frequency.setValueAtTime(300,now);o.frequency.linearRampToValueAtTime(800,now+0.15);g.gain.setValueAtTime(vol*0.15,now);g.gain.exponentialRampToValueAtTime(0.001,now+0.2);o.start(now);o.stop(now+0.2);}
+  else if(type==='buy'){o.frequency.setValueAtTime(500,now);o.frequency.linearRampToValueAtTime(900,now+0.1);g.gain.setValueAtTime(vol*0.12,now);g.gain.exponentialRampToValueAtTime(0.001,now+0.15);o.start(now);o.stop(now+0.15);}
+  else if(type==='error'){o.frequency.setValueAtTime(200,now);g.gain.setValueAtTime(vol*0.15,now);g.gain.exponentialRampToValueAtTime(0.001,now+0.3);o.start(now);o.stop(now+0.3);}
+  else if(type==='notify'){o.frequency.setValueAtTime(800,now);g.gain.setValueAtTime(vol*0.1,now);g.gain.exponentialRampToValueAtTime(0.001,now+0.25);o.start(now);o.stop(now+0.25);}
+}
+function vibrate(ms){if(Settings.vibration&&navigator.vibrate){try{navigator.vibrate(ms||50);}catch(e){}}}
+
+// ========== FPS / PING ==========
+let _fpsFrames=0,_fpsLast=performance.now(),_currentFps=0,_currentPing=0;
+function updateFpsCounter(){
+  _fpsFrames++;
+  const now=performance.now();
+  if(now-_fpsLast>=1000){_currentFps=_fpsFrames;_fpsFrames=0;_fpsLast=now;
+    const el=document.getElementById('fps-counter');
+    if(el&&Settings.showFps){el.textContent='FPS: '+_currentFps+' | PING: '+_currentPing+'ms';}
+  }
+}
+setInterval(()=>{if(Settings.showFps&&currentServerId){const start=Date.now();db.ref('.info/connected').once('value').then(()=>{_currentPing=Date.now()-start;}).catch(()=>{});}},5000);
 
 // ========== БРЭИНРОТЫ ==========
 const BRAINROTS_LIST=[
@@ -599,7 +969,7 @@ function normalizeSlots(slots,size){size=size||12;const arr=new Array(size).fill
 function formatNumber(num){if(num>=1e15)return(num/1e15).toFixed(2)+'Qa';if(num>=1e12)return(num/1e12).toFixed(2)+'T';if(num>=1e9)return(num/1e9).toFixed(2)+'B';if(num>=1e6)return(num/1e6).toFixed(2)+'M';if(num>=1e3)return(num/1e3).toFixed(2)+'K';return num.toString();}
 function showModal(t,x){document.getElementById('modal-title').textContent=t;document.getElementById('modal-text').textContent=x;document.getElementById('custom-modal').style.display='block';}
 function closeModal(){document.getElementById('custom-modal').style.display='none';}
-function showNotif(text){const n=document.getElementById('notif');n.textContent=text;n.style.display='block';setTimeout(()=>{n.style.display='none';},4000);}
+function showNotif(text){const n=document.getElementById('notif');n.textContent=text;n.style.display='block';if(Settings.notifSound)playSfx('notify');setTimeout(()=>{n.style.display='none';},4000);}
 function resizeGame(){const g=document.getElementById('game-container'),f=document.getElementById('floor-container');const w=window.innerWidth,h=window.innerHeight;let s=Math.min(w/500,h/500);s=Math.max(0.6,Math.min(1.2,s));g.style.transform=`scale(${s})`;f.style.transform=`scale(${s})`;}
 window.addEventListener('resize',resizeGame);
 async function readUserData(n){try{const s=await db.ref('users/'+n).once('value');return s.exists()?s.val():null}catch(e){return null}}
@@ -610,14 +980,14 @@ async function handleRegister(){
   if(!u||!p){showModal('Ошибка','Заполните всё!');return;}
   const e=await readUserData(u);if(e){showModal('Ошибка','Ник занят!');return;}
   await writeUserData(u,{nickname:u,password:p,coins:25,dushka:0,spins:0,ownedItems:[],autoBuyShopItems:[],ownedRedItems:[],baseId:0,baseLocked:false,baseSlots:new Array(12).fill(null),notifications:[],avatar:'',background:'',friends:[],friendRequests:[],serverId:null});
-  currentNickname=u;showMainMenu();
+  currentNickname=u;try{localStorage.setItem('dushka_nick',u);}catch(e){}showMainMenu();
 }
 async function handleLogin(){
   const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();
   if(!u||!p){showModal('Ошибка','Заполните всё!');return;}
   const e=await readUserData(u);if(!e){showModal('Ошибка','Ник не найден!');return;}
   if(e.password!==p){showModal('Ошибка','Неверный пароль!');return;}
-  currentNickname=u;showMainMenu();
+  currentNickname=u;try{localStorage.setItem('dushka_nick',u);}catch(e){}showMainMenu();
 }
 function showMainMenu(){
   document.getElementById('auth').style.display='none';
@@ -665,9 +1035,8 @@ async function startGame(){
   });
   db.ref('servers/'+currentServerId+'/players').on('value',snap=>{renderOtherPlayers(snap.val()||{});});
   db.ref('users/'+currentNickname+'/notifications').on('value',snap=>{
-    const n=snap.val()||[];if(n.length>0){const last=n[n.length-1];if(window._lastNotif!==last.ts){window._lastNotif=last.ts;showNotif(last.text);}}
+    const n=snap.val()||[];if(n.length>0){const last=n[n.length-1];if(window._lastNotif!==last.ts){window._lastNotif=last.ts;if(Settings.notifySteal){showNotif(last.text);vibrate(100);}}}
   });
-  // Restart watcher
   _lastRestartSeen=null;
   db.ref('servers/'+currentServerId+'/restart').on('value',snap=>{
     const val=snap.val();
@@ -741,15 +1110,15 @@ function updateConveyor(dt){
 }
 function countFreeSlots(){return mySlots.filter(s=>s===null).length;}
 async function buyConveyor(b){
-  if(mySlots.filter(s=>s).length>=BASE_MAX){showModal('Ошибка','База полна! '+BASE_MAX+'/'+BASE_MAX);return;}
-  if(coins<b.brainrot.price){showModal('Ошибка','Нужно $'+formatNumber(b.brainrot.price)+'\nУ тебя: $'+formatNumber(coins));return;}
-  const free=mySlots.findIndex(s=>s===null);if(free<0){showModal('Ошибка','Нет свободного места');return;}
+  if(mySlots.filter(s=>s).length>=BASE_MAX){showModal('Ошибка','База полна! '+BASE_MAX+'/'+BASE_MAX);playSfx('error');return;}
+  if(coins<b.brainrot.price){showModal('Ошибка','Нужно $'+formatNumber(b.brainrot.price)+'\nУ тебя: $'+formatNumber(coins));playSfx('error');return;}
+  const free=mySlots.findIndex(s=>s===null);if(free<0){showModal('Ошибка','Нет свободного места');playSfx('error');return;}
   coins-=b.brainrot.price;document.getElementById('balance-amount').textContent=formatNumber(coins);
   b.locked=true;b.dom.remove();const idx=conveyorBrainrots.indexOf(b);if(idx>-1)conveyorBrainrots.splice(idx,1);
   mySlots[free]={file:b.brainrot.file,name:b.brainrot.name,rarity:b.brainrot.rarity,income:b.brainrot.income,price:b.brainrot.price,placedAt:Date.now()};
   await db.ref('users/'+currentNickname).update({coins:coins,baseSlots:mySlots});
   await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
-  showModal('Куплено',b.brainrot.name+' -$'+formatNumber(b.brainrot.price)+'\nСвободно: '+countFreeSlots()+'/'+BASE_MAX);
+  playSfx('buy');vibrate(30);showModal('Куплено',b.brainrot.name+' -$'+formatNumber(b.brainrot.price)+'\nСвободно: '+countFreeSlots()+'/'+BASE_MAX);
 }
 
 function initJoystick(){
@@ -766,7 +1135,7 @@ async function doSell(idx,br){
   await db.ref('users/'+currentNickname).update({coins:coins,baseSlots:mySlots});
   await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
   if(inFloor)renderFloor();if(document.getElementById('base-menu').style.display==='block')openBaseMenu();
-  showModal('Продано',br.name+' +$'+formatNumber(price));
+  playSfx('buy');showModal('Продано',br.name+' +$'+formatNumber(price));
 }
 function confirmYes(){if(window._pendingSell){doSell(window._pendingSell.idx,window._pendingSell.br);window._pendingSell=null;}document.getElementById('confirm-modal').style.display='none';}
 function confirmNo(){window._pendingSell=null;document.getElementById('confirm-modal').style.display='none';}
@@ -811,7 +1180,7 @@ async function executeLongE(snap){
       carriedBrainrot={...mySlots[snap.slot],fromBase:myBaseId,fromSlot:snap.slot};mySlots[snap.slot]=null;
       await db.ref('users/'+currentNickname).update({baseSlots:mySlots});
       await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
-      floorSlots=mySlots;if(inFloor)renderFloor();updateCarried();showNotif('✋ Взял: '+carriedBrainrot.name);
+      floorSlots=mySlots;if(inFloor)renderFloor();updateCarried();playSfx('click');vibrate(30);showNotif('✋ Взял: '+carriedBrainrot.name);
     } else if(snap.type==='slot_other_full'){
       const bid=snap.baseId;const bdata=allBasesData[bid];
       if(!bdata||bdata.locked){showModal('Ошибка','База закрыта');return;}
@@ -821,7 +1190,7 @@ async function executeLongE(snap){
       carriedBrainrot={...br,fromBase:bid,fromSlot:snap.slot};floorSlots=victimSlots;
       if(inFloor)renderFloor();updateCarried();
       await db.ref('users/'+bdata.owner+'/notifications').transaction(cur=>{const arr=cur||[];arr.push({text:'⚠️ У тебя украли '+br.name+'!',ts:Date.now()});return arr;});
-      showNotif('👊 Украл: '+br.name);
+      playSfx('steal');vibrate(80);showNotif('👊 Украл: '+br.name);
     }
   } else {
     if(snap.type==='slot_mine_full'||snap.type==='slot_empty_mine'){
@@ -836,7 +1205,7 @@ async function executeLongE(snap){
       delete carriedBrainrot.fromBase;delete carriedBrainrot.fromSlot;carriedBrainrot=null;
       await db.ref('users/'+currentNickname).update({baseSlots:mySlots});
       await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
-      floorSlots=mySlots;if(inFloor)renderFloor();updateCarried();showNotif('✅ Положил');
+      floorSlots=mySlots;if(inFloor)renderFloor();updateCarried();playSfx('click');showNotif('✅ Положил');
     } else if(snap.type==='slot_other_full'){showNotif('Нельзя класть в чужой занятый слот');}
   }
 }
@@ -876,7 +1245,6 @@ function openIndexMenu(){
 
 document.addEventListener('keydown',e=>{
   const k=String(e.key||'').toLowerCase();if(!k)return;
-  // ESC работает всегда
   if(k==='escape'||k==='esc'){
     e.preventDefault();
     if(document.getElementById('settings-modal').classList.contains('open')){closeSettings();return;}
@@ -998,6 +1366,7 @@ let lastTime=0,lastSync=0;
 function update(t=0){
   requestAnimationFrame(update);
   const dt=Math.min((t-lastTime)/1000,0.1);lastTime=t;
+  updateFpsCounter();
   let dx=0,dy=0;
   if(keys.w)dy-=1;if(keys.s)dy+=1;if(keys.a)dx-=1;if(keys.d)dx+=1;
   if(Math.abs(touchDX)>0.05||Math.abs(touchDY)>0.05){dx+=touchDX;dy+=touchDY;}
@@ -1021,8 +1390,8 @@ function update(t=0){
 }
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y);}
 function removeEHint(){document.getElementById('interact').style.display='none';document.getElementById('interactF').style.display='none';}
-function showEOnly(){document.getElementById('interact').style.display='flex';document.getElementById('interactF').style.display='none';}
-function showEAndF(){document.getElementById('interact').style.display='flex';document.getElementById('interactF').style.display='flex';}
+function showEOnly(){if(!Settings.showEButtons)return;document.getElementById('interact').style.display='flex';document.getElementById('interactF').style.display='none';}
+function showEAndF(){if(!Settings.showEButtons)return;document.getElementById('interact').style.display='flex';document.getElementById('interactF').style.display='flex';}
 
 function updateTarget(){
   const pc={x:x+4,y:y+8};currentTarget=null;removeEHint();
@@ -1094,10 +1463,10 @@ function closeShop(){document.getElementById('shop-menu').style.display='none';}
 async function buyShopItem(id){
   const item=shopItems.find(i=>i.id===id);if(!item)return;
   if(ownedItems.includes(id))return;
-  if(coins<item.price){showModal('Ошибка','Нужно $'+item.price.toLocaleString()+'\nУ тебя: $'+formatNumber(coins));return;}
+  if(coins<item.price){showModal('Ошибка','Нужно $'+item.price.toLocaleString()+'\nУ тебя: $'+formatNumber(coins));playSfx('error');return;}
   coins-=item.price;ownedItems.push(id);document.getElementById('balance-amount').textContent=formatNumber(coins);
   await db.ref('users/'+currentNickname).update({coins:coins,ownedItems:ownedItems});
-  openShop();showModal('Покупка','Куплено: '+item.name);
+  playSfx('buy');openShop();showModal('Покупка','Куплено: '+item.name);
 }
 async function toggleAutoBuyShopItem(id,checked){
   if(checked){if(!autoBuyShopItems.includes(id))autoBuyShopItems.push(id);}
@@ -1122,8 +1491,8 @@ function updateBeeUI(){
 async function buyBee(id){
   const bee=beeItems.find(b=>b.id===id);if(!bee)return;
   const cs=window.beeStock[id]??bee.count;if(cs<=0)return;
-  if(dushka>=bee.price){dushka-=bee.price;window.beeStock[id]=cs-1;await db.ref('beeStock/'+id).set(window.beeStock[id]);document.getElementById('dushka-coins').textContent=formatNumber(dushka);await db.ref('users/'+currentNickname).update({dushka:dushka});updateBeeUI();showModal('Покупка','Куплено '+bee.name+'!');}
-  else showModal('Ошибка','Нужно '+bee.price+' Dushka');
+  if(dushka>=bee.price){dushka-=bee.price;window.beeStock[id]=cs-1;await db.ref('beeStock/'+id).set(window.beeStock[id]);document.getElementById('dushka-coins').textContent=formatNumber(dushka);await db.ref('users/'+currentNickname).update({dushka:dushka});updateBeeUI();playSfx('buy');showModal('Покупка','Куплено '+bee.name+'!');}
+  else{playSfx('error');showModal('Ошибка','Нужно '+bee.price+' Dushka');}
 }
 
 const redShopItems={
@@ -1174,9 +1543,9 @@ async function buyRedShopItem(id){
     dushka-=item.price;if(item.once)ownedRedItems.push(id);
     if(item.reward){coins+=item.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);}
     await db.ref('users/'+currentNickname).update({coins:coins,dushka:dushka,ownedRedItems:ownedRedItems});
-    document.getElementById('dushka-coins').textContent=formatNumber(dushka);renderRedShop();
+    document.getElementById('dushka-coins').textContent=formatNumber(dushka);renderRedShop();playSfx('buy');
     showModal('Покупка','Куплено '+item.name+'!');
-  } else showModal('Ошибка','Нужно '+item.price+' Dushka');
+  } else{playSfx('error');showModal('Ошибка','Нужно '+item.price+' Dushka');}
 }
 
 const FREE_SPIN_INTERVAL=7200;let lastFreeSpinTime=localStorage.getItem('lastFreeSpinTime');
@@ -1189,11 +1558,11 @@ function updateFreeSpinTimer(){
   if(tEl)tEl.textContent=t('freeSpin')+': '+h+'h '+m+'m '+s+'s';
 }
 setInterval(updateFreeSpinTimer,1000);
-async function buySpin(a){let c=a===1?49:199;if(dushka>=c){dushka-=c;_spins+=a;document.getElementById('dushka-coins').textContent=formatNumber(dushka);await db.ref('users/'+currentNickname).update({dushka:dushka,spins:_spins});updateSpinBtn();}else showModal('Ошибка','Нужно Dushka Coins!');}
+async function buySpin(a){let c=a===1?49:199;if(dushka>=c){dushka-=c;_spins+=a;document.getElementById('dushka-coins').textContent=formatNumber(dushka);await db.ref('users/'+currentNickname).update({dushka:dushka,spins:_spins});updateSpinBtn();playSfx('buy');}else{playSfx('error');showModal('Ошибка','Нужно Dushka Coins!');}}
 function updateSpinBtn(){const b=document.querySelector('#wheel-menu .spin-btn');if(b)b.textContent=`Spin (${_spins})`;}
 function doSpin(){
   if(isSpinning)return;
-  if(_spins<=0){showModal('Ошибка','Нет спинов!');return;}
+  if(_spins<=0){playSfx('error');showModal('Ошибка','Нет спинов!');return;}
   isSpinning=true;_spins--;updateSpinBtn();
   const w=document.getElementById('wheel-spin');
   const prizes=[{name:'$12K',chance:60,reward:12000},{name:'$1M',chance:30,reward:1000000},{name:'2x',chance:2,reward:0},{name:'$12K',chance:4,reward:12000},{name:'Crystal',chance:3,reward:0},{name:'Lucky',chance:1,reward:0}];
@@ -1203,7 +1572,7 @@ function doSpin(){
   let deltaMod=(desiredMod-currentMod+360)%360;const extra=10*360;wheelRotation+=deltaMod+extra;
   w.style.transition='none';w.style.transform=`rotate(${wheelRotation}deg)`;void w.offsetWidth;
   setTimeout(()=>{w.style.transition='transform 3s cubic-bezier(0.15,0.9,0.25,1)';w.style.transform=`rotate(${wheelRotation}deg)`;},20);
-  setTimeout(()=>{isSpinning=false;const p=prizes[sel];if(p.reward>0){coins+=p.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});}showModal('Колесо','Выпало: '+p.name+'!');},3000);
+  setTimeout(()=>{isSpinning=false;const p=prizes[sel];if(p.reward>0){coins+=p.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);db.ref('users/'+currentNickname).update({coins:coins});}playSfx('buy');showModal('Колесо','Выпало: '+p.name+'!');},3000);
 }
 function openWheel(){document.getElementById('wheel-menu').style.display='flex';}
 function closeWheel(){document.getElementById('wheel-menu').style.display='none';}
@@ -1269,13 +1638,46 @@ function closeBaseMenu(){document.getElementById('base-menu').style.display='non
 async function collectFrom(i){
   const br=mySlots[i];if(!br)return;
   const t=Math.floor((Date.now()-(br.placedAt||Date.now()))/1000);const earned=Math.floor(t*br.income);
-  if(earned<=0){showModal('Пусто','Ещё не заработал');return;}
+  if(earned<=0){playSfx('error');showModal('Пусто','Ещё не заработал');return;}
   coins+=earned;br.placedAt=Date.now();
   document.getElementById('balance-amount').textContent=formatNumber(coins);
   await db.ref('users/'+currentNickname).update({coins:coins,baseSlots:mySlots});
   await db.ref('servers/'+currentServerId+'/bases/'+myBaseId+'/slots').set(mySlots);
-  openBaseMenu();showModal('Собрано','+$'+formatNumber(earned));
+  playSfx('buy');openBaseMenu();showModal('Собрано','+$'+formatNumber(earned));
 }
+
+// ========== ADMIN ==========
+function openAdmin(){document.getElementById('admin-panel').style.display='flex';}
+function closeAdmin(){document.getElementById('admin-panel').style.display='none';}
+function adminUpdateManage(){document.getElementById('admin-update-panel').style.display='flex';}
+function closeAdminUpdate(){document.getElementById('admin-update-panel').style.display='none';}
+async function adminViewServers(){
+  document.getElementById('admin-servers-panel').style.display='flex';
+  const c=document.getElementById('admin-servers-list');c.innerHTML='<div style="color:var(--text-dim);text-align:center;padding:20px">Загрузка...</div>';
+  const s=await db.ref('servers').once('value');const servers=s.val()||{};
+  c.innerHTML='';const entries=Object.entries(servers);
+  document.getElementById('admin-servers-count').textContent=entries.length+' шт.';
+  if(entries.length===0){c.innerHTML='<div style="color:var(--text-dim);text-align:center;padding:20px">Нет серверов</div>';return;}
+  for(const [id,sv] of entries){
+    const p=await db.ref('servers/'+id+'/players').once('value');
+    const pc=Object.keys(p.val()||{}).length;
+    const div=document.createElement('div');div.className='server-item';
+    div.innerHTML='<div class="name">'+(sv.name||'Server')+'</div><div class="players">'+pc+'/8 · '+id.slice(-6)+'</div>';
+    c.appendChild(div);
+  }
+}
+function closeAdminServers(){document.getElementById('admin-servers-panel').style.display='none';}
+async function adminRestartServers(){
+  if(!confirm('Перезапустить ВСЕ серверы? Все игроки будут отключены.'))return;
+  const snap=await db.ref('servers').once('value');const servers=snap.val()||{};const now=Date.now();
+  for(let id in servers){await db.ref('servers/'+id+'/restart').set(now);}
+  showNotif('⚡ Все серверы перезагружены');closeAdmin();
+}
+function adminEditChangelog(){document.getElementById('admin-changelog-panel').style.display='flex';}
+function closeAdminChangelog(){document.getElementById('admin-changelog-panel').style.display='none';}
+async function saveChangelog(){const text=document.getElementById('admin-changelog-input').value.trim();if(!text){showNotif('Введите текст');return;}await db.ref('global/changelog').set({text:text,time:Date.now()});showNotif('✅ Обновление сохранено');closeAdminChangelog();}
+async function clearChangelog(){await db.ref('global/changelog').remove();document.getElementById('admin-changelog-input').value='';showNotif('Очищено');closeAdminChangelog();}
+db.ref('global/changelog').on('value',snap=>{const data=snap.val();const el=document.getElementById('changelog-display');if(data&&data.text){el.textContent='📢 '+data.text;el.classList.add('visible');}else{el.textContent='';el.classList.remove('visible');}});
 
 async function exitToMenu(){
   if(currentServerId&&currentNickname){try{await db.ref('servers/'+currentServerId+'/players/'+currentNickname).remove();}catch(e){}}
@@ -1287,7 +1689,11 @@ async function exitToMenu(){
   document.getElementById('balance').style.display='none';
   document.getElementById('main-menu').style.display='flex';
 }
-window.addEventListener('load',()=>{resizeGame();applyLanguage();initMusic();});
+window.addEventListener('load',()=>{
+  resizeGame();loadSettings();initMusic();
+  // Автологин
+  try{const savedNick=localStorage.getItem('dushka_nick');if(savedNick){currentNickname=savedNick;showMainMenu();}}catch(e){}
+});
 </script>
 </body>
 </html>
