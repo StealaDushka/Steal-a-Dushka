@@ -114,8 +114,8 @@ input[type="file"]{color:var(--text-main)}
 .base-bottom-1{bottom:20px;left:20px}.base-bottom-2{bottom:20px;left:115px}.base-bottom-3{bottom:20px;left:210px}.base-bottom-4{bottom:20px;left:305px}
 .base-bottom .brown{top:4px;bottom:auto}.base-bottom .green{top:-14px;bottom:auto}.base-bottom .nickname{top:4px;bottom:auto}
 .base.locked::after{content:'ЗАКРЫТО';position:absolute;inset:0;background:rgba(192,57,43,.6);color:#fff;font-weight:bold;font-size:12px;display:flex;justify-content:center;align-items:center;z-index:12;pointer-events:none}
-.base-slot{position:absolute;width:15px;height:15px;background:#22e54c;border:1px solid #0a0a0a;z-index:7;border-radius:2px}
-.brainrot-on-base{position:absolute;width:15px;height:15px;background-size:cover;background-position:center;z-index:8;border-radius:2px;pointer-events:none;box-sizing:border-box;background-color:#4a90e2}
+.base-slot{position:absolute;width:14px;height:14px;background:#22e54c;border:1px solid #0a0a0a;z-index:7;border-radius:2px}
+.brainrot-on-base{position:absolute;width:14px;height:14px;background-size:cover;background-position:center;z-index:8;border-radius:2px;pointer-events:none;box-sizing:border-box;background-color:#4a90e2}
 .brainrot-on-base.common{border:1px solid #aaa}
 .brainrot-on-base.horror{border:1px solid #555}
 .brainrot-on-base.epic{border:1px solid #9b59b6}
@@ -135,21 +135,9 @@ input[type="file"]{color:var(--text-main)}
 #player,.other-player,#floor-player{position:absolute;width:8px;height:16px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20;border:1px solid rgba(0,0,0,.5)}
 #player .pixel,.other-player .pixel,#floor-player .pixel{width:100%;height:100%}
 .player-name{position:absolute;left:50%;transform:translateX(-50%);top:-12px;color:#fff;font-size:5px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
-
-/* КНОПКИ E/F ПРЯМО НАД ГОЛОВОЙ */
-#interact,#interactF{
-  position:fixed;display:none;z-index:10000;
-  width:34px;height:34px;
-  font-family:'Courier New',monospace;
-  font-size:20px;font-weight:900;
-  cursor:pointer;user-select:none;touch-action:none;
-  border:none;image-rendering:pixelated;
-  justify-content:center;align-items:center;
-  pointer-events:auto;
-}
+#interact,#interactF{position:fixed;display:none;z-index:10000;width:32px;height:32px;font-family:'Courier New',monospace;font-size:20px;font-weight:900;cursor:pointer;user-select:none;touch-action:none;border:none;image-rendering:pixelated;justify-content:center;align-items:center;pointer-events:auto;box-shadow:0 2px 0 rgba(0,0,0,.4)}
 #interact{background:#8a9ba5;color:#f0f4f7;text-shadow:1px 1px 0 rgba(0,0,0,.4)}
 #interactF{background:#b03a2e;color:#f0f4f7;text-shadow:1px 1px 0 rgba(0,0,0,.4)}
-
 #holdProgress{position:fixed;display:none;z-index:10001;width:60px;height:8px;background:rgba(0,0,0,.7);border:1px solid #fff;border-radius:4px;overflow:hidden;pointer-events:none}
 #holdProgress .fill{position:absolute;left:0;top:0;height:100%;width:0%;background:#4caf50}
 #floor-carried{position:absolute;width:28px;height:28px;background-size:cover;background-position:center;z-index:25;border:2px solid #fff;border-radius:4px;pointer-events:none;box-shadow:0 0 8px #fff;display:none;background-color:#4a90e2}
@@ -241,24 +229,14 @@ input[type="file"]{color:var(--text-main)}
 #confirm-modal .confirm-buttons{display:flex;gap:20px}
 #confirm-modal .confirm-btn{width:170px;height:75px;border:4px solid #000;font-size:28px;font-weight:bold;cursor:pointer;font-family:Arial;color:#fff}
 .confirm-yes{background:#2ecc40}.confirm-no{background:#b71c1c}
-
-/* ============ БАЛАНС С ИКОНКАМИ ============ */
 #balance{position:fixed;bottom:20px;left:20px;background:rgba(0,0,0,.85);padding:10px 14px;border:2px solid #444;color:#fff;font-size:14px;display:none;flex-direction:column;gap:6px;border-radius:8px;z-index:1000;min-width:190px}
 #balance .box{display:flex;justify-content:space-between;gap:14px;align-items:center}
 #balance .label{color:#aaa;font-size:13px}
 #balance .amount{display:flex;align-items:center;gap:6px;font-weight:bold;color:#4caf50;font-family:'Courier New',monospace}
 #balance .dushka .amount{color:#f7931a}
-.coin-icon{
-  display:inline-flex;justify-content:center;align-items:center;
-  width:20px;height:20px;border-radius:50%;
-  font-weight:bold;font-size:13px;flex-shrink:0;
-  font-family:'Courier New',monospace;
-  text-shadow:0 1px 0 rgba(0,0,0,.3);
-  line-height:1;
-}
+.coin-icon{display:inline-flex;justify-content:center;align-items:center;width:20px;height:20px;border-radius:50%;font-weight:bold;font-size:13px;flex-shrink:0;font-family:'Courier New',monospace;text-shadow:0 1px 0 rgba(0,0,0,.3);line-height:1}
 .coin-icon.btc{background:linear-gradient(135deg,#f7931a,#f7b73a);color:#fff;border:1.5px solid #b86910;box-shadow:0 0 6px rgba(247,147,26,.5)}
 .coin-icon.usd{background:linear-gradient(135deg,#4caf50,#66bb6a);color:#fff;border:1.5px solid #2e7d32;box-shadow:0 0 6px rgba(76,175,80,.5)}
-
 #version{position:fixed;bottom:20px;right:20px;color:#fff;font-size:12px;background:rgba(0,0,0,.5);padding:4px 8px;border-radius:4px;z-index:9999}
 #exit-btn{position:fixed;top:20px;left:20px;background:#c0392b;color:#fff;padding:8px 14px;border-radius:8px;font-weight:bold;cursor:pointer;z-index:5000;display:none}
 #back-btn{position:fixed;top:20px;right:80px;background:#0f3460;color:#fff;padding:8px 14px;border-radius:8px;font-weight:bold;cursor:pointer;z-index:5000;display:none}
@@ -293,20 +271,11 @@ input[type="file"]{color:var(--text-main)}
 </head>
 <body>
 <div id="auth"><div id="auth-box"><label class="auth-label">НИК</label><input type="text" id="username" class="auth-input" autocomplete="off"><label class="auth-label">ПАРОЛЬ</label><input type="password" id="password" class="auth-input"><div class="auth-btns"><button class="auth-btn btn-login" onclick="handleLogin()">ВОЙТИ</button><button class="auth-btn btn-reg" onclick="handleRegister()">РЕГ</button></div><div class="hint">Запишите ваш пароль</div></div></div>
-
-<!-- БАЛАНС С ИКОНКАМИ -->
 <div id="balance">
-  <div class="box dushka">
-    <span class="label">Dushka Coins</span>
-    <span class="amount"><span class="coin-icon btc">₿</span><span id="dushka-coins">0</span></span>
-  </div>
-  <div class="box">
-    <span class="label">Монеты</span>
-    <span class="amount"><span class="coin-icon usd">$</span><span id="balance-amount">25</span></span>
-  </div>
+  <div class="box dushka"><span class="label">Dushka Coins</span><span class="amount"><span class="coin-icon btc">₿</span><span id="dushka-coins">0</span></span></div>
+  <div class="box"><span class="label">Монеты</span><span class="amount"><span class="coin-icon usd">$</span><span id="balance-amount">25</span></span></div>
 </div>
-
-<div id="version">Версия: 0.40</div>
+<div id="version">Версия: 0.41</div>
 <div id="exit-btn" onclick="exitToMenu()">Выйти</div>
 <div id="back-btn" onclick="exitFloor()">Назад</div>
 <div id="fps-counter">FPS: -- | PING: --</div>
@@ -322,7 +291,7 @@ input[type="file"]{color:var(--text-main)}
       <button class="menu-btn" onclick="openFriends()"><span class="menu-icon">👥</span> Друзья</button>
       <button class="menu-btn" onclick="openProfile()"><span class="menu-icon">👤</span> Профиль</button>
     </div>
-    <div class="menu-footer"><div>v0.40 · by MrDushka</div><div id="changelog-display"></div></div>
+    <div class="menu-footer"><div>v0.41 · by MrDushka</div><div id="changelog-display"></div></div>
   </div>
   <div class="theme-toggle" onclick="toggleMenuTheme()"><svg viewBox="0 0 100 100"><defs><mask id="moon-mask"><rect width="100" height="100" fill="white"/><circle cx="68" cy="38" r="38" fill="black"/></mask></defs><circle cx="50" cy="50" r="42" fill="currentColor" mask="url(#moon-mask)"/></svg></div>
   <div id="settings-btn" onclick="openSettings()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
@@ -379,9 +348,9 @@ input[type="file"]{color:var(--text-main)}
           <h3 class="settings-section-title">❓ Помощь</h3>
           <div class="setting-row" style="flex-direction:column;align-items:flex-start">
             <div style="color:var(--text-main);font-size:14px;line-height:1.8">
-              <b>🎮 Управление:</b><br>WASD — движение<br>E — взаимодействие<br>F — продать брэинрота<br>ESC — назад<br><br>
+              <b>🎮 Управление:</b><br>WASD — движение<br>E (зажать) — купить/украсть<br>F — продать брэинрота<br>ESC — назад<br><br>
               <b>👊 Кража:</b><br>1. Зайди на чужую базу (E)<br>2. Подойди к брэинроту<br>3. Зажми E 0.5 сек<br>4. Неси на свою базу<br><br>
-              <b>💰 Заработок:</b><br>• Покупай с конвейера<br>• Собирай доход<br>• Продавай ненужных<br>• Крути колесо
+              <b>💰 Покупка:</b><br>Зажми E 0.5 сек на конвейере<br>Брэинрот прилетит на базу<br>Каждая покупка +5% цены
             </div>
           </div>
         </div>
@@ -562,7 +531,6 @@ input[type="file"]{color:var(--text-main)}
 </div>
 
 <script>
-// ===== НАСТРОЙКИ =====
 const Settings={sfxEnabled:true,joystickSize:'medium',joystickOpacity:50,showEButtons:true,notifySteal:true,vibration:true,showFps:false,showNames:true,theme:'dark',brightness:100,musicVolume:50,sfxVolume:70};
 function loadSettings(){try{const s=localStorage.getItem('dushka_settings');if(s)Object.assign(Settings,JSON.parse(s));}catch(e){}applyAllSettings();}
 function saveSettings(){try{localStorage.setItem('dushka_settings',JSON.stringify(Settings));}catch(e){}}
@@ -607,7 +575,6 @@ function switchSettingsTab(tab){document.querySelectorAll('.settings-tabs .tab-b
 function logoutAccount(){if(!confirm('Выйти?'))return;currentNickname=null;try{localStorage.removeItem('dushka_nick');}catch(e){}closeSettings();document.getElementById('main-menu').style.display='none';document.getElementById('auth').style.display='flex';document.getElementById('username').value='';document.getElementById('password').value='';}
 async function deleteAccount(){if(!confirm('УДАЛИТЬ АККАУНТ? Нельзя отменить!'))return;if(!confirm('Точно?'))return;if(currentNickname){await sb.from('users').delete().eq('nickname',currentNickname);}logoutAccount();showNotif('🗑 Удалён');}
 
-// Звук
 let audioCtx=null;
 function initAudioCtx(){if(!audioCtx){try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}}
 function playSfx(type){if(!Settings.sfxEnabled)return;initAudioCtx();if(!audioCtx)return;const vol=Settings.sfxVolume/100;const o=audioCtx.createOscillator();const g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);const now=audioCtx.currentTime;
@@ -620,7 +587,6 @@ function vibrate(ms){if(Settings.vibration&&navigator.vibrate){try{navigator.vib
 let bgMusic=null;
 function initMusic(){try{bgMusic=new Audio('music.mp3');bgMusic.loop=true;bgMusic.volume=Settings.musicVolume/100;bgMusic.play().catch(()=>{});}catch(e){}}
 
-// FPS (только в игре)
 let _frames=0,_last=performance.now(),_fps=0,_ping=0;
 function updateFps(){
   _frames++;
@@ -635,11 +601,9 @@ function updateFps(){
 }
 setInterval(()=>{if(Settings.showFps&&currentServerId){const t=Date.now();sb.from('servers').select('id').eq('id',currentServerId).maybeSingle().then(()=>{_ping=Date.now()-t;});}},5000);
 
-// ===== SUPABASE =====
 async function getUser(n){const{data}=await sb.from('users').select('*').eq('nickname',n).maybeSingle();return data;}
 async function updateUser(n,u){await sb.from('users').update(u).eq('nickname',n);}
 
-// ===== БРЭИНРОТЫ =====
 const BRAINROTS_LIST=[
 {file:'meme8.jpg',name:'200',rarity:'common',income:2,price:200},{file:'meme9.jpg',name:'Нубини',rarity:'common',income:1,price:25},{file:'meme10.jpg',name:'Капибара',rarity:'common',income:3,price:100},{file:'meme11.jpg',name:'Диманини',rarity:'common',income:5,price:50},{file:'meme22.jpg',name:'Гига Чат',rarity:'common',income:10,price:250},{file:'meme28.jpg',name:'Математика',rarity:'horror',income:6.7,price:670},{file:'meme3.jpg',name:'Биология',rarity:'horror',income:10,price:100},{file:'meme17.jpg',name:'История',rarity:'horror',income:20,price:1500},{file:'meme4.jpg',name:'Воздуханы',rarity:'horror',income:25,price:2000},{file:'meme23.jpg',name:'Тони Кросс',rarity:'epic',income:45,price:4500},{file:'meme7.jpg',name:'Кар-Карыч',rarity:'epic',income:50,price:5000},{file:'meme13.jpg',name:'Spider Man',rarity:'epic',income:100,price:10000},{file:'meme24.jpg',name:'Сквидвард',rarity:'epic',income:100,price:6700},{file:'meme27.jpg',name:'Омайгат',rarity:'epic',income:100,price:6000},{file:'meme2.jpg',name:'Кросс',rarity:'legendary',income:200,price:20000},{file:'meme6.jpg',name:'Противостояние',rarity:'legendary',income:350,price:35000},{file:'meme5.jpg',name:'Роналду',rarity:'legendary',income:400,price:40000},{file:'meme12.jpg',name:'Spider Pig',rarity:'mythic',income:500,price:50000},{file:'meme18.jpg',name:'Меси',rarity:'mythic',income:525,price:52500},{file:'meme25.jpg',name:'Неймар',rarity:'mythic',income:560,price:56000},{file:'meme21.jpg',name:'67',rarity:'god',income:670,price:67000},{file:'meme29.jpg',name:'52',rarity:'god',income:850,price:85000},{file:'meme26.jpg',name:'Копатыч',rarity:'god',income:900,price:100000},{file:'meme19.jpg',name:'Килиан',rarity:'god',income:1000,price:100000},{file:'meme20.jpg',name:'Гарама',rarity:'secret',income:2500,price:250000},{file:'meme15.jpg',name:'Драгон',rarity:'secret',income:5000,price:500000},{file:'meme14.jpg',name:'Краснодар',rarity:'secret',income:6700,price:1000000},{file:'meme16.jpg',name:'MrDushka OG',rarity:'og',income:100000,price:10000000}
 ];
@@ -665,6 +629,7 @@ let touchDX=0,touchDY=0,joystickManager=null;let typedCode='';
 let heartbeatInterval=null;
 let playersChannel=null,basesChannel=null,notifChannel=null,restartChannel=null,changelogChannel=null,serverChannel=null;
 let tutorialActive=false,tutorialStep=0;
+let _lastRestartSeen=null;
 const obstacles=[{x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},{x:148,y:135,w:24,h:24},{x:188,y:135,w:24,h:24},{x:228,y:135,w:24,h:28},{x:148,y:228,w:24,h:24},{x:188,y:228,w:24,h:24},{x:228,y:228,w:24,h:24}];
 
 function normalizeSlots(slots,size){size=size||12;const arr=new Array(size).fill(null);if(!slots)return arr;if(typeof slots==='string'){try{slots=JSON.parse(slots);}catch(e){return arr;}}for(let i=0;i<size;i++){if(slots[i])arr[i]=slots[i];}return arr;}
@@ -712,7 +677,7 @@ async function playRandom(){
     const{count}=await sb.from('players').select('*',{count:'exact',head:true}).eq('server_id',s.id);
     if((count||0)<(s.max_players||8)){chosen=s.id;break;}
   }
-  if(!chosen){const{data:newS}=await sb.from('servers').insert({name:'Сервер',access:'all',owner:currentNickname,created_by:currentNickname,allow_steal:true,allow_pvp:true,max_players:8,blacklist:[],kicked:[]}).select().single();chosen=newS.id;}
+  if(!chosen){const{data:newS}=await sb.from('servers').insert({name:'Сервер',access:'all',owner:currentNickname,created_by:currentNickname,allow_steal:true,allow_pvp:true,max_players:8,blacklist:[],kicked:[],prices:{}}).select().single();chosen=newS.id;}
   currentServerId=chosen;await updateUser(currentNickname,{server_id:chosen});startGame();
 }
 
@@ -754,9 +719,7 @@ async function startGame(){
   lastConveyorSpawn=Date.now();
   update();window.focus();resizeGame();initJoystick();
   updateFreeSpinTimer();updateBeeUI();
-  setTimeout(()=>{
-    try{if(!localStorage.getItem('dushka_tutorial_done')){startTutorial();}}catch(e){startTutorial();}
-  },1200);
+  setTimeout(()=>{try{if(!localStorage.getItem('dushka_tutorial_done')){startTutorial();}}catch(e){startTutorial();}},1200);
 }
 
 function startHeartbeat(){
@@ -838,35 +801,31 @@ function renderOtherPlayers(players){
     otherPlayers[k].style.left=d.x+'px';otherPlayers[k].style.top=d.y+'px';
   }
 }
+
 function renderAllBases(){
-  document.querySelectorAll('#game-container .base-slot,#game-container .brainrot-on-base').forEach(e=>e.remove());
+  document.querySelectorAll('#game-container .brainrot-on-base').forEach(e=>e.remove());
   document.querySelectorAll('.base .nickname').forEach(e=>e.textContent='');
   document.querySelectorAll('.base').forEach(b=>b.classList.remove('locked'));
-  renderBase(myBaseId,{owner:currentNickname,slots:mySlots,locked:myBaseLocked},true);
-  for(let bid in allBasesData){if(parseInt(bid)===myBaseId)continue;renderBase(parseInt(bid),allBasesData[bid],false);}
+  renderBase(myBaseId,{owner:currentNickname,slots:mySlots,locked:myBaseLocked});
+  for(let bid in allBasesData){if(parseInt(bid)===myBaseId)continue;renderBase(parseInt(bid),allBasesData[bid]);}
 }
-function renderBase(bid,data,isMine){
+function renderBase(bid,data){
   const bp=BASE_POSITIONS[bid];if(!bp)return;
   const baseEl=document.querySelector('.base[data-base="'+bid+'"]');if(!baseEl)return;
   const nickEl=baseEl.querySelector('.nickname');if(nickEl)nickEl.textContent=data.owner||'';
   if(data.locked)baseEl.classList.add('locked');
-  // Отрисовка слотов с брэинротами
   const slots=data.slots||[];
-  const isTopRow=bid<=4;
-  const offsets=[
-    {dx:4,dy:6},{dx:4,dy:20},{dx:4,dy:34},{dx:4,dy:48},{dx:4,dy:60},
-    {dx:57,dy:6},{dx:57,dy:20},{dx:57,dy:34},{dx:57,dy:48},{dx:57,dy:60},
-    {dx:30,dy:6},{dx:30,dy:60}
-  ];
+  // Сетка 4x3 на базе 75x75
+  const cols=4,cellW=17,cellH=22,startX=5,startY=6;
   slots.forEach((br,i)=>{
     if(!br)return;
-    const off=offsets[i]||{dx:4,dy:6+i*14};
+    const col=i%cols,row=Math.floor(i/cols);
     const d=document.createElement('div');
     d.className='brainrot-on-base '+br.rarity;
     d.style.backgroundImage='url(Картинки/'+br.file+')';
-    d.style.left=(bp.x+off.dx)+'px';
-    d.style.top=(bp.y+off.dy)+'px';
-    d.style.width='15px';d.style.height='15px';
+    d.style.left=(bp.x+startX+col*cellW)+'px';
+    d.style.top=(bp.y+startY+row*cellH)+'px';
+    d.style.width='14px';d.style.height='14px';
     d.style.zIndex='8';
     document.getElementById('game-container').appendChild(d);
   });
@@ -894,18 +853,40 @@ function updateConveyor(dt){
 function countFreeSlots(){return mySlots.filter(s=>s===null).length;}
 async function buyConveyor(b){
   if(mySlots.filter(s=>s).length>=BASE_MAX){showModal('Ошибка','База полна!');playSfx('error');return;}
-  if(coins<b.brainrot.price){showModal('Ошибка','Нужно $'+formatNumber(b.brainrot.price));playSfx('error');return;}
+  const prices=(currentServerData&&currentServerData.prices)||{};
+  const basePrice=b.brainrot.price;
+  const currentPrice=prices[b.brainrot.file]!==undefined?prices[b.brainrot.file]:basePrice;
+  if(coins<currentPrice){showModal('Ошибка','Нужно $'+formatNumber(currentPrice));playSfx('error');return;}
   const free=mySlots.findIndex(s=>s===null);if(free<0){showModal('Ошибка','Нет свободного места');playSfx('error');return;}
-  coins-=b.brainrot.price;document.getElementById('balance-amount').textContent=formatNumber(coins);
-  b.locked=true;b.dom.remove();const idx=conveyorBrainrots.indexOf(b);if(idx>-1)conveyorBrainrots.splice(idx,1);
-  mySlots[free]={file:b.brainrot.file,name:b.brainrot.name,rarity:b.brainrot.rarity,income:b.brainrot.income,price:b.brainrot.price,placedAt:Date.now()};
+  coins-=currentPrice;document.getElementById('balance-amount').textContent=formatNumber(coins);
+  prices[b.brainrot.file]=Math.floor(currentPrice+basePrice*0.05);
+  await sb.from('servers').update({prices:prices}).eq('id',currentServerId);
+  if(currentServerData)currentServerData.prices=prices;
+  b.locked=true;
+  const startX=b.x,startY=b.y;
+  b.dom.remove();const idx=conveyorBrainrots.indexOf(b);if(idx>-1)conveyorBrainrots.splice(idx,1);
+  mySlots[free]={file:b.brainrot.file,name:b.brainrot.name,rarity:b.brainrot.rarity,income:b.brainrot.income,price:basePrice,placedAt:Date.now()};
   await updateUser(currentNickname,{coins:coins,base_slots:mySlots});
   await sb.from('bases').update({slots:mySlots}).eq('server_id',currentServerId).eq('base_num',myBaseId);
   if(allBasesData[myBaseId])allBasesData[myBaseId].slots=mySlots;
   else allBasesData[myBaseId]={owner:currentNickname,slots:mySlots,locked:myBaseLocked};
-  renderAllBases();
+  // Анимация полёта
+  const flyEl=document.createElement('div');
+  flyEl.className='brainrot-conveyor '+b.brainrot.rarity;
+  flyEl.style.backgroundImage='url(Картинки/'+b.brainrot.file+')';
+  flyEl.style.left=startX+'px';flyEl.style.top=startY+'px';
+  flyEl.style.zIndex='50';flyEl.style.transition='all .8s cubic-bezier(.5,.1,.5,1)';
+  document.getElementById('game-container').appendChild(flyEl);
+  const targetPos=BASE_POSITIONS[myBaseId];
+  requestAnimationFrame(()=>{
+    flyEl.style.left=(targetPos.x+30)+'px';
+    flyEl.style.top=(targetPos.y+30)+'px';
+    flyEl.style.transform='scale(0.5)';
+    flyEl.style.opacity='0.3';
+  });
+  setTimeout(()=>{flyEl.remove();renderAllBases();},850);
   playSfx('buy');vibrate(30);
-  showModal('Куплено',b.brainrot.name+' -$'+formatNumber(b.brainrot.price)+'\nНа базе: '+mySlots.filter(s=>s).length+'/'+BASE_MAX);
+  showModal('Куплено',b.brainrot.name+' -$'+formatNumber(currentPrice)+'\nНовая цена: $'+formatNumber(prices[b.brainrot.file]));
 }
 
 function initJoystick(){
@@ -950,7 +931,7 @@ function releaseE(){if(eHoldActive&&Date.now()-eHoldStart<500){cancelEHold();exe
 
 async function executeShortE(snap){
   if(!snap)return;
-  if(snap.type==='conveyor'){buyConveyor(snap.target);return;}
+  if(snap.type==='conveyor'){showNotif('Зажми E 0.5 сек чтобы купить');return;}
   if(snap.type==='shop'){quickShopOpen(snap.target);return;}
   if(snap.type==='green_mine'){openFloor(myBaseId);return;}
   if(snap.type==='green_other'){openFloor(snap.baseId);return;}
@@ -961,6 +942,7 @@ async function executeShortE(snap){
 }
 async function executeLongE(snap){
   if(!snap)return;
+  if(snap.type==='conveyor'){buyConveyor(snap.target);return;}
   if(!carriedBrainrot){
     if(snap.type==='slot_mine_full'){
       carriedBrainrot={...mySlots[snap.slot],fromBase:myBaseId,fromSlot:snap.slot};mySlots[snap.slot]=null;
@@ -968,7 +950,7 @@ async function executeLongE(snap){
       await sb.from('bases').update({slots:mySlots}).eq('server_id',currentServerId).eq('base_num',myBaseId);
       floorSlots=mySlots;if(inFloor)renderFloor();updateCarried();playSfx('click');vibrate(30);showNotif('✋ Взял: '+carriedBrainrot.name);
     } else if(snap.type==='slot_other_full'){
-      if(currentServerData&&currentServerData.allow_steal===false){showModal('Кража запрещена','Владелец сервера отключил кражу');return;}
+      if(currentServerData&&currentServerData.allow_steal===false){showModal('Кража запрещена','Владелец отключил кражу');return;}
       const bid=snap.baseId;const bdata=allBasesData[bid];
       if(!bdata||bdata.locked){showModal('Ошибка','База закрыта');return;}
       const victimSlots=normalizeSlots(bdata.slots,12);const br=victimSlots[snap.slot];if(!br)return;
@@ -1062,9 +1044,7 @@ document.addEventListener('keydown',e=>{
   typedCode+=k;typedCode=typedCode.slice(-17);
   if(typedCode==='ядушкамистердушка'){
     typedCode='';
-    getUser(currentNickname).then(me=>{
-      if(currentNickname==='MrDushka'||(me&&me.is_admin)){openAdmin();}
-    });
+    getUser(currentNickname).then(me=>{if(currentNickname==='MrDushka'||(me&&me.is_admin)){openAdmin();}});
     return;
   }
   if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;e.preventDefault()}
@@ -1152,7 +1132,7 @@ async function toggleFloorLock(){
   renderFloor();
 }
 
-// ===== КНОПКИ E/F НАД ГОЛОВОЙ =====
+// E/F ПО ЦЕНТРУ НАД НИКОМ
 function updateInteractButtons(){
   const eBtn=document.getElementById('interact'),fBtn=document.getElementById('interactF');
   if(!currentTarget||!Settings.showEButtons){eBtn.style.display='none';fBtn.style.display='none';return;}
@@ -1160,15 +1140,15 @@ function updateInteractButtons(){
   const scale=el.width/400;
   const px=inFloor?fx:x,py=inFloor?fy:y;
   const cx=el.left+(px+4)*scale;
-  const cy=el.top+py*scale;
-  const btnTop=cy-40*scale;
+  const btnTop=el.top+py*scale-42*scale;
+  const btnSize=32*scale;
   if(currentTarget.type==='slot_mine_full'&&floorOwner===currentNickname&&!carriedBrainrot){
     eBtn.style.display='flex';fBtn.style.display='flex';
-    eBtn.style.left=(cx-20*scale)+'px';eBtn.style.top=btnTop+'px';
-    fBtn.style.left=(cx+2*scale)+'px';fBtn.style.top=btnTop+'px';
+    eBtn.style.left=(cx-btnSize-2)+'px';eBtn.style.top=btnTop+'px';
+    fBtn.style.left=(cx+2)+'px';fBtn.style.top=btnTop+'px';
   } else {
     eBtn.style.display='flex';fBtn.style.display='none';
-    eBtn.style.left=(cx-17*scale)+'px';eBtn.style.top=btnTop+'px';
+    eBtn.style.left=(cx-btnSize/2)+'px';eBtn.style.top=btnTop+'px';
   }
 }
 
@@ -1242,7 +1222,6 @@ function updateFloorTarget(){
 document.getElementById('interact').addEventListener('click',()=>{if(eHoldActive)return;const snap=currentTarget?JSON.parse(JSON.stringify(currentTarget)):null;executeShortE(snap);});
 document.getElementById('interactF').addEventListener('click',()=>{const snap=currentTarget?JSON.parse(JSON.stringify(currentTarget)):null;executeShortF(snap);});
 
-// ===== SVG =====
 function getShopIcon(type){switch(type){
 case'slap':return'<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="#fff" stroke-width="6" fill="none"/></svg>';
 case'speed-coil':return'<svg viewBox="0 0 100 100"><path d="M50 15 Q20 30 50 45 Q80 60 50 75 Q20 90 50 95" stroke="#e74c3c" stroke-width="8" fill="none"/></svg>';
@@ -1329,9 +1308,9 @@ async function buyRedShopItem(id){
     dushka-=item.price;if(item.once)ownedRedItems.push(id);
     if(item.reward){coins+=item.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);}
     const updateObj={coins:coins,dushka:dushka,owned_red_items:ownedRedItems};
-    if(item.id==='admin-panel'){updateObj.is_admin=true;setTimeout(()=>showNotif('👑 Админ-панель активирована! Команда: ядушкамистердушка'),500);}
+    if(item.id==='admin-panel'){updateObj.is_admin=true;setTimeout(()=>showNotif('👑 Админ-панель активирована!'),500);}
     if(item.id==='vip'){updateObj.vip=true;setTimeout(()=>showNotif('⭐ VIP активирован!'),500);}
-    if(item.id==='2x-money'){updateObj.x2money=true;setTimeout(()=>showNotif('💵 2X MONEY активирован!'),500);}
+    if(item.id==='2x-money'){updateObj.x2money=true;setTimeout(()=>showNotif('💵 2X MONEY!'),500);}
     await updateUser(currentNickname,updateObj);
     document.getElementById('dushka-coins').textContent=formatNumber(dushka);renderRedShop();playSfx('buy');showModal('Покупка','Куплено '+item.name);
   } else{playSfx('error');showModal('Ошибка','Нужно '+item.price+' Dushka');}
@@ -1367,7 +1346,6 @@ function closeWheel(){document.getElementById('wheel-menu').style.display='none'
 function openTradePlaza(){showModal('Trade Plaza','Скоро!');}
 function closeTradePlaza(){}
 
-// ===== СЕРВЕРЫ =====
 let currentServerTab='all';
 async function openServers(){document.getElementById('main-menu').style.display='none';document.getElementById('server-menu').style.display='block';await loadServers();}
 function switchServerTab(tab){currentServerTab=tab;document.querySelectorAll('.server-tab').forEach(t=>t.classList.toggle('active',t.dataset.vis===tab));loadServers();}
@@ -1391,14 +1369,7 @@ async function loadServers(){
     if(s.allow_steal===false)badges+='<span class="srv-badge nosteal">🚫👊</span>';
     if(s.allow_pvp===false)badges+='<span class="srv-badge nopvp">🚫⚔</span>';
     const div=document.createElement('div');div.className='server-item';
-    div.innerHTML=`
-      <div class="server-info">
-        <div class="name">${s.name||'Server'} ${badges}</div>
-        <div class="players">${pc}/${maxP}${isMine?' · 👑':''}${s.lifetime_hours>0?' · ⏱'+s.lifetime_hours+'ч':''}</div>
-      </div>
-      ${full?'<span class="full">Full</span>':'<button class="join-btn" onclick="joinServer(\''+s.id+'\')">Join</button>'}
-      ${isMine?'<button class="marker-btn" onclick="openServerEdit(\''+s.id+'\')" title="Настройки">⚙</button>':''}
-    `;
+    div.innerHTML='<div class="server-info"><div class="name">'+(s.name||'Server')+' '+badges+'</div><div class="players">'+pc+'/'+maxP+(isMine?' · 👑':'')+(s.lifetime_hours>0?' · ⏱'+s.lifetime_hours+'ч':'')+'</div></div>'+(full?'<span class="full">Full</span>':'<button class="join-btn" onclick="joinServer(\''+s.id+'\')">Join</button>')+(isMine?'<button class="marker-btn" onclick="openServerEdit(\''+s.id+'\')" title="Настройки">⚙</button>':'');
     c.appendChild(div);
   }
 }
@@ -1421,17 +1392,16 @@ function closeCreateServer(){document.getElementById('create-server-modal').styl
 async function createServer(){
   const n=document.getElementById('server-name').value.trim();
   if(!n){showModal('Ошибка','Введите название');return;}
-  await sb.from('servers').insert({name:n,access:currentServerTab,owner:currentNickname,created_by:currentNickname,allow_steal:true,allow_pvp:true,lifetime_hours:0,max_players:8,blacklist:[],kicked:[]});
+  await sb.from('servers').insert({name:n,access:currentServerTab,owner:currentNickname,created_by:currentNickname,allow_steal:true,allow_pvp:true,lifetime_hours:0,max_players:8,blacklist:[],kicked:[],prices:{}});
   closeCreateServer();openServers();
 }
 
-// ===== РЕДАКТИРОВАНИЕ СЕРВЕРА =====
 let _editingServerId=null;
 async function openServerEdit(id){
   _editingServerId=id;
   const{data}=await sb.from('servers').select('*').eq('id',id).maybeSingle();
   if(!data){showModal('Ошибка','Сервер не найден');return;}
-  if(data.owner!==currentNickname&&data.created_by!==currentNickname){showModal('Ошибка','Только владелец может настроить');return;}
+  if(data.owner!==currentNickname&&data.created_by!==currentNickname){showModal('Ошибка','Только владелец');return;}
   document.getElementById('edit-server-name').value=data.name||'';
   document.getElementById('edit-server-access').value=data.access||'all';
   document.getElementById('edit-server-maxplayers').value=data.max_players||8;
@@ -1451,40 +1421,22 @@ async function saveServerEdit(){
   const pvp=document.getElementById('edit-server-pvp').classList.contains('on');
   let expires_at=0;
   if(lh>0){
-    const{data:cur}=await sb.from('servers').select('created_at,expires_at').eq('id',_editingServerId).maybeSingle();
-    if(cur){
-      const base=cur.created_at?new Date(cur.created_at).getTime():Date.now();
-      expires_at=base+lh*3600000;
-    }
+    const{data:cur}=await sb.from('servers').select('created_at').eq('id',_editingServerId).maybeSingle();
+    if(cur){const base=cur.created_at?new Date(cur.created_at).getTime():Date.now();expires_at=base+lh*3600000;}
   }
   await sb.from('servers').update({name:n,access:a,max_players:mp,lifetime_hours:lh,allow_steal:steal,allow_pvp:pvp,expires_at:expires_at}).eq('id',_editingServerId);
   closeServerEdit();loadServers();showNotif('✅ Сервер обновлён');
 }
 
-// ===== КИК =====
 async function openServerKick(){
   const{data}=await sb.from('servers').select('kicked').eq('id',_editingServerId).maybeSingle();
   const kicked=(data&&data.kicked)||[];
   const{data:players}=await sb.from('players').select('nickname').eq('server_id',_editingServerId);
   const c=document.getElementById('kick-players-list');c.innerHTML='';
   const list=(players||[]).filter(p=>p.nickname!==currentNickname);
-  if(list.length===0){c.innerHTML='<div style="text-align:center;color:var(--text-dim);padding:20px">Никого нет на сервере</div>';}
-  else{
-    list.forEach(p=>{
-      const div=document.createElement('div');div.className='player-kick-row';
-      div.innerHTML='<span>'+p.nickname+'</span><button onclick="kickPlayer(\''+p.nickname+'\')">👢 Кик</button>';
-      c.appendChild(div);
-    });
-  }
-  if(kicked.length>0){
-    const h=document.createElement('div');h.style.cssText='color:var(--text-dim);font-size:12px;margin-top:12px;margin-bottom:6px';h.textContent='Уже кикнуты';
-    c.appendChild(h);
-    kicked.forEach(n=>{
-      const div=document.createElement('div');div.className='player-kick-row';
-      div.innerHTML='<span>'+n+'</span><button style="background:#4caf50" onclick="unkickPlayer(\''+n+'\')">✓</button>';
-      c.appendChild(div);
-    });
-  }
+  if(list.length===0){c.innerHTML='<div style="text-align:center;color:var(--text-dim);padding:20px">Никого нет</div>';}
+  else{list.forEach(p=>{const div=document.createElement('div');div.className='player-kick-row';div.innerHTML='<span>'+p.nickname+'</span><button onclick="kickPlayer(\''+p.nickname+'\')">👢</button>';c.appendChild(div);});}
+  if(kicked.length>0){const h=document.createElement('div');h.style.cssText='color:var(--text-dim);font-size:12px;margin-top:12px;margin-bottom:6px';h.textContent='Кикнуты';c.appendChild(h);kicked.forEach(n=>{const div=document.createElement('div');div.className='player-kick-row';div.innerHTML='<span>'+n+'</span><button style="background:#4caf50" onclick="unkickPlayer(\''+n+'\')">✓</button>';c.appendChild(div);});}
   document.getElementById('server-kick-modal').style.display='block';
 }
 function closeServerKick(){document.getElementById('server-kick-modal').style.display='none';}
@@ -1503,7 +1455,6 @@ async function unkickPlayer(nickname){
   showNotif('✅ Разбанен');openServerKick();
 }
 
-// ===== ЧЁРНЫЙ СПИСОК =====
 async function openServerBlacklist(){
   const{data}=await sb.from('servers').select('blacklist').eq('id',_editingServerId).maybeSingle();
   renderBlacklist((data&&data.blacklist)||[]);
@@ -1513,11 +1464,7 @@ function closeServerBlacklist(){document.getElementById('server-blacklist-modal'
 function renderBlacklist(list){
   const c=document.getElementById('blacklist-list');c.innerHTML='';
   if(list.length===0){c.innerHTML='<div style="text-align:center;color:var(--text-dim);padding:10px">Пусто</div>';return;}
-  list.forEach(n=>{
-    const div=document.createElement('div');div.className='player-kick-row';
-    div.innerHTML='<span>🚫 '+n+'</span><button onclick="removeFromBlacklist(\''+n+'\')">✓ Убрать</button>';
-    c.appendChild(div);
-  });
+  list.forEach(n=>{const div=document.createElement('div');div.className='player-kick-row';div.innerHTML='<span>🚫 '+n+'</span><button onclick="removeFromBlacklist(\''+n+'\')">✓</button>';c.appendChild(div);});
 }
 async function addToBlacklist(){
   const n=document.getElementById('blacklist-input').value.trim();
@@ -1540,7 +1487,6 @@ async function removeFromBlacklist(n){
   renderBlacklist(bl);showNotif('✅ Убран');
 }
 
-// ===== ДРУЗЬЯ =====
 async function openFriends(){document.getElementById('main-menu').style.display='none';document.getElementById('friends-menu').style.display='block';await loadFriendRequests();await loadFriends();}
 async function searchFriend(){const n=document.getElementById('friend-search').value.trim();if(!n){showModal('Ошибка','Введите ник');return;}const u=await getUser(n);const rd=document.getElementById('friend-result');if(!u){rd.innerHTML='<div style="color:#f44">Not found</div>';return;}rd.innerHTML='<div class="friend-item"><div class="nick">'+n+'</div><button onclick="sendFriendRequest(\''+n+'\')" style="background:#4caf50;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Send</button></div>';}
 async function sendFriendRequest(n){const d=await getUser(n);if(!d){showModal('Ошибка','Не найден');return;}let r=d.friend_requests||[];if(r.includes(currentNickname)){showModal('Инфо','Уже отправлено');return;}r.push(currentNickname);await updateUser(n,{friend_requests:r});showModal('Успех','Отправлено!');}
@@ -1586,7 +1532,6 @@ async function collectFrom(i){
   playSfx('buy');openBaseMenu();showModal('Собрано','+$'+formatNumber(earned));
 }
 
-// ===== ADMIN =====
 function openAdmin(){document.getElementById('admin-panel').style.display='flex';}
 function closeAdmin(){document.getElementById('admin-panel').style.display='none';}
 async function adminViewUsers(){
@@ -1594,12 +1539,7 @@ async function adminViewUsers(){
   const c=document.getElementById('admin-users-list');c.innerHTML='Загрузка...';
   const{data}=await sb.from('users').select('*');
   c.innerHTML='';document.getElementById('admin-users-count').textContent=(data||[]).length+' шт.';
-  (data||[]).forEach(u=>{
-    const div=document.createElement('div');div.className='server-item';div.style.cursor='pointer';
-    div.innerHTML='<div><div class="name">'+u.nickname+'</div><div class="players" style="font-size:11px">$'+formatNumber(u.coins||0)+' · ₿'+formatNumber(u.dushka||0)+' · '+((u.base_slots||[]).filter(s=>s).length)+' бр.</div></div><button class="join-btn">Edit</button>';
-    div.onclick=()=>openAdminUserEdit(u);
-    c.appendChild(div);
-  });
+  (data||[]).forEach(u=>{const div=document.createElement('div');div.className='server-item';div.style.cursor='pointer';div.innerHTML='<div><div class="name">'+u.nickname+'</div><div class="players" style="font-size:11px">$'+formatNumber(u.coins||0)+' · ₿'+formatNumber(u.dushka||0)+'</div></div><button class="join-btn">Edit</button>';div.onclick=()=>openAdminUserEdit(u);c.appendChild(div);});
 }
 function closeAdminUsers(){document.getElementById('admin-users-panel').style.display='none';}
 let _editingUser=null;
@@ -1661,14 +1601,14 @@ async function saveManageUser(nickname){
   const newDushka=parseInt(document.getElementById('mg-dushka-'+nickname).value)||0;
   await updateUser(nickname,{coins:newCoins,dushka:newDushka});
   const u=_manageUsers.find(x=>x.nickname===nickname);if(u){u.coins=newCoins;u.dushka=newDushka;}
-  showNotif('✅ '+nickname+': $'+formatNumber(newCoins)+' ₿'+formatNumber(newDushka));
+  showNotif('✅ '+nickname);
 }
 async function setManageUserFast(nickname,coins,dushka){
   await updateUser(nickname,{coins:coins,dushka:dushka});
   const u=_manageUsers.find(x=>x.nickname===nickname);if(u){u.coins=coins;u.dushka=dushka;}
   const cEl=document.getElementById('mg-coins-'+nickname);if(cEl)cEl.value=coins;
   const dEl=document.getElementById('mg-dushka-'+nickname);if(dEl)dEl.value=dushka;
-  showNotif('⚡ '+nickname+' обновлён');
+  showNotif('⚡ '+nickname);
 }
 
 async function adminViewServers(){
@@ -1701,13 +1641,12 @@ async function subscribeChangelog(){
   changelogChannel=sb.channel('changelog').on('postgres_changes',{event:'*',schema:'public',table:'global_data',filter:'key=eq.changelog'},()=>{load();}).subscribe();
 }
 
-// ===== ТУТОРИАЛ =====
 const TUTORIAL_STEPS=[
-  {step:'Шаг 1',text:'Привет! Это твоя база. Подойди к зелёной кнопке на базе и нажми E, чтобы открыть её.',target:()=>BASE_SPAWN[myBaseId]},
-  {step:'Шаг 2',text:'Купи первого брэинрота с конвейера (жёлтая полоса в центре). Он будет приносить тебе деньги.',target:()=>({x:200,y:200})},
-  {step:'Шаг 3',text:'Красный магазин справа внизу — там крутые скины и бусты. Загляни!',target:()=>({x:150,y:230})},
-  {step:'Шаг 4',text:'Хочешь украсть? Зайди на базу другого игрока, подойди к его брэинроту и ЗАЖМИ E на 0.5 сек.',target:()=>BASE_POSITIONS[((myBaseId%8)+1)]},
-  {step:'Шаг 5',text:'Готово! Теперь ты знаешь базу. Удачи и богатства! 💰',target:null}
+  {step:'Шаг 1',text:'Привет! Это твоя база. Подойди к зелёной кнопке и нажми E, чтобы открыть её.',target:()=>BASE_SPAWN[myBaseId]},
+  {step:'Шаг 2',text:'Зажми E на конвейере (жёлтая полоса) — купишь первого брэинрота. Он прилетит на базу!',target:()=>({x:200,y:200})},
+  {step:'Шаг 3',text:'Красный магазин справа внизу — там крутые скины и бусты.',target:()=>({x:150,y:230})},
+  {step:'Шаг 4',text:'Хочешь украсть? Зайди на чужую базу, подойди к брэинроту и ЗАЖМИ E на 0.5 сек.',target:()=>BASE_POSITIONS[((myBaseId%8)+1)]},
+  {step:'Шаг 5',text:'Готово! Удачи и богатства! 💰',target:null}
 ];
 function startTutorial(){if(inFloor)return;tutorialActive=true;tutorialStep=0;showTutorialStep();}
 function showTutorialStep(){
@@ -1723,10 +1662,10 @@ function updateTutorialArrow(){
   const target=t.target();
   const el=document.getElementById('game-container').getBoundingClientRect();
   const scale=el.width/400;
-  const arrowX=el.left+target.x*scale;
-  const arrowY=el.top+target.y*scale-60*scale;
   const arrow=document.getElementById('tutorial-arrow');
-  arrow.style.left=arrowX+'px';arrow.style.top=arrowY+'px';arrow.classList.add('show');
+  arrow.style.left=(el.left+target.x*scale)+'px';
+  arrow.style.top=(el.top+target.y*scale-40*scale)+'px';
+  arrow.classList.add('show');
 }
 function nextTutorialStep(){tutorialStep++;if(tutorialStep>=TUTORIAL_STEPS.length){skipTutorial();return;}showTutorialStep();}
 function skipTutorial(){
