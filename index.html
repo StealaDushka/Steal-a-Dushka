@@ -68,7 +68,6 @@ body.light-theme .theme-toggle{color:#1a1a2e}
 .setting-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(128,128,128,.1);gap:12px}
 .setting-row:last-child{border-bottom:none}
 .setting-label{color:var(--text-main);font-size:14px;flex:1}
-.setting-hint{color:var(--text-mid);font-size:11px;margin-top:2px}
 .setting-control{flex-shrink:0;display:flex;align-items:center;gap:8px}
 .switch{position:relative;width:48px;height:26px;background:var(--border-color);border-radius:13px;cursor:pointer;transition:background .25s}
 .switch.on{background:var(--accent)}
@@ -89,7 +88,7 @@ body.light-theme .theme-toggle{color:#1a1a2e}
 .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
 .header h2{color:var(--text-main);margin:0}
 .close-btn{background:#c0392b;border:none;color:#fff;padding:5px 10px;border-radius:5px;cursor:pointer}
-.server-item,.friend-item{background:var(--bg-item);border:1px solid var(--border-soft);border-radius:8px;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.server-item,.friend-item{background:var(--bg-item);border:1px solid var(--border-soft);border-radius:8px;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .server-item .name,.friend-item .nick{color:var(--text-main);font-size:16px;font-weight:bold}
 .server-item .players{color:var(--text-dim);font-size:14px}
 .join-btn{background:#4caf50;border:none;color:#fff;padding:5px 15px;border-radius:6px;cursor:pointer}
@@ -97,7 +96,7 @@ body.light-theme .theme-toggle{color:#1a1a2e}
 .profile-preview{width:120px;height:120px;background:#333;border-radius:50%;margin:0 auto;background-size:cover;background-position:center}
 .profile-bg-preview{width:100%;height:120px;background:#333;border-radius:8px;background-size:cover;background-position:center;margin:10px 0}
 input[type="file"]{color:var(--text-main)}
-.save-btn{background:#4caf50;color:#fff;padding:8px 15px;border:none;border-radius:6px;cursor:pointer;margin-top:10px}
+.save-btn{background:#4caf50;color:#fff;padding:8px 15px;border:none;border-radius:6px;cursor:pointer;margin-top:10px;font-family:inherit}
 #app{display:none;flex-direction:row;width:100vw;height:100vh;justify-content:center;align-items:center;position:relative}
 #sidebar{position:absolute;top:80px;left:20px;z-index:60;display:flex;flex-direction:column;gap:8px}
 #sidebar .action-btn{width:70px;height:70px;display:flex;justify-content:center;align-items:center;background:#666;border:3px solid #000;color:#fff;font-weight:bold;font-size:11px;cursor:pointer;text-align:center;border-radius:8px}
@@ -136,9 +135,21 @@ input[type="file"]{color:var(--text-main)}
 #player,.other-player,#floor-player{position:absolute;width:8px;height:16px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr;z-index:20;border:1px solid rgba(0,0,0,.5)}
 #player .pixel,.other-player .pixel,#floor-player .pixel{width:100%;height:100%}
 .player-name{position:absolute;left:50%;transform:translateX(-50%);top:-12px;color:#fff;font-size:5px;font-weight:bold;text-shadow:1px 1px 1px #000;pointer-events:none;white-space:nowrap}
-#interact,#interactF{position:fixed;display:none;z-index:10000;width:52px;height:52px;border:3px solid #222;border-radius:50%;justify-content:center;align-items:center;color:#fff;font-size:22px;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,.7);user-select:none;touch-action:none}
-#interact{background:#4caf50}
-#interactF{background:#c0392b}
+
+/* КНОПКИ E/F ПРЯМО НАД ГОЛОВОЙ */
+#interact,#interactF{
+  position:fixed;display:none;z-index:10000;
+  width:34px;height:34px;
+  font-family:'Courier New',monospace;
+  font-size:20px;font-weight:900;
+  cursor:pointer;user-select:none;touch-action:none;
+  border:none;image-rendering:pixelated;
+  justify-content:center;align-items:center;
+  pointer-events:auto;
+}
+#interact{background:#8a9ba5;color:#f0f4f7;text-shadow:1px 1px 0 rgba(0,0,0,.4)}
+#interactF{background:#b03a2e;color:#f0f4f7;text-shadow:1px 1px 0 rgba(0,0,0,.4)}
+
 #holdProgress{position:fixed;display:none;z-index:10001;width:60px;height:8px;background:rgba(0,0,0,.7);border:1px solid #fff;border-radius:4px;overflow:hidden;pointer-events:none}
 #holdProgress .fill{position:absolute;left:0;top:0;height:100%;width:0%;background:#4caf50}
 #floor-carried{position:absolute;width:28px;height:28px;background-size:cover;background-position:center;z-index:25;border:2px solid #fff;border-radius:4px;pointer-events:none;box-shadow:0 0 8px #fff;display:none;background-color:#4a90e2}
@@ -230,11 +241,24 @@ input[type="file"]{color:var(--text-main)}
 #confirm-modal .confirm-buttons{display:flex;gap:20px}
 #confirm-modal .confirm-btn{width:170px;height:75px;border:4px solid #000;font-size:28px;font-weight:bold;cursor:pointer;font-family:Arial;color:#fff}
 .confirm-yes{background:#2ecc40}.confirm-no{background:#b71c1c}
-#balance{position:fixed;bottom:20px;left:20px;background:rgba(0,0,0,.8);padding:10px;border:2px solid #444;color:#fff;font-size:14px;display:none;flex-direction:column;gap:5px;border-radius:8px;z-index:1000}
-#balance .box{display:flex;justify-content:space-between;gap:10px;align-items:center}
-#balance .label{color:#aaa}
-#balance .amount{color:#4caf50}
-#balance .dushka .amount{color:#f7931a;font-weight:bold}
+
+/* ============ БАЛАНС С ИКОНКАМИ ============ */
+#balance{position:fixed;bottom:20px;left:20px;background:rgba(0,0,0,.85);padding:10px 14px;border:2px solid #444;color:#fff;font-size:14px;display:none;flex-direction:column;gap:6px;border-radius:8px;z-index:1000;min-width:190px}
+#balance .box{display:flex;justify-content:space-between;gap:14px;align-items:center}
+#balance .label{color:#aaa;font-size:13px}
+#balance .amount{display:flex;align-items:center;gap:6px;font-weight:bold;color:#4caf50;font-family:'Courier New',monospace}
+#balance .dushka .amount{color:#f7931a}
+.coin-icon{
+  display:inline-flex;justify-content:center;align-items:center;
+  width:20px;height:20px;border-radius:50%;
+  font-weight:bold;font-size:13px;flex-shrink:0;
+  font-family:'Courier New',monospace;
+  text-shadow:0 1px 0 rgba(0,0,0,.3);
+  line-height:1;
+}
+.coin-icon.btc{background:linear-gradient(135deg,#f7931a,#f7b73a);color:#fff;border:1.5px solid #b86910;box-shadow:0 0 6px rgba(247,147,26,.5)}
+.coin-icon.usd{background:linear-gradient(135deg,#4caf50,#66bb6a);color:#fff;border:1.5px solid #2e7d32;box-shadow:0 0 6px rgba(76,175,80,.5)}
+
 #version{position:fixed;bottom:20px;right:20px;color:#fff;font-size:12px;background:rgba(0,0,0,.5);padding:4px 8px;border-radius:4px;z-index:9999}
 #exit-btn{position:fixed;top:20px;left:20px;background:#c0392b;color:#fff;padding:8px 14px;border-radius:8px;font-weight:bold;cursor:pointer;z-index:5000;display:none}
 #back-btn{position:fixed;top:20px;right:80px;background:#0f3460;color:#fff;padding:8px 14px;border-radius:8px;font-weight:bold;cursor:pointer;z-index:5000;display:none}
@@ -250,16 +274,39 @@ input[type="file"]{color:var(--text-main)}
 #tutorial-arrow{position:fixed;z-index:7999;display:none;pointer-events:none;font-size:48px;color:#ffd700;filter:drop-shadow(0 0 12px #ffd700);animation:arrow-pulse 1s ease-in-out infinite;transform:translate(-50%,-50%)}
 #tutorial-arrow.show{display:block}
 @keyframes arrow-pulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.2)}}
+.server-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.server-tab{flex:1;min-width:90px;padding:10px;border:2px solid var(--border-color);background:var(--bg-item);color:var(--text-main);border-radius:8px;cursor:pointer;font-weight:bold;font-size:12px;font-family:inherit}
+.server-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.server-info{flex:1;min-width:0}
+.server-info .name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.marker-btn{width:36px;height:36px;background:var(--bg-panel-2);border:2px solid var(--border-color);border-radius:6px;cursor:pointer;font-size:16px;display:flex;justify-content:center;align-items:center;flex-shrink:0;color:var(--text-main)}
+.marker-btn:hover{border-color:var(--accent);background:var(--bg-item-hover)}
+.srv-badge{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:bold;margin-left:4px}
+.srv-badge.private{background:#9c27b0;color:#fff}
+.srv-badge.friends{background:#2196f3;color:#fff}
+.srv-badge.nosteal{background:#c0392b;color:#fff}
+.srv-badge.nopvp{background:#e67e22;color:#fff}
+.player-kick-row{display:flex;justify-content:space-between;align-items:center;background:var(--bg-item);border:1px solid var(--border-soft);border-radius:6px;padding:6px 10px;margin-bottom:4px;font-size:13px;color:var(--text-main)}
+.player-kick-row button{background:#c0392b;border:none;color:#fff;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:bold}
 @media(max-width:700px){#game-container,#floor-container{width:300px;height:300px}#sidebar{top:60px;left:10px}#sidebar .action-btn{width:60px;height:60px;font-size:10px}}
 </style>
 </head>
 <body>
 <div id="auth"><div id="auth-box"><label class="auth-label">НИК</label><input type="text" id="username" class="auth-input" autocomplete="off"><label class="auth-label">ПАРОЛЬ</label><input type="password" id="password" class="auth-input"><div class="auth-btns"><button class="auth-btn btn-login" onclick="handleLogin()">ВОЙТИ</button><button class="auth-btn btn-reg" onclick="handleRegister()">РЕГ</button></div><div class="hint">Запишите ваш пароль</div></div></div>
+
+<!-- БАЛАНС С ИКОНКАМИ -->
 <div id="balance">
-  <div class="box dushka"><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div>
-  <div class="box"><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div>
+  <div class="box dushka">
+    <span class="label">Dushka Coins</span>
+    <span class="amount"><span class="coin-icon btc">₿</span><span id="dushka-coins">0</span></span>
+  </div>
+  <div class="box">
+    <span class="label">Монеты</span>
+    <span class="amount"><span class="coin-icon usd">$</span><span id="balance-amount">25</span></span>
+  </div>
 </div>
-<div id="version">Версия: 0.37</div>
+
+<div id="version">Версия: 0.40</div>
 <div id="exit-btn" onclick="exitToMenu()">Выйти</div>
 <div id="back-btn" onclick="exitFloor()">Назад</div>
 <div id="fps-counter">FPS: -- | PING: --</div>
@@ -275,7 +322,7 @@ input[type="file"]{color:var(--text-main)}
       <button class="menu-btn" onclick="openFriends()"><span class="menu-icon">👥</span> Друзья</button>
       <button class="menu-btn" onclick="openProfile()"><span class="menu-icon">👤</span> Профиль</button>
     </div>
-    <div class="menu-footer"><div>v0.37 · by MrDushka</div><div id="changelog-display"></div></div>
+    <div class="menu-footer"><div>v0.40 · by MrDushka</div><div id="changelog-display"></div></div>
   </div>
   <div class="theme-toggle" onclick="toggleMenuTheme()"><svg viewBox="0 0 100 100"><defs><mask id="moon-mask"><rect width="100" height="100" fill="white"/><circle cx="68" cy="38" r="38" fill="black"/></mask></defs><circle cx="50" cy="50" r="42" fill="currentColor" mask="url(#moon-mask)"/></svg></div>
   <div id="settings-btn" onclick="openSettings()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
@@ -343,7 +390,6 @@ input[type="file"]{color:var(--text-main)}
   </div>
 </div>
 
-<!-- ADMIN PANEL -->
 <div id="admin-panel" class="menu-overlay" style="display:none;max-width:520px">
   <div class="header"><div class="title"><h2>⚙ ADMIN PANEL</h2><p>MrDushka only</p></div><div class="close-btn" onclick="closeAdmin()">X</div></div>
   <div class="content" style="padding:20px">
@@ -375,7 +421,6 @@ input[type="file"]{color:var(--text-main)}
   </div>
 </div>
 
-<!-- ADMIN MANAGE (ПУНКТ 5) -->
 <div id="admin-manage-panel" class="menu-overlay" style="display:none;max-width:750px">
   <div class="header"><div class="title"><h2>Управление игроками</h2><p id="admin-manage-count">—</p></div><div class="close-btn" onclick="closeAdminManage()">X</div></div>
   <div class="content" style="padding:15px">
@@ -403,10 +448,65 @@ input[type="file"]{color:var(--text-main)}
   </div>
 </div>
 
-<div id="server-menu"><div class="header"><h2>Серверы</h2><button class="close-btn" onclick="closeServers()">X</button></div><div id="server-list"></div><button style="width:100%;padding:12px;background:#ffd700;color:#000;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px" onclick="openCreateServer()">Создать сервер</button></div>
+<div id="server-menu">
+  <div class="header"><h2>Серверы</h2><button class="close-btn" onclick="closeServers()">X</button></div>
+  <div class="server-tabs">
+    <button class="server-tab active" data-vis="all" onclick="switchServerTab('all')">🌐 Для всех</button>
+    <button class="server-tab" data-vis="friends" onclick="switchServerTab('friends')">👥 Для друзей</button>
+    <button class="server-tab" data-vis="self" onclick="switchServerTab('self')">🔒 Для себя</button>
+  </div>
+  <div id="server-list"></div>
+  <button style="width:100%;padding:12px;background:#ffd700;color:#000;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px" onclick="openCreateServer()">Создать сервер</button>
+</div>
+
 <div id="friends-menu"><div class="header"><h2>Друзья</h2><button class="close-btn" onclick="closeFriends()">X</button></div><div style="margin-bottom:10px"><input type="text" id="friend-search" placeholder="Ник" style="width:70%;padding:8px;border-radius:6px;border:none"><button style="padding:8px 15px;border:none;border-radius:6px;background:#4caf50;color:#fff;cursor:pointer" onclick="searchFriend()">Найти</button></div><div id="friend-result"></div><div style="color:var(--text-dim);margin:10px 0 5px">Запросы</div><div id="friend-requests"></div><div style="color:var(--text-dim);margin:10px 0 5px">Друзья</div><div id="friends-list"></div></div>
 <div id="profile-menu"><div class="header"><h2>Профиль</h2><button class="close-btn" onclick="closeProfile()">X</button></div><div class="profile-preview" id="avatar-preview"></div><label style="color:var(--text-main);display:block;margin:10px 0">Аватарка</label><input type="file" id="avatar-input" accept="image/*"><div class="profile-bg-preview" id="bg-preview"></div><label style="color:var(--text-main);display:block;margin:10px 0">Фон профиля</label><input type="file" id="bg-input" accept="image/*"><button class="save-btn" onclick="saveProfile()">Сохранить</button></div>
-<div id="create-server-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--border-color);border-radius:12px;padding:20px;width:90%;max-width:400px;z-index:960"><h3 style="color:var(--text-main)">Создать сервер</h3><input type="text" id="server-name" placeholder="Название" style="width:100%;padding:8px;border-radius:6px;border:none;margin-bottom:10px"><button style="width:100%;padding:10px;border:none;border-radius:8px;background:#ffd700;color:#000;font-weight:bold;cursor:pointer" onclick="createServer()">Создать</button><button style="width:100%;padding:8px;border:none;border-radius:8px;background:#666;color:#fff;margin-top:5px;cursor:pointer" onclick="closeCreateServer()">Отмена</button></div>
+<div id="create-server-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--border-color);border-radius:12px;padding:20px;width:90%;max-width:400px;z-index:960"><h3 style="color:var(--text-main);margin:0 0 15px">Создать сервер</h3><input type="text" id="server-name" placeholder="Название" style="width:100%;padding:10px;border-radius:8px;border:2px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:14px;margin-bottom:10px"><div style="color:var(--text-dim);font-size:12px;margin-bottom:10px">Видимость: <b id="create-server-access-label">🌐 Для всех</b></div><button style="width:100%;padding:10px;border:none;border-radius:8px;background:#ffd700;color:#000;font-weight:bold;cursor:pointer;margin-bottom:6px" onclick="createServer()">Создать</button><button style="width:100%;padding:8px;border:none;border-radius:8px;background:#666;color:#fff;cursor:pointer" onclick="closeCreateServer()">Отмена</button></div>
+
+<div id="server-edit-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--border-color);border-radius:12px;padding:20px;width:90%;max-width:420px;max-height:90vh;overflow-y:auto;z-index:970">
+  <h3 style="color:var(--text-main);margin:0 0 15px">⚙ Настройки сервера</h3>
+  <label style="color:var(--text-dim);font-size:12px">Название</label>
+  <input type="text" id="edit-server-name" style="width:100%;padding:10px;border-radius:8px;border:2px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:14px;margin-bottom:10px">
+  <label style="color:var(--text-dim);font-size:12px">Кто может заходить</label>
+  <select id="edit-server-access" style="width:100%;padding:10px;border-radius:8px;border:2px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:14px;margin-bottom:10px">
+    <option value="all">🌐 Для всех</option>
+    <option value="friends">👥 Для друзей</option>
+    <option value="self">🔒 Только я</option>
+  </select>
+  <label style="color:var(--text-dim);font-size:12px">Макс. игроков (2-8)</label>
+  <input type="number" id="edit-server-maxplayers" min="2" max="8" value="8" style="width:100%;padding:10px;border-radius:8px;border:2px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:14px;margin-bottom:10px">
+  <label style="color:var(--text-dim);font-size:12px">Время жизни</label>
+  <select id="edit-server-lifetime" style="width:100%;padding:10px;border-radius:8px;border:2px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:14px;margin-bottom:10px">
+    <option value="1">⏱ 1 час</option>
+    <option value="6">⏱ 6 часов</option>
+    <option value="24">⏱ 24 часа</option>
+    <option value="0">♾ Бесконечно</option>
+  </select>
+  <div class="setting-row" style="padding:10px 0"><div class="setting-label" style="font-size:13px">Разрешить кражу</div><div class="setting-control"><div class="switch on" id="edit-server-steal" onclick="this.classList.toggle('on')"></div></div></div>
+  <div class="setting-row" style="padding:10px 0"><div class="setting-label" style="font-size:13px">Разрешить PvP</div><div class="setting-control"><div class="switch on" id="edit-server-pvp" onclick="this.classList.toggle('on')"></div></div></div>
+  <button style="width:100%;padding:10px;border:none;border-radius:8px;background:#4caf50;color:#fff;font-weight:bold;cursor:pointer;margin-top:15px;margin-bottom:6px" onclick="saveServerEdit()">Сохранить</button>
+  <button style="width:100%;padding:10px;border:none;border-radius:8px;background:#e74c3c;color:#fff;font-weight:bold;cursor:pointer;margin-bottom:6px" onclick="openServerKick()">👢 Кик игрока</button>
+  <button style="width:100%;padding:10px;border:none;border-radius:8px;background:#8e44ad;color:#fff;font-weight:bold;cursor:pointer;margin-bottom:6px" onclick="openServerBlacklist()">🚫 Чёрный список</button>
+  <button style="width:100%;padding:8px;border:none;border-radius:8px;background:#666;color:#fff;cursor:pointer" onclick="closeServerEdit()">Отмена</button>
+</div>
+
+<div id="server-kick-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--border-color);border-radius:12px;padding:20px;width:90%;max-width:420px;max-height:80vh;overflow-y:auto;z-index:980">
+  <h3 style="color:var(--text-main);margin:0 0 15px">👢 Кик игрока</h3>
+  <div id="kick-players-list"></div>
+  <button style="width:100%;padding:8px;border:none;border-radius:8px;background:#666;color:#fff;cursor:pointer;margin-top:10px" onclick="closeServerKick()">Назад</button>
+</div>
+
+<div id="server-blacklist-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--border-color);border-radius:12px;padding:20px;width:90%;max-width:420px;max-height:80vh;overflow-y:auto;z-index:980">
+  <h3 style="color:var(--text-main);margin:0 0 15px">🚫 Чёрный список</h3>
+  <div style="display:flex;gap:6px;margin-bottom:10px">
+    <input type="text" id="blacklist-input" placeholder="Ник" style="flex:1;padding:8px;border-radius:6px;border:2px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:13px">
+    <button style="padding:8px 14px;border:none;border-radius:6px;background:#8e44ad;color:#fff;font-weight:bold;cursor:pointer;font-family:inherit" onclick="addToBlacklist()">Добавить</button>
+  </div>
+  <div id="blacklist-list"></div>
+  <button style="width:100%;padding:8px;border:none;border-radius:8px;background:#666;color:#fff;cursor:pointer;margin-top:10px" onclick="closeServerBlacklist()">Назад</button>
+</div>
+
+<div id="friend-profile" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--border-color);border-radius:12px;padding:20px;width:90%;max-width:300px;z-index:960;text-align:center"><div class="profile-preview" id="friend-avatar-preview" style="margin:0 auto 10px"></div><div style="color:var(--text-main);font-size:18px;font-weight:bold" id="friend-profile-name"></div><button style="padding:10px 20px;border:none;border-radius:8px;background:#4caf50;color:#fff;font-weight:bold;cursor:pointer;margin-top:10px" onclick="joinFriendGame()">Join</button><button style="padding:8px 20px;border:none;border-radius:8px;background:#666;color:#fff;margin-top:5px;cursor:pointer" onclick="cancelFriendJoin()">Cancel</button></div>
 
 <div id="app">
   <div id="sidebar">
@@ -504,7 +604,6 @@ function setJoystickOpacity(v){Settings.joystickOpacity=parseInt(v);document.get
 function openSettings(){document.getElementById('settings-modal').classList.add('open');document.getElementById('my-uid').textContent=currentNickname||'—';}
 function closeSettings(){document.getElementById('settings-modal').classList.remove('open');}
 function switchSettingsTab(tab){document.querySelectorAll('.settings-tabs .tab-btn').forEach(el=>el.classList.toggle('active',el.dataset.tab===tab));document.querySelectorAll('.settings-section').forEach(el=>{el.style.display=el.dataset.section===tab?'block':'none';});document.getElementById('settings-content').scrollTop=0;}
-function clearCache(){if(!confirm('Очистить кеш?'))return;try{localStorage.clear();}catch(e){}showNotif('✅ Кеш очищен');}
 function logoutAccount(){if(!confirm('Выйти?'))return;currentNickname=null;try{localStorage.removeItem('dushka_nick');}catch(e){}closeSettings();document.getElementById('main-menu').style.display='none';document.getElementById('auth').style.display='flex';document.getElementById('username').value='';document.getElementById('password').value='';}
 async function deleteAccount(){if(!confirm('УДАЛИТЬ АККАУНТ? Нельзя отменить!'))return;if(!confirm('Точно?'))return;if(currentNickname){await sb.from('users').delete().eq('nickname',currentNickname);}logoutAccount();showNotif('🗑 Удалён');}
 
@@ -521,9 +620,19 @@ function vibrate(ms){if(Settings.vibration&&navigator.vibrate){try{navigator.vib
 let bgMusic=null;
 function initMusic(){try{bgMusic=new Audio('music.mp3');bgMusic.loop=true;bgMusic.volume=Settings.musicVolume/100;bgMusic.play().catch(()=>{});}catch(e){}}
 
-// FPS
+// FPS (только в игре)
 let _frames=0,_last=performance.now(),_fps=0,_ping=0;
-function updateFps(){_frames++;const now=performance.now();if(now-_last>=1000){_fps=_frames;_frames=0;_last=now;const el=document.getElementById('fps-counter');if(el&&Settings.showFps)el.textContent='FPS: '+_fps+' | PING: '+_ping+'ms';}}
+function updateFps(){
+  _frames++;
+  const now=performance.now();
+  if(now-_last>=1000){
+    _fps=_frames;_frames=0;_last=now;
+    const el=document.getElementById('fps-counter');
+    const inGame=document.getElementById('app').style.display==='flex';
+    if(el&&Settings.showFps&&inGame){el.textContent='FPS: '+_fps+' | PING: '+_ping+'ms';}
+    else if(el){el.textContent='';}
+  }
+}
 setInterval(()=>{if(Settings.showFps&&currentServerId){const t=Date.now();sb.from('servers').select('id').eq('id',currentServerId).maybeSingle().then(()=>{_ping=Date.now()-t;});}},5000);
 
 // ===== SUPABASE =====
@@ -544,7 +653,7 @@ const BASE_POSITIONS={1:{x:20,y:20},2:{x:115,y:20},3:{x:210,y:20},4:{x:305,y:20}
 const BASE_SPAWN={1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81},5:{x:52,y:307},6:{x:147,y:307},7:{x:242,y:307},8:{x:337,y:307}};
 const FLOOR_SLOT_OFFSETS=[{dx:10,dy:55},{dx:10,dy:105},{dx:10,dy:155},{dx:10,dy:205},{dx:10,dy:255},{dx:10,dy:305},{dx:362,dy:55},{dx:362,dy:105},{dx:362,dy:155},{dx:362,dy:205},{dx:362,dy:255},{dx:362,dy:305}];
 
-let x=200,y=200,coins=25,dushka=0,currentNickname=null,currentServerId=null,myBaseId=0,myBaseLocked=false;
+let x=200,y=200,coins=25,dushka=0,currentNickname=null,currentServerId=null,currentServerData=null,myBaseId=0,myBaseLocked=false;
 let mySlots=new Array(12).fill(null);let allBasesData={};let otherPlayers={};let conveyorBrainrots=[];let lastConveyorSpawn=0;let currentTarget=null;
 let inFloor=false,fx=195,fy=370,floorSlots=[],floorLocked=false,floorOwner=null,viewingBaseId=null;let carriedBrainrot=null;
 let _spins=0,isSpinning=false,wheelRotation=0;let ownedItems=[],autoBuyShopItems=[],ownedRedItems=[],currentRedTab='gear';
@@ -554,7 +663,7 @@ const CONVEYOR_MAX=12,SPAWN_INTERVAL=2000,BASE_MAX=12;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
 let touchDX=0,touchDY=0,joystickManager=null;let typedCode='';
 let heartbeatInterval=null;
-let playersChannel=null,basesChannel=null,notifChannel=null,restartChannel=null,changelogChannel=null;
+let playersChannel=null,basesChannel=null,notifChannel=null,restartChannel=null,changelogChannel=null,serverChannel=null;
 let tutorialActive=false,tutorialStep=0;
 const obstacles=[{x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},{x:148,y:135,w:24,h:24},{x:188,y:135,w:24,h:24},{x:228,y:135,w:24,h:28},{x:148,y:228,w:24,h:24},{x:188,y:228,w:24,h:24},{x:228,y:228,w:24,h:24}];
 
@@ -592,16 +701,18 @@ function showMainMenu(){
   document.getElementById('version').style.display='none';
   document.getElementById('main-menu').style.display='flex';
   document.getElementById('joystick-zone').style.display='none';
+  document.getElementById('fps-counter').textContent='';
 }
 
 async function playRandom(){
-  const{data}=await sb.from('servers').select('*').limit(20);
+  const{data}=await sb.from('servers').select('*').eq('access','all').limit(20);
   let chosen=null;
   for(const s of (data||[])){
+    if(s.blacklist&&s.blacklist.includes(currentNickname))continue;
     const{count}=await sb.from('players').select('*',{count:'exact',head:true}).eq('server_id',s.id);
-    if((count||0)<8){chosen=s.id;break;}
+    if((count||0)<(s.max_players||8)){chosen=s.id;break;}
   }
-  if(!chosen){const{data:newS}=await sb.from('servers').insert({name:'Сервер',access:'all'}).select().single();chosen=newS.id;}
+  if(!chosen){const{data:newS}=await sb.from('servers').insert({name:'Сервер',access:'all',owner:currentNickname,created_by:currentNickname,allow_steal:true,allow_pvp:true,max_players:8,blacklist:[],kicked:[]}).select().single();chosen=newS.id;}
   currentServerId=chosen;await updateUser(currentNickname,{server_id:chosen});startGame();
 }
 
@@ -614,6 +725,11 @@ async function startGame(){
   document.getElementById('exit-btn').style.display='block';
   document.getElementById('balance').style.display='flex';
   document.getElementById('version').style.display='block';
+  const{data:srvData}=await sb.from('servers').select('*').eq('id',currentServerId).maybeSingle();
+  currentServerData=srvData||{};
+  if(currentServerData.blacklist&&currentServerData.blacklist.includes(currentNickname)){
+    showModal('Доступ запрещён','Вы в чёрном списке этого сервера');exitToMenu();return;
+  }
   const d=await getUser(currentNickname);
   coins=d.coins||25;dushka=d.dushka||0;myBaseId=d.base_id||0;myBaseLocked=d.base_locked||false;
   mySlots=normalizeSlots(d.base_slots,12);
@@ -634,16 +750,13 @@ async function startGame(){
   renderPlayer();renderAllBases();
   await sb.from('players').upsert({server_id:currentServerId,nickname:currentNickname,x:x,y:y,base_num:myBaseId,updated_at:new Date().toISOString()},{onConflict:'server_id,nickname'});
   startHeartbeat();
-  subscribeBases();subscribePlayers();subscribeNotifs();subscribeRestart();
+  subscribeBases();subscribePlayers();subscribeNotifs();subscribeRestart();subscribeServer();
   lastConveyorSpawn=Date.now();
   update();window.focus();resizeGame();initJoystick();
   updateFreeSpinTimer();updateBeeUI();
-  try{
-    if(localStorage.getItem('dushka_tutorial_pending')==='1'){
-      localStorage.removeItem('dushka_tutorial_pending');
-      setTimeout(startTutorial,800);
-    }
-  }catch(e){}
+  setTimeout(()=>{
+    try{if(!localStorage.getItem('dushka_tutorial_done')){startTutorial();}}catch(e){startTutorial();}
+  },1200);
 }
 
 function startHeartbeat(){
@@ -651,8 +764,13 @@ function startHeartbeat(){
   heartbeatInterval=setInterval(async()=>{
     if(currentServerId&&currentNickname){
       await sb.from('players').update({updated_at:new Date().toISOString()}).eq('server_id',currentServerId).eq('nickname',currentNickname);
+      const{data}=await sb.from('servers').select('kicked,expires_at').eq('id',currentServerId).maybeSingle();
+      if(data){
+        if(data.kicked&&data.kicked.includes(currentNickname)){showNotif('👢 Вас кикнули');setTimeout(()=>exitToMenu(),1000);return;}
+        if(data.expires_at&&data.expires_at>0&&Date.now()>data.expires_at){showNotif('⏱ Сервер истёк');setTimeout(()=>exitToMenu(),1000);return;}
+      }
     }
-  },15000);
+  },5000);
 }
 function stopHeartbeat(){if(heartbeatInterval){clearInterval(heartbeatInterval);heartbeatInterval=null;}}
 
@@ -702,6 +820,11 @@ function subscribeRestart(){
   }).subscribe();
 }
 
+function subscribeServer(){
+  if(serverChannel)sb.removeChannel(serverChannel);
+  serverChannel=sb.channel('server-'+currentServerId).on('postgres_changes',{event:'UPDATE',schema:'public',table:'servers',filter:'id=eq.'+currentServerId},payload=>{currentServerData=payload.new;}).subscribe();
+}
+
 function renderPlayer(){
   const p=document.getElementById('player');
   p.innerHTML='<div class="pixel" style="background:#FFCC00"></div><div class="pixel" style="background:#FF0000"></div><div class="player-name">'+currentNickname+'</div>';
@@ -727,6 +850,26 @@ function renderBase(bid,data,isMine){
   const baseEl=document.querySelector('.base[data-base="'+bid+'"]');if(!baseEl)return;
   const nickEl=baseEl.querySelector('.nickname');if(nickEl)nickEl.textContent=data.owner||'';
   if(data.locked)baseEl.classList.add('locked');
+  // Отрисовка слотов с брэинротами
+  const slots=data.slots||[];
+  const isTopRow=bid<=4;
+  const offsets=[
+    {dx:4,dy:6},{dx:4,dy:20},{dx:4,dy:34},{dx:4,dy:48},{dx:4,dy:60},
+    {dx:57,dy:6},{dx:57,dy:20},{dx:57,dy:34},{dx:57,dy:48},{dx:57,dy:60},
+    {dx:30,dy:6},{dx:30,dy:60}
+  ];
+  slots.forEach((br,i)=>{
+    if(!br)return;
+    const off=offsets[i]||{dx:4,dy:6+i*14};
+    const d=document.createElement('div');
+    d.className='brainrot-on-base '+br.rarity;
+    d.style.backgroundImage='url(Картинки/'+br.file+')';
+    d.style.left=(bp.x+off.dx)+'px';
+    d.style.top=(bp.y+off.dy)+'px';
+    d.style.width='15px';d.style.height='15px';
+    d.style.zIndex='8';
+    document.getElementById('game-container').appendChild(d);
+  });
 }
 
 function spawnConveyor(){
@@ -752,13 +895,17 @@ function countFreeSlots(){return mySlots.filter(s=>s===null).length;}
 async function buyConveyor(b){
   if(mySlots.filter(s=>s).length>=BASE_MAX){showModal('Ошибка','База полна!');playSfx('error');return;}
   if(coins<b.brainrot.price){showModal('Ошибка','Нужно $'+formatNumber(b.brainrot.price));playSfx('error');return;}
-  const free=mySlots.findIndex(s=>s===null);if(free<0){playSfx('error');return;}
+  const free=mySlots.findIndex(s=>s===null);if(free<0){showModal('Ошибка','Нет свободного места');playSfx('error');return;}
   coins-=b.brainrot.price;document.getElementById('balance-amount').textContent=formatNumber(coins);
   b.locked=true;b.dom.remove();const idx=conveyorBrainrots.indexOf(b);if(idx>-1)conveyorBrainrots.splice(idx,1);
   mySlots[free]={file:b.brainrot.file,name:b.brainrot.name,rarity:b.brainrot.rarity,income:b.brainrot.income,price:b.brainrot.price,placedAt:Date.now()};
   await updateUser(currentNickname,{coins:coins,base_slots:mySlots});
   await sb.from('bases').update({slots:mySlots}).eq('server_id',currentServerId).eq('base_num',myBaseId);
-  playSfx('buy');vibrate(30);showModal('Куплено',b.brainrot.name+' -$'+formatNumber(b.brainrot.price));
+  if(allBasesData[myBaseId])allBasesData[myBaseId].slots=mySlots;
+  else allBasesData[myBaseId]={owner:currentNickname,slots:mySlots,locked:myBaseLocked};
+  renderAllBases();
+  playSfx('buy');vibrate(30);
+  showModal('Куплено',b.brainrot.name+' -$'+formatNumber(b.brainrot.price)+'\nНа базе: '+mySlots.filter(s=>s).length+'/'+BASE_MAX);
 }
 
 function initJoystick(){
@@ -821,6 +968,7 @@ async function executeLongE(snap){
       await sb.from('bases').update({slots:mySlots}).eq('server_id',currentServerId).eq('base_num',myBaseId);
       floorSlots=mySlots;if(inFloor)renderFloor();updateCarried();playSfx('click');vibrate(30);showNotif('✋ Взял: '+carriedBrainrot.name);
     } else if(snap.type==='slot_other_full'){
+      if(currentServerData&&currentServerData.allow_steal===false){showModal('Кража запрещена','Владелец сервера отключил кражу');return;}
       const bid=snap.baseId;const bdata=allBasesData[bid];
       if(!bdata||bdata.locked){showModal('Ошибка','База закрыта');return;}
       const victimSlots=normalizeSlots(bdata.slots,12);const br=victimSlots[snap.slot];if(!br)return;
@@ -893,6 +1041,10 @@ document.addEventListener('keydown',e=>{
     if(document.getElementById('admin-users-panel').style.display==='flex'){closeAdminUsers();return;}
     if(document.getElementById('admin-servers-panel').style.display==='flex'){closeAdminServers();return;}
     if(document.getElementById('admin-panel').style.display==='flex'){closeAdmin();return;}
+    if(document.getElementById('server-blacklist-modal').style.display==='block'){closeServerBlacklist();return;}
+    if(document.getElementById('server-kick-modal').style.display==='block'){closeServerKick();return;}
+    if(document.getElementById('server-edit-modal').style.display==='block'){closeServerEdit();return;}
+    if(document.getElementById('create-server-modal').style.display==='block'){closeCreateServer();return;}
     if(document.getElementById('base-menu').style.display==='block'){closeBaseMenu();return;}
     if(document.getElementById('shop-menu').style.display==='flex'){closeShop();return;}
     if(document.getElementById('red-shop-menu').style.display==='flex'){closeRedShop();return;}
@@ -904,12 +1056,17 @@ document.addEventListener('keydown',e=>{
     if(document.getElementById('server-menu').style.display==='block'){closeServers();return;}
     if(document.getElementById('friends-menu').style.display==='block'){closeFriends();return;}
     if(document.getElementById('profile-menu').style.display==='block'){closeProfile();return;}
-    if(document.getElementById('create-server-modal').style.display==='block'){closeCreateServer();return;}
     return;
   }
   if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
   typedCode+=k;typedCode=typedCode.slice(-17);
-  if(typedCode==='ядушкамистердушка'&&currentNickname==='MrDushka'){openAdmin();typedCode='';return;}
+  if(typedCode==='ядушкамистердушка'){
+    typedCode='';
+    getUser(currentNickname).then(me=>{
+      if(currentNickname==='MrDushka'||(me&&me.is_admin)){openAdmin();}
+    });
+    return;
+  }
   if(k==='w'||k==='ц'||k==='arrowup'){keys.w=true;e.preventDefault()}
   if(k==='s'||k==='ы'||k==='arrowdown'){keys.s=true;e.preventDefault()}
   if(k==='a'||k==='ф'||k==='arrowleft'){keys.a=true;e.preventDefault()}
@@ -995,21 +1152,23 @@ async function toggleFloorLock(){
   renderFloor();
 }
 
+// ===== КНОПКИ E/F НАД ГОЛОВОЙ =====
 function updateInteractButtons(){
   const eBtn=document.getElementById('interact'),fBtn=document.getElementById('interactF');
   if(!currentTarget||!Settings.showEButtons){eBtn.style.display='none';fBtn.style.display='none';return;}
   const el=document.getElementById('game-container').getBoundingClientRect();
   const scale=el.width/400;
   const px=inFloor?fx:x,py=inFloor?fy:y;
-  const baseX=el.left+px*scale;
-  const baseY=el.top+py*scale-40*scale;
-  if(currentTarget.type==='slot_mine_full'&&floorOwner===currentNickname){
+  const cx=el.left+(px+4)*scale;
+  const cy=el.top+py*scale;
+  const btnTop=cy-40*scale;
+  if(currentTarget.type==='slot_mine_full'&&floorOwner===currentNickname&&!carriedBrainrot){
     eBtn.style.display='flex';fBtn.style.display='flex';
-    eBtn.style.left=(baseX-30*scale)+'px';eBtn.style.top=(baseY-30*scale)+'px';
-    fBtn.style.left=(baseX+30*scale)+'px';fBtn.style.top=(baseY-30*scale)+'px';
+    eBtn.style.left=(cx-20*scale)+'px';eBtn.style.top=btnTop+'px';
+    fBtn.style.left=(cx+2*scale)+'px';fBtn.style.top=btnTop+'px';
   } else {
     eBtn.style.display='flex';fBtn.style.display='none';
-    eBtn.style.left=(baseX-26*scale)+'px';eBtn.style.top=(baseY-26*scale)+'px';
+    eBtn.style.left=(cx-17*scale)+'px';eBtn.style.top=btnTop+'px';
   }
 }
 
@@ -1023,7 +1182,12 @@ function update(t=0){
   if(Math.abs(touchDX)>0.05||Math.abs(touchDY)>0.05){dx+=touchDX;dy+=touchDY;}
   if(dx!==0||dy!==0){
     const len=Math.sqrt(dx*dx+dy*dy);
-    if(inFloor){fx+=(dx/len)*PLAYER_SPEED*dt;fy+=(dy/len)*PLAYER_SPEED*dt;fx=Math.max(10,Math.min(382,fx));fy=Math.max(30,Math.min(365,fy));renderFloorPlayer();updateCarried();}
+    if(inFloor){
+      const sp=PLAYER_SPEED*2;
+      fx+=(dx/len)*sp*dt;fy+=(dy/len)*sp*dt;
+      fx=Math.max(10,Math.min(382,fx));fy=Math.max(30,Math.min(365,fy));
+      renderFloorPlayer();updateCarried();
+    }
     else{
       let nx=x+(dx/len)*PLAYER_SPEED*dt,ny=y+(dy/len)*PLAYER_SPEED*dt;
       const rX={x:nx,y:y,w:8,h:16};let bX=false;
@@ -1045,7 +1209,7 @@ function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h|
 function removeEHint(){document.getElementById('interact').style.display='none';document.getElementById('interactF').style.display='none';}
 
 function updateTarget(){
-  const pc={x:x+4,y:y+8};currentTarget=null;removeEHint();
+  const pc={x:x+4,y:y+8};currentTarget=null;
   for(const b of conveyorBrainrots){if(b.locked)continue;const d=Math.hypot(pc.x-(b.x+14),pc.y-(b.y+14));if(d<25){currentTarget={type:'conveyor',target:b};return;}}
   const bp=BASE_POSITIONS[myBaseId];
   if(bp){const gx=bp.x+37.5,gy=bp.y+89;if(Math.hypot(pc.x-gx,pc.y-gy)<28){currentTarget={type:'green_mine'};return;}}
@@ -1062,7 +1226,7 @@ function updateTarget(){
   }
 }
 function updateFloorTarget(){
-  const pc={x:fx+4,y:fy+8};currentTarget=null;removeEHint();
+  const pc={x:fx+4,y:fy+8};currentTarget=null;
   for(let i=0;i<12;i++){
     const off=FLOOR_SLOT_OFFSETS[i];const sx=off.dx+14,sy=off.dy+14;
     if(Math.hypot(pc.x-sx,pc.y-sy)<22){
@@ -1096,11 +1260,16 @@ case'ban-hammer':return'<svg viewBox="0 0 100 100"><rect x="20" y="30" width="60
 case'laser-gun':return'<svg viewBox="0 0 100 100"><rect x="10" y="40" width="60" height="15" fill="#2c3e50"/><rect x="20" y="55" width="15" height="15" fill="#34495e"/><path d="M70 45 L90 42" stroke="red" stroke-width="5"/></svg>';
 case'vip':return'<svg viewBox="0 0 100 100"><text x="10" y="70" font-size="45" fill="#f1c40f" font-weight="bold">VIP</text></svg>';
 case'2x-money':return'<svg viewBox="0 0 100 100"><text x="10" y="65" font-size="40" fill="#2ecc71" font-weight="bold">x2</text></svg>';
+case'admin-panel':return'<svg viewBox="0 0 100 100"><rect x="10" y="20" width="80" height="60" fill="#34495e"/><text x="25" y="60" fill="white" font-size="25" font-weight="bold">AP</text></svg>';
 case'm51k':return'<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#27ae60" rx="5"/><text x="20" y="58" fill="white" font-size="18" font-weight="bold">$</text></svg>';
 case'm425k':return'<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#2ecc71" rx="5"/><text x="20" y="58" fill="white" font-size="18" font-weight="bold">$$</text></svg>';
+case'm1700k':return'<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#27ae60" rx="5"/><rect x="20" y="30" width="25" height="40" fill="#1e8449"/></svg>';
+case'm8500k':return'<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#2ecc71" rx="5"/><rect x="30" y="30" width="30" height="40" fill="#229954"/></svg>';
 case'm17m':return'<svg viewBox="0 0 100 100"><rect x="10" y="30" width="80" height="40" fill="#27ae60" rx="5"/><rect x="40" y="30" width="40" height="40" fill="#1e8449"/></svg>';
 case'mythic':return'<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="#8e44ad" rx="5"/><text x="30" y="60" fill="white" font-size="20" font-weight="bold">M</text></svg>';
+case'brainrot-god':return'<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="#3498db" rx="5"/><text x="25" y="60" fill="white" font-size="15" font-weight="bold">BR</text></svg>';
 case'secret':return'<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="#2c3e50" rx="5"/><text x="25" y="60" fill="white" font-size="20" font-weight="bold">S</text></svg>';
+case'server-luck':return'<svg viewBox="0 0 100 100"><text x="10" y="70" font-size="40" fill="#2ecc71" font-weight="bold">2x</text></svg>';
 default:return'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#fff"/></svg>';}}
 
 const shopItems=[{id:'slap',name:'Slap',desc:'Slap thieves!',price:500,icon:'slap'},{id:'speed-coil',name:'Speed Coil',desc:'Zoom!',price:750,icon:'speed-coil'},{id:'trap',name:'Trap',desc:'Freeze 10 sec',price:1000,icon:'trap'},{id:'iron-slap',name:'Iron Slap',desc:'Heavy slap!',price:2500,icon:'iron-slap'},{id:'gravity-coil',name:'Gravity Coil',desc:'Jump!',price:3000,icon:'gravity-coil'},{id:'bee-launcher',name:'Bee Launcher',desc:'Bees!',price:10000,icon:'bee-launcher'},{id:'coil-combo',name:'Coil Combo',desc:'Ultimate!',price:20000,icon:'coil-combo'},{id:'rage-table',name:'Rage Table',desc:'Table!',price:25000,icon:'rage-table'},{id:'diamond-slap',name:'Diamond Slap',desc:'Knock!',price:50000,icon:'diamond-slap'}];
@@ -1138,11 +1307,12 @@ async function buyBee(id){
   else{playSfx('error');showModal('Ошибка','Нужно '+bee.price+' Dushka');}
 }
 
-const redShopItems={gear:[{id:'blackhole-slap',name:'Blackhole Slap',desc:'Pull players!',price:199,once:true},{id:'ban-hammer',name:'Ban Hammer',desc:'Smash!',price:1125,once:true},{id:'laser-gun',name:'Laser Gun',desc:'Fling lasers!',price:565,once:true}],gamepasses:[{id:'vip',name:'VIP',desc:'Benefits',price:375,once:true},{id:'2x-money',name:'2X MONEY',desc:'Double money',price:199,once:true}],money:[{id:'m51k',name:'$51,000',desc:'Money',price:59,reward:51000},{id:'m425k',name:'$425,000',desc:'Money',price:379,reward:425000},{id:'m17m',name:'$17M',desc:'Money',price:2499,reward:17000000}],lucky:[{id:'mythic',name:'Mythic',desc:'Lucky Block',price:175},{id:'secret',name:'Secret',desc:'Lucky Block',price:1499}]};
+const redShopItems={gear:[{id:'blackhole-slap',name:'Blackhole Slap',desc:'Pull players!',price:199,once:true},{id:'ban-hammer',name:'Ban Hammer',desc:'Smash!',price:1125,once:true},{id:'laser-gun',name:'Laser Gun',desc:'Fling lasers!',price:565,once:true}],gamepasses:[{id:'vip',name:'VIP',desc:'Benefits',price:375,once:true},{id:'2x-money',name:'2X MONEY',desc:'Double money',price:199,once:true},{id:'admin-panel',name:'Admin Panel',desc:'Get Admin Commands!',price:7999,once:true}],money:[{id:'m51k',name:'$51,000',desc:'Money',price:59,reward:51000},{id:'m425k',name:'$425,000',desc:'Money',price:379,reward:425000},{id:'m1700k',name:'$1,700,000',desc:'Money',price:659,reward:1700000},{id:'m8500k',name:'$8,500,000',desc:'Money',price:1249,reward:8500000},{id:'m17m',name:'$17,000,000',desc:'Money',price:2499,reward:17000000}],lucky:[{id:'mythic',name:'Mythic',desc:'Lucky Block',price:175},{id:'brainrot-god',name:'Brainrot God',desc:'Lucky Block',price:399},{id:'secret',name:'Secret',desc:'Lucky Block',price:1499}],server:[{id:'server-luck',name:'Server Luck',desc:'1x > 2x',price:249}],redeem:[]};
 function switchRedTab(tab){currentRedTab=tab;document.querySelectorAll('#red-shop-menu .tab').forEach(t=>t.classList.remove('active'));document.querySelector('#red-shop-menu .tab[data-tab="'+tab+'"]').classList.add('active');renderRedShop();}
 function renderRedShop(){
   const c=document.getElementById('red-shop-items');c.innerHTML='';
   const items=redShopItems[currentRedTab]||[];
+  if(currentRedTab==='redeem'){c.innerHTML='<div style="text-align:center;color:var(--text-main);font-size:16px;padding:20px;">Введите код:</div><input type="text" placeholder="Code..." style="width:100%;padding:10px;font-size:16px;border-radius:8px;border:none;margin-top:10px;">';return;}
   items.forEach(item=>{
     const isOwned=ownedRedItems.includes(item.id)&&item.once;
     const div=document.createElement('div');div.className='red-shop-item';
@@ -1158,7 +1328,11 @@ async function buyRedShopItem(id){
   if(dushka>=item.price){
     dushka-=item.price;if(item.once)ownedRedItems.push(id);
     if(item.reward){coins+=item.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);}
-    await updateUser(currentNickname,{coins:coins,dushka:dushka,owned_red_items:ownedRedItems});
+    const updateObj={coins:coins,dushka:dushka,owned_red_items:ownedRedItems};
+    if(item.id==='admin-panel'){updateObj.is_admin=true;setTimeout(()=>showNotif('👑 Админ-панель активирована! Команда: ядушкамистердушка'),500);}
+    if(item.id==='vip'){updateObj.vip=true;setTimeout(()=>showNotif('⭐ VIP активирован!'),500);}
+    if(item.id==='2x-money'){updateObj.x2money=true;setTimeout(()=>showNotif('💵 2X MONEY активирован!'),500);}
+    await updateUser(currentNickname,updateObj);
     document.getElementById('dushka-coins').textContent=formatNumber(dushka);renderRedShop();playSfx('buy');showModal('Покупка','Куплено '+item.name);
   } else{playSfx('error');showModal('Ошибка','Нужно '+item.price+' Dushka');}
 }
@@ -1193,24 +1367,180 @@ function closeWheel(){document.getElementById('wheel-menu').style.display='none'
 function openTradePlaza(){showModal('Trade Plaza','Скоро!');}
 function closeTradePlaza(){}
 
+// ===== СЕРВЕРЫ =====
+let currentServerTab='all';
 async function openServers(){document.getElementById('main-menu').style.display='none';document.getElementById('server-menu').style.display='block';await loadServers();}
+function switchServerTab(tab){currentServerTab=tab;document.querySelectorAll('.server-tab').forEach(t=>t.classList.toggle('active',t.dataset.vis===tab));loadServers();}
 async function loadServers(){
   const c=document.getElementById('server-list');c.innerHTML='';
-  const{data}=await sb.from('servers').select('*');
-  for(const s of (data||[])){
+  const{data,error}=await sb.from('servers').select('*').eq('access',currentServerTab);
+  if(error){c.innerHTML='<div style="color:#f44;text-align:center;padding:20px">Ошибка: '+error.message+'</div>';return;}
+  if(!data||data.length===0){c.innerHTML='<div style="text-align:center;color:var(--text-dim);padding:20px">Нет серверов</div>';return;}
+  let myFriends=[];
+  try{const me=await getUser(currentNickname);if(me)myFriends=me.friends||[];}catch(e){}
+  for(const s of data){
+    if(s.access==='friends'&&s.owner!==currentNickname&&!myFriends.includes(s.owner))continue;
+    if(s.access==='self'&&s.owner!==currentNickname)continue;
+    if(s.blacklist&&s.blacklist.includes(currentNickname))continue;
     const{count}=await sb.from('players').select('*',{count:'exact',head:true}).eq('server_id',s.id);
-    const pc=count||0;const full=pc>=8;
+    const pc=count||0;const maxP=s.max_players||8;const full=pc>=maxP;
+    const isMine=(s.owner===currentNickname)||(s.created_by===currentNickname);
+    let badges='';
+    if(s.access==='self')badges+='<span class="srv-badge private">🔒</span>';
+    else if(s.access==='friends')badges+='<span class="srv-badge friends">👥</span>';
+    if(s.allow_steal===false)badges+='<span class="srv-badge nosteal">🚫👊</span>';
+    if(s.allow_pvp===false)badges+='<span class="srv-badge nopvp">🚫⚔</span>';
     const div=document.createElement('div');div.className='server-item';
-    div.innerHTML='<div class="name">'+(s.name||'Server')+'</div><div class="players">'+pc+'/8</div>'+(full?'<span class="full">Full</span>':'<button class="join-btn" onclick="joinServer(\''+s.id+'\')">Join</button>');
+    div.innerHTML=`
+      <div class="server-info">
+        <div class="name">${s.name||'Server'} ${badges}</div>
+        <div class="players">${pc}/${maxP}${isMine?' · 👑':''}${s.lifetime_hours>0?' · ⏱'+s.lifetime_hours+'ч':''}</div>
+      </div>
+      ${full?'<span class="full">Full</span>':'<button class="join-btn" onclick="joinServer(\''+s.id+'\')">Join</button>'}
+      ${isMine?'<button class="marker-btn" onclick="openServerEdit(\''+s.id+'\')" title="Настройки">⚙</button>':''}
+    `;
     c.appendChild(div);
   }
 }
-async function joinServer(id){await updateUser(currentNickname,{server_id:id});currentServerId=id;closeServers();startGame();}
+async function joinServer(id){
+  const{data:srv}=await sb.from('servers').select('*').eq('id',id).maybeSingle();
+  if(srv){
+    if(srv.blacklist&&srv.blacklist.includes(currentNickname)){showModal('Доступ запрещён','Ты в чёрном списке');return;}
+    if(srv.kicked&&srv.kicked.includes(currentNickname)){
+      const newKick=(srv.kicked||[]).filter(n=>n!==currentNickname);
+      await sb.from('servers').update({kicked:newKick}).eq('id',id);
+    }
+    if(srv.expires_at&&srv.expires_at>0&&Date.now()>srv.expires_at){showModal('Сервер истёк','Владелец не продлил сервер');return;}
+  }
+  await updateUser(currentNickname,{server_id:id});
+  currentServerId=id;closeServers();startGame();
+}
 function closeServers(){document.getElementById('server-menu').style.display='none';showMainMenu();}
-function openCreateServer(){document.getElementById('create-server-modal').style.display='block';}
+function openCreateServer(){document.getElementById('create-server-access-label').textContent=currentServerTab==='all'?'🌐 Для всех':currentServerTab==='friends'?'👥 Для друзей':'🔒 Только я';document.getElementById('create-server-modal').style.display='block';}
 function closeCreateServer(){document.getElementById('create-server-modal').style.display='none';}
-async function createServer(){const n=document.getElementById('server-name').value.trim();if(!n){showModal('Ошибка','Введите название');return;}await sb.from('servers').insert({name:n,access:'all',owner:currentNickname});closeCreateServer();openServers();}
+async function createServer(){
+  const n=document.getElementById('server-name').value.trim();
+  if(!n){showModal('Ошибка','Введите название');return;}
+  await sb.from('servers').insert({name:n,access:currentServerTab,owner:currentNickname,created_by:currentNickname,allow_steal:true,allow_pvp:true,lifetime_hours:0,max_players:8,blacklist:[],kicked:[]});
+  closeCreateServer();openServers();
+}
 
+// ===== РЕДАКТИРОВАНИЕ СЕРВЕРА =====
+let _editingServerId=null;
+async function openServerEdit(id){
+  _editingServerId=id;
+  const{data}=await sb.from('servers').select('*').eq('id',id).maybeSingle();
+  if(!data){showModal('Ошибка','Сервер не найден');return;}
+  if(data.owner!==currentNickname&&data.created_by!==currentNickname){showModal('Ошибка','Только владелец может настроить');return;}
+  document.getElementById('edit-server-name').value=data.name||'';
+  document.getElementById('edit-server-access').value=data.access||'all';
+  document.getElementById('edit-server-maxplayers').value=data.max_players||8;
+  document.getElementById('edit-server-lifetime').value=String(data.lifetime_hours||0);
+  document.getElementById('edit-server-steal').classList.toggle('on',data.allow_steal!==false);
+  document.getElementById('edit-server-pvp').classList.toggle('on',data.allow_pvp!==false);
+  document.getElementById('server-edit-modal').style.display='block';
+}
+function closeServerEdit(){document.getElementById('server-edit-modal').style.display='none';_editingServerId=null;}
+async function saveServerEdit(){
+  if(!_editingServerId)return;
+  const n=document.getElementById('edit-server-name').value.trim();
+  const a=document.getElementById('edit-server-access').value;
+  const mp=Math.max(2,Math.min(8,parseInt(document.getElementById('edit-server-maxplayers').value)||8));
+  const lh=parseInt(document.getElementById('edit-server-lifetime').value)||0;
+  const steal=document.getElementById('edit-server-steal').classList.contains('on');
+  const pvp=document.getElementById('edit-server-pvp').classList.contains('on');
+  let expires_at=0;
+  if(lh>0){
+    const{data:cur}=await sb.from('servers').select('created_at,expires_at').eq('id',_editingServerId).maybeSingle();
+    if(cur){
+      const base=cur.created_at?new Date(cur.created_at).getTime():Date.now();
+      expires_at=base+lh*3600000;
+    }
+  }
+  await sb.from('servers').update({name:n,access:a,max_players:mp,lifetime_hours:lh,allow_steal:steal,allow_pvp:pvp,expires_at:expires_at}).eq('id',_editingServerId);
+  closeServerEdit();loadServers();showNotif('✅ Сервер обновлён');
+}
+
+// ===== КИК =====
+async function openServerKick(){
+  const{data}=await sb.from('servers').select('kicked').eq('id',_editingServerId).maybeSingle();
+  const kicked=(data&&data.kicked)||[];
+  const{data:players}=await sb.from('players').select('nickname').eq('server_id',_editingServerId);
+  const c=document.getElementById('kick-players-list');c.innerHTML='';
+  const list=(players||[]).filter(p=>p.nickname!==currentNickname);
+  if(list.length===0){c.innerHTML='<div style="text-align:center;color:var(--text-dim);padding:20px">Никого нет на сервере</div>';}
+  else{
+    list.forEach(p=>{
+      const div=document.createElement('div');div.className='player-kick-row';
+      div.innerHTML='<span>'+p.nickname+'</span><button onclick="kickPlayer(\''+p.nickname+'\')">👢 Кик</button>';
+      c.appendChild(div);
+    });
+  }
+  if(kicked.length>0){
+    const h=document.createElement('div');h.style.cssText='color:var(--text-dim);font-size:12px;margin-top:12px;margin-bottom:6px';h.textContent='Уже кикнуты';
+    c.appendChild(h);
+    kicked.forEach(n=>{
+      const div=document.createElement('div');div.className='player-kick-row';
+      div.innerHTML='<span>'+n+'</span><button style="background:#4caf50" onclick="unkickPlayer(\''+n+'\')">✓</button>';
+      c.appendChild(div);
+    });
+  }
+  document.getElementById('server-kick-modal').style.display='block';
+}
+function closeServerKick(){document.getElementById('server-kick-modal').style.display='none';}
+async function kickPlayer(nickname){
+  const{data}=await sb.from('servers').select('kicked').eq('id',_editingServerId).maybeSingle();
+  const kicked=(data&&data.kicked)||[];
+  if(!kicked.includes(nickname))kicked.push(nickname);
+  await sb.from('servers').update({kicked:kicked}).eq('id',_editingServerId);
+  showNotif('👢 Кикнут: '+nickname);openServerKick();
+}
+async function unkickPlayer(nickname){
+  const{data}=await sb.from('servers').select('kicked').eq('id',_editingServerId).maybeSingle();
+  let kicked=(data&&data.kicked)||[];
+  kicked=kicked.filter(n=>n!==nickname);
+  await sb.from('servers').update({kicked:kicked}).eq('id',_editingServerId);
+  showNotif('✅ Разбанен');openServerKick();
+}
+
+// ===== ЧЁРНЫЙ СПИСОК =====
+async function openServerBlacklist(){
+  const{data}=await sb.from('servers').select('blacklist').eq('id',_editingServerId).maybeSingle();
+  renderBlacklist((data&&data.blacklist)||[]);
+  document.getElementById('server-blacklist-modal').style.display='block';
+}
+function closeServerBlacklist(){document.getElementById('server-blacklist-modal').style.display='none';}
+function renderBlacklist(list){
+  const c=document.getElementById('blacklist-list');c.innerHTML='';
+  if(list.length===0){c.innerHTML='<div style="text-align:center;color:var(--text-dim);padding:10px">Пусто</div>';return;}
+  list.forEach(n=>{
+    const div=document.createElement('div');div.className='player-kick-row';
+    div.innerHTML='<span>🚫 '+n+'</span><button onclick="removeFromBlacklist(\''+n+'\')">✓ Убрать</button>';
+    c.appendChild(div);
+  });
+}
+async function addToBlacklist(){
+  const n=document.getElementById('blacklist-input').value.trim();
+  if(!n)return;
+  if(n===currentNickname){showNotif('Нельзя себя');return;}
+  const{data}=await sb.from('servers').select('blacklist').eq('id',_editingServerId).maybeSingle();
+  const bl=(data&&data.blacklist)||[];
+  if(!bl.includes(n))bl.push(n);
+  await sb.from('servers').update({blacklist:bl}).eq('id',_editingServerId);
+  document.getElementById('blacklist-input').value='';
+  renderBlacklist(bl);
+  showNotif('🚫 '+n+' в чёрном списке');
+  const{data:p}=await sb.from('players').select('*').eq('server_id',_editingServerId).eq('nickname',n).maybeSingle();
+  if(p){await sb.from('players').delete().eq('id',p.id);}
+}
+async function removeFromBlacklist(n){
+  const{data}=await sb.from('servers').select('blacklist').eq('id',_editingServerId).maybeSingle();
+  const bl=((data&&data.blacklist)||[]).filter(x=>x!==n);
+  await sb.from('servers').update({blacklist:bl}).eq('id',_editingServerId);
+  renderBlacklist(bl);showNotif('✅ Убран');
+}
+
+// ===== ДРУЗЬЯ =====
 async function openFriends(){document.getElementById('main-menu').style.display='none';document.getElementById('friends-menu').style.display='block';await loadFriendRequests();await loadFriends();}
 async function searchFriend(){const n=document.getElementById('friend-search').value.trim();if(!n){showModal('Ошибка','Введите ник');return;}const u=await getUser(n);const rd=document.getElementById('friend-result');if(!u){rd.innerHTML='<div style="color:#f44">Not found</div>';return;}rd.innerHTML='<div class="friend-item"><div class="nick">'+n+'</div><button onclick="sendFriendRequest(\''+n+'\')" style="background:#4caf50;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Send</button></div>';}
 async function sendFriendRequest(n){const d=await getUser(n);if(!d){showModal('Ошибка','Не найден');return;}let r=d.friend_requests||[];if(r.includes(currentNickname)){showModal('Инфо','Уже отправлено');return;}r.push(currentNickname);await updateUser(n,{friend_requests:r});showModal('Успех','Отправлено!');}
@@ -1263,11 +1593,9 @@ async function adminViewUsers(){
   document.getElementById('admin-users-panel').style.display='flex';
   const c=document.getElementById('admin-users-list');c.innerHTML='Загрузка...';
   const{data}=await sb.from('users').select('*');
-  c.innerHTML='';
-  document.getElementById('admin-users-count').textContent=(data||[]).length+' шт.';
+  c.innerHTML='';document.getElementById('admin-users-count').textContent=(data||[]).length+' шт.';
   (data||[]).forEach(u=>{
-    const div=document.createElement('div');div.className='server-item';
-    div.style.cursor='pointer';
+    const div=document.createElement('div');div.className='server-item';div.style.cursor='pointer';
     div.innerHTML='<div><div class="name">'+u.nickname+'</div><div class="players" style="font-size:11px">$'+formatNumber(u.coins||0)+' · ₿'+formatNumber(u.dushka||0)+' · '+((u.base_slots||[]).filter(s=>s).length)+' бр.</div></div><button class="join-btn">Edit</button>';
     div.onclick=()=>openAdminUserEdit(u);
     c.appendChild(div);
@@ -1293,20 +1621,15 @@ async function saveAdminUser(){
   const newDushka=parseInt(document.getElementById('edit-dushka').value)||0;
   const newSpins=parseInt(document.getElementById('edit-spins').value)||0;
   await updateUser(_editingUser.nickname,{password:newPass,coins:newCoins,dushka:newDushka,spins:newSpins});
-  showNotif('✅ Сохранено');
-  closeAdminUserEdit();
-  adminViewUsers();
+  showNotif('✅ Сохранено');closeAdminUserEdit();adminViewUsers();
 }
 async function deleteAdminUser(){
   if(!_editingUser)return;
   if(!confirm('Удалить '+_editingUser.nickname+'?'))return;
   await sb.from('users').delete().eq('nickname',_editingUser.nickname);
-  showNotif('🗑 Удалён');
-  closeAdminUserEdit();
-  adminViewUsers();
+  showNotif('🗑 Удалён');closeAdminUserEdit();adminViewUsers();
 }
 
-// ===== ПУНКТ 5: УПРАВЛЕНИЕ =====
 let _manageUsers=[];
 async function adminOpenManage(){
   document.getElementById('admin-manage-panel').style.display='flex';
@@ -1321,36 +1644,15 @@ function closeAdminManage(){document.getElementById('admin-manage-panel').style.
 function filterManageUsers(){
   const q=document.getElementById('admin-manage-search').value.trim().toLowerCase();
   if(!q){renderManageUsers(_manageUsers);return;}
-  const filtered=_manageUsers.filter(u=>u.nickname.toLowerCase().includes(q));
-  renderManageUsers(filtered);
+  renderManageUsers(_manageUsers.filter(u=>u.nickname.toLowerCase().includes(q)));
 }
 function renderManageUsers(users){
   const c=document.getElementById('admin-manage-list');c.innerHTML='';
   if(users.length===0){c.innerHTML='<div style="text-align:center;color:var(--text-dim);padding:20px">Не найдено</div>';return;}
   users.forEach(u=>{
     const slotsCount=(u.base_slots||[]).filter(s=>s).length;
-    const div=document.createElement('div');
-    div.className='server-item';
-    div.style.cssText='padding:12px;flex-wrap:wrap;gap:10px';
-    div.innerHTML=`
-      <div style="min-width:120px">
-        <div class="name">${u.nickname}</div>
-        <div class="players" style="font-size:11px;margin-top:2px">${slotsCount} бр.</div>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;flex:1;justify-content:flex-end">
-        <div style="display:flex;align-items:center;gap:4px;background:var(--bg-panel-2);padding:4px 8px;border-radius:6px">
-          <span style="color:#4caf50;font-weight:bold;font-size:13px">$</span>
-          <input type="number" id="mg-coins-${u.nickname}" value="${u.coins||0}" style="width:90px;padding:4px 6px;border-radius:4px;border:1px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:13px">
-        </div>
-        <div style="display:flex;align-items:center;gap:4px;background:var(--bg-panel-2);padding:4px 8px;border-radius:6px">
-          <span style="color:#f7931a;font-weight:bold;font-size:13px">₿</span>
-          <input type="number" id="mg-dushka-${u.nickname}" value="${u.dushka||0}" style="width:90px;padding:4px 6px;border-radius:4px;border:1px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:13px">
-        </div>
-        <button class="save-btn" style="margin-top:0;padding:6px 12px;font-size:12px" onclick="saveManageUser('${u.nickname}')">💾</button>
-        <button class="save-btn" style="margin-top:0;padding:6px 12px;font-size:12px;background:#f39c12" onclick="setManageUserFast('${u.nickname}',1000000,0)">1M$</button>
-        <button class="save-btn" style="margin-top:0;padding:6px 12px;font-size:12px;background:#f7931a" onclick="setManageUserFast('${u.nickname}',0,1000)">1K₿</button>
-      </div>
-    `;
+    const div=document.createElement('div');div.className='server-item';div.style.cssText='padding:12px;flex-wrap:wrap;gap:10px';
+    div.innerHTML='<div style="min-width:120px"><div class="name">'+u.nickname+'</div><div class="players" style="font-size:11px;margin-top:2px">'+slotsCount+' бр.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;flex:1;justify-content:flex-end"><div style="display:flex;align-items:center;gap:4px;background:var(--bg-panel-2);padding:4px 8px;border-radius:6px"><span style="color:#4caf50;font-weight:bold;font-size:13px">$</span><input type="number" id="mg-coins-'+u.nickname+'" value="'+(u.coins||0)+'" style="width:90px;padding:4px 6px;border-radius:4px;border:1px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:13px"></div><div style="display:flex;align-items:center;gap:4px;background:var(--bg-panel-2);padding:4px 8px;border-radius:6px"><span style="color:#f7931a;font-weight:bold;font-size:13px">₿</span><input type="number" id="mg-dushka-'+u.nickname+'" value="'+(u.dushka||0)+'" style="width:90px;padding:4px 6px;border-radius:4px;border:1px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:13px"></div><button class="save-btn" style="margin-top:0;padding:6px 12px;font-size:12px" onclick="saveManageUser(\''+u.nickname+'\')">💾</button><button class="save-btn" style="margin-top:0;padding:6px 12px;font-size:12px;background:#f39c12" onclick="setManageUserFast(\''+u.nickname+'\',1000000,0)">1M$</button><button class="save-btn" style="margin-top:0;padding:6px 12px;font-size:12px;background:#f7931a" onclick="setManageUserFast(\''+u.nickname+'\',0,1000)">1K₿</button></div>';
     c.appendChild(div);
   });
 }
@@ -1358,14 +1660,12 @@ async function saveManageUser(nickname){
   const newCoins=parseInt(document.getElementById('mg-coins-'+nickname).value)||0;
   const newDushka=parseInt(document.getElementById('mg-dushka-'+nickname).value)||0;
   await updateUser(nickname,{coins:newCoins,dushka:newDushka});
-  const u=_manageUsers.find(x=>x.nickname===nickname);
-  if(u){u.coins=newCoins;u.dushka=newDushka;}
+  const u=_manageUsers.find(x=>x.nickname===nickname);if(u){u.coins=newCoins;u.dushka=newDushka;}
   showNotif('✅ '+nickname+': $'+formatNumber(newCoins)+' ₿'+formatNumber(newDushka));
 }
 async function setManageUserFast(nickname,coins,dushka){
   await updateUser(nickname,{coins:coins,dushka:dushka});
-  const u=_manageUsers.find(x=>x.nickname===nickname);
-  if(u){u.coins=coins;u.dushka=dushka;}
+  const u=_manageUsers.find(x=>x.nickname===nickname);if(u){u.coins=coins;u.dushka=dushka;}
   const cEl=document.getElementById('mg-coins-'+nickname);if(cEl)cEl.value=coins;
   const dEl=document.getElementById('mg-dushka-'+nickname);if(dEl)dEl.value=dushka;
   showNotif('⚡ '+nickname+' обновлён');
@@ -1379,7 +1679,7 @@ async function adminViewServers(){
   for(const s of (data||[])){
     const{count}=await sb.from('players').select('*',{count:'exact',head:true}).eq('server_id',s.id);
     const div=document.createElement('div');div.className='server-item';
-    div.innerHTML='<div class="name">'+(s.name||'Server')+'</div><div class="players">'+(count||0)+'/8 · '+String(s.id).slice(-6)+'</div>';
+    div.innerHTML='<div class="name">'+(s.name||'Server')+'</div><div class="players">'+(count||0)+'/'+(s.max_players||8)+' · '+String(s.id).slice(-6)+'</div>';
     c.appendChild(div);
   }
 }
@@ -1409,11 +1709,7 @@ const TUTORIAL_STEPS=[
   {step:'Шаг 4',text:'Хочешь украсть? Зайди на базу другого игрока, подойди к его брэинроту и ЗАЖМИ E на 0.5 сек.',target:()=>BASE_POSITIONS[((myBaseId%8)+1)]},
   {step:'Шаг 5',text:'Готово! Теперь ты знаешь базу. Удачи и богатства! 💰',target:null}
 ];
-function startTutorial(){
-  if(inFloor)return;
-  tutorialActive=true;tutorialStep=0;
-  showTutorialStep();
-}
+function startTutorial(){if(inFloor)return;tutorialActive=true;tutorialStep=0;showTutorialStep();}
 function showTutorialStep(){
   const t=TUTORIAL_STEPS[tutorialStep];if(!t){skipTutorial();return;}
   document.getElementById('tutorial-step').textContent=t.step;
@@ -1430,15 +1726,9 @@ function updateTutorialArrow(){
   const arrowX=el.left+target.x*scale;
   const arrowY=el.top+target.y*scale-60*scale;
   const arrow=document.getElementById('tutorial-arrow');
-  arrow.style.left=arrowX+'px';
-  arrow.style.top=arrowY+'px';
-  arrow.classList.add('show');
+  arrow.style.left=arrowX+'px';arrow.style.top=arrowY+'px';arrow.classList.add('show');
 }
-function nextTutorialStep(){
-  tutorialStep++;
-  if(tutorialStep>=TUTORIAL_STEPS.length){skipTutorial();return;}
-  showTutorialStep();
-}
+function nextTutorialStep(){tutorialStep++;if(tutorialStep>=TUTORIAL_STEPS.length){skipTutorial();return;}showTutorialStep();}
 function skipTutorial(){
   tutorialActive=false;
   document.getElementById('tutorial').classList.remove('show');
@@ -1453,6 +1743,7 @@ async function exitToMenu(){
   if(basesChannel){sb.removeChannel(basesChannel);basesChannel=null;}
   if(notifChannel){sb.removeChannel(notifChannel);notifChannel=null;}
   if(restartChannel){sb.removeChannel(restartChannel);restartChannel=null;}
+  if(serverChannel){sb.removeChannel(serverChannel);serverChannel=null;}
   conveyorBrainrots.forEach(b=>b.dom.remove());conveyorBrainrots=[];
   for(let k in otherPlayers){otherPlayers[k].remove();}otherPlayers={};
   removeEHint();closeFloorCleanup();
@@ -1463,7 +1754,9 @@ async function exitToMenu(){
   document.getElementById('exit-btn').style.display='none';
   document.getElementById('balance').style.display='none';
   document.getElementById('joystick-zone').style.display='none';
+  document.getElementById('fps-counter').textContent='';
   document.getElementById('main-menu').style.display='flex';
+  currentServerData=null;
 }
 
 window.addEventListener('load',async()=>{
