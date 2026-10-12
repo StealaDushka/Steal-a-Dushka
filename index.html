@@ -33,8 +33,9 @@ body{background:var(--bg-main);font-family:'Courier New',monospace;touch-action:
 .menu-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px;padding:20px}
 .menu-logo{font-size:64px;animation:logo-float 3s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(255,215,0,.6))}
 @keyframes logo-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-#main-menu h1{color:var(--title-color);font-size:46px;margin:0;letter-spacing:3px;font-weight:900}
-.menu-subtitle{color:var(--text-dim);font-size:13px;letter-spacing:4px;text-transform:uppercase;margin-bottom:15px}
+#main-menu h1{color:var(--title-color);font-size:46px;margin:0;letter-spacing:3px;font-weight:900;text-align:center}
+@media(max-width:600px){#main-menu h1{font-size:32px}.menu-logo{font-size:48px}}
+.menu-subtitle{color:var(--text-dim);font-size:13px;letter-spacing:4px;text-transform:uppercase;margin-bottom:15px;text-align:center}
 .menu-buttons{display:flex;flex-direction:column;gap:12px;align-items:center}
 .menu-btn{width:320px;max-width:90vw;height:62px;border:2px solid var(--btn-border);border-radius:14px;font-size:18px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;background:var(--btn-bg);color:var(--btn-text);font-family:inherit}
 .menu-btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 30px rgba(0,0,0,.35)}
@@ -241,7 +242,7 @@ input[type="file"]{color:var(--text-main)}
 #floor-title{position:absolute;top:8px;left:50%;transform:translateX(-50%);color:#fff;font-size:14px;font-weight:bold;z-index:100;text-shadow:1px 1px 2px #000}
 #joystick-zone{position:fixed;bottom:120px;left:30px;width:120px;height:120px;z-index:100;opacity:0.5;display:none;touch-action:none}
 #tutorial{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:16px 24px;border-radius:12px;z-index:8000;display:none;border:2px solid #ffd700;text-align:center;max-width:90%;box-shadow:0 8px 30px rgba(0,0,0,.6)}
-#tutorial.show{display:block;animation:fade-in .3s}
+#tutorial.show{display:block}
 #tutorial .step{font-size:16px;font-weight:bold;color:#ffd700;margin-bottom:6px}
 #tutorial .text{font-size:14px;margin-bottom:12px;line-height:1.5}
 #tutorial .btn{background:#4caf50;color:#fff;border:none;padding:8px 20px;border-radius:8px;font-weight:bold;cursor:pointer;margin:0 4px}
@@ -258,7 +259,7 @@ input[type="file"]{color:var(--text-main)}
   <div class="box dushka"><span class="label">Dushka Coins</span><span class="amount" id="dushka-coins">0</span></div>
   <div class="box"><span class="label">Монеты</span><span class="amount" id="balance-amount">25</span></div>
 </div>
-<div id="version">Версия: 0.36</div>
+<div id="version">Версия: 0.37</div>
 <div id="exit-btn" onclick="exitToMenu()">Выйти</div>
 <div id="back-btn" onclick="exitFloor()">Назад</div>
 <div id="fps-counter">FPS: -- | PING: --</div>
@@ -274,7 +275,7 @@ input[type="file"]{color:var(--text-main)}
       <button class="menu-btn" onclick="openFriends()"><span class="menu-icon">👥</span> Друзья</button>
       <button class="menu-btn" onclick="openProfile()"><span class="menu-icon">👤</span> Профиль</button>
     </div>
-    <div class="menu-footer"><div>v0.36 · by MrDushka</div><div id="changelog-display"></div></div>
+    <div class="menu-footer"><div>v0.37 · by MrDushka</div><div id="changelog-display"></div></div>
   </div>
   <div class="theme-toggle" onclick="toggleMenuTheme()"><svg viewBox="0 0 100 100"><defs><mask id="moon-mask"><rect width="100" height="100" fill="white"/><circle cx="68" cy="38" r="38" fill="black"/></mask></defs><circle cx="50" cy="50" r="42" fill="currentColor" mask="url(#moon-mask)"/></svg></div>
   <div id="settings-btn" onclick="openSettings()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
@@ -308,7 +309,7 @@ input[type="file"]{color:var(--text-main)}
         <div class="settings-section" data-section="controls" style="display:none">
           <h3 class="settings-section-title">🎮 Управление</h3>
           <div class="setting-row"><div class="setting-label">Размер джойстика</div><div class="setting-control"><div class="opt-group"><button class="opt-btn" data-joy="small" onclick="setJoystickSize('small')">S</button><button class="opt-btn active" data-joy="medium" onclick="setJoystickSize('medium')">M</button><button class="opt-btn" data-joy="large" onclick="setJoystickSize('large')">L</button></div></div></div>
-          <div class="setting-row"><div class="setting-label">Прозрачность джойстика</div><div class="setting-control"><div class="range-wrap"><input type="range" id="joy-opacity-slider" min="10" max="100" value="50" oninput="setJoystickOpacity(this.value)"><span class="range-value" id="joy-opacity-value">50%</span></div></div></div>
+          <div class="setting-row"><div class="setting-label">Прозрачность</div><div class="setting-control"><div class="range-wrap"><input type="range" id="joy-opacity-slider" min="10" max="100" value="50" oninput="setJoystickOpacity(this.value)"><span class="range-value" id="joy-opacity-value">50%</span></div></div></div>
           <div class="setting-row"><div class="setting-label">Показывать E/F</div><div class="setting-control"><div class="switch on" id="switch-eButtons" onclick="toggleSetting('showEButtons',this)"></div></div></div>
         </div>
         <div class="settings-section" data-section="notifications" style="display:none">
@@ -342,6 +343,7 @@ input[type="file"]{color:var(--text-main)}
   </div>
 </div>
 
+<!-- ADMIN PANEL -->
 <div id="admin-panel" class="menu-overlay" style="display:none;max-width:520px">
   <div class="header"><div class="title"><h2>⚙ ADMIN PANEL</h2><p>MrDushka only</p></div><div class="close-btn" onclick="closeAdmin()">X</div></div>
   <div class="content" style="padding:20px">
@@ -349,6 +351,7 @@ input[type="file"]{color:var(--text-main)}
     <button class="admin-btn" onclick="adminViewServers()"><span class="num">2</span> Сервера</button>
     <button class="admin-btn" onclick="adminRestartServers()"><span class="num">3</span> Рестарт серверов</button>
     <button class="admin-btn" onclick="adminEditChangelog()"><span class="num">4</span> Обновление</button>
+    <button class="admin-btn" onclick="adminOpenManage()"><span class="num">5</span> Управление</button>
   </div>
 </div>
 
@@ -369,6 +372,18 @@ input[type="file"]{color:var(--text-main)}
       <button class="save-btn" onclick="saveAdminUser()" style="margin-top:10px">Сохранить</button>
       <button class="save-btn" style="background:#c0392b;margin-top:0" onclick="deleteAdminUser()">Удалить аккаунт</button>
     </div>
+  </div>
+</div>
+
+<!-- ADMIN MANAGE (ПУНКТ 5) -->
+<div id="admin-manage-panel" class="menu-overlay" style="display:none;max-width:750px">
+  <div class="header"><div class="title"><h2>Управление игроками</h2><p id="admin-manage-count">—</p></div><div class="close-btn" onclick="closeAdminManage()">X</div></div>
+  <div class="content" style="padding:15px">
+    <div style="margin-bottom:12px;display:flex;gap:8px">
+      <input type="text" id="admin-manage-search" placeholder="Поиск по нику..." style="flex:1;padding:10px;border-radius:8px;border:2px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:14px" oninput="filterManageUsers()">
+      <button class="save-btn" style="margin-top:0;padding:10px 16px" onclick="filterManageUsers()">🔍</button>
+    </div>
+    <div id="admin-manage-list" style="display:flex;flex-direction:column;gap:8px"></div>
   </div>
 </div>
 
@@ -472,7 +487,6 @@ function applyAllSettings(){
   const jz=document.getElementById('joystick-zone');if(jz)jz.style.opacity=Settings.joystickOpacity/100;
   const fc=document.getElementById('fps-counter');if(fc)fc.classList.toggle('visible',Settings.showFps);
   document.querySelectorAll('.player-name').forEach(el=>{el.style.display=Settings.showNames?'':'none';});
-  // Размер джойстика
   const sizes={small:80,medium:120,large:160};
   if(jz){const s=sizes[Settings.joystickSize]||120;jz.style.width=s+'px';jz.style.height=s+'px';}
 }
@@ -534,8 +548,8 @@ let x=200,y=200,coins=25,dushka=0,currentNickname=null,currentServerId=null,myBa
 let mySlots=new Array(12).fill(null);let allBasesData={};let otherPlayers={};let conveyorBrainrots=[];let lastConveyorSpawn=0;let currentTarget=null;
 let inFloor=false,fx=195,fy=370,floorSlots=[],floorLocked=false,floorOwner=null,viewingBaseId=null;let carriedBrainrot=null;
 let _spins=0,isSpinning=false,wheelRotation=0;let ownedItems=[],autoBuyShopItems=[],ownedRedItems=[],currentRedTab='gear';
-const PLAYER_SPEED=60; // px/sec
-const CONVEYOR_SPEED=30; // px/sec (2x медленнее игрока)
+const PLAYER_SPEED=60;
+const CONVEYOR_SPEED=30;
 const CONVEYOR_MAX=12,SPAWN_INTERVAL=2000,BASE_MAX=12;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
 let touchDX=0,touchDY=0,joystickManager=null;let typedCode='';
@@ -559,7 +573,6 @@ async function handleRegister(){
   const{error}=await sb.from('users').insert({nickname:u,password:p,coins:25,dushka:0,base_slots:[],owned_items:[],owned_red_items:[],auto_buy:[],notifications:[],friends:[],friend_requests:[]});
   if(error){showModal('Ошибка',error.message);return;}
   currentNickname=u;try{localStorage.setItem('dushka_nick',u);}catch(e){}
-  // Туториал для нового игрока
   try{if(!localStorage.getItem('dushka_tutorial_done')){localStorage.setItem('dushka_tutorial_pending','1');}}catch(e){}
   showMainMenu();
 }
@@ -625,7 +638,6 @@ async function startGame(){
   lastConveyorSpawn=Date.now();
   update();window.focus();resizeGame();initJoystick();
   updateFreeSpinTimer();updateBeeUI();
-  // Туториал
   try{
     if(localStorage.getItem('dushka_tutorial_pending')==='1'){
       localStorage.removeItem('dushka_tutorial_pending');
@@ -876,6 +888,7 @@ document.addEventListener('keydown',e=>{
     e.preventDefault();
     if(document.getElementById('settings-modal').classList.contains('open')){closeSettings();return;}
     if(document.getElementById('admin-changelog-panel').style.display==='flex'){closeAdminChangelog();return;}
+    if(document.getElementById('admin-manage-panel').style.display==='flex'){closeAdminManage();return;}
     if(document.getElementById('admin-user-edit-panel').style.display==='flex'){closeAdminUserEdit();return;}
     if(document.getElementById('admin-users-panel').style.display==='flex'){closeAdminUsers();return;}
     if(document.getElementById('admin-servers-panel').style.display==='flex'){closeAdminServers();return;}
@@ -982,7 +995,6 @@ async function toggleFloorLock(){
   renderFloor();
 }
 
-// Управление E/F кнопками над персонажем
 function updateInteractButtons(){
   const eBtn=document.getElementById('interact'),fBtn=document.getElementById('interactF');
   if(!currentTarget||!Settings.showEButtons){eBtn.style.display='none';fBtn.style.display='none';return;}
@@ -1031,8 +1043,6 @@ function update(t=0){
 }
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y);}
 function removeEHint(){document.getElementById('interact').style.display='none';document.getElementById('interactF').style.display='none';}
-function showEOnly(){if(!Settings.showEButtons)return;document.getElementById('interact').style.display='flex';document.getElementById('interactF').style.display='none';}
-function showEAndF(){if(!Settings.showEButtons)return;document.getElementById('interact').style.display='flex';document.getElementById('interactF').style.display='flex';}
 
 function updateTarget(){
   const pc={x:x+4,y:y+8};currentTarget=null;removeEHint();
@@ -1068,7 +1078,7 @@ function updateFloorTarget(){
 document.getElementById('interact').addEventListener('click',()=>{if(eHoldActive)return;const snap=currentTarget?JSON.parse(JSON.stringify(currentTarget)):null;executeShortE(snap);});
 document.getElementById('interactF').addEventListener('click',()=>{const snap=currentTarget?JSON.parse(JSON.stringify(currentTarget)):null;executeShortF(snap);});
 
-// ===== SVG ИКОНКИ — ТОЛЬКО ДЛЯ МАГАЗИНОВ =====
+// ===== SVG =====
 function getShopIcon(type){switch(type){
 case'slap':return'<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="#fff" stroke-width="6" fill="none"/></svg>';
 case'speed-coil':return'<svg viewBox="0 0 100 100"><path d="M50 15 Q20 30 50 45 Q80 60 50 75 Q20 90 50 95" stroke="#e74c3c" stroke-width="8" fill="none"/></svg>';
@@ -1294,6 +1304,71 @@ async function deleteAdminUser(){
   showNotif('🗑 Удалён');
   closeAdminUserEdit();
   adminViewUsers();
+}
+
+// ===== ПУНКТ 5: УПРАВЛЕНИЕ =====
+let _manageUsers=[];
+async function adminOpenManage(){
+  document.getElementById('admin-manage-panel').style.display='flex';
+  document.getElementById('admin-manage-list').innerHTML='<div style="text-align:center;color:var(--text-dim);padding:20px">Загрузка...</div>';
+  document.getElementById('admin-manage-search').value='';
+  const{data}=await sb.from('users').select('*').order('nickname');
+  _manageUsers=data||[];
+  document.getElementById('admin-manage-count').textContent=_manageUsers.length+' игроков';
+  renderManageUsers(_manageUsers);
+}
+function closeAdminManage(){document.getElementById('admin-manage-panel').style.display='none';}
+function filterManageUsers(){
+  const q=document.getElementById('admin-manage-search').value.trim().toLowerCase();
+  if(!q){renderManageUsers(_manageUsers);return;}
+  const filtered=_manageUsers.filter(u=>u.nickname.toLowerCase().includes(q));
+  renderManageUsers(filtered);
+}
+function renderManageUsers(users){
+  const c=document.getElementById('admin-manage-list');c.innerHTML='';
+  if(users.length===0){c.innerHTML='<div style="text-align:center;color:var(--text-dim);padding:20px">Не найдено</div>';return;}
+  users.forEach(u=>{
+    const slotsCount=(u.base_slots||[]).filter(s=>s).length;
+    const div=document.createElement('div');
+    div.className='server-item';
+    div.style.cssText='padding:12px;flex-wrap:wrap;gap:10px';
+    div.innerHTML=`
+      <div style="min-width:120px">
+        <div class="name">${u.nickname}</div>
+        <div class="players" style="font-size:11px;margin-top:2px">${slotsCount} бр.</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;flex:1;justify-content:flex-end">
+        <div style="display:flex;align-items:center;gap:4px;background:var(--bg-panel-2);padding:4px 8px;border-radius:6px">
+          <span style="color:#4caf50;font-weight:bold;font-size:13px">$</span>
+          <input type="number" id="mg-coins-${u.nickname}" value="${u.coins||0}" style="width:90px;padding:4px 6px;border-radius:4px;border:1px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:13px">
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;background:var(--bg-panel-2);padding:4px 8px;border-radius:6px">
+          <span style="color:#f7931a;font-weight:bold;font-size:13px">₿</span>
+          <input type="number" id="mg-dushka-${u.nickname}" value="${u.dushka||0}" style="width:90px;padding:4px 6px;border-radius:4px;border:1px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:13px">
+        </div>
+        <button class="save-btn" style="margin-top:0;padding:6px 12px;font-size:12px" onclick="saveManageUser('${u.nickname}')">💾</button>
+        <button class="save-btn" style="margin-top:0;padding:6px 12px;font-size:12px;background:#f39c12" onclick="setManageUserFast('${u.nickname}',1000000,0)">1M$</button>
+        <button class="save-btn" style="margin-top:0;padding:6px 12px;font-size:12px;background:#f7931a" onclick="setManageUserFast('${u.nickname}',0,1000)">1K₿</button>
+      </div>
+    `;
+    c.appendChild(div);
+  });
+}
+async function saveManageUser(nickname){
+  const newCoins=parseInt(document.getElementById('mg-coins-'+nickname).value)||0;
+  const newDushka=parseInt(document.getElementById('mg-dushka-'+nickname).value)||0;
+  await updateUser(nickname,{coins:newCoins,dushka:newDushka});
+  const u=_manageUsers.find(x=>x.nickname===nickname);
+  if(u){u.coins=newCoins;u.dushka=newDushka;}
+  showNotif('✅ '+nickname+': $'+formatNumber(newCoins)+' ₿'+formatNumber(newDushka));
+}
+async function setManageUserFast(nickname,coins,dushka){
+  await updateUser(nickname,{coins:coins,dushka:dushka});
+  const u=_manageUsers.find(x=>x.nickname===nickname);
+  if(u){u.coins=coins;u.dushka=dushka;}
+  const cEl=document.getElementById('mg-coins-'+nickname);if(cEl)cEl.value=coins;
+  const dEl=document.getElementById('mg-dushka-'+nickname);if(dEl)dEl.value=dushka;
+  showNotif('⚡ '+nickname+' обновлён');
 }
 
 async function adminViewServers(){
