@@ -18,7 +18,7 @@ const IS_MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini
 body.light-theme{--bg-main:#eef2ff;--bg-main-2:#dce4f7;--bg-panel:#fff;--bg-panel-2:#f0f4ff;--bg-item:#f5f7fb;--bg-item-hover:#e8ecf5;--text-main:#1a1a2e;--text-dim:#555;--text-mid:#888;--border-color:#c5cde0;--border-soft:#d5dce8;--btn-bg:#0a0a1e;--btn-text:#fff;--btn-border:#1a1a2e;--title-color:#6a1b9a}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
-body{background:var(--bg-main);font-family:'Courier New',monospace;touch-action:none;user-select:none;-webkit-user-select:none;transition:background .4s,color .4s;color:var(--text-main)}
+body{background:var(--bg-main);font-family:'Courier New',monospace;touch-action:none;user-select:none;-webkit-user-select:none;color:var(--text-main)}
 ::-webkit-scrollbar{width:8px;height:8px}
 ::-webkit-scrollbar-thumb{background:var(--border-color);border-radius:4px}
 #auth{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background:#1a1a1a;z-index:999}
@@ -122,6 +122,7 @@ input[type="file"]{color:var(--text-main)}
 .base-bottom-1{bottom:20px;left:20px}.base-bottom-2{bottom:20px;left:115px}.base-bottom-3{bottom:20px;left:210px}.base-bottom-4{bottom:20px;left:305px}
 .base-bottom .brown{top:4px;bottom:auto}.base-bottom .green{top:-14px;bottom:auto}.base-bottom .nickname{top:4px;bottom:auto}
 .base.locked::after{content:'ЗАКРЫТО';position:absolute;inset:0;background:rgba(192,57,43,.6);color:#fff;font-weight:bold;font-size:12px;display:flex;justify-content:center;align-items:center;z-index:12;pointer-events:none}
+.base-slot{position:absolute;width:28px;height:28px;background:#22e54c;border:3px solid #0a0a0a;z-index:7;border-radius:4px;box-shadow:inset 0 2px 4px rgba(0,0,0,.25);box-sizing:border-box}
 .brainrot-on-base{position:absolute;width:14px;height:14px;background-size:cover;background-position:center;z-index:8;border-radius:2px;pointer-events:none;box-sizing:border-box;background-color:#4a90e2}
 .brainrot-on-base.common{border:1px solid #aaa}.brainrot-on-base.horror{border:1px solid #555}
 .brainrot-on-base.epic{border:1px solid #9b59b6}.brainrot-on-base.legendary{border:1px solid #f1c40f;box-shadow:0 0 4px #f1c40f}
@@ -137,7 +138,6 @@ input[type="file"]{color:var(--text-main)}
 #queen-bee{left:230px;top:137px}.q-yellow{background:#FFD966}.q-red{background:#F44336}.q-brown{background:#8B4513}
 #rng-circle{left:190px;top:230px;background:#A454B4;border-radius:50%}
 #shop-white{left:230px;top:230px}.w-dark{background:#003366}.w-white{background:#FFFFFF}
-/* ТОНКИЙ ПЕРСОНАЖ 10px x 22px */
 #player,.other-player,#floor-player{position:absolute;width:10px;height:22px;display:grid;grid-template-columns:1fr;grid-template-rows:9px 1fr;z-index:20;border:2px solid rgba(0,0,0,.8);border-radius:2px;overflow:hidden;box-shadow:0 2px 4px rgba(0,0,0,.35)}
 #player .head-pix,.other-player .head-pix,#floor-player .head-pix{background:#FFCC00;border-bottom:1px solid rgba(0,0,0,.4)}
 #player .body-pix,.other-player .body-pix,#floor-player .body-pix{width:100%;height:100%;background:#FF0000}
@@ -159,9 +159,8 @@ input[type="file"]{color:var(--text-main)}
 .brainrot-conveyor.secret{border-color:#00bcd4;box-shadow:0 0 12px #00bcd4}
 .brainrot-conveyor.og{border-color:#ffd700;box-shadow:0 0 15px #ffd700}
 .brainrot-price-tag{position:absolute;top:-18px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#ffd700;font-size:9px;font-weight:bold;padding:2px 5px;border-radius:4px;white-space:nowrap;border:1px solid #ffd700;pointer-events:none}
-#chat-banner{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f7931a,#f7b73a);color:#fff;padding:14px 28px;border-radius:12px;font-weight:bold;font-size:16px;z-index:8500;display:none;box-shadow:0 6px 24px rgba(247,147,26,.5);border:2px solid #fff;max-width:80%;text-align:center;animation:chat-pulse 2s ease-in-out infinite}
+#chat-banner{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f7931a,#f7b73a);color:#fff;padding:14px 28px;border-radius:12px;font-weight:bold;font-size:16px;z-index:8500;display:none;box-shadow:0 6px 24px rgba(247,147,26,.5);border:2px solid #fff;max-width:80%;text-align:center}
 #chat-banner.show{display:block}
-@keyframes chat-pulse{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.03)}}
 #chat-banner::before{content:'📢 ';font-size:20px}
 #base-menu{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--border-color);border-radius:12px;padding:20px;width:90%;max-width:520px;max-height:80vh;overflow-y:auto;z-index:2500}
 #base-menu h2{color:var(--text-main);margin:0 0 15px;font-size:20px}
@@ -175,7 +174,6 @@ input[type="file"]{color:var(--text-main)}
 .bm-row .earned{color:#4caf50;font-weight:bold;font-size:13px}
 .bm-row .collect{background:#4caf50;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:12px}
 .bm-empty{text-align:center;color:var(--text-mid);padding:20px}
-/* === ПЕРЕТАСКИВАЕМЫЕ ОКНА === */
 .menu-overlay{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:85%;max-width:900px;max-height:90vh;background:var(--bg-panel);border:2px solid var(--border-color);border-radius:8px;z-index:2000;flex-direction:column;padding:0;overflow:hidden}
 .menu-overlay .header{display:flex;justify-content:space-between;align-items:flex-start;padding:15px 20px;flex-shrink:0;background:var(--bg-panel-2);cursor:move;user-select:none}
 .menu-overlay .header .title h2{margin:0;color:var(--text-main);font-size:22px}
@@ -198,7 +196,6 @@ input[type="file"]{color:var(--text-main)}
 .shop-item .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
 .shop-item .price-btn{background:#4caf50;color:#fff;padding:8px 15px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px}
 .shop-item .price-btn.owned{background:#555;cursor:default}
-.shop-item .auto-buy{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:12px;color:var(--text-main);cursor:pointer}
 #bee-menu{max-width:700px}
 #bee-menu .content{padding:15px;background:var(--bg-panel)}
 #bee-menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
@@ -256,7 +253,7 @@ input[type="file"]{color:var(--text-main)}
 #notif{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#c0392b;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;z-index:99999;display:none;box-shadow:0 4px 12px rgba(0,0,0,.5)}
 #floor-title{position:absolute;top:8px;left:50%;transform:translateX(-50%);color:#fff;font-size:14px;font-weight:bold;z-index:100;text-shadow:1px 1px 2px #000}
 #joystick-zone{position:fixed;bottom:120px;left:30px;width:120px;height:120px;z-index:100;opacity:0.5;display:none;touch-action:none}
-#tutorial{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:16px 24px;border-radius:12px;z-index:8000;display:none;border:2px solid #ffd700;text-align:center;max-width:90%;box-shadow:0 8px 30px rgba(0,0,0,.6)}
+#tutorial{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:16px 24px;border-radius:12px;z-index:8000;display:none;border:2px solid #ffd700;text-align:center;max-width:90%}
 #tutorial.show{display:block}
 #tutorial .step{font-size:16px;font-weight:bold;color:#ffd700;margin-bottom:6px}
 #tutorial .text{font-size:14px;margin-bottom:12px;line-height:1.5}
@@ -285,7 +282,6 @@ input[type="file"]{color:var(--text-main)}
 .esc-header h2{margin:0;color:var(--text-main);font-size:22px}
 .esc-body{padding:20px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
 .esc-btn{width:100%;padding:16px;background:var(--bg-item);border:2px solid var(--border-color);color:var(--text-main);border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:12px}
-.esc-btn:hover{background:var(--bg-item-hover);border-color:var(--accent)}
 .esc-btn.danger{background:#7f1d1d;border-color:#c0392b}
 .esc-players{background:var(--bg-panel-2);border-radius:10px;padding:12px;max-height:240px;overflow-y:auto}
 .esc-player-row{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--bg-item);border-radius:8px;margin-bottom:6px;gap:8px}
@@ -312,7 +308,7 @@ input[type="file"]{color:var(--text-main)}
   <div class="box dushka"><span class="label">Dushka Coins</span><span class="amount"><span class="coin-icon btc">₿</span><span id="dushka-coins">0</span></span></div>
   <div class="box"><span class="label">Монеты</span><span class="amount"><span class="coin-icon usd">$</span><span id="balance-amount">25</span></span></div>
 </div>
-<div id="version">Версия: 0.47</div>
+<div id="version">Версия: 0.48</div>
 <div id="exit-btn" onclick="openEscMenu()">Меню</div>
 <div id="back-btn" onclick="exitFloor()">Назад</div>
 <div id="fps-counter">FPS: -- | PING: --</div>
@@ -329,7 +325,7 @@ input[type="file"]{color:var(--text-main)}
       <button class="menu-btn" onclick="openFriends()"><span class="menu-icon">👥</span> Друзья</button>
       <button class="menu-btn" onclick="openProfile()"><span class="menu-icon">👤</span> Профиль</button>
     </div>
-    <div class="menu-footer"><div>v0.47 · by MrDushka</div><div id="changelog-display"></div></div>
+    <div class="menu-footer"><div>v0.48 · by MrDushka</div><div id="changelog-display"></div></div>
   </div>
   <div class="theme-toggle" onclick="toggleMenuTheme()"><svg viewBox="0 0 100 100"><defs><mask id="moon-mask"><rect width="100" height="100" fill="white"/><circle cx="68" cy="38" r="38" fill="black"/></mask></defs><circle cx="50" cy="50" r="42" fill="currentColor" mask="url(#moon-mask)"/></svg></div>
   <div id="settings-btn" onclick="openSettings()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
@@ -584,7 +580,6 @@ input[type="file"]{color:var(--text-main)}
 </div>
 
 <script>
-/* ==== SETTINGS ==== */
 const Settings={sfxEnabled:true,joystickSize:'medium',joystickOpacity:50,showEButtons:true,notifySteal:true,vibration:true,showFps:false,showNames:false,theme:'dark',brightness:100,sfxVolume:70,skin:'red'};
 const SKINS=[
   {id:'red',name:'Красный',color:'#FF0000'},{id:'blue',name:'Синий',color:'#3498db'},{id:'green',name:'Зелёный',color:'#2ecc71'},
@@ -679,16 +674,25 @@ function pickBrainrot(){const rar=pickRarity();const pool=BRAINROTS_LIST.filter(
 
 const BASE_POSITIONS={1:{x:20,y:20},2:{x:115,y:20},3:{x:210,y:20},4:{x:305,y:20},5:{x:20,y:305},6:{x:115,y:305},7:{x:210,y:305},8:{x:305,y:305}};
 const BASE_SPAWN={1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81},5:{x:52,y:307},6:{x:147,y:307},7:{x:242,y:307},8:{x:337,y:307}};
-const FLOOR_SLOT_OFFSETS=[{dx:15,dy:55},{dx:15,dy:105},{dx:15,dy:155},{dx:15,dy:205},{dx:15,dy:255},{dx:15,dy:305},{dx:357,dy:55},{dx:357,dy:105},{dx:357,dy:155},{dx:357,dy:205},{dx:357,dy:255},{dx:357,dy:305}];
+/* 10 слотов: 5 слева, 5 справа */
+const FLOOR_SLOT_OFFSETS=[
+  {dx:15,dy:70},{dx:15,dy:130},{dx:15,dy:190},{dx:15,dy:250},{dx:15,dy:310},
+  {dx:357,dy:70},{dx:357,dy:130},{dx:357,dy:190},{dx:357,dy:250},{dx:357,dy:310}
+];
+/* Цвета рамок по редкости */
+const RARITY_BORDER={
+  common:'#888888',horror:'#555555',epic:'#9b59b6',legendary:'#f1c40f',
+  mythic:'#e74c3c',god:'#e67e22',secret:'#00bcd4',og:'#ffd700'
+};
 
 let x=200,y=200,coins=25,dushka=0,currentNickname=null,currentServerId=null,currentServerData=null,myBaseId=0,myBaseLocked=false;
-let mySlots=new Array(12).fill(null);let allBasesData={};let otherPlayers={};let conveyorBrainrots=[];let lastConveyorSpawn=0;let currentTarget=null;
+let mySlots=new Array(10).fill(null);let allBasesData={};let otherPlayers={};let conveyorBrainrots=[];let lastConveyorSpawn=0;let currentTarget=null;
 let inFloor=false,fx=195,fy=370,floorSlots=[],floorLocked=false,floorOwner=null,viewingBaseId=null;let carriedBrainrot=null;
 let _spins=0,isSpinning=false,wheelRotation=0;let ownedItems=[],autoBuyShopItems=[],ownedRedItems=[],currentRedTab='gear';
 /* Скорость игрока 60 (2х медленнее), конвейер 15 */
 const PLAYER_SPEED=60;
 const CONVEYOR_SPEED=15;
-const CONVEYOR_MAX=12,SPAWN_INTERVAL=2000,BASE_MAX=12;
+const CONVEYOR_MAX=12,SPAWN_INTERVAL=2000,BASE_MAX=10;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
 let touchDX=0,touchDY=0,joystickManager=null;let typedCode='';
 let heartbeatInterval=null;
@@ -696,7 +700,7 @@ let playersChannel=null,basesChannel=null,notifChannel=null,restartChannel=null,
 let _lastRestartSeen=null;
 const obstacles=[{x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},{x:148,y:135,w:24,h:24},{x:188,y:135,w:24,h:24},{x:228,y:135,w:24,h:28},{x:148,y:228,w:24,h:24},{x:188,y:228,w:24,h:24},{x:228,y:228,w:24,h:24}];
 
-function normalizeSlots(slots,size){size=size||12;const arr=new Array(size).fill(null);if(!slots)return arr;if(typeof slots==='string'){try{slots=JSON.parse(slots);}catch(e){return arr;}}for(let i=0;i<size;i++){if(slots[i])arr[i]=slots[i];}return arr;}
+function normalizeSlots(slots,size){size=size||10;const arr=new Array(size).fill(null);if(!slots)return arr;if(typeof slots==='string'){try{slots=JSON.parse(slots);}catch(e){return arr;}}for(let i=0;i<size;i++){if(slots[i])arr[i]=slots[i];}return arr;}
 function formatNumber(num){if(num>=1e15)return(num/1e15).toFixed(2)+'Qa';if(num>=1e12)return(num/1e12).toFixed(2)+'T';if(num>=1e9)return(num/1e9).toFixed(2)+'B';if(num>=1e6)return(num/1e6).toFixed(2)+'M';if(num>=1e3)return(num/1e3).toFixed(2)+'K';return Math.floor(num).toString();}
 function showModal(t,x){document.getElementById('modal-title').textContent=t;document.getElementById('modal-text').textContent=x;document.getElementById('custom-modal').style.display='block';}
 function closeModal(){document.getElementById('custom-modal').style.display='none';}
@@ -704,38 +708,25 @@ function showNotif(text){const n=document.getElementById('notif');n.textContent=
 function resizeGame(){const g=document.getElementById('game-container'),f=document.getElementById('floor-container');const w=window.innerWidth,h=window.innerHeight;let s=Math.min(w/500,h/500);s=Math.max(0.6,Math.min(1.2,s));g.style.transform=`scale(${s})`;f.style.transform=`scale(${s})`;}
 window.addEventListener('resize',resizeGame);
 
-/* ==== DRAGABLE PANELS ==== */
+/* ===== DRAGABLE PANELS ===== */
 function makeDraggable(el){
   const header=el.querySelector('.header');
   if(!header)return;
   let dragging=false,startX=0,startY=0,startLeft=0,startTop=0;
-  header.addEventListener('mousedown',e=>{
-    if(e.target.closest('.close-btn'))return;
-    dragging=true;
+  const startDrag=(cx,cy)=>{
     const rect=el.getBoundingClientRect();
     el.style.transform='none';el.style.left=rect.left+'px';el.style.top=rect.top+'px';el.style.margin='0';
-    startX=e.clientX;startY=e.clientY;startLeft=rect.left;startTop=rect.top;
-    e.preventDefault();
-  });
-  document.addEventListener('mousemove',e=>{
+    startX=cx;startY=cy;startLeft=rect.left;startTop=rect.top;dragging=true;
+  };
+  const moveDrag=(cx,cy)=>{
     if(!dragging)return;
-    const dx=e.clientX-startX,dy=e.clientY-startY;
-    el.style.left=(startLeft+dx)+'px';el.style.top=(startTop+dy)+'px';
-  });
+    el.style.left=(startLeft+cx-startX)+'px';el.style.top=(startTop+cy-startY)+'px';
+  };
+  header.addEventListener('mousedown',e=>{if(e.target.closest('.close-btn'))return;startDrag(e.clientX,e.clientY);e.preventDefault();});
+  document.addEventListener('mousemove',e=>moveDrag(e.clientX,e.clientY));
   document.addEventListener('mouseup',()=>{dragging=false;});
-  header.addEventListener('touchstart',e=>{
-    if(e.target.closest('.close-btn'))return;
-    const t=e.touches[0];dragging=true;
-    const rect=el.getBoundingClientRect();
-    el.style.transform='none';el.style.left=rect.left+'px';el.style.top=rect.top+'px';
-    startX=t.clientX;startY=t.clientY;startLeft=rect.left;startTop=rect.top;
-    e.preventDefault();
-  },{passive:false});
-  document.addEventListener('touchmove',e=>{
-    if(!dragging)return;
-    const t=e.touches[0];const dx=t.clientX-startX,dy=t.clientY-startY;
-    el.style.left=(startLeft+dx)+'px';el.style.top=(startTop+dy)+'px';
-  },{passive:false});
+  header.addEventListener('touchstart',e=>{if(e.target.closest('.close-btn'))return;const t=e.touches[0];startDrag(t.clientX,t.clientY);e.preventDefault();},{passive:false});
+  document.addEventListener('touchmove',e=>{if(!dragging)return;const t=e.touches[0];moveDrag(t.clientX,t.clientY);},{passive:false});
   document.addEventListener('touchend',()=>{dragging=false;});
 }
 
@@ -770,7 +761,6 @@ function showMainMenu(){
   document.getElementById('esc-menu').classList.remove('open');
   document.getElementById('chat-panel').classList.remove('open');
 }
-
 async function playRandom(){
   const{data}=await sb.from('servers').select('*').eq('access','all').limit(20);
   let chosen=null;
@@ -799,7 +789,7 @@ async function startGame(){
   const d=await getUser(currentNickname);
   coins=d.coins||25;dushka=d.dushka||0;myBaseId=d.base_id||0;myBaseLocked=d.base_locked||false;
   if(d.skin)Settings.skin=d.skin;
-  mySlots=normalizeSlots(d.base_slots,12);
+  mySlots=normalizeSlots(d.base_slots,10);
   ownedItems=d.owned_items||[];autoBuyShopItems=d.auto_buy||[];ownedRedItems=d.owned_red_items||[];_spins=d.spins||0;
   document.getElementById('balance-amount').textContent=formatNumber(coins);
   document.getElementById('dushka-coins').textContent=formatNumber(dushka);
@@ -823,7 +813,6 @@ async function startGame(){
   if(IS_MOBILE)initJoystick();
   updateFreeSpinTimer();
 }
-
 function startHeartbeat(){
   stopHeartbeat();
   heartbeatInterval=setInterval(async()=>{
@@ -845,8 +834,8 @@ async function subscribeBases(){
     const{data}=await sb.from('bases').select('*').eq('server_id',currentServerId);
     (data||[]).forEach(b=>{
       const isMine=b.base_num===myBaseId&&b.owner===currentNickname;
-      if(isMine){const dbSlots=normalizeSlots(b.slots,12);const dbCount=dbSlots.filter(s=>s).length;const localCount=mySlots.filter(s=>s).length;if(dbCount>=localCount){mySlots=dbSlots;}myBaseLocked=b.locked||false;allBasesData[b.base_num]={owner:b.owner,slots:mySlots,locked:myBaseLocked};}
-      else{allBasesData[b.base_num]={owner:b.owner,slots:normalizeSlots(b.slots,12),locked:b.locked};}
+      if(isMine){const dbSlots=normalizeSlots(b.slots,10);const dbCount=dbSlots.filter(s=>s).length;const localCount=mySlots.filter(s=>s).length;if(dbCount>=localCount){mySlots=dbSlots;}myBaseLocked=b.locked||false;allBasesData[b.base_num]={owner:b.owner,slots:mySlots,locked:myBaseLocked};}
+      else{allBasesData[b.base_num]={owner:b.owner,slots:normalizeSlots(b.slots,10),locked:b.locked};}
     });
     renderAllBases();
     if(inFloor)renderFloor();
@@ -854,7 +843,6 @@ async function subscribeBases(){
   await load();
   basesChannel=sb.channel('bases-'+currentServerId).on('postgres_changes',{event:'*',schema:'public',table:'bases',filter:'server_id=eq.'+currentServerId},()=>{load();}).subscribe();
 }
-
 function subscribePlayers(){
   if(playersChannel)sb.removeChannel(playersChannel);
   const load=async()=>{
@@ -865,7 +853,6 @@ function subscribePlayers(){
   load();
   playersChannel=sb.channel('players-'+currentServerId).on('postgres_changes',{event:'*',schema:'public',table:'players',filter:'server_id=eq.'+currentServerId},()=>{load();}).subscribe();
 }
-
 function subscribeNotifs(){
   if(notifChannel)sb.removeChannel(notifChannel);
   notifChannel=sb.channel('notif-'+currentNickname).on('postgres_changes',{event:'UPDATE',schema:'public',table:'users',filter:'nickname=eq.'+currentNickname},payload=>{
@@ -887,7 +874,6 @@ function subscribeServer(){
   if(serverChannel)sb.removeChannel(serverChannel);
   serverChannel=sb.channel('server-'+currentServerId).on('postgres_changes',{event:'UPDATE',schema:'public',table:'servers',filter:'id=eq.'+currentServerId},payload=>{currentServerData=payload.new;}).subscribe();
 }
-
 function renderPlayer(){
   const p=document.getElementById('player');
   p.innerHTML='<div class="head-pix"></div><div class="body-pix" style="background:'+getSkinColor()+'"></div>';
@@ -920,7 +906,6 @@ function renderBase(bid,data){
   const slots=data.slots||[];const cols=4,cellW=17,cellH=22,startX=5,startY=6;
   slots.forEach((br,i)=>{if(!br)return;const col=i%cols,row=Math.floor(i/cols);const d=document.createElement('div');d.className='brainrot-on-base '+br.rarity;d.style.backgroundImage='url(Картинки/'+br.file+')';d.style.left=(bp.x+startX+col*cellW)+'px';d.style.top=(bp.y+startY+row*cellH)+'px';d.style.width='14px';d.style.height='14px';d.style.zIndex='8';document.getElementById('game-container').appendChild(d);});
 }
-
 function spawnConveyor(){
   if(conveyorBrainrots.length>=CONVEYOR_MAX)return;
   for(const b of conveyorBrainrots){if(b.x<30)return;}
@@ -936,7 +921,6 @@ function updateConveyor(dt){
   if(now-lastConveyorSpawn>SPAWN_INTERVAL){lastConveyorSpawn=now;spawnConveyor();}
   for(let i=conveyorBrainrots.length-1;i>=0;i--){const b=conveyorBrainrots[i];if(b.locked)continue;b.x+=CONVEYOR_SPEED*dt;b.dom.style.left=b.x+'px';if(b.x>=384){b.dom.remove();conveyorBrainrots.splice(i,1);}}
 }
-
 async function buyConveyor(b){
   if(!b||b.locked)return;
   if(mySlots.filter(s=>s).length>=BASE_MAX){showModal('Ошибка','База полна!');playSfx('error');return;}
@@ -956,7 +940,7 @@ async function buyConveyor(b){
   if(domToRemove&&domToRemove.remove)domToRemove.remove();
   const idx=conveyorBrainrots.indexOf(b);if(idx>-1)conveyorBrainrots.splice(idx,1);
   const bp=BASE_POSITIONS[myBaseId];const greenBtnX=bp.x+37.5;const greenBtnY=bp.y+89;
-  /* Летит на базу со скоростью дорожки: время = расстояние / CONVEYOR_SPEED */
+  /* Летит на базу СО СКОРОСТЬЮ ДОРОЖКИ */
   const dist=Math.hypot(greenBtnX-startX,greenBtnY-startY);
   const duration=Math.max(0.3,dist/CONVEYOR_SPEED);
   const flyEl=document.createElement('div');flyEl.className='brainrot-conveyor '+b.brainrot.rarity;
@@ -975,7 +959,6 @@ async function buyConveyor(b){
   playSfx('buy');vibrate(30);
   setTimeout(()=>showModal('Куплено',b.brainrot.name+' -$'+formatNumber(currentPrice)+'\nСледующая цена: $'+formatNumber(newPrice)),duration*1000+200);
 }
-
 function initJoystick(){
   if(!IS_MOBILE)return;
   const z=document.getElementById('joystick-zone');z.style.display='block';
@@ -987,7 +970,6 @@ function initJoystick(){
   joystickManager.on('move',(e,d)=>{const f=Math.min(d.force,1);touchDX=Math.cos(d.angle.radian)*f;touchDY=-Math.sin(d.angle.radian)*f;});
   joystickManager.on('end',()=>{touchDX=0;touchDY=0;});
 }
-
 function confirmYes(){if(window._pendingSell){doSell(window._pendingSell.idx,window._pendingSell.br);window._pendingSell=null;}document.getElementById('confirm-modal').style.display='none';}
 function confirmNo(){window._pendingSell=null;document.getElementById('confirm-modal').style.display='none';}
 async function doSell(idx,br){
@@ -1006,7 +988,6 @@ async function sellMyBrainrot(idx){
   if(br.rarity==='god'||br.rarity==='secret'||br.rarity==='og'){window._pendingSell={idx,br};document.getElementById('confirm-text').textContent='Sell '+br.name+'?';document.getElementById('confirm-modal').style.display='flex';return;}
   await doSell(idx,br);
 }
-
 let eHoldTimer=null,eHoldStart=0,eHoldActive=false,eHoldTargetSnap=null;
 function startEHold(){
   if(eHoldActive)return;if(!currentTarget)return;
@@ -1043,7 +1024,7 @@ async function executeLongE(snap){
       if(currentServerData&&currentServerData.allow_steal===false){showModal('Кража запрещена','Владелец отключил кражу');return;}
       const bid=snap.baseId;const bdata=allBasesData[bid];
       if(!bdata||bdata.locked){showModal('Ошибка','База закрыта');return;}
-      const victimSlots=normalizeSlots(bdata.slots,12);const br=victimSlots[snap.slot];if(!br)return;
+      const victimSlots=normalizeSlots(bdata.slots,10);const br=victimSlots[snap.slot];if(!br)return;
       victimSlots[snap.slot]=null;
       await sb.from('bases').update({slots:victimSlots}).eq('server_id',currentServerId).eq('base_num',bid);
       carriedBrainrot={...br,fromBase:bid,fromSlot:snap.slot};floorSlots=victimSlots;
@@ -1056,7 +1037,7 @@ async function executeLongE(snap){
       const idx=snap.slot;const current=mySlots[idx];const fromBase=carriedBrainrot.fromBase;const fromSlot=carriedBrainrot.fromSlot;
       if(current){
         if(fromBase===myBaseId){mySlots[fromSlot]=current;mySlots[idx]=carriedBrainrot;}
-        else{mySlots[idx]=carriedBrainrot;const otherSlots=normalizeSlots(allBasesData[fromBase]?.slots,12);otherSlots[fromSlot]=current;await sb.from('bases').update({slots:otherSlots}).eq('server_id',currentServerId).eq('base_num',fromBase);}
+        else{mySlots[idx]=carriedBrainrot;const otherSlots=normalizeSlots(allBasesData[fromBase]?.slots,10);otherSlots[fromSlot]=current;await sb.from('bases').update({slots:otherSlots}).eq('server_id',currentServerId).eq('base_num',fromBase);}
       } else {
         if(fromBase===myBaseId){mySlots[fromSlot]=null;mySlots[idx]=carriedBrainrot;}
         else{mySlots[idx]=carriedBrainrot;}
@@ -1076,7 +1057,6 @@ function updateCarried(){
   el.className='brainrot-on-base '+carriedBrainrot.rarity;
   el.style.position='absolute';el.style.left=(fx-10)+'px';el.style.top=(fy-38)+'px';el.style.width='28px';el.style.height='28px';el.style.zIndex='25';
 }
-
 let fHoldTimer=null,fHoldStart=0,fHoldActive=false,fHoldTargetSnap=null;
 function startFHold(){
   if(fHoldActive)return;if(!currentTarget)return;
@@ -1089,14 +1069,12 @@ function startFHold(){
   fHoldTimer=setTimeout(()=>{clearInterval(iv);hp.style.display='none';document.getElementById('interactF').classList.remove('holding');const snap=fHoldTargetSnap;fHoldTargetSnap=null;executeShortF(snap);fHoldActive=false;},400);
 }
 function releaseF(){document.getElementById('interactF').classList.remove('holding');if(fHoldTimer){clearTimeout(fHoldTimer);fHoldTimer=null;}document.getElementById('holdProgress').style.display='none';fHoldActive=false;}
-
 function quickShopOpen(o){
   if(o.id==='shop-blue')openShop();else if(o.id==='shop-red')openRedShop();
   else if(o.id==='shop-white')openTradePlaza();else if(o.id==='queen-bee')openBee();
   else if(o.id==='rng-circle')openWheel();else if(o.id==='rng-machine')showModal('RNG','Здесь будет приз!');
 }
 function openIndexMenu(){showModal('ИНДЕКС','База: №'+myBaseId+'\nБрэинротов: '+mySlots.filter(s=>s).length+'/'+BASE_MAX);}
-
 function openEscMenu(){
   if(inFloor)exitFloor();
   document.getElementById('esc-menu').classList.add('open');
@@ -1179,13 +1157,13 @@ document.addEventListener('keyup',e=>{
   if(k==='f'||k==='а'){releaseF();e.preventDefault()}
 });
 
-/* ==== FLOOR: без пустых слотов, без синей кнопки, выход сверху/снизу ==== */
+/* ===== FLOOR ===== */
 function openFloor(baseId){
   const bdata=baseId===myBaseId?{owner:currentNickname,slots:mySlots,locked:myBaseLocked}:allBasesData[baseId];
   if(!bdata)return;
   if(bdata.locked&&bdata.owner!==currentNickname){showModal('База закрыта','Владелец закрыл доступ');return;}
   viewingBaseId=baseId;floorOwner=bdata.owner;floorLocked=bdata.locked;
-  floorSlots=normalizeSlots(bdata.slots,12);inFloor=true;fx=195;fy=370;
+  floorSlots=normalizeSlots(bdata.slots,10);inFloor=true;fx=195;fy=370;
   document.getElementById('game-container').style.display='none';
   document.getElementById('floor-container').style.display='block';
   document.getElementById('back-btn').style.display='block';
@@ -1214,10 +1192,11 @@ function renderFloorPlayer(){
   p.innerHTML='<div class="head-pix"></div><div class="body-pix" style="background:'+getSkinColor()+'"></div>';
   p.style.left=fx+'px';p.style.top=fy+'px';
 }
+/* ИНТЕРЬЕР: 10 слотов + цветная обводка по редкости + выход сверху/снизу */
 function renderFloor(){
   document.querySelectorAll('#floor-container .floor-decor').forEach(e=>e.remove());
   const fc=document.getElementById('floor-container');
-  /* Выход: для баз сверху (1-4) - СНИЗУ, для баз снизу (5-8) - СВЕРХУ */
+  /* Выход: для баз сверху (1-4) — СНИЗУ, для баз снизу (5-8) — СВЕРХУ */
   const isTopBase = myBaseId>=1 && myBaseId<=4;
   const exit=document.createElement('div');
   exit.className='floor-decor';
@@ -1227,14 +1206,27 @@ function renderFloor(){
     exit.style.cssText='position:absolute;left:170px;top:0;width:60px;height:18px;background:#22e54c;border:3px solid #000;border-top:none;z-index:2;box-sizing:border-box';
   }
   fc.appendChild(exit);
-  /* Только занятые слоты, пустые не рисуем */
-  for(let i=0;i<12;i++){
+
+  /* Рисуем ВСЕ 10 слотов */
+  for(let i=0;i<10;i++){
     const off=FLOOR_SLOT_OFFSETS[i];const sx=off.dx,sy=off.dy;
+    const slot=document.createElement('div');
+    slot.className='floor-decor';
+    slot.style.cssText='position:absolute;left:'+sx+'px;top:'+sy+'px;width:28px;height:28px;background:#22e54c;border:3px solid #0a0a0a;z-index:6;border-radius:4px;box-sizing:border-box;overflow:hidden;transition:border-color .2s,box-shadow .2s';
+
     if(floorSlots[i]){
-      const br=floorSlots[i];const d=document.createElement('div');
-      d.className='brainrot-on-base '+br.rarity;d.style.backgroundImage='url(Картинки/'+br.file+')';
-      d.style.left=sx+'px';d.style.top=sy+'px';d.style.width='28px';d.style.height='28px';d.style.zIndex='6';d.style.pointerEvents='none';d.style.borderRadius='4px';fc.appendChild(d);
+      const br=floorSlots[i];
+      const bc=RARITY_BORDER[br.rarity]||'#000';
+      slot.style.borderColor=bc;
+      if(br.rarity==='legendary'||br.rarity==='og'){slot.style.boxShadow='0 0 8px '+bc;}
+      else if(br.rarity==='mythic'||br.rarity==='god'||br.rarity==='secret'){slot.style.boxShadow='0 0 6px '+bc;}
+      else if(br.rarity==='epic'){slot.style.boxShadow='0 0 3px '+bc;}
+
+      const img=document.createElement('div');
+      img.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;background-image:url(Картинки/'+br.file+');background-size:cover;background-position:center;pointer-events:none';
+      slot.appendChild(img);
     }
+    fc.appendChild(slot);
   }
 }
 async function toggleFloorLock(){
@@ -1246,7 +1238,7 @@ async function toggleFloorLock(){
 function checkStepCollect(){
   if(!inFloor||floorOwner!==currentNickname)return;
   const now=Date.now();
-  for(let i=0;i<12;i++){
+  for(let i=0;i<10;i++){
     if(!floorSlots[i])continue;
     const off=FLOOR_SLOT_OFFSETS[i];const cx=off.dx+14,cy=off.dy+14;
     if(Math.hypot((fx+5)-cx,(fy+11)-cy)<16){
@@ -1256,7 +1248,6 @@ function checkStepCollect(){
     }
   }
 }
-
 function isAnyMenuOpen(){
   const ids=['shop-menu','red-shop-menu','bee-menu','wheel-menu','base-menu','server-menu','friends-menu','profile-menu','admin-panel','admin-users-panel','admin-user-edit-panel','admin-manage-panel','admin-servers-panel','admin-changelog-panel','admin-chat-panel','server-edit-modal','server-kick-modal','server-blacklist-modal','create-server-modal','custom-modal','confirm-modal','friend-profile'];
   for(const id of ids){const el=document.getElementById(id);if(el&&(el.style.display==='flex'||el.style.display==='block'))return true;}
@@ -1285,7 +1276,6 @@ function updateInteractButtons(){
     fBtn.style.top=(nickTopY-eSize-fSize-8*scale)+'px';
   } else {fBtn.style.display='none';}
 }
-
 let lastTime=0,lastSync=0;
 function update(t=0){
   requestAnimationFrame(update);
@@ -1319,7 +1309,6 @@ function update(t=0){
 }
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y);}
 function removeEHint(){document.getElementById('interact').style.display='none';document.getElementById('interactF').style.display='none';}
-
 function updateTarget(){
   const pc={x:x+5,y:y+11};currentTarget=null;
   for(const b of conveyorBrainrots){if(b.locked)continue;const d=Math.hypot(pc.x-(b.x+14),pc.y-(b.y+14));if(d<25){currentTarget={type:'conveyor',target:b};return;}}
@@ -1336,7 +1325,7 @@ function updateTarget(){
 }
 function updateFloorTarget(){
   const pc={x:fx+5,y:fy+11};currentTarget=null;
-  for(let i=0;i<12;i++){
+  for(let i=0;i<10;i++){
     const off=FLOOR_SLOT_OFFSETS[i];const sx=off.dx+14,sy=off.dy+14;
     if(Math.hypot(pc.x-sx,pc.y-sy)<22){
       if(floorSlots[i]){if(floorOwner===currentNickname){currentTarget={type:'slot_mine_full',slot:i};}else{currentTarget={type:'slot_other_full',slot:i,baseId:viewingBaseId};}}
@@ -1345,7 +1334,6 @@ function updateFloorTarget(){
     }
   }
 }
-
 document.getElementById('interact').addEventListener('click',()=>{if(eHoldActive)return;const snap=currentTarget;if(snap)executeShortE(snap);});
 document.getElementById('interactF').addEventListener('click',()=>{const snap=currentTarget;if(snap)executeShortF(snap);});
 
@@ -1353,37 +1341,26 @@ function getShopIcon(type){switch(type){
 case'slap':return'<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="#fff" stroke-width="6" fill="none"/></svg>';
 case'speed-coil':return'<svg viewBox="0 0 100 100"><path d="M50 15 Q20 30 50 45 Q80 60 50 75 Q20 90 50 95" stroke="#e74c3c" stroke-width="8" fill="none"/></svg>';
 case'trap':return'<svg viewBox="0 0 100 100"><path d="M20 80 Q50 40 80 80 L70 90 L30 90 Z" fill="#777"/></svg>';
-case'iron-slap':return'<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="#aaa" stroke-width="6" fill="none"/></svg>';
-case'gravity-coil':return'<svg viewBox="0 0 100 100"><path d="M50 15 Q20 30 50 45 Q80 60 50 75 Q20 90 50 95" stroke="#3498db" stroke-width="8" fill="none"/></svg>';
-case'bee-launcher':return'<svg viewBox="0 0 100 100"><rect x="30" y="30" width="40" height="40" fill="#f1c40f" rx="10"/><path d="M50 20 L60 40 L40 40 Z" fill="#333"/></svg>';
-case'coil-combo':return'<svg viewBox="0 0 100 100"><path d="M20 20 Q0 40 20 60 Q40 80 20 90" stroke="#e74c3c" stroke-width="6" fill="none"/><path d="M80 20 Q100 40 80 60 Q60 80 80 90" stroke="#3498db" stroke-width="6" fill="none"/></svg>';
-case'rage-table':return'<svg viewBox="0 0 100 100"><rect x="15" y="40" width="70" height="15" fill="#d35400"/><rect x="20" y="55" width="10" height="35" fill="#8e44ad"/><rect x="70" y="55" width="10" height="35" fill="#8e44ad"/></svg>';
-case'diamond-slap':return'<svg viewBox="0 0 100 100"><path d="M50 10 L50 90 M30 30 L70 30 M20 50 L80 50 M30 70 L70 70" stroke="#00FFFF" stroke-width="6" fill="none"/></svg>';
 default:return'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#fff"/></svg>';}}
 function getRedIcon(type){switch(type){
 case'blackhole-slap':return'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="25" fill="#000"/><path d="M20 50 L80 50 M50 20 L50 80" stroke="#fff" stroke-width="3"/></svg>';
 case'ban-hammer':return'<svg viewBox="0 0 100 100"><rect x="20" y="30" width="60" height="15" fill="#7f8c8d"/><rect x="45" y="20" width="10" height="60" fill="#95a5a6"/></svg>';
 case'laser-gun':return'<svg viewBox="0 0 100 100"><rect x="10" y="40" width="60" height="15" fill="#2c3e50"/><path d="M70 45 L90 42" stroke="red" stroke-width="5"/></svg>';
-case'vip':return'<svg viewBox="0 0 100 100"><text x="10" y="70" font-size="45" fill="#f1c40f" font-weight="bold">VIP</text></svg>';
-case'2x-money':return'<svg viewBox="0 0 100 100"><text x="10" y="65" font-size="40" fill="#2ecc71" font-weight="bold">x2</text></svg>';
 default:return'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#c0392b"/></svg>';}}
 
-const shopItems=[{id:'slap',name:'Slap',desc:'Slap thieves!',price:500,icon:'slap'},{id:'speed-coil',name:'Speed Coil',desc:'Zoom!',price:750,icon:'speed-coil'},{id:'trap',name:'Trap',desc:'Freeze 10 sec',price:1000,icon:'trap'},{id:'iron-slap',name:'Iron Slap',desc:'Heavy slap!',price:2500,icon:'iron-slap'},{id:'gravity-coil',name:'Gravity Coil',desc:'Jump!',price:3000,icon:'gravity-coil'},{id:'bee-launcher',name:'Bee Launcher',desc:'Bees!',price:10000,icon:'bee-launcher'},{id:'coil-combo',name:'Coil Combo',desc:'Ultimate!',price:20000,icon:'coil-combo'},{id:'rage-table',name:'Rage Table',desc:'Table!',price:25000,icon:'rage-table'},{id:'diamond-slap',name:'Diamond Slap',desc:'Knock!',price:50000,icon:'diamond-slap'}];
+const shopItems=[{id:'slap',name:'Slap',desc:'Slap thieves!',price:500,icon:'slap'},{id:'speed-coil',name:'Speed Coil',desc:'Zoom!',price:750,icon:'speed-coil'},{id:'trap',name:'Trap',desc:'Freeze 10 sec',price:1000,icon:'trap'}];
 function openShop(){const c=document.getElementById('shop-items');c.innerHTML='';shopItems.forEach(item=>{const isOwned=ownedItems.includes(item.id);const div=document.createElement('div');div.className='shop-item';div.innerHTML='<div class="icon">'+getShopIcon(item.icon)+'</div><div class="info"><div class="name">'+item.name+'</div><div class="desc">'+item.desc+'</div></div><div class="right"><div class="price-btn '+(isOwned?'owned':'')+'" onclick="buyShopItem(\''+item.id+'\')">'+(isOwned?'OWNED':'$'+item.price.toLocaleString())+'</div></div>';c.appendChild(div);});document.getElementById('shop-menu').style.display='flex';}
 function closeShop(){document.getElementById('shop-menu').style.display='none';}
 async function buyShopItem(id){const item=shopItems.find(i=>i.id===id);if(!item)return;if(ownedItems.includes(id))return;if(coins<item.price){playSfx('error');showModal('Ошибка','Нужно $'+item.price.toLocaleString());return;}coins-=item.price;ownedItems.push(id);document.getElementById('balance-amount').textContent=formatNumber(coins);await updateUser(currentNickname,{coins:coins,owned_items:ownedItems});playSfx('buy');openShop();showModal('Покупка','Куплено: '+item.name);}
-
 function openBee(){document.getElementById('bee-menu').style.display='flex';}
 function closeBee(){document.getElementById('bee-menu').style.display='none';}
 async function buyBee(id,price){if(dushka>=price){dushka-=price;document.getElementById('dushka-coins').textContent=formatNumber(dushka);await updateUser(currentNickname,{dushka:dushka});playSfx('buy');showModal('Покупка','Куплено '+id);}else{playSfx('error');showModal('Ошибка','Нужно '+price+' Dushka');}}
-
 const redShopItems={gear:[{id:'blackhole-slap',name:'Blackhole Slap',desc:'Pull!',price:199,once:true},{id:'ban-hammer',name:'Ban Hammer',desc:'Smash!',price:1125,once:true},{id:'laser-gun',name:'Laser Gun',desc:'Fling lasers!',price:565,once:true}],gamepasses:[{id:'vip',name:'VIP',desc:'Benefits',price:375,once:true},{id:'2x-money',name:'2X MONEY',desc:'Double money',price:199,once:true},{id:'admin-panel',name:'Admin Panel',desc:'Admin!',price:7999,once:true}],money:[{id:'m51k',name:'$51,000',desc:'Money',price:59,reward:51000},{id:'m425k',name:'$425,000',desc:'Money',price:379,reward:425000},{id:'m1700k',name:'$1,700,000',desc:'Money',price:659,reward:1700000},{id:'m8500k',name:'$8,500,000',desc:'Money',price:1249,reward:8500000},{id:'m17m',name:'$17,000,000',desc:'Money',price:2499,reward:17000000}],lucky:[{id:'mythic',name:'Mythic',desc:'Lucky Block',price:175},{id:'brainrot-god',name:'Brainrot God',desc:'Lucky Block',price:399},{id:'secret',name:'Secret',desc:'Lucky Block',price:1499}]};
 function switchRedTab(tab){currentRedTab=tab;document.querySelectorAll('#red-shop-menu .tab').forEach(t=>t.classList.remove('active'));document.querySelector('#red-shop-menu .tab[data-tab="'+tab+'"]').classList.add('active');renderRedShop();}
 function renderRedShop(){const c=document.getElementById('red-shop-items');c.innerHTML='';const items=redShopItems[currentRedTab]||[];items.forEach(item=>{const isOwned=ownedRedItems.includes(item.id)&&item.once;const div=document.createElement('div');div.className='red-shop-item';div.innerHTML='<div class="icon">'+getRedIcon(item.id)+'</div><div class="info"><div class="name">'+item.name+'</div><div class="desc">'+item.desc+'</div></div><div class="price-btn '+(isOwned?'owned':'')+'" onclick="buyRedShopItem(\''+item.id+'\')">'+(isOwned?'OWNED':'₿ '+item.price)+'</div>';c.appendChild(div);});}
 function openRedShop(){switchRedTab('gear');document.getElementById('red-shop-menu').style.display='flex';}
 function closeRedShop(){document.getElementById('red-shop-menu').style.display='none';}
 async function buyRedShopItem(id){const item=Object.values(redShopItems).flat().find(i=>i.id===id);if(!item)return;if(item.once&&ownedRedItems.includes(id))return;if(dushka>=item.price){dushka-=item.price;if(item.once)ownedRedItems.push(id);if(item.reward){coins+=item.reward;document.getElementById('balance-amount').textContent=formatNumber(coins);}const updateObj={coins:coins,dushka:dushka,owned_red_items:ownedRedItems};if(item.id==='admin-panel'){updateObj.is_admin=true;setTimeout(()=>showNotif('👑 Админ-панель активирована!'),500);}if(item.id==='vip'){updateObj.vip=true;setTimeout(()=>showNotif('⭐ VIP активирован!'),500);}if(item.id==='2x-money'){updateObj.x2money=true;setTimeout(()=>showNotif('💵 2X MONEY!'),500);}await updateUser(currentNickname,updateObj);document.getElementById('dushka-coins').textContent=formatNumber(dushka);renderRedShop();playSfx('buy');showModal('Покупка','Куплено '+item.name);}else{playSfx('error');showModal('Ошибка','Нужно '+item.price+' Dushka');}}
-
 const FREE_SPIN_INTERVAL=7200;let lastFreeSpinTime=parseInt(localStorage.getItem('lastFreeSpinTime'))||Date.now();
 function updateFreeSpinTimer(){const e=Math.floor((Date.now()-lastFreeSpinTime)/1000);let r=FREE_SPIN_INTERVAL-e;if(r<=0){_spins++;lastFreeSpinTime=Date.now();localStorage.setItem('lastFreeSpinTime',lastFreeSpinTime.toString());updateSpinBtn();r=FREE_SPIN_INTERVAL;}const h=Math.floor(r/3600),m=Math.floor((r%3600)/60),s=r%60;const tEl=document.getElementById('wheel-timer');if(tEl)tEl.textContent='Бесплатный спин: '+h+'ч '+m+'м '+s+'с';}
 setInterval(updateFreeSpinTimer,1000);
@@ -1393,7 +1370,6 @@ function doSpin(){if(isSpinning)return;if(_spins<=0){playSfx('error');showModal(
 function openWheel(){document.getElementById('wheel-menu').style.display='flex';}
 function closeWheel(){document.getElementById('wheel-menu').style.display='none';}
 function openTradePlaza(){showModal('Trade Plaza','Скоро!');}
-
 let currentServerTab='all';
 async function openServers(){document.getElementById('main-menu').style.display='none';document.getElementById('server-menu').style.display='block';await loadServers();}
 function switchServerTab(tab){currentServerTab=tab;document.querySelectorAll('.server-tab').forEach(t=>t.classList.toggle('active',t.dataset.vis===tab));loadServers();}
@@ -1432,7 +1408,6 @@ function closeServerBlacklist(){document.getElementById('server-blacklist-modal'
 function renderBlacklist(list){const c=document.getElementById('blacklist-list');c.innerHTML='';if(list.length===0){c.innerHTML='<div style="text-align:center;color:var(--text-dim);padding:10px">Пусто</div>';return;}list.forEach(n=>{const div=document.createElement('div');div.className='player-kick-row';div.innerHTML='<span>🚫 '+n+'</span><button onclick="removeFromBlacklist(\''+n+'\')">✓</button>';c.appendChild(div);});}
 async function addToBlacklist(){const n=document.getElementById('blacklist-input').value.trim();if(!n)return;if(n===currentNickname){showNotif('Нельзя себя');return;}const{data}=await sb.from('servers').select('blacklist').eq('id',_editingServerId).maybeSingle();const bl=(data&&data.blacklist)||[];if(!bl.includes(n))bl.push(n);await sb.from('servers').update({blacklist:bl}).eq('id',_editingServerId);document.getElementById('blacklist-input').value='';renderBlacklist(bl);showNotif('🚫 '+n);}
 async function removeFromBlacklist(n){const{data}=await sb.from('servers').select('blacklist').eq('id',_editingServerId).maybeSingle();const bl=((data&&data.blacklist)||[]).filter(x=>x!==n);await sb.from('servers').update({blacklist:bl}).eq('id',_editingServerId);renderBlacklist(bl);showNotif('✅ Убран');}
-
 async function openFriends(){document.getElementById('main-menu').style.display='none';document.getElementById('friends-menu').style.display='block';await loadFriendRequests();await loadFriends();}
 async function searchFriend(){const n=document.getElementById('friend-search').value.trim();if(!n)return;const u=await getUser(n);const rd=document.getElementById('friend-result');if(!u){rd.innerHTML='<div style="color:#f44">Not found</div>';return;}rd.innerHTML='<div class="friend-item"><div class="nick">'+n+'</div><button onclick="sendFriendRequest(\''+n+'\')" style="background:#4caf50;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Send</button></div>';}
 async function sendFriendRequest(n){const d=await getUser(n);if(!d)return;let r=d.friend_requests||[];if(r.includes(currentNickname)){showModal('Инфо','Уже отправлено');return;}r.push(currentNickname);await updateUser(n,{friend_requests:r});showModal('Успех','Отправлено!');}
@@ -1441,12 +1416,10 @@ async function acceptFriend(n){const d=await getUser(currentNickname);let f=d.fr
 async function loadFriends(){const d=await getUser(currentNickname);const f=(d&&d.friends)||[];const c=document.getElementById('friends-list');c.innerHTML='';if(f.length===0){c.innerHTML='<div style="color:var(--text-dim)">No friends</div>';return;}f.forEach(fr=>{const div=document.createElement('div');div.className='friend-item';div.innerHTML='<div class="nick">'+fr+'</div><div><button onclick="joinFriend(\''+fr+'\')" style="background:#0f3460;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Join</button></div>';c.appendChild(div);});}
 async function joinFriend(n){const d=await getUser(n);if(d&&d.server_id){joinServer(d.server_id);}else{showModal('Инфо','Друг не играет');}}
 function closeFriends(){document.getElementById('friends-menu').style.display='none';showMainMenu();}
-
 function openProfile(){document.getElementById('main-menu').style.display='none';document.getElementById('profile-menu').style.display='block';getUser(currentNickname).then(d=>{if(d){document.getElementById('avatar-preview').style.backgroundImage=d.avatar?'url('+d.avatar+')':'none';}});}
 document.getElementById('avatar-input').addEventListener('change',function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=function(ev){document.getElementById('avatar-preview').style.backgroundImage='url('+ev.target.result+')';window._avatarData=ev.target.result;};r.readAsDataURL(f);});
 async function saveProfile(){const a=window._avatarData||'';await updateUser(currentNickname,{avatar:a});showModal('Успех','Сохранено');}
 function closeProfile(){document.getElementById('profile-menu').style.display='none';showMainMenu();}
-
 function openBaseMenu(){
   const c=document.getElementById('bm-list');c.innerHTML='';
   const totalIncome=mySlots.reduce((s,br)=>s+(br?br.income:0),0);
@@ -1459,7 +1432,6 @@ function openBaseMenu(){
 }
 function closeBaseMenu(){document.getElementById('base-menu').style.display='none';}
 async function collectFrom(i){const br=mySlots[i];if(!br)return;const last=br.lastCollect||br.placedAt||Date.now();const earned=Math.floor((Date.now()-last)/1000*br.income);if(earned<=0){playSfx('error');showModal('Пусто','Ещё не заработал');return;}coins+=earned;br.lastCollect=Date.now();document.getElementById('balance-amount').textContent=formatNumber(coins);await updateUser(currentNickname,{coins:coins,base_slots:mySlots});await sb.from('bases').update({slots:mySlots}).eq('server_id',currentServerId).eq('base_num',myBaseId);playSfx('buy');openBaseMenu();showModal('Собрано','+$'+formatNumber(earned));}
-
 function openAdmin(){document.getElementById('admin-panel').style.display='flex';}
 function closeAdmin(){document.getElementById('admin-panel').style.display='none';}
 async function adminViewUsers(){document.getElementById('admin-users-panel').style.display='flex';const c=document.getElementById('admin-users-list');c.innerHTML='Загрузка...';const{data}=await sb.from('users').select('*');c.innerHTML='';document.getElementById('admin-users-count').textContent=(data||[]).length+' шт.';(data||[]).forEach(u=>{const div=document.createElement('div');div.className='server-item';div.style.cursor='pointer';div.innerHTML='<div><div class="name">'+u.nickname+'</div><div class="players" style="font-size:11px">$'+formatNumber(u.coins||0)+' · ₿'+formatNumber(u.dushka||0)+'</div></div><button class="join-btn">Edit</button>';div.onclick=()=>openAdminUserEdit(u);c.appendChild(div);});}
@@ -1487,7 +1459,6 @@ function adminEditChangelog(){document.getElementById('admin-changelog-panel').s
 function closeAdminChangelog(){document.getElementById('admin-changelog-panel').style.display='none';}
 async function saveChangelog(){const text=document.getElementById('admin-changelog-input').value.trim();if(!text){showNotif('Введите текст');return;}await sb.from('global_data').upsert({key:'changelog',value:{text:text,time:Date.now()}});showNotif('✅ Сохранено');closeAdminChangelog();}
 async function clearChangelog(){await sb.from('global_data').update({value:{}}).eq('key','changelog');document.getElementById('admin-changelog-input').value='';showNotif('Очищено');closeAdminChangelog();}
-
 async function subscribeChangelog(){
   const load=async()=>{const{data}=await sb.from('global_data').select('value').eq('key','changelog').maybeSingle();const el=document.getElementById('changelog-display');if(data&&data.value&&data.value.text){el.textContent='📢 '+data.value.text;el.classList.add('visible');}else{el.textContent='';el.classList.remove('visible');}};
   await load();
@@ -1511,7 +1482,6 @@ async function subscribeChatMessages(){
     const d=document.createElement('div');d.className='chat-msg';d.innerHTML='<span class="who">'+escapeHtml(m.nickname)+':</span>'+escapeHtml(m.text);c.appendChild(d);c.scrollTop=c.scrollHeight;
   }).subscribe();
 }
-
 async function exitToMenu(){
   stopHeartbeat();
   if(currentServerId&&currentNickname){try{await sb.from('players').delete().eq('server_id',currentServerId).eq('nickname',currentNickname);}catch(e){}}
@@ -1536,8 +1506,6 @@ async function exitToMenu(){
   document.getElementById('esc-menu').classList.remove('open');
   currentServerData=null;
 }
-
-/* Make draggable after DOM ready */
 window.addEventListener('load',async()=>{
   resizeGame();loadSettings();subscribeChangelog();subscribeChat();
   if(IS_MOBILE){document.getElementById('joystick-zone').style.display='none';}
