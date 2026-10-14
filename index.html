@@ -122,7 +122,6 @@ input[type="file"]{color:var(--text-main)}
 .base-bottom-1{bottom:20px;left:20px}.base-bottom-2{bottom:20px;left:115px}.base-bottom-3{bottom:20px;left:210px}.base-bottom-4{bottom:20px;left:305px}
 .base-bottom .brown{top:4px;bottom:auto}.base-bottom .green{top:-14px;bottom:auto}.base-bottom .nickname{top:4px;bottom:auto}
 .base.locked::after{content:'ЗАКРЫТО';position:absolute;inset:0;background:rgba(192,57,43,.6);color:#fff;font-weight:bold;font-size:12px;display:flex;justify-content:center;align-items:center;z-index:12;pointer-events:none}
-.base-slot{position:absolute;width:28px;height:28px;background:#22e54c;border:3px solid #0a0a0a;z-index:7;border-radius:4px;box-shadow:inset 0 2px 4px rgba(0,0,0,.25);box-sizing:border-box}
 .brainrot-on-base{position:absolute;width:14px;height:14px;background-size:cover;background-position:center;z-index:8;border-radius:2px;pointer-events:none;box-sizing:border-box;background-color:#4a90e2}
 .brainrot-on-base.common{border:1px solid #aaa}.brainrot-on-base.horror{border:1px solid #555}
 .brainrot-on-base.epic{border:1px solid #9b59b6}.brainrot-on-base.legendary{border:1px solid #f1c40f;box-shadow:0 0 4px #f1c40f}
@@ -308,7 +307,7 @@ input[type="file"]{color:var(--text-main)}
   <div class="box dushka"><span class="label">Dushka Coins</span><span class="amount"><span class="coin-icon btc">₿</span><span id="dushka-coins">0</span></span></div>
   <div class="box"><span class="label">Монеты</span><span class="amount"><span class="coin-icon usd">$</span><span id="balance-amount">25</span></span></div>
 </div>
-<div id="version">Версия: 0.48</div>
+<div id="version">Версия: 0.49</div>
 <div id="exit-btn" onclick="openEscMenu()">Меню</div>
 <div id="back-btn" onclick="exitFloor()">Назад</div>
 <div id="fps-counter">FPS: -- | PING: --</div>
@@ -325,7 +324,7 @@ input[type="file"]{color:var(--text-main)}
       <button class="menu-btn" onclick="openFriends()"><span class="menu-icon">👥</span> Друзья</button>
       <button class="menu-btn" onclick="openProfile()"><span class="menu-icon">👤</span> Профиль</button>
     </div>
-    <div class="menu-footer"><div>v0.48 · by MrDushka</div><div id="changelog-display"></div></div>
+    <div class="menu-footer"><div>v0.49 · by MrDushka</div><div id="changelog-display"></div></div>
   </div>
   <div class="theme-toggle" onclick="toggleMenuTheme()"><svg viewBox="0 0 100 100"><defs><mask id="moon-mask"><rect width="100" height="100" fill="white"/><circle cx="68" cy="38" r="38" fill="black"/></mask></defs><circle cx="50" cy="50" r="42" fill="currentColor" mask="url(#moon-mask)"/></svg></div>
   <div id="settings-btn" onclick="openSettings()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
@@ -674,10 +673,10 @@ function pickBrainrot(){const rar=pickRarity();const pool=BRAINROTS_LIST.filter(
 
 const BASE_POSITIONS={1:{x:20,y:20},2:{x:115,y:20},3:{x:210,y:20},4:{x:305,y:20},5:{x:20,y:305},6:{x:115,y:305},7:{x:210,y:305},8:{x:305,y:305}};
 const BASE_SPAWN={1:{x:52,y:81},2:{x:147,y:81},3:{x:242,y:81},4:{x:337,y:81},5:{x:52,y:307},6:{x:147,y:307},7:{x:242,y:307},8:{x:337,y:307}};
-/* 10 слотов: 5 слева, 5 справа */
+/* 10 слотов — крупнее и растянуты по высоте */
 const FLOOR_SLOT_OFFSETS=[
-  {dx:15,dy:70},{dx:15,dy:130},{dx:15,dy:190},{dx:15,dy:250},{dx:15,dy:310},
-  {dx:357,dy:70},{dx:357,dy:130},{dx:357,dy:190},{dx:357,dy:250},{dx:357,dy:310}
+  {dx:12,dy:48},{dx:12,dy:112},{dx:12,dy:176},{dx:12,dy:240},{dx:12,dy:304},
+  {dx:352,dy:48},{dx:352,dy:112},{dx:352,dy:176},{dx:352,dy:240},{dx:352,dy:304}
 ];
 /* Цвета рамок по редкости */
 const RARITY_BORDER={
@@ -708,7 +707,7 @@ function showNotif(text){const n=document.getElementById('notif');n.textContent=
 function resizeGame(){const g=document.getElementById('game-container'),f=document.getElementById('floor-container');const w=window.innerWidth,h=window.innerHeight;let s=Math.min(w/500,h/500);s=Math.max(0.6,Math.min(1.2,s));g.style.transform=`scale(${s})`;f.style.transform=`scale(${s})`;}
 window.addEventListener('resize',resizeGame);
 
-/* ===== DRAGABLE PANELS ===== */
+/* ===== DRAGGABLE PANELS ===== */
 function makeDraggable(el){
   const header=el.querySelector('.header');
   if(!header)return;
@@ -940,7 +939,6 @@ async function buyConveyor(b){
   if(domToRemove&&domToRemove.remove)domToRemove.remove();
   const idx=conveyorBrainrots.indexOf(b);if(idx>-1)conveyorBrainrots.splice(idx,1);
   const bp=BASE_POSITIONS[myBaseId];const greenBtnX=bp.x+37.5;const greenBtnY=bp.y+89;
-  /* Летит на базу СО СКОРОСТЬЮ ДОРОЖКИ */
   const dist=Math.hypot(greenBtnX-startX,greenBtnY-startY);
   const duration=Math.max(0.3,dist/CONVEYOR_SPEED);
   const flyEl=document.createElement('div');flyEl.className='brainrot-conveyor '+b.brainrot.rarity;
@@ -1103,7 +1101,6 @@ async function escAddFriend(nick){
   r.push(currentNickname);await updateUser(nick,{friend_requests:r});
   showNotif('📩 Заявка отправлена '+nick);
 }
-
 document.addEventListener('keydown',e=>{
   const k=String(e.key||'').toLowerCase();if(!k)return;
   if(k==='escape'){
@@ -1192,27 +1189,29 @@ function renderFloorPlayer(){
   p.innerHTML='<div class="head-pix"></div><div class="body-pix" style="background:'+getSkinColor()+'"></div>';
   p.style.left=fx+'px';p.style.top=fy+'px';
 }
-/* ИНТЕРЬЕР: 10 слотов + цветная обводка по редкости + выход сверху/снизу */
+/* ===== ИНТЕРЬЕР БАЗЫ (10 крупных слотов + цветная обводка + ПРАВИЛЬНЫЙ выход) ===== */
 function renderFloor(){
   document.querySelectorAll('#floor-container .floor-decor').forEach(e=>e.remove());
   const fc=document.getElementById('floor-container');
-  /* Выход: для баз сверху (1-4) — СНИЗУ, для баз снизу (5-8) — СВЕРХУ */
+  /* Верхние базы (1-4) — выход СВЕРХУ, Нижние базы (5-8) — выход СНИЗУ */
   const isTopBase = myBaseId>=1 && myBaseId<=4;
   const exit=document.createElement('div');
   exit.className='floor-decor';
   if(isTopBase){
-    exit.style.cssText='position:absolute;left:170px;bottom:0;width:60px;height:18px;background:#22e54c;border:3px solid #000;border-bottom:none;z-index:2;box-sizing:border-box';
+    /* Верхняя база → выход СВЕРХУ */
+    exit.style.cssText='position:absolute;left:170px;top:0;width:60px;height:22px;background:#22e54c;border:3px solid #000;border-top:none;z-index:2;box-sizing:border-box';
   } else {
-    exit.style.cssText='position:absolute;left:170px;top:0;width:60px;height:18px;background:#22e54c;border:3px solid #000;border-top:none;z-index:2;box-sizing:border-box';
+    /* Нижняя база → выход СНИЗУ */
+    exit.style.cssText='position:absolute;left:170px;bottom:0;width:60px;height:22px;background:#22e54c;border:3px solid #000;border-bottom:none;z-index:2;box-sizing:border-box';
   }
   fc.appendChild(exit);
 
-  /* Рисуем ВСЕ 10 слотов */
+  /* Рисуем 10 слотов (крупные 32×32) */
   for(let i=0;i<10;i++){
     const off=FLOOR_SLOT_OFFSETS[i];const sx=off.dx,sy=off.dy;
     const slot=document.createElement('div');
     slot.className='floor-decor';
-    slot.style.cssText='position:absolute;left:'+sx+'px;top:'+sy+'px;width:28px;height:28px;background:#22e54c;border:3px solid #0a0a0a;z-index:6;border-radius:4px;box-sizing:border-box;overflow:hidden;transition:border-color .2s,box-shadow .2s';
+    slot.style.cssText='position:absolute;left:'+sx+'px;top:'+sy+'px;width:32px;height:32px;background:#22e54c;border:4px solid #0a0a0a;z-index:6;border-radius:4px;box-sizing:border-box;overflow:hidden;transition:border-color .2s,box-shadow .2s';
 
     if(floorSlots[i]){
       const br=floorSlots[i];
@@ -1240,8 +1239,8 @@ function checkStepCollect(){
   const now=Date.now();
   for(let i=0;i<10;i++){
     if(!floorSlots[i])continue;
-    const off=FLOOR_SLOT_OFFSETS[i];const cx=off.dx+14,cy=off.dy+14;
-    if(Math.hypot((fx+5)-cx,(fy+11)-cy)<16){
+    const off=FLOOR_SLOT_OFFSETS[i];const cx=off.dx+16,cy=off.dy+16;
+    if(Math.hypot((fx+5)-cx,(fy+11)-cy)<18){
       const br=floorSlots[i];const last=br.lastCollect||br.placedAt||now;
       const earned=Math.floor((now-last)/1000*br.income);
       if(earned>0){coins+=earned;br.lastCollect=now;document.getElementById('balance-amount').textContent=formatNumber(coins);updateUser(currentNickname,{coins:coins,base_slots:floorSlots});sb.from('bases').update({slots:floorSlots}).eq('server_id',currentServerId).eq('base_num',myBaseId);mySlots=floorSlots;playSfx('buy');showNotif('💰 +$'+formatNumber(earned));}
@@ -1326,7 +1325,7 @@ function updateTarget(){
 function updateFloorTarget(){
   const pc={x:fx+5,y:fy+11};currentTarget=null;
   for(let i=0;i<10;i++){
-    const off=FLOOR_SLOT_OFFSETS[i];const sx=off.dx+14,sy=off.dy+14;
+    const off=FLOOR_SLOT_OFFSETS[i];const sx=off.dx+16,sy=off.dy+16;
     if(Math.hypot(pc.x-sx,pc.y-sy)<22){
       if(floorSlots[i]){if(floorOwner===currentNickname){currentTarget={type:'slot_mine_full',slot:i};}else{currentTarget={type:'slot_other_full',slot:i,baseId:viewingBaseId};}}
       else{currentTarget={type:'slot_empty_mine',slot:i};}
@@ -1347,7 +1346,6 @@ case'blackhole-slap':return'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r
 case'ban-hammer':return'<svg viewBox="0 0 100 100"><rect x="20" y="30" width="60" height="15" fill="#7f8c8d"/><rect x="45" y="20" width="10" height="60" fill="#95a5a6"/></svg>';
 case'laser-gun':return'<svg viewBox="0 0 100 100"><rect x="10" y="40" width="60" height="15" fill="#2c3e50"/><path d="M70 45 L90 42" stroke="red" stroke-width="5"/></svg>';
 default:return'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#c0392b"/></svg>';}}
-
 const shopItems=[{id:'slap',name:'Slap',desc:'Slap thieves!',price:500,icon:'slap'},{id:'speed-coil',name:'Speed Coil',desc:'Zoom!',price:750,icon:'speed-coil'},{id:'trap',name:'Trap',desc:'Freeze 10 sec',price:1000,icon:'trap'}];
 function openShop(){const c=document.getElementById('shop-items');c.innerHTML='';shopItems.forEach(item=>{const isOwned=ownedItems.includes(item.id);const div=document.createElement('div');div.className='shop-item';div.innerHTML='<div class="icon">'+getShopIcon(item.icon)+'</div><div class="info"><div class="name">'+item.name+'</div><div class="desc">'+item.desc+'</div></div><div class="right"><div class="price-btn '+(isOwned?'owned':'')+'" onclick="buyShopItem(\''+item.id+'\')">'+(isOwned?'OWNED':'$'+item.price.toLocaleString())+'</div></div>';c.appendChild(div);});document.getElementById('shop-menu').style.display='flex';}
 function closeShop(){document.getElementById('shop-menu').style.display='none';}
