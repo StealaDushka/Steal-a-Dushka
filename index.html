@@ -82,7 +82,6 @@ body.light-theme .theme-toggle{color:#1a1a2e}
 .range-value{color:var(--text-main);font-weight:bold;min-width:45px;text-align:right;font-size:13px}
 .action-big-btn{width:100%;padding:12px;border:none;border-radius:10px;font-weight:bold;font-size:14px;cursor:pointer;font-family:inherit;margin-top:8px}
 .btn-danger{background:#c0392b;color:#fff}
-.btn-warning{background:#f39c12;color:#fff}
 .skins-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
 .skin-card{background:var(--bg-item);border:3px solid var(--border-color);border-radius:10px;padding:10px;cursor:pointer;text-align:center;transition:all .2s}
 .skin-card:hover{border-color:var(--accent);transform:translateY(-2px)}
@@ -123,7 +122,6 @@ input[type="file"]{color:var(--text-main)}
 .base-bottom-1{bottom:20px;left:20px}.base-bottom-2{bottom:20px;left:115px}.base-bottom-3{bottom:20px;left:210px}.base-bottom-4{bottom:20px;left:305px}
 .base-bottom .brown{top:4px;bottom:auto}.base-bottom .green{top:-14px;bottom:auto}.base-bottom .nickname{top:4px;bottom:auto}
 .base.locked::after{content:'ЗАКРЫТО';position:absolute;inset:0;background:rgba(192,57,43,.6);color:#fff;font-weight:bold;font-size:12px;display:flex;justify-content:center;align-items:center;z-index:12;pointer-events:none}
-.base-slot{position:absolute;width:28px;height:28px;background:#22e54c;border:2px solid #0a0a0a;z-index:7;border-radius:4px;box-shadow:inset 0 2px 4px rgba(0,0,0,.25)}
 .brainrot-on-base{position:absolute;width:14px;height:14px;background-size:cover;background-position:center;z-index:8;border-radius:2px;pointer-events:none;box-sizing:border-box;background-color:#4a90e2}
 .brainrot-on-base.common{border:1px solid #aaa}.brainrot-on-base.horror{border:1px solid #555}
 .brainrot-on-base.epic{border:1px solid #9b59b6}.brainrot-on-base.legendary{border:1px solid #f1c40f;box-shadow:0 0 4px #f1c40f}
@@ -139,15 +137,14 @@ input[type="file"]{color:var(--text-main)}
 #queen-bee{left:230px;top:137px}.q-yellow{background:#FFD966}.q-red{background:#F44336}.q-brown{background:#8B4513}
 #rng-circle{left:190px;top:230px;background:#A454B4;border-radius:50%}
 #shop-white{left:230px;top:230px}.w-dark{background:#003366}.w-white{background:#FFFFFF}
-/* CHARACTER: yellow head + red/skin body */
-#player,.other-player,#floor-player{position:absolute;width:14px;height:22px;display:grid;grid-template-columns:1fr;grid-template-rows:10px 1fr;z-index:20;border:2px solid rgba(0,0,0,.75);border-radius:3px;overflow:hidden;box-shadow:0 2px 4px rgba(0,0,0,.35)}
+/* ТОНКИЙ ПЕРСОНАЖ 10px x 22px */
+#player,.other-player,#floor-player{position:absolute;width:10px;height:22px;display:grid;grid-template-columns:1fr;grid-template-rows:9px 1fr;z-index:20;border:2px solid rgba(0,0,0,.8);border-radius:2px;overflow:hidden;box-shadow:0 2px 4px rgba(0,0,0,.35)}
 #player .head-pix,.other-player .head-pix,#floor-player .head-pix{background:#FFCC00;border-bottom:1px solid rgba(0,0,0,.4)}
 #player .body-pix,.other-player .body-pix,#floor-player .body-pix{width:100%;height:100%;background:#FF0000}
-.player-name{position:absolute;left:50%;transform:translateX(-50%);top:-16px;color:#fff;font-size:9px;font-weight:bold;text-shadow:1px 1px 2px #000,0 0 4px #000;pointer-events:none;white-space:nowrap}
-/* E/F BUTTONS */
-#interact,#interactF{position:fixed;display:none;z-index:10000;width:36px;height:36px;font-family:'Courier New',monospace;font-size:22px;font-weight:900;cursor:pointer;user-select:none;touch-action:none;border:none;justify-content:center;align-items:center;box-shadow:0 3px 0 rgba(0,0,0,.4);border-radius:6px;color:#fff;transition:transform .1s,box-shadow .1s}
-#interact{background:#8a9ba5}
-#interactF{background:#b03a2e}
+.player-name{display:none!important}
+#interact,#interactF{position:fixed;display:none;z-index:10000;font-family:'Courier New',monospace;font-weight:900;cursor:pointer;user-select:none;touch-action:none;border:none;justify-content:center;align-items:center;box-shadow:0 3px 0 rgba(0,0,0,.4);border-radius:6px;color:#fff;transition:transform .1s,box-shadow .1s}
+#interact{width:36px;height:36px;font-size:22px;background:#8a9ba5}
+#interactF{width:26px;height:26px;font-size:16px;background:#b03a2e}
 #interact.holding{animation:holdPulse .35s ease-in-out infinite;background:#4caf50}
 #interactF.holding{animation:holdPulse .35s ease-in-out infinite;background:#e74c3c}
 @keyframes holdPulse{0%,100%{transform:scale(1) translateY(0);box-shadow:0 3px 0 rgba(0,0,0,.4)}50%{transform:scale(.85) translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.4)}}
@@ -178,8 +175,9 @@ input[type="file"]{color:var(--text-main)}
 .bm-row .earned{color:#4caf50;font-weight:bold;font-size:13px}
 .bm-row .collect{background:#4caf50;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:12px}
 .bm-empty{text-align:center;color:var(--text-mid);padding:20px}
+/* === ПЕРЕТАСКИВАЕМЫЕ ОКНА === */
 .menu-overlay{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:85%;max-width:900px;max-height:90vh;background:var(--bg-panel);border:2px solid var(--border-color);border-radius:8px;z-index:2000;flex-direction:column;padding:0;overflow:hidden}
-.menu-overlay .header{display:flex;justify-content:space-between;align-items:flex-start;padding:15px 20px;flex-shrink:0;background:var(--bg-panel-2)}
+.menu-overlay .header{display:flex;justify-content:space-between;align-items:flex-start;padding:15px 20px;flex-shrink:0;background:var(--bg-panel-2);cursor:move;user-select:none}
 .menu-overlay .header .title h2{margin:0;color:var(--text-main);font-size:22px}
 .menu-overlay .header .title p{margin:5px 0 0;color:var(--text-dim);font-size:13px}
 .menu-overlay .header .close-btn{background:#c0392b;border:2px solid #922b21;color:#fff;font-size:20px;width:40px;height:40px;display:flex;justify-content:center;align-items:center;cursor:pointer;border-radius:4px}
@@ -293,7 +291,6 @@ input[type="file"]{color:var(--text-main)}
 .esc-player-row{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--bg-item);border-radius:8px;margin-bottom:6px;gap:8px}
 .esc-player-row .pn{color:var(--text-main);font-weight:bold;font-size:14px}
 .esc-player-row button{padding:6px 12px;background:#4caf50;color:#fff;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-size:12px;font-family:inherit}
-/* CHAT — поднят выше версии */
 #chat-btn{position:fixed;bottom:70px;right:20px;width:56px;height:56px;background:linear-gradient(135deg,#4a90e2,#2e86de);border:3px solid #fff;border-radius:50%;color:#fff;font-size:26px;cursor:pointer;z-index:5000;display:none;justify-content:center;align-items:center;box-shadow:0 4px 16px rgba(74,144,226,.5)}
 #chat-panel{position:fixed;bottom:136px;right:20px;width:340px;max-width:90vw;height:420px;max-height:70vh;background:var(--bg-panel);border:2px solid var(--border-color);border-radius:14px;z-index:5100;display:none;flex-direction:column;overflow:hidden}
 #chat-panel.open{display:flex}
@@ -315,7 +312,7 @@ input[type="file"]{color:var(--text-main)}
   <div class="box dushka"><span class="label">Dushka Coins</span><span class="amount"><span class="coin-icon btc">₿</span><span id="dushka-coins">0</span></span></div>
   <div class="box"><span class="label">Монеты</span><span class="amount"><span class="coin-icon usd">$</span><span id="balance-amount">25</span></span></div>
 </div>
-<div id="version">Версия: 0.46</div>
+<div id="version">Версия: 0.47</div>
 <div id="exit-btn" onclick="openEscMenu()">Меню</div>
 <div id="back-btn" onclick="exitFloor()">Назад</div>
 <div id="fps-counter">FPS: -- | PING: --</div>
@@ -332,7 +329,7 @@ input[type="file"]{color:var(--text-main)}
       <button class="menu-btn" onclick="openFriends()"><span class="menu-icon">👥</span> Друзья</button>
       <button class="menu-btn" onclick="openProfile()"><span class="menu-icon">👤</span> Профиль</button>
     </div>
-    <div class="menu-footer"><div>v0.46 · by MrDushka</div><div id="changelog-display"></div></div>
+    <div class="menu-footer"><div>v0.47 · by MrDushka</div><div id="changelog-display"></div></div>
   </div>
   <div class="theme-toggle" onclick="toggleMenuTheme()"><svg viewBox="0 0 100 100"><defs><mask id="moon-mask"><rect width="100" height="100" fill="white"/><circle cx="68" cy="38" r="38" fill="black"/></mask></defs><circle cx="50" cy="50" r="42" fill="currentColor" mask="url(#moon-mask)"/></svg></div>
   <div id="settings-btn" onclick="openSettings()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
@@ -347,8 +344,6 @@ input[type="file"]{color:var(--text-main)}
         <button class="tab-btn" data-tab="skins" onclick="switchSettingsTab('skins')"><span class="tab-icon">👕</span> Скины</button>
         <button class="tab-btn" data-tab="sound" onclick="switchSettingsTab('sound')"><span class="tab-icon">🔊</span> Звук</button>
         <button class="tab-btn" data-tab="controls" onclick="switchSettingsTab('controls')"><span class="tab-icon">🎮</span> Управление</button>
-        <button class="tab-btn" data-tab="notifications" onclick="switchSettingsTab('notifications')"><span class="tab-icon">🔔</span> Уведомления</button>
-        <button class="tab-btn" data-tab="performance" onclick="switchSettingsTab('performance')"><span class="tab-icon">⚡</span> Производительность</button>
         <button class="tab-btn" data-tab="account" onclick="switchSettingsTab('account')"><span class="tab-icon">👤</span> Аккаунт</button>
         <button class="tab-btn" data-tab="help" onclick="switchSettingsTab('help')"><span class="tab-icon">❓</span> Помощь</button>
       </div>
@@ -373,16 +368,6 @@ input[type="file"]{color:var(--text-main)}
           <div class="setting-row"><div class="setting-label">Размер джойстика</div><div class="setting-control"><div class="opt-group"><button class="opt-btn" data-joy="small" onclick="setJoystickSize('small')">S</button><button class="opt-btn active" data-joy="medium" onclick="setJoystickSize('medium')">M</button><button class="opt-btn" data-joy="large" onclick="setJoystickSize('large')">L</button></div></div></div>
           <div class="setting-row"><div class="setting-label">Прозрачность</div><div class="setting-control"><div class="range-wrap"><input type="range" id="joy-opacity-slider" min="10" max="100" value="50" oninput="setJoystickOpacity(this.value)"><span class="range-value" id="joy-opacity-value">50%</span></div></div></div>
           <div class="setting-row"><div class="setting-label">Показывать E/F</div><div class="setting-control"><div class="switch on" id="switch-eButtons" onclick="toggleSetting('showEButtons',this)"></div></div></div>
-        </div>
-        <div class="settings-section" data-section="notifications" style="display:none">
-          <h3 class="settings-section-title">🔔 Уведомления</h3>
-          <div class="setting-row"><div class="setting-label">О краже</div><div class="setting-control"><div class="switch on" id="switch-notifySteal" onclick="toggleSetting('notifySteal',this)"></div></div></div>
-          <div class="setting-row"><div class="setting-label">Вибрация</div><div class="setting-control"><div class="switch on" id="switch-vibration" onclick="toggleSetting('vibration',this)"></div></div></div>
-        </div>
-        <div class="settings-section" data-section="performance" style="display:none">
-          <h3 class="settings-section-title">⚡ Производительность</h3>
-          <div class="setting-row"><div class="setting-label">Показывать FPS</div><div class="setting-control"><div class="switch" id="switch-fps" onclick="toggleSetting('showFps',this)"></div></div></div>
-          <div class="setting-row"><div class="setting-label">Ник над персонажем</div><div class="setting-control"><div class="switch on" id="switch-showNames" onclick="toggleSetting('showNames',this)"></div></div></div>
         </div>
         <div class="settings-section" data-section="account" style="display:none">
           <h3 class="settings-section-title">👤 Аккаунт</h3>
@@ -505,7 +490,7 @@ input[type="file"]{color:var(--text-main)}
 </div>
 
 <div id="friends-menu"><div class="header"><h2>Друзья</h2><button class="close-btn" onclick="closeFriends()">X</button></div><div style="margin-bottom:10px"><input type="text" id="friend-search" placeholder="Ник" style="width:70%;padding:8px;border-radius:6px;border:none"><button style="padding:8px 15px;border:none;border-radius:6px;background:#4caf50;color:#fff;cursor:pointer" onclick="searchFriend()">Найти</button></div><div id="friend-result"></div><div style="color:var(--text-dim);margin:10px 0 5px">Запросы</div><div id="friend-requests"></div><div style="color:var(--text-dim);margin:10px 0 5px">Друзья</div><div id="friends-list"></div></div>
-<div id="profile-menu"><div class="header"><h2>Профиль</h2><button class="close-btn" onclick="closeProfile()">X</button></div><div class="profile-preview" id="avatar-preview"></div><label style="color:var(--text-main);display:block;margin:10px 0">Аватарка</label><input type="file" id="avatar-input" accept="image/*"><div class="profile-bg-preview" id="bg-preview"></div><label style="color:var(--text-main);display:block;margin:10px 0">Фон профиля</label><input type="file" id="bg-input" accept="image/*"><button class="save-btn" onclick="saveProfile()">Сохранить</button></div>
+<div id="profile-menu"><div class="header"><h2>Профиль</h2><button class="close-btn" onclick="closeProfile()">X</button></div><div class="profile-preview" id="avatar-preview"></div><label style="color:var(--text-main);display:block;margin:10px 0">Аватарка</label><input type="file" id="avatar-input" accept="image/*"><button class="save-btn" onclick="saveProfile()">Сохранить</button></div>
 
 <div id="create-server-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--border-color);border-radius:12px;padding:20px;width:90%;max-width:400px;z-index:960"><h3 style="color:var(--text-main);margin:0 0 15px">Создать сервер</h3><input type="text" id="server-name" placeholder="Название" style="width:100%;padding:10px;border-radius:8px;border:2px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:14px;margin-bottom:10px"><div style="color:var(--text-dim);font-size:12px;margin-bottom:10px">Видимость: <b id="create-server-access-label">🌐 Для всех</b></div><button style="width:100%;padding:10px;border:none;border-radius:8px;background:#ffd700;color:#000;font-weight:bold;cursor:pointer;margin-bottom:6px" onclick="createServer()">Создать</button><button style="width:100%;padding:8px;border:none;border-radius:8px;background:#666;color:#fff;cursor:pointer" onclick="closeCreateServer()">Отмена</button></div>
 
@@ -519,10 +504,6 @@ input[type="file"]{color:var(--text-main)}
   </select>
   <label style="color:var(--text-dim);font-size:12px">Макс. игроков (2-8)</label>
   <input type="number" id="edit-server-maxplayers" min="2" max="8" value="8" style="width:100%;padding:10px;border-radius:8px;border:2px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:14px;margin-bottom:10px">
-  <label style="color:var(--text-dim);font-size:12px">Время жизни</label>
-  <select id="edit-server-lifetime" style="width:100%;padding:10px;border-radius:8px;border:2px solid var(--border-color);background:var(--bg-item);color:var(--text-main);font-family:inherit;font-size:14px;margin-bottom:10px">
-    <option value="1">⏱ 1 час</option><option value="6">⏱ 6 часов</option><option value="24">⏱ 24 часа</option><option value="0">♾ Бесконечно</option>
-  </select>
   <div class="setting-row" style="padding:10px 0"><div class="setting-label" style="font-size:13px">Разрешить кражу</div><div class="setting-control"><div class="switch on" id="edit-server-steal" onclick="this.classList.toggle('on')"></div></div></div>
   <div class="setting-row" style="padding:10px 0"><div class="setting-label" style="font-size:13px">Разрешить PvP</div><div class="setting-control"><div class="switch on" id="edit-server-pvp" onclick="this.classList.toggle('on')"></div></div></div>
   <button style="width:100%;padding:10px;border:none;border-radius:8px;background:#4caf50;color:#fff;font-weight:bold;cursor:pointer;margin-top:15px;margin-bottom:6px" onclick="saveServerEdit()">Сохранить</button>
@@ -604,17 +585,11 @@ input[type="file"]{color:var(--text-main)}
 
 <script>
 /* ==== SETTINGS ==== */
-const Settings={sfxEnabled:true,joystickSize:'medium',joystickOpacity:50,showEButtons:true,notifySteal:true,vibration:true,showFps:false,showNames:true,theme:'dark',brightness:100,sfxVolume:70,skin:'red'};
+const Settings={sfxEnabled:true,joystickSize:'medium',joystickOpacity:50,showEButtons:true,notifySteal:true,vibration:true,showFps:false,showNames:false,theme:'dark',brightness:100,sfxVolume:70,skin:'red'};
 const SKINS=[
-  {id:'red',name:'Красный',color:'#FF0000'},
-  {id:'blue',name:'Синий',color:'#3498db'},
-  {id:'green',name:'Зелёный',color:'#2ecc71'},
-  {id:'purple',name:'Фиолет',color:'#9b59b6'},
-  {id:'orange',name:'Оранж',color:'#e67e22'},
-  {id:'pink',name:'Розовый',color:'#e84393'},
-  {id:'cyan',name:'Голубой',color:'#00cec9'},
-  {id:'white',name:'Белый',color:'#ecf0f1'},
-  {id:'black',name:'Чёрный',color:'#2d3436'}
+  {id:'red',name:'Красный',color:'#FF0000'},{id:'blue',name:'Синий',color:'#3498db'},{id:'green',name:'Зелёный',color:'#2ecc71'},
+  {id:'purple',name:'Фиолет',color:'#9b59b6'},{id:'orange',name:'Оранж',color:'#e67e22'},{id:'pink',name:'Розовый',color:'#e84393'},
+  {id:'cyan',name:'Голубой',color:'#00cec9'},{id:'white',name:'Белый',color:'#ecf0f1'},{id:'black',name:'Чёрный',color:'#2d3436'}
 ];
 function getSkinColor(){const s=SKINS.find(x=>x.id===Settings.skin);return s?s.color:'#FF0000';}
 function nameColor(name){let h=0;for(let i=0;i<name.length;i++)h=(h*31+name.charCodeAt(i))>>>0;return 'hsl('+(h%360)+',65%,55%)';}
@@ -629,15 +604,10 @@ function applyAllSettings(){
   const sv=document.getElementById('sfx-value');if(sv)sv.textContent=Settings.sfxVolume+'%';
   updateSwitch('switch-sfx',Settings.sfxEnabled);
   updateSwitch('switch-eButtons',Settings.showEButtons);
-  updateSwitch('switch-notifySteal',Settings.notifySteal);
-  updateSwitch('switch-vibration',Settings.vibration);
-  updateSwitch('switch-fps',Settings.showFps);
-  updateSwitch('switch-showNames',Settings.showNames);
   updateOptGroup('joy',Settings.joystickSize);
   updateOptGroup('theme',Settings.theme);
   const jz=document.getElementById('joystick-zone');if(jz)jz.style.opacity=Settings.joystickOpacity/100;
   const fc=document.getElementById('fps-counter');if(fc)fc.classList.toggle('visible',Settings.showFps);
-  document.querySelectorAll('.player-name').forEach(el=>{el.style.display=Settings.showNames?'':'none';});
   const sizes={small:80,medium:120,large:160};
   if(jz){const s=sizes[Settings.joystickSize]||120;jz.style.width=s+'px';jz.style.height=s+'px';}
   renderSkinsGrid();
@@ -668,7 +638,6 @@ function switchSettingsTab(tab){document.querySelectorAll('.settings-tabs .tab-b
 function logoutAccount(){if(!confirm('Выйти?'))return;currentNickname=null;try{localStorage.removeItem('dushka_nick');}catch(e){}closeSettings();document.getElementById('main-menu').style.display='none';document.getElementById('auth').style.display='flex';document.getElementById('username').value='';document.getElementById('password').value='';}
 async function deleteAccount(){if(!confirm('УДАЛИТЬ АККАУНТ? Нельзя отменить!'))return;if(!confirm('Точно?'))return;if(currentNickname){await sb.from('users').delete().eq('nickname',currentNickname);}logoutAccount();showNotif('🗑 Удалён');}
 
-/* ==== AUDIO ==== */
 let audioCtx=null;
 function initAudioCtx(){if(!audioCtx){try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}}
 function playSfx(type){if(!Settings.sfxEnabled)return;initAudioCtx();if(!audioCtx)return;const vol=Settings.sfxVolume/100;const o=audioCtx.createOscillator();const g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);const now=audioCtx.currentTime;
@@ -716,15 +685,14 @@ let x=200,y=200,coins=25,dushka=0,currentNickname=null,currentServerId=null,curr
 let mySlots=new Array(12).fill(null);let allBasesData={};let otherPlayers={};let conveyorBrainrots=[];let lastConveyorSpawn=0;let currentTarget=null;
 let inFloor=false,fx=195,fy=370,floorSlots=[],floorLocked=false,floorOwner=null,viewingBaseId=null;let carriedBrainrot=null;
 let _spins=0,isSpinning=false,wheelRotation=0;let ownedItems=[],autoBuyShopItems=[],ownedRedItems=[],currentRedTab='gear';
-/* SPEEDS: player ×4 faster (120), conveyor ×2 faster (15) */
-const PLAYER_SPEED=120;
+/* Скорость игрока 60 (2х медленнее), конвейер 15 */
+const PLAYER_SPEED=60;
 const CONVEYOR_SPEED=15;
 const CONVEYOR_MAX=12,SPAWN_INTERVAL=2000,BASE_MAX=12;
 const keys={w:false,s:false,a:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false};
 let touchDX=0,touchDY=0,joystickManager=null;let typedCode='';
 let heartbeatInterval=null;
 let playersChannel=null,basesChannel=null,notifChannel=null,restartChannel=null,changelogChannel=null,serverChannel=null,chatChannel=null,chatMsgChannel=null;
-let tutorialActive=false,tutorialStep=0;
 let _lastRestartSeen=null;
 const obstacles=[{x:0,y:170,w:16,h:60},{x:384,y:170,w:16,h:60},{x:148,y:135,w:24,h:24},{x:188,y:135,w:24,h:24},{x:228,y:135,w:24,h:28},{x:148,y:228,w:24,h:24},{x:188,y:228,w:24,h:24},{x:228,y:228,w:24,h:24}];
 
@@ -736,7 +704,41 @@ function showNotif(text){const n=document.getElementById('notif');n.textContent=
 function resizeGame(){const g=document.getElementById('game-container'),f=document.getElementById('floor-container');const w=window.innerWidth,h=window.innerHeight;let s=Math.min(w/500,h/500);s=Math.max(0.6,Math.min(1.2,s));g.style.transform=`scale(${s})`;f.style.transform=`scale(${s})`;}
 window.addEventListener('resize',resizeGame);
 
-/* ==== AUTH ==== */
+/* ==== DRAGABLE PANELS ==== */
+function makeDraggable(el){
+  const header=el.querySelector('.header');
+  if(!header)return;
+  let dragging=false,startX=0,startY=0,startLeft=0,startTop=0;
+  header.addEventListener('mousedown',e=>{
+    if(e.target.closest('.close-btn'))return;
+    dragging=true;
+    const rect=el.getBoundingClientRect();
+    el.style.transform='none';el.style.left=rect.left+'px';el.style.top=rect.top+'px';el.style.margin='0';
+    startX=e.clientX;startY=e.clientY;startLeft=rect.left;startTop=rect.top;
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove',e=>{
+    if(!dragging)return;
+    const dx=e.clientX-startX,dy=e.clientY-startY;
+    el.style.left=(startLeft+dx)+'px';el.style.top=(startTop+dy)+'px';
+  });
+  document.addEventListener('mouseup',()=>{dragging=false;});
+  header.addEventListener('touchstart',e=>{
+    if(e.target.closest('.close-btn'))return;
+    const t=e.touches[0];dragging=true;
+    const rect=el.getBoundingClientRect();
+    el.style.transform='none';el.style.left=rect.left+'px';el.style.top=rect.top+'px';
+    startX=t.clientX;startY=t.clientY;startLeft=rect.left;startTop=rect.top;
+    e.preventDefault();
+  },{passive:false});
+  document.addEventListener('touchmove',e=>{
+    if(!dragging)return;
+    const t=e.touches[0];const dx=t.clientX-startX,dy=t.clientY-startY;
+    el.style.left=(startLeft+dx)+'px';el.style.top=(startTop+dy)+'px';
+  },{passive:false});
+  document.addEventListener('touchend',()=>{dragging=false;});
+}
+
 async function handleRegister(){
   const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value.trim();
   if(!u||!p){showModal('Ошибка','Заполните всё!');return;}
@@ -820,7 +822,6 @@ async function startGame(){
   update();window.focus();resizeGame();
   if(IS_MOBILE)initJoystick();
   updateFreeSpinTimer();
-  setTimeout(()=>{try{if(!localStorage.getItem('dushka_tutorial_done')){startTutorial();}}catch(e){startTutorial();}},1200);
 }
 
 function startHeartbeat(){
@@ -872,7 +873,6 @@ function subscribeNotifs(){
     if(n.length>0){const last=n[n.length-1];if(window._lastNotif!==last.ts){window._lastNotif=last.ts;if(Settings.notifySteal){showNotif(last.text);vibrate(100);}}}
   }).subscribe();
 }
-
 function subscribeRestart(){
   if(restartChannel)sb.removeChannel(restartChannel);
   _lastRestartSeen=null;
@@ -883,7 +883,6 @@ function subscribeRestart(){
     _lastRestartSeen=val;
   }).subscribe();
 }
-
 function subscribeServer(){
   if(serverChannel)sb.removeChannel(serverChannel);
   serverChannel=sb.channel('server-'+currentServerId).on('postgres_changes',{event:'UPDATE',schema:'public',table:'servers',filter:'id=eq.'+currentServerId},payload=>{currentServerData=payload.new;}).subscribe();
@@ -891,9 +890,8 @@ function subscribeServer(){
 
 function renderPlayer(){
   const p=document.getElementById('player');
-  p.innerHTML='<div class="head-pix"></div><div class="body-pix" style="background:'+getSkinColor()+'"></div><div class="player-name">'+currentNickname+'</div>';
+  p.innerHTML='<div class="head-pix"></div><div class="body-pix" style="background:'+getSkinColor()+'"></div>';
   p.style.left=x+'px';p.style.top=y+'px';
-  p.querySelector('.player-name').style.display=Settings.showNames?'':'none';
 }
 function renderOtherPlayers(players){
   for(let k in otherPlayers){if(!players[k]||k===currentNickname){otherPlayers[k].remove();delete otherPlayers[k];}}
@@ -901,8 +899,7 @@ function renderOtherPlayers(players){
     if(k===currentNickname)continue;const d=players[k];if(!d)continue;
     if(!otherPlayers[k]){
       const div=document.createElement('div');div.className='other-player';
-      div.innerHTML='<div class="head-pix"></div><div class="body-pix" style="background:'+nameColor(k)+'"></div><div class="player-name">'+k+'</div>';
-      div.querySelector('.player-name').style.display=Settings.showNames?'':'none';
+      div.innerHTML='<div class="head-pix"></div><div class="body-pix" style="background:'+nameColor(k)+'"></div>';
       document.getElementById('game-container').appendChild(div);otherPlayers[k]=div;
     }
     otherPlayers[k].style.left=d.x+'px';otherPlayers[k].style.top=d.y+'px';
@@ -940,33 +937,32 @@ function updateConveyor(dt){
   for(let i=conveyorBrainrots.length-1;i>=0;i--){const b=conveyorBrainrots[i];if(b.locked)continue;b.x+=CONVEYOR_SPEED*dt;b.dom.style.left=b.x+'px';if(b.x>=384){b.dom.remove();conveyorBrainrots.splice(i,1);}}
 }
 
-/* ==== FIXED: не даёт купить 2 раза ==== */
 async function buyConveyor(b){
-  if(!b) return;
-  if(b.locked) return; // уже куплен/летит — не трогаем
+  if(!b||b.locked)return;
   if(mySlots.filter(s=>s).length>=BASE_MAX){showModal('Ошибка','База полна!');playSfx('error');return;}
   const stats=(currentServerData&&currentServerData.brainrot_stats)||{};
-  const fileKey=b.brainrot.file;
-  const basePrice=b.brainrot.price;
+  const fileKey=b.brainrot.file;const basePrice=b.brainrot.price;
   const currentPrice=(stats[fileKey]&&stats[fileKey].current_price)||basePrice;
   if(coins<currentPrice){showModal('Ошибка','Нужно $'+formatNumber(currentPrice));playSfx('error');return;}
-  const free=mySlots.findIndex(s=>s===null);
-  if(free<0){showModal('Ошибка','Нет свободного места');playSfx('error');return;}
-  // === СТАВИМ ЛОК СРАЗУ (фикс двойной покупки) ===
+  const free=mySlots.findIndex(s=>s===null);if(free<0){showModal('Ошибка','Нет свободного места');playSfx('error');return;}
   b.locked=true;
-  coins-=currentPrice;
-  document.getElementById('balance-amount').textContent=formatNumber(coins);
+  coins-=currentPrice;document.getElementById('balance-amount').textContent=formatNumber(coins);
   const timesBought=((stats[fileKey]&&stats[fileKey].times_bought)||0)+1;
   const newPrice=Math.floor(basePrice+basePrice*0.05*timesBought);
   stats[fileKey]={times_bought:timesBought,current_price:newPrice,base_price:basePrice};
-  const domToRemove=b.dom;
-  const startX=b.x,startY=b.y;
+  await sb.from('servers').update({brainrot_stats:stats}).eq('id',currentServerId);
+  if(currentServerData)currentServerData.brainrot_stats=stats;
+  const domToRemove=b.dom;const startX=b.x,startY=b.y;
   if(domToRemove&&domToRemove.remove)domToRemove.remove();
   const idx=conveyorBrainrots.indexOf(b);if(idx>-1)conveyorBrainrots.splice(idx,1);
-  const bp=BASE_POSITIONS[myBaseId];const greenBtnX=bp.x+37.5;const greenBtnY=bp.y+75+7;
+  const bp=BASE_POSITIONS[myBaseId];const greenBtnX=bp.x+37.5;const greenBtnY=bp.y+89;
+  /* Летит на базу со скоростью дорожки: время = расстояние / CONVEYOR_SPEED */
+  const dist=Math.hypot(greenBtnX-startX,greenBtnY-startY);
+  const duration=Math.max(0.3,dist/CONVEYOR_SPEED);
   const flyEl=document.createElement('div');flyEl.className='brainrot-conveyor '+b.brainrot.rarity;
   flyEl.style.backgroundImage='url(Картинки/'+b.brainrot.file+')';flyEl.style.left=startX+'px';flyEl.style.top=startY+'px';flyEl.style.zIndex='50';
-  flyEl.style.transition='all 1.2s cubic-bezier(.4,.0,.2,1)';document.getElementById('game-container').appendChild(flyEl);
+  flyEl.style.transition='all '+duration+'s linear';
+  document.getElementById('game-container').appendChild(flyEl);
   requestAnimationFrame(()=>{flyEl.style.left=(greenBtnX-14)+'px';flyEl.style.top=(greenBtnY-14)+'px';flyEl.style.transform='scale(0.6)';});
   setTimeout(async()=>{
     flyEl.style.transition='all .3s ease';flyEl.style.opacity='0';flyEl.style.transform='scale(0.2)';
@@ -974,15 +970,10 @@ async function buyConveyor(b){
     await updateUser(currentNickname,{coins:coins,base_slots:mySlots});
     await sb.from('bases').update({slots:mySlots}).eq('server_id',currentServerId).eq('base_num',myBaseId);
     if(allBasesData[myBaseId])allBasesData[myBaseId].slots=mySlots;else allBasesData[myBaseId]={owner:currentNickname,slots:mySlots,locked:myBaseLocked};
-    // Серверная статистика
-    const statsUpd=(currentServerData&&currentServerData.brainrot_stats)||{};
-    statsUpd[fileKey]={times_bought:timesBought,current_price:newPrice,base_price:basePrice};
-    try{await sb.from('servers').update({brainrot_stats:statsUpd}).eq('id',currentServerId);}catch(e){}
-    if(currentServerData)currentServerData.brainrot_stats=statsUpd;
     setTimeout(()=>{flyEl.remove();renderAllBases();},350);
-  },1200);
+  },duration*1000);
   playSfx('buy');vibrate(30);
-  setTimeout(()=>showModal('Куплено',b.brainrot.name+' -$'+formatNumber(currentPrice)+'\nСледующая цена: $'+formatNumber(newPrice)),1400);
+  setTimeout(()=>showModal('Куплено',b.brainrot.name+' -$'+formatNumber(currentPrice)+'\nСледующая цена: $'+formatNumber(newPrice)),duration*1000+200);
 }
 
 function initJoystick(){
@@ -1006,23 +997,16 @@ async function doSell(idx,br){
   await updateUser(currentNickname,{coins:coins,base_slots:mySlots});
   await sb.from('bases').update({slots:mySlots}).eq('server_id',currentServerId).eq('base_num',myBaseId);
   if(allBasesData[myBaseId])allBasesData[myBaseId].slots=mySlots;
-  floorSlots=mySlots;
-  if(inFloor)renderFloor();
-  renderAllBases();
+  floorSlots=mySlots;if(inFloor)renderFloor();renderAllBases();
   if(document.getElementById('base-menu').style.display==='block')openBaseMenu();
   playSfx('buy');showModal('Продано',br.name+' +$'+formatNumber(price));
 }
 async function sellMyBrainrot(idx){
   const br=mySlots[idx];if(!br)return;
-  if(br.rarity==='god'||br.rarity==='secret'||br.rarity==='og'){
-    window._pendingSell={idx,br};
-    document.getElementById('confirm-text').textContent='Sell '+br.name+'?';
-    document.getElementById('confirm-modal').style.display='flex';return;
-  }
+  if(br.rarity==='god'||br.rarity==='secret'||br.rarity==='og'){window._pendingSell={idx,br};document.getElementById('confirm-text').textContent='Sell '+br.name+'?';document.getElementById('confirm-modal').style.display='flex';return;}
   await doSell(idx,br);
 }
 
-/* ==== E/F HOLD с анимацией ==== */
 let eHoldTimer=null,eHoldStart=0,eHoldActive=false,eHoldTargetSnap=null;
 function startEHold(){
   if(eHoldActive)return;if(!currentTarget)return;
@@ -1036,7 +1020,6 @@ function startEHold(){
 }
 function cancelEHold(){if(eHoldTimer){clearTimeout(eHoldTimer);eHoldTimer=null;}document.getElementById('holdProgress').style.display='none';document.getElementById('interact').classList.remove('holding');eHoldActive=false;}
 function releaseE(){document.getElementById('interact').classList.remove('holding');if(eHoldActive&&Date.now()-eHoldStart<400){cancelEHold();const snap=eHoldTargetSnap;eHoldTargetSnap=null;executeShortE(snap);}else{cancelEHold();}eHoldActive=false;}
-
 async function executeShortE(snap){
   if(!snap)return;
   if(snap.type==='conveyor'){showNotif('Зажми E 0.4 сек чтобы купить');return;}
@@ -1121,10 +1104,7 @@ function openEscMenu(){
   sb.from('players').select('nickname').eq('server_id',currentServerId).then(({data})=>{updateEscPlayers(data||[]);});
 }
 function closeEscMenu(){document.getElementById('esc-menu').classList.remove('open');}
-function respawnPlayer(){
-  const spawn=BASE_SPAWN[myBaseId];x=spawn.x;y=spawn.y;
-  renderPlayer();closeEscMenu();showNotif('🔄 Респавн');
-}
+function respawnPlayer(){const spawn=BASE_SPAWN[myBaseId];x=spawn.x;y=spawn.y;renderPlayer();closeEscMenu();showNotif('🔄 Респавн');}
 let _escPlayers=[];
 function updateEscPlayers(players){
   _escPlayers=players;
@@ -1199,7 +1179,7 @@ document.addEventListener('keyup',e=>{
   if(k==='f'||k==='а'){releaseF();e.preventDefault()}
 });
 
-/* ==== FLOOR — новый вид как на картинке ==== */
+/* ==== FLOOR: без пустых слотов, без синей кнопки, выход сверху/снизу ==== */
 function openFloor(baseId){
   const bdata=baseId===myBaseId?{owner:currentNickname,slots:mySlots,locked:myBaseLocked}:allBasesData[baseId];
   if(!bdata)return;
@@ -1209,7 +1189,7 @@ function openFloor(baseId){
   document.getElementById('game-container').style.display='none';
   document.getElementById('floor-container').style.display='block';
   document.getElementById('back-btn').style.display='block';
-  document.getElementById('floor-title').textContent='Этаж: '+bdata.owner+' '+(bdata.locked?'🔒':'🔓');
+  document.getElementById('floor-title').textContent='';
   renderFloor();renderFloorPlayer();updateCarried();
 }
 function closeFloorCleanup(){
@@ -1234,39 +1214,26 @@ function renderFloorPlayer(){
   p.innerHTML='<div class="head-pix"></div><div class="body-pix" style="background:'+getSkinColor()+'"></div>';
   p.style.left=fx+'px';p.style.top=fy+'px';
 }
-/* FLOOR как на картинке 1: серый пол + зелёные слоты по бокам + зелёные выходы */
 function renderFloor(){
   document.querySelectorAll('#floor-container .floor-decor').forEach(e=>e.remove());
   const fc=document.getElementById('floor-container');
-  // Зелёный выход сверху
-  const topExit=document.createElement('div');
-  topExit.className='floor-decor';
-  topExit.style.cssText='position:absolute;left:170px;top:0;width:60px;height:18px;background:#22e54c;border:3px solid #000;border-top:none;z-index:2;box-sizing:border-box';
-  fc.appendChild(topExit);
-  // Зелёный выход снизу
-  const botExit=document.createElement('div');
-  botExit.className='floor-decor';
-  botExit.style.cssText='position:absolute;left:170px;bottom:0;width:60px;height:18px;background:#22e54c;border:3px solid #000;border-bottom:none;z-index:2;box-sizing:border-box';
-  fc.appendChild(botExit);
-  // Кнопка лока (только для своей базы)
-  if(floorOwner===currentNickname){
-    const lk=document.createElement('div');
-    lk.className='floor-decor';
-    lk.style.cssText='position:absolute;left:186px;top:190px;width:28px;height:22px;background:'+(floorLocked?'#c0392b':'#0066ff')+';border:2px solid #000;z-index:5;cursor:pointer;border-radius:3px';
-    lk.title=floorLocked?'Разблокировать':'Заблокировать';
-    lk.onclick=(e)=>{e.stopPropagation();toggleFloorLock();};
-    fc.appendChild(lk);
+  /* Выход: для баз сверху (1-4) - СНИЗУ, для баз снизу (5-8) - СВЕРХУ */
+  const isTopBase = myBaseId>=1 && myBaseId<=4;
+  const exit=document.createElement('div');
+  exit.className='floor-decor';
+  if(isTopBase){
+    exit.style.cssText='position:absolute;left:170px;bottom:0;width:60px;height:18px;background:#22e54c;border:3px solid #000;border-bottom:none;z-index:2;box-sizing:border-box';
+  } else {
+    exit.style.cssText='position:absolute;left:170px;top:0;width:60px;height:18px;background:#22e54c;border:3px solid #000;border-top:none;z-index:2;box-sizing:border-box';
   }
-  // Слоты по 6 с каждой стороны
+  fc.appendChild(exit);
+  /* Только занятые слоты, пустые не рисуем */
   for(let i=0;i<12;i++){
     const off=FLOOR_SLOT_OFFSETS[i];const sx=off.dx,sy=off.dy;
     if(floorSlots[i]){
       const br=floorSlots[i];const d=document.createElement('div');
       d.className='brainrot-on-base '+br.rarity;d.style.backgroundImage='url(Картинки/'+br.file+')';
       d.style.left=sx+'px';d.style.top=sy+'px';d.style.width='28px';d.style.height='28px';d.style.zIndex='6';d.style.pointerEvents='none';d.style.borderRadius='4px';fc.appendChild(d);
-    } else {
-      const s=document.createElement('div');s.className='base-slot';
-      s.style.left=sx+'px';s.style.top=sy+'px';s.style.width='28px';s.style.height='28px';s.style.zIndex='6';fc.appendChild(s);
     }
   }
 }
@@ -1275,8 +1242,6 @@ async function toggleFloorLock(){
   floorLocked=!floorLocked;myBaseLocked=floorLocked;
   await updateUser(currentNickname,{base_locked:myBaseLocked});
   await sb.from('bases').update({locked:myBaseLocked}).eq('server_id',currentServerId).eq('base_num',myBaseId);
-  document.getElementById('floor-title').textContent='Этаж: '+currentNickname+' '+(floorLocked?'🔒':'🔓');
-  renderFloor();
 }
 function checkStepCollect(){
   if(!inFloor||floorOwner!==currentNickname)return;
@@ -1284,18 +1249,10 @@ function checkStepCollect(){
   for(let i=0;i<12;i++){
     if(!floorSlots[i])continue;
     const off=FLOOR_SLOT_OFFSETS[i];const cx=off.dx+14,cy=off.dy+14;
-    if(Math.hypot((fx+6)-cx,(fy+10)-cy)<16){
-      const br=floorSlots[i];
-      const last=br.lastCollect||br.placedAt||now;
+    if(Math.hypot((fx+5)-cx,(fy+11)-cy)<16){
+      const br=floorSlots[i];const last=br.lastCollect||br.placedAt||now;
       const earned=Math.floor((now-last)/1000*br.income);
-      if(earned>0){
-        coins+=earned;br.lastCollect=now;
-        document.getElementById('balance-amount').textContent=formatNumber(coins);
-        updateUser(currentNickname,{coins:coins,base_slots:floorSlots});
-        sb.from('bases').update({slots:floorSlots}).eq('server_id',currentServerId).eq('base_num',myBaseId);
-        mySlots=floorSlots;
-        playSfx('buy');showNotif('💰 +$'+formatNumber(earned));
-      }
+      if(earned>0){coins+=earned;br.lastCollect=now;document.getElementById('balance-amount').textContent=formatNumber(coins);updateUser(currentNickname,{coins:coins,base_slots:floorSlots});sb.from('bases').update({slots:floorSlots}).eq('server_id',currentServerId).eq('base_num',myBaseId);mySlots=floorSlots;playSfx('buy');showNotif('💰 +$'+formatNumber(earned));}
     }
   }
 }
@@ -1308,31 +1265,25 @@ function isAnyMenuOpen(){
   if(document.getElementById('chat-panel').classList.contains('open'))return true;
   return false;
 }
-/* E — правее, F — меньше и выше над головой */
 function updateInteractButtons(){
   const eBtn=document.getElementById('interact'),fBtn=document.getElementById('interactF');
   if(isAnyMenuOpen()||!currentTarget||!Settings.showEButtons){eBtn.style.display='none';fBtn.style.display='none';return;}
   const el=document.getElementById('game-container').getBoundingClientRect();
   const scale=el.width/400;
   const px=inFloor?fx:x,py=inFloor?fy:y;
-  const playerCX=el.left+(px+7)*scale;
+  const playerCX=el.left+(px+5)*scale;
   const nickTopY=el.top+(py-12)*scale;
-  const eSize=36*scale;
-  const fSize=26*scale;
-  // E: по центру над ником, чуть правее
+  const eSize=36*scale;const fSize=26*scale;
   eBtn.style.width=eSize+'px';eBtn.style.height=eSize+'px';eBtn.style.fontSize=(22*scale)+'px';
   eBtn.style.display='flex';
   eBtn.style.left=(playerCX-eSize/2+8*scale)+'px';
   eBtn.style.top=(nickTopY-eSize-4*scale)+'px';
-  // F: меньше и выше головы (только для своих слотов)
   if(currentTarget.type==='slot_mine_full'&&!carriedBrainrot){
     fBtn.style.display='flex';
     fBtn.style.width=fSize+'px';fBtn.style.height=fSize+'px';fBtn.style.fontSize=(16*scale)+'px';
     fBtn.style.left=(playerCX-fSize/2+8*scale)+'px';
-    fBtn.style.top=(nickTopY-eSize-fSize-10*scale)+'px';
-  } else {
-    fBtn.style.display='none';
-  }
+    fBtn.style.top=(nickTopY-eSize-fSize-8*scale)+'px';
+  } else {fBtn.style.display='none';}
 }
 
 let lastTime=0,lastSync=0;
@@ -1346,32 +1297,31 @@ function update(t=0){
   if(dx!==0||dy!==0){
     const len=Math.sqrt(dx*dx+dy*dy);
     if(inFloor){
-      const sp=PLAYER_SPEED*2;
+      const sp=PLAYER_SPEED*1.5;
       fx+=(dx/len)*sp*dt;fy+=(dy/len)*sp*dt;
-      fx=Math.max(10,Math.min(382,fx));fy=Math.max(30,Math.min(365,fy));
+      fx=Math.max(10,Math.min(384,fx));fy=Math.max(30,Math.min(368,fy));
       renderFloorPlayer();updateCarried();checkStepCollect();
     } else {
       let nx=x+(dx/len)*PLAYER_SPEED*dt,ny=y+(dy/len)*PLAYER_SPEED*dt;
-      const rX={x:nx,y:y,w:14,h:22};let bX=false;
+      const rX={x:nx,y:y,w:10,h:22};let bX=false;
       for(const o of obstacles)if(collide(rX,o)){bX=true;break;}
       if(!bX)x=nx;
-      const rY={x:x,y:ny,w:14,h:22};let bY=false;
+      const rY={x:x,y:ny,w:10,h:22};let bY=false;
       for(const o of obstacles)if(collide(rY,o)){bY=true;break;}
       if(!bY)y=ny;
-      x=Math.max(10,Math.min(386,x));y=Math.max(10,Math.min(386,y));
+      x=Math.max(10,Math.min(388,x));y=Math.max(10,Math.min(388,y));
       document.getElementById('player').style.left=x+'px';document.getElementById('player').style.top=y+'px';
       if(Date.now()-lastSync>150&&currentServerId){sb.from('players').update({x:x,y:y,updated_at:new Date().toISOString()}).eq('server_id',currentServerId).eq('nickname',currentNickname).then(()=>{});lastSync=Date.now();}
     }
   }
   if(!inFloor){updateConveyor(dt);updateTarget();}else{updateFloorTarget();}
   updateInteractButtons();
-  if(tutorialActive)updateTutorialArrow();
 }
 function collide(r1,r2){return !(r2.x>r1.x+r1.w||r2.x+r2.w<r1.x||r2.y>r1.y+r1.h||r2.y+r2.h<r1.y);}
 function removeEHint(){document.getElementById('interact').style.display='none';document.getElementById('interactF').style.display='none';}
 
 function updateTarget(){
-  const pc={x:x+7,y:y+11};currentTarget=null;
+  const pc={x:x+5,y:y+11};currentTarget=null;
   for(const b of conveyorBrainrots){if(b.locked)continue;const d=Math.hypot(pc.x-(b.x+14),pc.y-(b.y+14));if(d<25){currentTarget={type:'conveyor',target:b};return;}}
   const bp=BASE_POSITIONS[myBaseId];
   if(bp){const gx=bp.x+37.5,gy=bp.y+89;if(Math.hypot(pc.x-gx,pc.y-gy)<28){currentTarget={type:'green_mine'};return;}}
@@ -1385,14 +1335,12 @@ function updateTarget(){
   for(const obj of interactables){const oc={x:obj.x+10,y:obj.y+obj.h/2};if(Math.hypot(pc.x-oc.x,pc.y-oc.y)<25){currentTarget={type:'shop',target:obj};return;}}
 }
 function updateFloorTarget(){
-  const pc={x:fx+7,y:fy+11};currentTarget=null;
+  const pc={x:fx+5,y:fy+11};currentTarget=null;
   for(let i=0;i<12;i++){
     const off=FLOOR_SLOT_OFFSETS[i];const sx=off.dx+14,sy=off.dy+14;
     if(Math.hypot(pc.x-sx,pc.y-sy)<22){
-      if(floorSlots[i]){
-        if(floorOwner===currentNickname){currentTarget={type:'slot_mine_full',slot:i};}
-        else{currentTarget={type:'slot_other_full',slot:i,baseId:viewingBaseId};}
-      } else {currentTarget={type:'slot_empty_mine',slot:i};}
+      if(floorSlots[i]){if(floorOwner===currentNickname){currentTarget={type:'slot_mine_full',slot:i};}else{currentTarget={type:'slot_other_full',slot:i,baseId:viewingBaseId};}}
+      else{currentTarget={type:'slot_empty_mine',slot:i};}
       return;
     }
   }
@@ -1421,10 +1369,9 @@ case'2x-money':return'<svg viewBox="0 0 100 100"><text x="10" y="65" font-size="
 default:return'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#c0392b"/></svg>';}}
 
 const shopItems=[{id:'slap',name:'Slap',desc:'Slap thieves!',price:500,icon:'slap'},{id:'speed-coil',name:'Speed Coil',desc:'Zoom!',price:750,icon:'speed-coil'},{id:'trap',name:'Trap',desc:'Freeze 10 sec',price:1000,icon:'trap'},{id:'iron-slap',name:'Iron Slap',desc:'Heavy slap!',price:2500,icon:'iron-slap'},{id:'gravity-coil',name:'Gravity Coil',desc:'Jump!',price:3000,icon:'gravity-coil'},{id:'bee-launcher',name:'Bee Launcher',desc:'Bees!',price:10000,icon:'bee-launcher'},{id:'coil-combo',name:'Coil Combo',desc:'Ultimate!',price:20000,icon:'coil-combo'},{id:'rage-table',name:'Rage Table',desc:'Table!',price:25000,icon:'rage-table'},{id:'diamond-slap',name:'Diamond Slap',desc:'Knock!',price:50000,icon:'diamond-slap'}];
-function openShop(){const c=document.getElementById('shop-items');c.innerHTML='';shopItems.forEach(item=>{const isOwned=ownedItems.includes(item.id);const isAuto=autoBuyShopItems.includes(item.id);const div=document.createElement('div');div.className='shop-item';div.innerHTML='<div class="icon">'+getShopIcon(item.icon)+'</div><div class="info"><div class="name">'+item.name+'</div><div class="desc">'+item.desc+'</div></div><div class="right"><div class="price-btn '+(isOwned?'owned':'')+'" onclick="buyShopItem(\''+item.id+'\')">'+(isOwned?'OWNED':'$'+item.price.toLocaleString())+'</div><label class="auto-buy"><input type="checkbox" '+(isAuto?'checked':'')+' onchange="toggleAutoBuyShopItem(\''+item.id+'\',this.checked)"> Auto</label></div>';c.appendChild(div);});document.getElementById('shop-menu').style.display='flex';}
+function openShop(){const c=document.getElementById('shop-items');c.innerHTML='';shopItems.forEach(item=>{const isOwned=ownedItems.includes(item.id);const div=document.createElement('div');div.className='shop-item';div.innerHTML='<div class="icon">'+getShopIcon(item.icon)+'</div><div class="info"><div class="name">'+item.name+'</div><div class="desc">'+item.desc+'</div></div><div class="right"><div class="price-btn '+(isOwned?'owned':'')+'" onclick="buyShopItem(\''+item.id+'\')">'+(isOwned?'OWNED':'$'+item.price.toLocaleString())+'</div></div>';c.appendChild(div);});document.getElementById('shop-menu').style.display='flex';}
 function closeShop(){document.getElementById('shop-menu').style.display='none';}
 async function buyShopItem(id){const item=shopItems.find(i=>i.id===id);if(!item)return;if(ownedItems.includes(id))return;if(coins<item.price){playSfx('error');showModal('Ошибка','Нужно $'+item.price.toLocaleString());return;}coins-=item.price;ownedItems.push(id);document.getElementById('balance-amount').textContent=formatNumber(coins);await updateUser(currentNickname,{coins:coins,owned_items:ownedItems});playSfx('buy');openShop();showModal('Покупка','Куплено: '+item.name);}
-async function toggleAutoBuyShopItem(id,checked){if(checked){if(!autoBuyShopItems.includes(id))autoBuyShopItems.push(id);}else autoBuyShopItems=autoBuyShopItems.filter(x=>x!==id);await updateUser(currentNickname,{auto_buy:autoBuyShopItems});}
 
 function openBee(){document.getElementById('bee-menu').style.display='flex';}
 function closeBee(){document.getElementById('bee-menu').style.display='none';}
@@ -1462,13 +1409,8 @@ async function loadServers(){
     if(s.blacklist&&s.blacklist.includes(currentNickname))continue;
     const{count}=await sb.from('players').select('*',{count:'exact',head:true}).eq('server_id',s.id);
     const pc=count||0;const maxP=s.max_players||8;const full=pc>=maxP;const isMine=(s.owner===currentNickname)||(s.created_by===currentNickname);
-    let badges='';
-    if(s.access==='self')badges+='<span class="srv-badge private">🔒</span>';
-    else if(s.access==='friends')badges+='<span class="srv-badge friends">👥</span>';
-    if(s.allow_steal===false)badges+='<span class="srv-badge nosteal">🚫👊</span>';
-    if(s.allow_pvp===false)badges+='<span class="srv-badge nopvp">🚫⚔</span>';
     const div=document.createElement('div');div.className='server-item';
-    div.innerHTML='<div class="server-info"><div class="name">'+(s.name||'Server')+' '+badges+'</div><div class="players">'+pc+'/'+maxP+(isMine?' · 👑':'')+'</div></div>'+(full?'<span class="full">Full</span>':'<button class="join-btn" onclick="joinServer(\''+s.id+'\')">Join</button>')+(isMine?'<button class="marker-btn" onclick="openServerEdit(\''+s.id+'\')">⚙</button>':'');
+    div.innerHTML='<div class="server-info"><div class="name">'+(s.name||'Server')+(isMine?' 👑':'')+'</div><div class="players">'+pc+'/'+maxP+'</div></div>'+(full?'<span class="full">Full</span>':'<button class="join-btn" onclick="joinServer(\''+s.id+'\')">Join</button>')+(isMine?'<button class="marker-btn" onclick="openServerEdit(\''+s.id+'\')">⚙</button>':'');
     c.appendChild(div);
   }
 }
@@ -1478,9 +1420,9 @@ function openCreateServer(){document.getElementById('create-server-access-label'
 function closeCreateServer(){document.getElementById('create-server-modal').style.display='none';}
 async function createServer(){const n=document.getElementById('server-name').value.trim();if(!n){showModal('Ошибка','Введите название');return;}await sb.from('servers').insert({name:n,access:currentServerTab,owner:currentNickname,created_by:currentNickname,allow_steal:true,allow_pvp:true,lifetime_hours:0,max_players:8,blacklist:[],kicked:[],brainrot_stats:{}});closeCreateServer();openServers();}
 let _editingServerId=null;
-async function openServerEdit(id){_editingServerId=id;const{data}=await sb.from('servers').select('*').eq('id',id).maybeSingle();if(!data){showModal('Ошибка','Сервер не найден');return;}if(data.owner!==currentNickname&&data.created_by!==currentNickname){showModal('Ошибка','Только владелец');return;}document.getElementById('edit-server-name').value=data.name||'';document.getElementById('edit-server-access').value=data.access||'all';document.getElementById('edit-server-maxplayers').value=data.max_players||8;document.getElementById('edit-server-lifetime').value=String(data.lifetime_hours||0);document.getElementById('edit-server-steal').classList.toggle('on',data.allow_steal!==false);document.getElementById('edit-server-pvp').classList.toggle('on',data.allow_pvp!==false);document.getElementById('server-edit-modal').style.display='block';}
+async function openServerEdit(id){_editingServerId=id;const{data}=await sb.from('servers').select('*').eq('id',id).maybeSingle();if(!data){showModal('Ошибка','Сервер не найден');return;}if(data.owner!==currentNickname&&data.created_by!==currentNickname){showModal('Ошибка','Только владелец');return;}document.getElementById('edit-server-name').value=data.name||'';document.getElementById('edit-server-access').value=data.access||'all';document.getElementById('edit-server-maxplayers').value=data.max_players||8;document.getElementById('edit-server-steal').classList.toggle('on',data.allow_steal!==false);document.getElementById('edit-server-pvp').classList.toggle('on',data.allow_pvp!==false);document.getElementById('server-edit-modal').style.display='block';}
 function closeServerEdit(){document.getElementById('server-edit-modal').style.display='none';_editingServerId=null;}
-async function saveServerEdit(){if(!_editingServerId)return;const n=document.getElementById('edit-server-name').value.trim();const a=document.getElementById('edit-server-access').value;const mp=Math.max(2,Math.min(8,parseInt(document.getElementById('edit-server-maxplayers').value)||8));const lh=parseInt(document.getElementById('edit-server-lifetime').value)||0;const steal=document.getElementById('edit-server-steal').classList.contains('on');const pvp=document.getElementById('edit-server-pvp').classList.contains('on');let expires_at=0;if(lh>0){const{data:cur}=await sb.from('servers').select('created_at').eq('id',_editingServerId).maybeSingle();if(cur){const base=cur.created_at?new Date(cur.created_at).getTime():Date.now();expires_at=base+lh*3600000;}}await sb.from('servers').update({name:n,access:a,max_players:mp,lifetime_hours:lh,allow_steal:steal,allow_pvp:pvp,expires_at:expires_at}).eq('id',_editingServerId);closeServerEdit();loadServers();showNotif('✅ Сервер обновлён');}
+async function saveServerEdit(){if(!_editingServerId)return;const n=document.getElementById('edit-server-name').value.trim();const a=document.getElementById('edit-server-access').value;const mp=Math.max(2,Math.min(8,parseInt(document.getElementById('edit-server-maxplayers').value)||8));const steal=document.getElementById('edit-server-steal').classList.contains('on');const pvp=document.getElementById('edit-server-pvp').classList.contains('on');await sb.from('servers').update({name:n,access:a,max_players:mp,allow_steal:steal,allow_pvp:pvp}).eq('id',_editingServerId);closeServerEdit();loadServers();showNotif('✅ Сервер обновлён');}
 async function openServerKick(){const{data}=await sb.from('servers').select('kicked').eq('id',_editingServerId).maybeSingle();const kicked=(data&&data.kicked)||[];const{data:players}=await sb.from('players').select('nickname').eq('server_id',_editingServerId);const c=document.getElementById('kick-players-list');c.innerHTML='';const list=(players||[]).filter(p=>p.nickname!==currentNickname);if(list.length===0){c.innerHTML='<div style="text-align:center;color:var(--text-dim);padding:20px">Никого нет</div>';}else{list.forEach(p=>{const div=document.createElement('div');div.className='player-kick-row';div.innerHTML='<span>'+p.nickname+'</span><button onclick="kickPlayer(\''+p.nickname+'\')">👢</button>';c.appendChild(div);});}if(kicked.length>0){const h=document.createElement('div');h.style.cssText='color:var(--text-dim);font-size:12px;margin-top:12px;margin-bottom:6px';h.textContent='Кикнуты';c.appendChild(h);kicked.forEach(n=>{const div=document.createElement('div');div.className='player-kick-row';div.innerHTML='<span>'+n+'</span><button style="background:#4caf50" onclick="unkickPlayer(\''+n+'\')">✓</button>';c.appendChild(div);});}document.getElementById('server-kick-modal').style.display='block';}
 function closeServerKick(){document.getElementById('server-kick-modal').style.display='none';}
 async function kickPlayer(nickname){const{data}=await sb.from('servers').select('kicked').eq('id',_editingServerId).maybeSingle();const kicked=(data&&data.kicked)||[];if(!kicked.includes(nickname))kicked.push(nickname);await sb.from('servers').update({kicked:kicked}).eq('id',_editingServerId);showNotif('👢 Кикнут: '+nickname);openServerKick();}
@@ -1488,7 +1430,7 @@ async function unkickPlayer(nickname){const{data}=await sb.from('servers').selec
 async function openServerBlacklist(){const{data}=await sb.from('servers').select('blacklist').eq('id',_editingServerId).maybeSingle();renderBlacklist((data&&data.blacklist)||[]);document.getElementById('server-blacklist-modal').style.display='block';}
 function closeServerBlacklist(){document.getElementById('server-blacklist-modal').style.display='none';}
 function renderBlacklist(list){const c=document.getElementById('blacklist-list');c.innerHTML='';if(list.length===0){c.innerHTML='<div style="text-align:center;color:var(--text-dim);padding:10px">Пусто</div>';return;}list.forEach(n=>{const div=document.createElement('div');div.className='player-kick-row';div.innerHTML='<span>🚫 '+n+'</span><button onclick="removeFromBlacklist(\''+n+'\')">✓</button>';c.appendChild(div);});}
-async function addToBlacklist(){const n=document.getElementById('blacklist-input').value.trim();if(!n)return;if(n===currentNickname){showNotif('Нельзя себя');return;}const{data}=await sb.from('servers').select('blacklist').eq('id',_editingServerId).maybeSingle();const bl=(data&&data.blacklist)||[];if(!bl.includes(n))bl.push(n);await sb.from('servers').update({blacklist:bl}).eq('id',_editingServerId);document.getElementById('blacklist-input').value='';renderBlacklist(bl);showNotif('🚫 '+n);const{data:p}=await sb.from('players').select('*').eq('server_id',_editingServerId).eq('nickname',n).maybeSingle();if(p){await sb.from('players').delete().eq('id',p.id);}}
+async function addToBlacklist(){const n=document.getElementById('blacklist-input').value.trim();if(!n)return;if(n===currentNickname){showNotif('Нельзя себя');return;}const{data}=await sb.from('servers').select('blacklist').eq('id',_editingServerId).maybeSingle();const bl=(data&&data.blacklist)||[];if(!bl.includes(n))bl.push(n);await sb.from('servers').update({blacklist:bl}).eq('id',_editingServerId);document.getElementById('blacklist-input').value='';renderBlacklist(bl);showNotif('🚫 '+n);}
 async function removeFromBlacklist(n){const{data}=await sb.from('servers').select('blacklist').eq('id',_editingServerId).maybeSingle();const bl=((data&&data.blacklist)||[]).filter(x=>x!==n);await sb.from('servers').update({blacklist:bl}).eq('id',_editingServerId);renderBlacklist(bl);showNotif('✅ Убран');}
 
 async function openFriends(){document.getElementById('main-menu').style.display='none';document.getElementById('friends-menu').style.display='block';await loadFriendRequests();await loadFriends();}
@@ -1496,16 +1438,13 @@ async function searchFriend(){const n=document.getElementById('friend-search').v
 async function sendFriendRequest(n){const d=await getUser(n);if(!d)return;let r=d.friend_requests||[];if(r.includes(currentNickname)){showModal('Инфо','Уже отправлено');return;}r.push(currentNickname);await updateUser(n,{friend_requests:r});showModal('Успех','Отправлено!');}
 async function loadFriendRequests(){const d=await getUser(currentNickname);const r=(d&&d.friend_requests)||[];const c=document.getElementById('friend-requests');c.innerHTML='';if(r.length===0){c.innerHTML='<div style="color:var(--text-dim)">No requests</div>';return;}r.forEach(rq=>{const div=document.createElement('div');div.className='friend-item';div.innerHTML='<div class="nick">'+rq+'</div><button onclick="acceptFriend(\''+rq+'\')" style="background:#4caf50;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Accept</button>';c.appendChild(div);});}
 async function acceptFriend(n){const d=await getUser(currentNickname);let f=d.friends||[];if(!f.includes(n))f.push(n);let r=d.friend_requests||[];r=r.filter(x=>x!==n);await updateUser(currentNickname,{friends:f,friend_requests:r});await loadFriendRequests();await loadFriends();}
-async function loadFriends(){const d=await getUser(currentNickname);const f=(d&&d.friends)||[];const c=document.getElementById('friends-list');c.innerHTML='';if(f.length===0){c.innerHTML='<div style="color:var(--text-dim)">No friends</div>';return;}f.forEach(fr=>{const div=document.createElement('div');div.className='friend-item';div.innerHTML='<div class="nick">'+fr+'</div><div><button onclick="showFriendProfile(\''+fr+'\')" style="background:#0f3460;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Profile</button></div>';c.appendChild(div);});}
-async function showFriendProfile(f){const d=await getUser(f);if(!d){showModal('Ошибка','Не найден');return;}document.getElementById('friend-profile-name').textContent=f;document.getElementById('friend-avatar-preview').style.backgroundImage=d.avatar?'url('+d.avatar+')':'none';document.getElementById('friend-profile').style.display='block';document.getElementById('friend-profile').dataset.nick=f;}
-function cancelFriendJoin(){document.getElementById('friend-profile').style.display='none';}
-function joinFriendGame(){const n=document.getElementById('friend-profile').dataset.nick;getUser(n).then(d=>{if(d&&d.server_id){joinServer(d.server_id);}else{showModal('Инфо','Друг не играет');}cancelFriendJoin();});}
+async function loadFriends(){const d=await getUser(currentNickname);const f=(d&&d.friends)||[];const c=document.getElementById('friends-list');c.innerHTML='';if(f.length===0){c.innerHTML='<div style="color:var(--text-dim)">No friends</div>';return;}f.forEach(fr=>{const div=document.createElement('div');div.className='friend-item';div.innerHTML='<div class="nick">'+fr+'</div><div><button onclick="joinFriend(\''+fr+'\')" style="background:#0f3460;border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer">Join</button></div>';c.appendChild(div);});}
+async function joinFriend(n){const d=await getUser(n);if(d&&d.server_id){joinServer(d.server_id);}else{showModal('Инфо','Друг не играет');}}
 function closeFriends(){document.getElementById('friends-menu').style.display='none';showMainMenu();}
 
-function openProfile(){document.getElementById('main-menu').style.display='none';document.getElementById('profile-menu').style.display='block';getUser(currentNickname).then(d=>{if(d){document.getElementById('avatar-preview').style.backgroundImage=d.avatar?'url('+d.avatar+')':'none';document.getElementById('bg-preview').style.backgroundImage=d.background?'url('+d.background+')':'none';}});}
+function openProfile(){document.getElementById('main-menu').style.display='none';document.getElementById('profile-menu').style.display='block';getUser(currentNickname).then(d=>{if(d){document.getElementById('avatar-preview').style.backgroundImage=d.avatar?'url('+d.avatar+')':'none';}});}
 document.getElementById('avatar-input').addEventListener('change',function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=function(ev){document.getElementById('avatar-preview').style.backgroundImage='url('+ev.target.result+')';window._avatarData=ev.target.result;};r.readAsDataURL(f);});
-document.getElementById('bg-input').addEventListener('change',function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=function(ev){document.getElementById('bg-preview').style.backgroundImage='url('+ev.target.result+')';window._bgData=ev.target.result;};r.readAsDataURL(f);});
-async function saveProfile(){const a=window._avatarData||'';const b=window._bgData||'';await updateUser(currentNickname,{avatar:a,background:b});showModal('Успех','Профиль сохранён');}
+async function saveProfile(){const a=window._avatarData||'';await updateUser(currentNickname,{avatar:a});showModal('Успех','Сохранено');}
 function closeProfile(){document.getElementById('profile-menu').style.display='none';showMainMenu();}
 
 function openBaseMenu(){
@@ -1573,19 +1512,6 @@ async function subscribeChatMessages(){
   }).subscribe();
 }
 
-const TUTORIAL_STEPS=[
-  {step:'Шаг 1',text:'Привет! Это твоя база. Подойди к зелёной кнопке и нажми E.',target:()=>BASE_SPAWN[myBaseId]},
-  {step:'Шаг 2',text:'Зажми E на конвейере (красная полоса) — купишь брэинрота!',target:()=>({x:200,y:200})},
-  {step:'Шаг 3',text:'Красный магазин справа — там крутые скины.',target:()=>({x:150,y:230})},
-  {step:'Шаг 4',text:'Хочешь украсть? Зайди на чужую базу, зажми E на брэинроте 0.4 сек.',target:()=>BASE_POSITIONS[((myBaseId%8)+1)]},
-  {step:'Шаг 5',text:'Готово! Удачи и богатства! 💰',target:null}
-];
-function startTutorial(){if(inFloor)return;tutorialActive=true;tutorialStep=0;showTutorialStep();}
-function showTutorialStep(){const t=TUTORIAL_STEPS[tutorialStep];if(!t){skipTutorial();return;}document.getElementById('tutorial-step').textContent=t.step;document.getElementById('tutorial-text').textContent=t.text;document.getElementById('tutorial').classList.add('show');updateTutorialArrow();}
-function updateTutorialArrow(){if(!tutorialActive)return;const t=TUTORIAL_STEPS[tutorialStep];if(!t||!t.target){document.getElementById('tutorial-arrow').classList.remove('show');return;}const target=t.target();const el=document.getElementById('game-container').getBoundingClientRect();const scale=el.width/400;const arrow=document.getElementById('tutorial-arrow');arrow.style.left=(el.left+target.x*scale)+'px';arrow.style.top=(el.top+target.y*scale-40*scale)+'px';arrow.classList.add('show');}
-function nextTutorialStep(){tutorialStep++;if(tutorialStep>=TUTORIAL_STEPS.length){skipTutorial();return;}showTutorialStep();}
-function skipTutorial(){tutorialActive=false;document.getElementById('tutorial').classList.remove('show');document.getElementById('tutorial-arrow').classList.remove('show');try{localStorage.setItem('dushka_tutorial_done','1');}catch(e){}}
-
 async function exitToMenu(){
   stopHeartbeat();
   if(currentServerId&&currentNickname){try{await sb.from('players').delete().eq('server_id',currentServerId).eq('nickname',currentNickname);}catch(e){}}
@@ -1598,9 +1524,6 @@ async function exitToMenu(){
   conveyorBrainrots.forEach(b=>{if(b.dom&&b.dom.remove)b.dom.remove();});conveyorBrainrots=[];
   for(let k in otherPlayers){otherPlayers[k].remove();}otherPlayers={};
   removeEHint();closeFloorCleanup();
-  tutorialActive=false;
-  document.getElementById('tutorial').classList.remove('show');
-  document.getElementById('tutorial-arrow').classList.remove('show');
   document.getElementById('chat-banner').classList.remove('show');
   document.getElementById('app').style.display='none';
   document.getElementById('exit-btn').style.display='none';
@@ -1614,9 +1537,11 @@ async function exitToMenu(){
   currentServerData=null;
 }
 
+/* Make draggable after DOM ready */
 window.addEventListener('load',async()=>{
   resizeGame();loadSettings();subscribeChangelog();subscribeChat();
   if(IS_MOBILE){document.getElementById('joystick-zone').style.display='none';}
+  document.querySelectorAll('.menu-overlay').forEach(el=>makeDraggable(el));
   try{const savedNick=localStorage.getItem('dushka_nick');if(savedNick){const d=await getUser(savedNick);if(d){currentNickname=savedNick;if(d.skin)Settings.skin=d.skin;applyAllSettings();showMainMenu();}}}catch(e){}
 });
 </script>
